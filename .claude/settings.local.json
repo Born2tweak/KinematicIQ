@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Skill(update-config)",
+      "Skill(update-config:*)",
+      "Bash(where npx *)",
+      "Bash(npx --version)",
+      "Bash(where docker *)",
+      "Bash(docker --version)",
+      "Bash(gh --version)"
+    ]
+  }
+}
