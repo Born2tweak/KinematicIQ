@@ -8,6 +8,7 @@ import {
   drawSkeleton,
 } from '../components/SkeletonOverlay'
 import { poseEngine } from '../cv/poseEngine'
+import { drawCalibrationGuides, checkCalibration } from '../cv/drawCalibration'
 
 export function CameraScreen() {
   const navigate = useNavigate()
@@ -17,6 +18,14 @@ export function CameraScreen() {
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [isModelLoading, setIsModelLoading] = useState(true)
+  
+  // Calibration and Capture Validation States (Milestones 5 & 6)
+  const [isCalibrated, setIsCalibrated] = useState(false)
+  const [missingJoints, setMissingJoints] = useState<string[]>(['Full Body'])
+  
+  // Auto-Calibration Trigger Countdown State & Ref
+  const [countdown, setCountdown] = useState<number | null>(null)
+  const calibrationStartTimeRef = useRef<number | null>(null)
 
   useEffect(() => {
     async function initModel() {
@@ -90,6 +99,14 @@ export function CameraScreen() {
     }
   }, [])
 
+  const goToResults = () => navigate('/results')
+  const handleCancel = () => navigate('/')
+
+  const goToResultsRef = useRef(goToResults)
+  useEffect(() => {
+    goToResultsRef.current = goToResults
+  })
+
   useEffect(() => {
     let animationFrameId: number
     let frameIndex = 0
@@ -104,12 +121,56 @@ export function CameraScreen() {
 
         const ctx = canvas.getContext('2d')
         if (ctx && canvas.width > 0 && canvas.height > 0) {
+          let currentCalibrated = false
+          let currentMissing: string[] = ['Full Body']
+
           if (poseFrame) {
             drawSkeleton(ctx, poseFrame.landmarks, canvas.width, canvas.height)
+            const calResult = checkCalibration(poseFrame)
+            currentCalibrated = calResult.isCalibrated
+            currentMissing = calResult.missingJoints
             frameIndex++
           } else {
             clearSkeleton(ctx, canvas.width, canvas.height)
           }
+
+          // Draw the calibration guidelines on top (Milestone 5)
+          drawCalibrationGuides(ctx, poseFrame, canvas.width, canvas.height)
+
+          // Auto-trigger analysis countdown if calibration is stable
+          if (currentCalibrated) {
+            if (calibrationStartTimeRef.current === null) {
+              calibrationStartTimeRef.current = timestamp
+            }
+            const elapsed = timestamp - calibrationStartTimeRef.current
+            const targetSeconds = 3
+            const remaining = Math.max(0, targetSeconds - Math.floor(elapsed / 1000))
+            
+            if (remaining === 0) {
+              // Trigger analysis capture automatically
+              calibrationStartTimeRef.current = null
+              setCountdown(null)
+              goToResultsRef.current()
+            } else {
+              setCountdown(remaining)
+            }
+          } else {
+            calibrationStartTimeRef.current = null
+            setCountdown(null)
+          }
+
+          // Diff-check state changes to avoid unnecessary React re-renders at 60 FPS
+          setIsCalibrated((prev) => {
+            if (prev !== currentCalibrated) return currentCalibrated
+            return prev
+          })
+
+          setMissingJoints((prev) => {
+            if (JSON.stringify(prev) !== JSON.stringify(currentMissing)) {
+              return currentMissing
+            }
+            return prev
+          })
         }
       }
 
@@ -131,9 +192,6 @@ export function CameraScreen() {
       canvasRef.current.height = videoRef.current.videoHeight
     }
   }
-
-  const goToResults = () => navigate('/results')
-  const handleCancel = () => navigate('/')
 
   return (
     <div className="stack-lg">
@@ -175,15 +233,64 @@ export function CameraScreen() {
           title="Initializing Camera..."
           subtitle="Please grant webcam access to start the analysis."
         />
+      ) : isCalibrated ? (
+        <Card
+          variant="status"
+          title="Calibration Successful"
+          subtitle="All tracking coordinates are locked in. Step back and stay still."
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '12px', color: '#22c55e', fontSize: '0.875rem', fontWeight: 600 }}>
+            <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#22c55e', boxShadow: '0 0 8px #22c55e' }} />
+            Ready for squat analysis
+          </div>
+        </Card>
       ) : (
         <Card
           variant="status"
-          title="Camera & AI Model Active"
-          subtitle="Position yourself in frame so your full body is visible."
-        />
+          title="Positioning Body..."
+          subtitle={`Step back until your entire body is visible. Missing: ${missingJoints.join(', ')}`}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '12px', color: '#ef4444', fontSize: '0.875rem', fontWeight: 600 }}>
+            <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#ef4444', boxShadow: '0 0 8px #ef4444' }} />
+            Align shoulders, hips, knees & feet
+          </div>
+        </Card>
       )}
 
-      <div className="camera-preview" style={{ overflow: 'hidden', padding: 0 }}>
+      <div className="camera-preview" style={{ overflow: 'hidden', padding: 0, position: 'relative' }}>
+        {countdown !== null && (
+          <div style={{
+            position: 'absolute',
+            inset: 0,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            background: 'rgba(0, 0, 0, 0.45)',
+            backdropFilter: 'blur(4px)',
+            borderRadius: 'var(--radius-lg)',
+            zIndex: 10,
+          }}>
+            <div style={{
+              fontSize: '6rem',
+              fontWeight: 800,
+              color: '#22c55e',
+              textShadow: '0 0 24px rgba(34, 197, 94, 0.7)',
+            }}>
+              {countdown}
+            </div>
+            <p style={{
+              fontSize: '1.125rem',
+              fontWeight: 600,
+              color: 'var(--color-text)',
+              marginTop: '12px',
+              letterSpacing: '0.05em',
+            }}>
+              HOLD POSITION...
+            </p>
+          </div>
+        )}
+
         {(isLoading || isModelLoading) && !error && (
           <div className="stack" style={{ alignItems: 'center' }}>
             <p className="camera-preview__label">
@@ -225,9 +332,9 @@ export function CameraScreen() {
         <Button
           variant="primary"
           onClick={goToResults}
-          disabled={!!error || isLoading || isModelLoading}
+          disabled={!!error || isLoading || isModelLoading || !isCalibrated}
         >
-          Capture (Simulate)
+          {isCalibrated ? 'Start Analysis' : 'Awaiting Calibration'}
         </Button>
         <Button variant="secondary" onClick={handleCancel}>
           Cancel
