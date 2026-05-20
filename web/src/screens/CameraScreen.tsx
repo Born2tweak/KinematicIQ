@@ -2,30 +2,47 @@ import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Button } from '../components/Button'
 import { Card } from '../components/Card'
+import { RepCounter } from '../components/RepCounter'
 import {
   SkeletonOverlay,
   clearSkeleton,
   drawSkeleton,
 } from '../components/SkeletonOverlay'
+import { getJointAngles } from '../analysis/angles'
+import { safeLandmark } from '../analysis/geometry'
+import {
+  createPhaseDetectorState,
+  updatePhaseDetector,
+} from '../analysis/phaseDetector'
+import {
+  createRepCounterState,
+  updateRepCounter,
+} from '../analysis/repCounter'
 import { poseEngine } from '../cv/poseEngine'
+import {
+  LANDMARK_INDICES,
+  type PoseFrame,
+  type RepMetrics,
+  type SquatState,
+} from '../cv/types'
 import { drawCalibrationGuides, checkCalibration } from '../cv/drawCalibration'
 
 export function CameraScreen() {
   const navigate = useNavigate()
   const videoRef = useRef<HTMLVideoElement | null>(null)
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
+  const phaseDetectorRef = useRef(createPhaseDetectorState())
+  const repCounterRef = useRef(createRepCounterState())
 
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [isModelLoading, setIsModelLoading] = useState(true)
-  
-  // Calibration and Capture Validation States (Milestones 5 & 6)
   const [isCalibrated, setIsCalibrated] = useState(false)
   const [missingJoints, setMissingJoints] = useState<string[]>(['Full Body'])
-  
-  // Auto-Calibration Trigger Countdown State & Ref
-  const [countdown, setCountdown] = useState<number | null>(null)
-  const calibrationStartTimeRef = useRef<number | null>(null)
+  const [isAnalyzing, setIsAnalyzing] = useState(false)
+  const [currentPhase, setCurrentPhase] = useState<SquatState>('STANDING')
+  const [repCount, setRepCount] = useState(0)
+  const [completedReps, setCompletedReps] = useState<RepMetrics[]>([])
 
   useEffect(() => {
     async function initModel() {
@@ -99,17 +116,55 @@ export function CameraScreen() {
     }
   }, [])
 
-  const goToResults = () => navigate('/results')
   const handleCancel = () => navigate('/')
-
-  const goToResultsRef = useRef(goToResults)
-  useEffect(() => {
-    goToResultsRef.current = goToResults
-  })
 
   useEffect(() => {
     let animationFrameId: number
     let frameIndex = 0
+
+    function updateAnalysis(poseFrame: PoseFrame) {
+      const angles = getJointAngles(poseFrame)
+      const kneeAngles = [angles.leftKnee, angles.rightKnee].filter(
+        (value): value is number => value !== null,
+      )
+      const trackingKneeAngle =
+        kneeAngles.length === 0
+          ? null
+          : Math.min(...kneeAngles)
+      const leftHip = safeLandmark(poseFrame, LANDMARK_INDICES.LEFT_HIP)
+      const rightHip = safeLandmark(poseFrame, LANDMARK_INDICES.RIGHT_HIP)
+      const hipY =
+        leftHip && rightHip ? (leftHip.y + rightHip.y) / 2 : null
+
+      const phaseResult = updatePhaseDetector(
+        phaseDetectorRef.current,
+        {
+          kneeAngle: trackingKneeAngle,
+          hipY,
+        },
+      )
+      phaseDetectorRef.current = phaseResult.state
+
+      setCurrentPhase((previousPhase) =>
+        previousPhase === phaseResult.phase ? previousPhase : phaseResult.phase,
+      )
+
+      const repResult = updateRepCounter(repCounterRef.current, {
+        phase: phaseResult.phase,
+        transitioned: phaseResult.transitioned,
+        frame: poseFrame,
+        angles,
+      })
+      repCounterRef.current = repResult.state
+
+      setRepCount((previousCount) =>
+        previousCount === repResult.repCount ? previousCount : repResult.repCount,
+      )
+
+      if (repResult.completedRep) {
+        setCompletedReps(repResult.reps)
+      }
+    }
 
     function runLoop() {
       const video = videoRef.current
@@ -129,37 +184,17 @@ export function CameraScreen() {
             const calResult = checkCalibration(poseFrame)
             currentCalibrated = calResult.isCalibrated
             currentMissing = calResult.missingJoints
+
+            if (isAnalyzing) {
+              updateAnalysis(poseFrame)
+            }
+
             frameIndex++
           } else {
             clearSkeleton(ctx, canvas.width, canvas.height)
           }
 
-          // Draw the calibration guidelines on top (Milestone 5)
           drawCalibrationGuides(ctx, poseFrame, canvas.width, canvas.height)
-
-          // Auto-trigger analysis countdown if calibration is stable
-          if (currentCalibrated) {
-            if (calibrationStartTimeRef.current === null) {
-              calibrationStartTimeRef.current = timestamp
-            }
-            const elapsed = timestamp - calibrationStartTimeRef.current
-            const targetSeconds = 3
-            const remaining = Math.max(0, targetSeconds - Math.floor(elapsed / 1000))
-            
-            if (remaining === 0) {
-              // Trigger analysis capture automatically
-              calibrationStartTimeRef.current = null
-              setCountdown(null)
-              goToResultsRef.current()
-            } else {
-              setCountdown(remaining)
-            }
-          } else {
-            calibrationStartTimeRef.current = null
-            setCountdown(null)
-          }
-
-          // Diff-check state changes to avoid unnecessary React re-renders at 60 FPS
           setIsCalibrated((prev) => {
             if (prev !== currentCalibrated) return currentCalibrated
             return prev
@@ -184,13 +219,26 @@ export function CameraScreen() {
     return () => {
       cancelAnimationFrame(animationFrameId)
     }
-  }, [isLoading, isModelLoading, error])
+  }, [isLoading, isModelLoading, error, isAnalyzing])
 
   const handleLoadedMetadata = () => {
     if (videoRef.current && canvasRef.current) {
       canvasRef.current.width = videoRef.current.videoWidth
       canvasRef.current.height = videoRef.current.videoHeight
     }
+  }
+
+  const handleBeginSet = () => {
+    phaseDetectorRef.current = createPhaseDetectorState()
+    repCounterRef.current = createRepCounterState()
+    setCurrentPhase('STANDING')
+    setRepCount(0)
+    setCompletedReps([])
+    setIsAnalyzing(true)
+  }
+
+  const handleDone = () => {
+    setIsAnalyzing(false)
   }
 
   return (
@@ -233,15 +281,21 @@ export function CameraScreen() {
           title="Initializing Camera..."
           subtitle="Please grant webcam access to start the analysis."
         />
+      ) : isAnalyzing ? (
+        <Card
+          variant="status"
+          title={`Analyzing Set: ${repCount} rep${repCount === 1 ? '' : 's'}`}
+          subtitle={`Current phase: ${currentPhase}. Press Done when your set is complete.`}
+        />
       ) : isCalibrated ? (
         <Card
           variant="status"
           title="Calibration Successful"
-          subtitle="All tracking coordinates are locked in. Step back and stay still."
+          subtitle="Tracking is stable. Press Begin Set when you are ready to squat."
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '12px', color: '#22c55e', fontSize: '0.875rem', fontWeight: 600 }}>
             <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#22c55e', boxShadow: '0 0 8px #22c55e' }} />
-            Ready for squat analysis
+            Ready to begin a set
           </div>
         </Card>
       ) : (
@@ -258,39 +312,6 @@ export function CameraScreen() {
       )}
 
       <div className="camera-preview" style={{ overflow: 'hidden', padding: 0, position: 'relative' }}>
-        {countdown !== null && (
-          <div style={{
-            position: 'absolute',
-            inset: 0,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            background: 'rgba(0, 0, 0, 0.45)',
-            backdropFilter: 'blur(4px)',
-            borderRadius: 'var(--radius-lg)',
-            zIndex: 10,
-          }}>
-            <div style={{
-              fontSize: '6rem',
-              fontWeight: 800,
-              color: '#22c55e',
-              textShadow: '0 0 24px rgba(34, 197, 94, 0.7)',
-            }}>
-              {countdown}
-            </div>
-            <p style={{
-              fontSize: '1.125rem',
-              fontWeight: 600,
-              color: 'var(--color-text)',
-              marginTop: '12px',
-              letterSpacing: '0.05em',
-            }}>
-              HOLD POSITION...
-            </p>
-          </div>
-        )}
-
         {(isLoading || isModelLoading) && !error && (
           <div className="stack" style={{ alignItems: 'center' }}>
             <p className="camera-preview__label">
@@ -315,6 +336,7 @@ export function CameraScreen() {
 
         {!isLoading && !isModelLoading && !error && (
           <div className="camera-preview__stage">
+            <RepCounter repCount={repCount} isAnalyzing={isAnalyzing} />
             <video
               ref={videoRef}
               className="camera-preview__media"
@@ -331,15 +353,42 @@ export function CameraScreen() {
       <div className="btn-group btn-group--row">
         <Button
           variant="primary"
-          onClick={goToResults}
-          disabled={!!error || isLoading || isModelLoading || !isCalibrated}
+          onClick={handleBeginSet}
+          disabled={!!error || isLoading || isModelLoading || !isCalibrated || isAnalyzing}
         >
-          {isCalibrated ? 'Start Analysis' : 'Awaiting Calibration'}
+          {isCalibrated ? 'Begin Set' : 'Awaiting Calibration'}
         </Button>
-        <Button variant="secondary" onClick={handleCancel}>
+        <Button
+          variant="secondary"
+          onClick={handleDone}
+          disabled={!isAnalyzing}
+        >
+          Done
+        </Button>
+        <Button variant="ghost" onClick={handleCancel}>
           Cancel
         </Button>
       </div>
+
+      {completedReps.length > 0 && (
+        <Card
+          title="Captured Reps"
+          subtitle={`${completedReps.length} completed rep${completedReps.length === 1 ? '' : 's'} recorded in this set.`}
+        >
+          <div className="detail-rows">
+            {completedReps.map((rep) => (
+              <div key={rep.repNumber} className="detail-row">
+                <span className="detail-row__label">Rep {rep.repNumber}</span>
+                <span className="detail-row__value">
+                  Depth {Math.round(Math.min(rep.minLeftKneeAngle ?? 180, rep.minRightKneeAngle ?? 180))}° ·
+                  {' '}
+                  Trunk {rep.averageTrunkLean === null ? 'n/a' : `${Math.round(rep.averageTrunkLean)}°`}
+                </span>
+              </div>
+            ))}
+          </div>
+        </Card>
+      )}
     </div>
   )
 }

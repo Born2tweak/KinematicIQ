@@ -51,7 +51,9 @@ export interface RepMetrics {
   endTimestamp: number
   minLeftKneeAngle: number | null
   minRightKneeAngle: number | null
+  averageTrunkLean: number | null
   maxTrunkLean: number | null
+  hipShiftAtBottom: number | null
   kneeAsymmetry: number | null
   confidence: number
   durationMs: number
