@@ -2,26 +2,32 @@ import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Button } from '../components/Button'
 import { Card } from '../components/Card'
+import {
+  SkeletonOverlay,
+  clearSkeleton,
+  drawSkeleton,
+} from '../components/SkeletonOverlay'
 import { poseEngine } from '../cv/poseEngine'
 
 export function CameraScreen() {
   const navigate = useNavigate()
   const videoRef = useRef<HTMLVideoElement | null>(null)
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
-  
+
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [isModelLoading, setIsModelLoading] = useState(true)
 
-  // Initialize MediaPipe Pose Model on mount
   useEffect(() => {
     async function initModel() {
       setIsModelLoading(true)
       try {
         await poseEngine.initialize()
-      } catch (err: any) {
+      } catch (err: unknown) {
         console.error('Error initializing Pose Engine:', err)
-        setError('Failed to load the tracking model. Please check your internet connection and refresh.')
+        setError(
+          'Failed to load the tracking model. Please check your internet connection and refresh.',
+        )
       } finally {
         setIsModelLoading(false)
       }
@@ -29,7 +35,6 @@ export function CameraScreen() {
     initModel()
   }, [])
 
-  // Start webcam feed on mount
   useEffect(() => {
     let activeStream: MediaStream | null = null
 
@@ -45,20 +50,31 @@ export function CameraScreen() {
           },
           audio: false,
         })
-        
+
         activeStream = mediaStream
-        
+
         if (videoRef.current) {
           videoRef.current.srcObject = mediaStream
         }
-      } catch (err: any) {
+      } catch (err: unknown) {
         console.error('Error accessing camera:', err)
-        if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
-          setError('Camera permission denied. Please allow camera access in your browser settings to continue.')
-        } else if (err.name === 'NotFoundError' || err.name === 'DevicesNotFoundError') {
-          setError('No camera device found. Please connect a webcam and try again.')
+        const error = err as { name?: string; message?: string }
+        if (
+          error.name === 'NotAllowedError' ||
+          error.name === 'PermissionDeniedError'
+        ) {
+          setError(
+            'Camera permission denied. Please allow camera access in your browser settings to continue.',
+          )
+        } else if (
+          error.name === 'NotFoundError' ||
+          error.name === 'DevicesNotFoundError'
+        ) {
+          setError(
+            'No camera device found. Please connect a webcam and try again.',
+          )
         } else {
-          setError(`Unable to access camera: ${err.message || 'Unknown error'}`)
+          setError(`Unable to access camera: ${error.message || 'Unknown error'}`)
         }
       } finally {
         setIsLoading(false)
@@ -74,28 +90,29 @@ export function CameraScreen() {
     }
   }, [])
 
-  // Real-time inference frame loop
   useEffect(() => {
     let animationFrameId: number
     let frameIndex = 0
 
     function runLoop() {
-      if (
-        videoRef.current &&
-        videoRef.current.readyState >= 2 &&
-        poseEngine.getReadyState()
-      ) {
+      const video = videoRef.current
+      const canvas = canvasRef.current
+
+      if (video && video.readyState >= 2 && poseEngine.getReadyState() && canvas) {
         const timestamp = performance.now()
-        const poseFrame = poseEngine.detect(videoRef.current, timestamp, frameIndex)
-        
-        if (poseFrame) {
-          console.log(
-            `[PoseFrame #${frameIndex}] Confidence: ${(poseFrame.poseConfidence * 100).toFixed(1)}%`,
-            poseFrame
-          )
-          frameIndex++
+        const poseFrame = poseEngine.detect(video, timestamp, frameIndex)
+
+        const ctx = canvas.getContext('2d')
+        if (ctx && canvas.width > 0 && canvas.height > 0) {
+          if (poseFrame) {
+            drawSkeleton(ctx, poseFrame.landmarks, canvas.width, canvas.height)
+            frameIndex++
+          } else {
+            clearSkeleton(ctx, canvas.width, canvas.height)
+          }
         }
       }
+
       animationFrameId = requestAnimationFrame(runLoop)
     }
 
@@ -104,13 +121,10 @@ export function CameraScreen() {
     }
 
     return () => {
-      if (animationFrameId) {
-        cancelAnimationFrame(animationFrameId)
-      }
+      cancelAnimationFrame(animationFrameId)
     }
   }, [isLoading, isModelLoading, error])
 
-  // Sync canvas size with video resolution once video metadata is loaded
   const handleLoadedMetadata = () => {
     if (videoRef.current && canvasRef.current) {
       canvasRef.current.width = videoRef.current.videoWidth
@@ -150,11 +164,23 @@ export function CameraScreen() {
           <p className="card__subtitle">{error}</p>
         </Card>
       ) : isModelLoading ? (
-        <Card variant="status" title="Initializing AI Model..." subtitle="Downloading and preparing on-device neural network (WASM)..." />
+        <Card
+          variant="status"
+          title="Initializing AI Model..."
+          subtitle="Downloading and preparing on-device neural network (WASM)..."
+        />
       ) : isLoading ? (
-        <Card variant="status" title="Initializing Camera..." subtitle="Please grant webcam access to start the analysis." />
+        <Card
+          variant="status"
+          title="Initializing Camera..."
+          subtitle="Please grant webcam access to start the analysis."
+        />
       ) : (
-        <Card variant="status" title="Camera & AI Model Active" subtitle="Position yourself in frame so your full body is visible." />
+        <Card
+          variant="status"
+          title="Camera & AI Model Active"
+          subtitle="Position yourself in frame so your full body is visible."
+        />
       )}
 
       <div className="camera-preview" style={{ overflow: 'hidden', padding: 0 }}>
@@ -167,46 +193,40 @@ export function CameraScreen() {
         )}
 
         {error && (
-          <div className="stack" style={{ alignItems: 'center', padding: 'var(--space-md)' }}>
-            <p className="camera-preview__label" style={{ color: 'var(--color-text-muted)' }}>
+          <div
+            className="stack"
+            style={{ alignItems: 'center', padding: 'var(--space-md)' }}
+          >
+            <p
+              className="camera-preview__label"
+              style={{ color: 'var(--color-text-muted)' }}
+            >
               Webcam preview unavailable
             </p>
           </div>
         )}
 
         {!isLoading && !isModelLoading && !error && (
-          <>
+          <div className="camera-preview__stage">
             <video
               ref={videoRef}
+              className="camera-preview__media"
               autoPlay
               playsInline
               muted
               onLoadedMetadata={handleLoadedMetadata}
-              style={{
-                width: '100%',
-                height: '100%',
-                objectFit: 'cover',
-                borderRadius: 'var(--radius-lg)',
-              }}
             />
-            <canvas
-              ref={canvasRef}
-              style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                width: '100%',
-                height: '100%',
-                pointerEvents: 'none',
-                borderRadius: 'var(--radius-lg)',
-              }}
-            />
-          </>
+            <SkeletonOverlay ref={canvasRef} />
+          </div>
         )}
       </div>
 
       <div className="btn-group btn-group--row">
-        <Button variant="primary" onClick={goToResults} disabled={!!error || isLoading || isModelLoading}>
+        <Button
+          variant="primary"
+          onClick={goToResults}
+          disabled={!!error || isLoading || isModelLoading}
+        >
           Capture (Simulate)
         </Button>
         <Button variant="secondary" onClick={handleCancel}>
@@ -216,4 +236,3 @@ export function CameraScreen() {
     </div>
   )
 }
-
