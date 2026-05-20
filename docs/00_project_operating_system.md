@@ -10,13 +10,15 @@
 
 ### 1.1 Executive Snapshot (Read/Update Daily)
 
-| Field | Value |
-|-------|--------|
-| **Current Phase** | Execution / Build |
-| **Current Goal** | Ship Layer 1 MVP within 3 weeks |
-| **Current MVP Focus** | Client-side bodyweight squat analysis |
+
+| Field                       | Value                                                                                                      |
+| --------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| **Current Phase**           | Execution / Build                                                                                          |
+| **Current Goal**            | Ship Layer 1 MVP within 3 weeks                                                                            |
+| **Current MVP Focus**       | Client-side bodyweight squat analysis                                                                      |
 | **Biggest Current Problem** | Week 1 incomplete — calibration (M5) and frame validation (M6) not started; results screen still mock data |
-| **Last Updated** | 2026-05-20 |
+| **Last Updated**            | 2026-05-20                                                                                                 |
+
 
 ### 1.2 Active Priorities & Execution State
 
@@ -32,14 +34,16 @@
 
 **IN PROGRESS:**
 
-| Milestone | Status | Notes |
-|-----------|--------|--------|
-| M1 App shell | ✅ Done | 3-screen flow, dark UI, `web/src/screens/*` |
-| M2 Camera feed | ✅ Done | Webcam stream + permissions on `CameraScreen` |
-| M3 Pose engine | ✅ Done | MediaPipe in `web/src/cv/poseEngine.ts` |
-| M4 Skeleton overlay | ✅ Done | `SkeletonOverlay` + `drawSkeleton` |
-| M5 Calibration | ⬜ Not started | Framing guides, stance, neutral pose |
-| M6 Frame validation | ⬜ Not started | Visibility, instability, invalid positioning |
+
+| Milestone           | Status        | Notes                                         |
+| ------------------- | ------------- | --------------------------------------------- |
+| M1 App shell        | ✅ Done        | 3-screen flow, dark UI, `web/src/screens/`*   |
+| M2 Camera feed      | ✅ Done        | Webcam stream + permissions on `CameraScreen` |
+| M3 Pose engine      | ✅ Done        | MediaPipe in `web/src/cv/poseEngine.ts`       |
+| M4 Skeleton overlay | ✅ Done        | `SkeletonOverlay` + `drawSkeleton`            |
+| M5 Calibration      | ⬜ Not started | Framing guides, stance, neutral pose          |
+| M6 Frame validation | ⬜ Not started | Visibility, instability, invalid positioning  |
+
 
 **Week 2–3:** Not started (joint math, rep FSM, scoring, coaching cues, QA).
 
@@ -61,12 +65,14 @@ KinematicIQ is a software-first movement intelligence platform that uses compute
 
 #### What We Are NOT
 
-| Area | Status |
-|------|--------|
-| Hardware / wearables product | ❌ Out of scope (Layer 1) |
-| Medical diagnosis or injury prediction | ❌ Out of scope |
-| Backend / cloud / persistence (Layer 1) | ❌ Out of scope |
-| Advanced custom ML training (Layer 1) | ❌ Out of scope |
+
+| Area                                    | Status                   |
+| --------------------------------------- | ------------------------ |
+| Hardware / wearables product            | ❌ Out of scope (Layer 1) |
+| Medical diagnosis or injury prediction  | ❌ Out of scope           |
+| Backend / cloud / persistence (Layer 1) | ❌ Out of scope           |
+| Advanced custom ML training (Layer 1)   | ❌ Out of scope           |
+
 
 #### Top 3 Recent Decisions
 
@@ -78,14 +84,16 @@ KinematicIQ is a software-first movement intelligence platform that uses compute
 
 ### 2.2 Product Definition & Success Metrics
 
-| Field | Value |
-|-------|--------|
-| **Product core** | Browser squat analyzer with real-time CV + explainable feedback |
-| **MVP goal** | High-signal, real-time bodyweight squat analysis prototype (Layer 1) |
-| **Primary user** | Self-training athletes; secondary: coaches doing quick movement screens ([PRD §3](06_prd.md)) |
+
+| Field                  | Value                                                                                                                                          |
+| ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Product core**       | Browser squat analyzer with real-time CV + explainable feedback                                                                                |
+| **MVP goal**           | High-signal, real-time bodyweight squat analysis prototype (Layer 1)                                                                           |
+| **Primary user**       | Self-training athletes; secondary: coaches doing quick movement screens ([PRD §3](06_prd.md))                                                  |
 | **Success definition** | Camera + skeleton at 15+ FPS; rep count ±1 for 3–5 reps; score + cues after a set; no medical claims; fully client-side ([PRD §14](06_prd.md)) |
-| **Non-goals** | Persistence, auth, cloud APIs, hardware, medical diagnosis, advanced ML |
-| **Core metrics** | Real-time FPS (target **15–30 FPS**) |
+| **Non-goals**          | Persistence, auth, cloud APIs, hardware, medical diagnosis, advanced ML                                                                        |
+| **Core metrics**       | Real-time FPS (target **15–30 FPS**)                                                                                                           |
+
 
 ---
 
@@ -97,11 +105,13 @@ KinematicIQ is a software-first movement intelligence platform that uses compute
 
 #### Strict Constraints (Non-Goals)
 
-| Constraint | Rule |
-|------------|------|
-| Movement | Single movement only — bodyweight squat |
-| Architecture | Fully client-side; no backend, DB, persistence, auth, cloud APIs, hardware |
-| Scope | No medical claims, injury diagnosis, force estimation, or advanced ML models |
+
+| Constraint   | Rule                                                                         |
+| ------------ | ---------------------------------------------------------------------------- |
+| Movement     | Single movement only — bodyweight squat                                      |
+| Architecture | Fully client-side; no backend, DB, persistence, auth, cloud APIs, hardware   |
+| Scope        | No medical claims, injury diagnosis, force estimation, or advanced ML models |
+
 
 ### 3.2 Core Biomechanical Metrics
 
@@ -117,43 +127,51 @@ Metrics driving the scoring engine:
 
 ### 3.3 Scoring Philosophy
 
-| Principle | Detail |
-|-----------|--------|
-| Methodology | Heuristic-based scoring |
-| Principle | Interpretable, explainable, non-medical |
-| Mandate | No predictive injury claims |
+
+| Principle   | Detail                                  |
+| ----------- | --------------------------------------- |
+| Methodology | Heuristic-based scoring                 |
+| Principle   | Interpretable, explainable, non-medical |
+| Mandate     | No predictive injury claims             |
+
 
 ### 3.4 3-Week Execution Milestones
 
 #### Week 1: Core CV Infrastructure (M1–M6)
 
-| ID | Description | Owner | Status |
-|----|-------------|-------|--------|
-| M1 | App shell: 3-screen flow (Landing, Camera, Results), responsive dark UI | UI/UX (Benian) | ✅ |
-| M2 | Camera feed: webcam stream, permissions, realtime rendering | CV (Oyin) | ✅ |
-| M3 | Pose engine: MediaPipe Pose, live landmarks in-browser | CV (Oyin) | ✅ |
-| M4 | Skeleton overlay: realtime joint + bone overlay | UI/UX (Benian) | ✅ |
-| M5 | Calibration: framing guides, stance positioning, neutral pose capture | CV (Oyin) | ⬜ |
-| M6 | Frame validation: visibility loss, instability, invalid positioning | CV (Oyin) | ⬜ |
+
+| ID  | Description                                                             | Owner          | Status |
+| --- | ----------------------------------------------------------------------- | -------------- | ------ |
+| M1  | App shell: 3-screen flow (Landing, Camera, Results), responsive dark UI | UI/UX (Benian) | ✅      |
+| M2  | Camera feed: webcam stream, permissions, realtime rendering             | CV (Oyin)      | ✅      |
+| M3  | Pose engine: MediaPipe Pose, live landmarks in-browser                  | CV (Oyin)      | ✅      |
+| M4  | Skeleton overlay: realtime joint + bone overlay                         | UI/UX (Benian) | ✅      |
+| M5  | Calibration: framing guides, stance positioning, neutral pose capture   | CV (Oyin)      | ⬜      |
+| M6  | Frame validation: visibility loss, instability, invalid positioning     | CV (Oyin)      | ⬜      |
+
 
 #### Week 2: Biomechanics + Scoring (M7–M10)
 
-| ID | Description | Owner | Status |
-|----|-------------|-------|--------|
-| M7 | Joint math: angles, torso, stance width, smoothing | Biomechanics (Andrian) | ⬜ |
-| M8 | Rep state machine: phases + rep count | Biomechanics (Andrian) | ⬜ |
-| M9 | Asymmetry metrics: hip shift, knee symmetry, depth, valgus | Biomechanics (Andrian) | ⬜ |
-| M10 | Scoring engine: 0–100 heuristic scores | Product (Thomas) | ⬜ |
+
+| ID  | Description                                                | Owner                  | Status |
+| --- | ---------------------------------------------------------- | ---------------------- | ------ |
+| M7  | Joint math: angles, torso, stance width, smoothing         | Biomechanics (Andrian) | ⬜      |
+| M8  | Rep state machine: phases + rep count                      | Biomechanics (Andrian) | ⬜      |
+| M9  | Asymmetry metrics: hip shift, knee symmetry, depth, valgus | Biomechanics (Andrian) | ⬜      |
+| M10 | Scoring engine: 0–100 heuristic scores                     | Product (Thomas)       | ⬜      |
+
 
 #### Week 3: Feedback, QA, Optimization (M11–M15)
 
-| ID | Description | Owner | Status |
-|----|-------------|-------|--------|
-| M11 | UI polish: progress, active states, transitions, responsive refinement | UI/UX (Benian) | ⬜ |
-| M12 | Coaching cue engine: threshold-based feedback | Product (Thomas) | ⬜ |
-| M13 | Results screen: score, breakdowns, observations, disclaimer | UI/UX (Benian) | ⬜ |
-| M14 | QA: cross-device, lighting, browser, positioning | Product (Thomas) | ⬜ |
-| M15 | Optimization: refactor, dead code removal, production build | Biomechanics (Andrian) | ⬜ |
+
+| ID  | Description                                                            | Owner                  | Status |
+| --- | ---------------------------------------------------------------------- | ---------------------- | ------ |
+| M11 | UI polish: progress, active states, transitions, responsive refinement | UI/UX (Benian)         | ⬜      |
+| M12 | Coaching cue engine: threshold-based feedback                          | Product (Thomas)       | ⬜      |
+| M13 | Results screen: score, breakdowns, observations, disclaimer            | UI/UX (Benian)         | ⬜      |
+| M14 | QA: cross-device, lighting, browser, positioning                       | Product (Thomas)       | ⬜      |
+| M15 | Optimization: refactor, dead code removal, production build            | Biomechanics (Andrian) | ⬜      |
+
 
 *Step-by-step acceptance criteria:* [build plan](09_build_plan.md)
 
@@ -171,21 +189,23 @@ Camera Feed → Pose Detection → Landmark Extraction → Frame Validation
 
 ### 4.2 Technical Stack & Priorities
 
-| Layer | Choice |
-|-------|--------|
-| Frontend | React 18, TypeScript, Vite (`web/`) |
-| Backend | None (Layer 1 client-side only) |
-| Pose engine | MediaPipe Pose (BlazePose) — `@mediapipe/tasks-vision` |
-| Runtime target | Browser / WASM, **15–30 FPS** |
-| Storage | None |
+
+| Layer          | Choice                                                 |
+| -------------- | ------------------------------------------------------ |
+| Frontend       | React 18, TypeScript, Vite (`web/`)                    |
+| Backend        | None (Layer 1 client-side only)                        |
+| Pose engine    | MediaPipe Pose (BlazePose) — `@mediapipe/tasks-vision` |
+| Runtime target | Browser / WASM, **15–30 FPS**                          |
+| Storage        | None                                                   |
+
 
 **Architectural priorities (in order):**
 
-1. Stability  
-2. Realtime responsiveness  
-3. Simplicity  
-4. Interpretability  
-5. Visual polish  
+1. Stability
+2. Realtime responsiveness
+3. Simplicity
+4. Interpretability
+5. Visual polish
 
 ### 4.3 Repository Structure (Execution Layer)
 
@@ -213,12 +233,14 @@ web/src/
 
 ### 5.1 Layer 1 Component Ownership (Meeting 2)
 
-| Role | Person | Ownership |
-|------|--------|-----------|
-| UI/UX Developer | Benian | App shell, overlays, progress UI, results UI, responsiveness, polish |
-| CV Engineer | Oyin | Camera, MediaPipe, landmarks, calibration, frame validation |
-| Biomechanics Engineer | Andrian | Joint math, smoothing, rep FSM, asymmetry metrics, biomechanical logic |
-| Coaching / Product Lead | Thomas | Scoring thresholds, coaching cues, QA, terminology, testing |
+
+| Role                    | Person  | Ownership                                                              |
+| ----------------------- | ------- | ---------------------------------------------------------------------- |
+| UI/UX Developer         | Benian  | App shell, overlays, progress UI, results UI, responsiveness, polish   |
+| CV Engineer             | Oyin    | Camera, MediaPipe, landmarks, calibration, frame validation            |
+| Biomechanics Engineer   | Andrian | Joint math, smoothing, rep FSM, asymmetry metrics, biomechanical logic |
+| Coaching / Product Lead | Thomas  | Scoring thresholds, coaching cues, QA, terminology, testing            |
+
 
 ---
 
@@ -226,13 +248,15 @@ web/src/
 
 ### 6.1 Phased Evolution (High-Level)
 
-| Phase | Focus |
-|-------|--------|
-| **Phase 1** (MVP) | Pose estimation, squat analysis, basic feedback — client-side only |
-| **Phase 2** | Jump intelligence — CMJ, landing, readiness trends |
-| **Phase 3** | Athlete baselines — longitudinal tracking, personalized scoring |
-| **Phase 4** | Advanced movement intelligence — sprint/decel, multi-angle, team analytics |
-| **Phase 5** | AI-native coaching — adaptive coaching, personalized intelligence |
+
+| Phase             | Focus                                                                      |
+| ----------------- | -------------------------------------------------------------------------- |
+| **Phase 1** (MVP) | Pose estimation, squat analysis, basic feedback — client-side only         |
+| **Phase 2**       | Jump intelligence — CMJ, landing, readiness trends                         |
+| **Phase 3**       | Athlete baselines — longitudinal tracking, personalized scoring            |
+| **Phase 4**       | Advanced movement intelligence — sprint/decel, multi-angle, team analytics |
+| **Phase 5**       | AI-native coaching — adaptive coaching, personalized intelligence          |
+
 
 ---
 
@@ -240,35 +264,44 @@ web/src/
 
 ### 7.1 Movement Profile: Bodyweight Squat (Layer 1)
 
-| Item | Detail |
-|------|--------|
-| Core MVP metrics | Squat depth, hip shift, knee symmetry, torso angle, valgus approximation |
-| Additional tracked | Knee angle, hip angle, trunk angle, knee tracking, depth |
-| Possible issues | Knee valgus, heel rise, excessive trunk lean, asymmetrical loading |
-| Future AI possibilities | *TBD — post Layer 1* |
+
+| Item                    | Detail                                                                   |
+| ----------------------- | ------------------------------------------------------------------------ |
+| Core MVP metrics        | Squat depth, hip shift, knee symmetry, torso angle, valgus approximation |
+| Additional tracked      | Knee angle, hip angle, trunk angle, knee tracking, depth                 |
+| Possible issues         | Knee valgus, heel rise, excessive trunk lean, asymmetrical loading       |
+| Future AI possibilities | *TBD — post Layer 1*                                                     |
+
 
 *Full test spec:* [movement tests](12_movement_tests.md)
 
 ### 7.2 Core Domain Insights
 
-| Area | Notes |
-|------|--------|
-| Key biomechanics insights | *Capture in [biomechanics research](09_biomechanics_research.md)* |
-| Key computer vision insights | *Capture in [CV pipeline](10_computer_vision_pipeline.md)* |
-| Key scoring insights | *Capture in [scoring systems](11_scoring_systems.md)* |
-| Important constraints | Client-side only; no medical language; confidence-gated feedback |
+
+| Area                         | Notes                                                             |
+| ---------------------------- | ----------------------------------------------------------------- |
+| Key biomechanics insights    | *Capture in [biomechanics research](09_biomechanics_research.md)* |
+| Key computer vision insights | *Capture in [CV pipeline](10_computer_vision_pipeline.md)*        |
+| Key scoring insights         | *Capture in [scoring systems](11_scoring_systems.md)*             |
+| Important constraints        | Client-side only; no medical language; confidence-gated feedback  |
+
 
 ### 7.3 Backlog Movement Profiles
 
-| Movement | Status |
-|----------|--------|
+
+| Movement             | Status            |
+| -------------------- | ----------------- |
 | Countermovement jump | Backlog (Phase 2) |
-| Landing mechanics | Backlog (Phase 2) |
+| Landing mechanics    | Backlog (Phase 2) |
+
 
 ---
 
 ## Changelog (OS document)
 
-| Date | Change |
-|------|--------|
+
+| Date       | Change                                                                        |
+| ---------- | ----------------------------------------------------------------------------- |
 | 2026-05-20 | Initial OS doc; execution status synced to `web/` repo state (M1–M4 complete) |
+
+
