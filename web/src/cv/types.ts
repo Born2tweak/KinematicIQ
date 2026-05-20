@@ -25,6 +25,9 @@ export interface JointAngles {
   rightKnee: number | null
   leftHip: number | null
   rightHip: number | null
+  leftAnkle: number | null
+  rightAnkle: number | null
+  trunkAngle: number | null
   trunkLean: number | null
   pelvisTilt: number | null
 }
