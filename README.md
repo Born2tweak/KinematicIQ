@@ -62,9 +62,40 @@ KinematicIQ/
 
 ---
 
+## Local clone (your computer)
+
+GitHub is the source of truth. Full guide: **[Local development](docs/14_local_development.md)**.
+
+**Windows (PowerShell):**
+
+```powershell
+git clone https://github.com/Born2tweak/KinematicIQ.git $env:USERPROFILE\KinematicIQ
+cd $env:USERPROFILE\KinematicIQ
+.\scripts\setup-local-machine.ps1
+cd web; npm run dev
+```
+
+**macOS / Linux:**
+
+```bash
+git clone https://github.com/Born2tweak/KinematicIQ.git && cd KinematicIQ
+./scripts/setup-local-machine.sh
+cd web && npm run dev
+```
+
+## Web app (Layer 1 MVP)
+
+```bash
+cd web && npm install && npm run dev
+```
+
+Open http://localhost:5173/
+
+---
+
 ## Status
 
-🟡 **Pre-development** — Repo structure only. No application code yet.
+🟢 **Layer 1 in progress** — `web/` MVP (camera + MediaPipe overlay). See `docs/09_build_plan.md`.
 
 ---
 
