@@ -7,6 +7,73 @@ Use this guide to keep a **real copy of the repo on your computer** that tracks 
 
 ---
 
+## Windows (start here)
+
+### Prerequisites
+
+- [Git for Windows](https://git-scm.com/download/win) (includes Git Bash)
+- [Node.js](https://nodejs.org/) 18+ LTS
+- [Cursor](https://cursor.com/) or VS Code
+
+### One command — clone, sync, install (PowerShell)
+
+Open **PowerShell** (not CMD) and paste:
+
+```powershell
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+git clone https://github.com/Born2tweak/KinematicIQ.git $env:USERPROFILE\KinematicIQ
+cd $env:USERPROFILE\KinematicIQ
+git remote set-url origin https://github.com/Born2tweak/KinematicIQ.git
+git pull origin master
+.\scripts\setup-local-machine.ps1
+```
+
+Or run setup only if you already cloned:
+
+```powershell
+cd $env:USERPROFILE\KinematicIQ
+.\scripts\setup-local-machine.ps1
+```
+
+### Run the app (PowerShell)
+
+```powershell
+cd $env:USERPROFILE\KinematicIQ\web
+npm run dev
+```
+
+Open http://localhost:5173/
+
+### Auto-sync while you work (second PowerShell window)
+
+```powershell
+cd $env:USERPROFILE\KinematicIQ
+.\scripts\watch-and-pull.ps1
+```
+
+Manual pull anytime:
+
+```powershell
+.\scripts\sync-repo.ps1
+```
+
+### Open in Cursor
+
+```powershell
+cursor $env:USERPROFILE\KinematicIQ
+```
+
+Or **File → Open Folder** → `C:\Users\YOUR_NAME\KinematicIQ`
+
+### Windows Task Scheduler (optional, every 5 min)
+
+- **Program:** `powershell.exe`
+- **Arguments:** `-NoProfile -ExecutionPolicy Bypass -File "C:\Users\YOU\KinematicIQ\scripts\sync-repo.ps1" -Quiet`
+
+---
+
+## macOS / Linux
+
 ## 1. One-time setup on your machine
 
 ### Prerequisites
@@ -137,10 +204,7 @@ launchctl load ~/Library/LaunchAgents/com.kinematiciq.sync.plist
 
 ### Option D — Windows Task Scheduler
 
-Create a task that runs every 5 minutes:
-
-- Program: `bash` (Git Bash) or `pwsh`
-- Arguments: `-lc "cd C:\Users\YOU\KinematicIQ && ./scripts/sync-repo.sh --quiet"`
+See **Windows (start here)** above for PowerShell task settings.
 
 ---
 

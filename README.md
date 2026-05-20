@@ -64,17 +64,24 @@ KinematicIQ/
 
 ## Local clone (your computer)
 
-GitHub is the source of truth. Clone once, then keep your machine updated as the repo changes:
+GitHub is the source of truth. Full guide: **[Local development](docs/14_local_development.md)**.
 
-```bash
-git clone https://github.com/Born2tweak/KinematicIQ.git
-cd KinematicIQ
-chmod +x scripts/sync-repo.sh
-./scripts/sync-repo.sh          # pull latest now
-./scripts/watch-and-pull.sh     # optional: auto-pull every 2 min
+**Windows (PowerShell):**
+
+```powershell
+git clone https://github.com/Born2tweak/KinematicIQ.git $env:USERPROFILE\KinematicIQ
+cd $env:USERPROFILE\KinematicIQ
+.\scripts\setup-local-machine.ps1
+cd web; npm run dev
 ```
 
-Full setup (auto-sync on macOS/Windows, Cursor settings): **[Local development guide](docs/14_local_development.md)**.
+**macOS / Linux:**
+
+```bash
+git clone https://github.com/Born2tweak/KinematicIQ.git && cd KinematicIQ
+./scripts/setup-local-machine.sh
+cd web && npm run dev
+```
 
 ## Web app (Layer 1 MVP)
 
