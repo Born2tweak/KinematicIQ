@@ -15,6 +15,16 @@ Use this guide to keep a **real copy of the repo on your computer** that tracks 
 - [Node.js](https://nodejs.org/) 18+ LTS
 - [Cursor](https://cursor.com/) or VS Code
 
+### Easiest: double-click setup (no typing)
+
+1. Install [Git](https://git-scm.com/download/win) and [Node.js](https://nodejs.org/) if you do not have them.
+2. In File Explorer, go to your clone (or download the repo as ZIP from GitHub and extract).
+3. Double-click **`scripts\Setup-KinematicIQ.bat`**  
+   - Clones/updates `%USERPROFILE%\KinematicIQ`  
+   - Runs `npm install`  
+   - Starts the dev server in a new window  
+4. Optional: double-click **`scripts\Start-AutoSync.bat`** to auto-pull from GitHub every 2 minutes.
+
 ### One command — clone, sync, install (PowerShell)
 
 Open **PowerShell** (not CMD) and paste:
