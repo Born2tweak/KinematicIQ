@@ -2,6 +2,8 @@
 
 These rules govern all coding agent behavior when building KinematicIQ Layer 1. Every agent session must follow these rules without exception. If a rule conflicts with a coding suggestion, the rule wins.
 
+**Start here for context:** [Project Operating System](00_project_operating_system.md) (phase, priorities, milestone status).
+
 ---
 
 ## 1. Non-Negotiable Build Rules
