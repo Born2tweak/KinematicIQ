@@ -62,9 +62,25 @@ KinematicIQ/
 
 ---
 
+## Documentation
+
+| Doc | Purpose |
+|-----|---------|
+| [Project Operating System](docs/00_project_operating_system.md) | Daily command center — phase, priorities, milestones, ownership |
+| [Build plan](docs/09_build_plan.md) | Milestone-by-milestone implementation guide |
+| [PRD](docs/06_prd.md) | Layer 1 product requirements |
+
+## Web app (Layer 1 MVP)
+
+```bash
+cd web && npm install && npm run dev
+```
+
+Open http://localhost:5173/ — Vite + React client with Landing → Camera → Results flow and MediaPipe pose overlay (Week 1 in progress).
+
 ## Status
 
-🟡 **Pre-development** — Repo structure only. No application code yet.
+🟢 **Layer 1 in progress** — `web/` MVP scaffold; M1–M4 complete, M5–M6 next. See [operating system](docs/00_project_operating_system.md).
 
 ---
 
