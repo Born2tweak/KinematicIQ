@@ -18,6 +18,11 @@ import {
   createRepCounterState,
   updateRepCounter,
 } from '../analysis/repCounter'
+import {
+  type AutoStartPhase,
+  createAutoStartState,
+  updateAutoStart,
+} from '../analysis/autoStart'
 import { poseEngine } from '../cv/poseEngine'
 import {
   LANDMARK_INDICES,
@@ -26,6 +31,7 @@ import {
   type SquatState,
 } from '../cv/types'
 import { drawCalibrationGuides, checkCalibration } from '../cv/drawCalibration'
+import { drawDebugOverlay, type DebugOverlayData } from '../cv/drawDebugOverlay'
 
 export function CameraScreen() {
   const navigate = useNavigate()
@@ -33,16 +39,18 @@ export function CameraScreen() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
   const phaseDetectorRef = useRef(createPhaseDetectorState())
   const repCounterRef = useRef(createRepCounterState())
+  const autoStartRef = useRef(createAutoStartState())
 
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [isModelLoading, setIsModelLoading] = useState(true)
-  const [isCalibrated, setIsCalibrated] = useState(false)
   const [missingJoints, setMissingJoints] = useState<string[]>(['Full Body'])
-  const [isAnalyzing, setIsAnalyzing] = useState(false)
+  const [autoStartPhase, setAutoStartPhase] = useState<AutoStartPhase>('WAITING')
   const [currentPhase, setCurrentPhase] = useState<SquatState>('STANDING')
   const [repCount, setRepCount] = useState(0)
   const [completedReps, setCompletedReps] = useState<RepMetrics[]>([])
+  /** Calibration progress 0-100 shown during CALIBRATING phase. */
+  const [calibrationProgress, setCalibrationProgress] = useState(0)
 
   useEffect(() => {
     async function initModel() {
@@ -122,8 +130,18 @@ export function CameraScreen() {
     let animationFrameId: number
     let frameIndex = 0
 
-    function updateAnalysis(poseFrame: PoseFrame) {
-      const angles = getJointAngles(poseFrame)
+    function computeHipY(poseFrame: PoseFrame): number | null {
+      const leftHip = safeLandmark(poseFrame, LANDMARK_INDICES.LEFT_HIP)
+      const rightHip = safeLandmark(poseFrame, LANDMARK_INDICES.RIGHT_HIP)
+      return leftHip && rightHip ? (leftHip.y + rightHip.y) / 2 : null
+    }
+
+    /** Returns the smoothed knee angle for the debug overlay. */
+    function runAnalysis(
+      poseFrame: PoseFrame,
+      angles: ReturnType<typeof getJointAngles>,
+      hipY: number | null,
+    ): number | null {
       const kneeAngles = [angles.leftKnee, angles.rightKnee].filter(
         (value): value is number => value !== null,
       )
@@ -131,22 +149,15 @@ export function CameraScreen() {
         kneeAngles.length === 0
           ? null
           : Math.min(...kneeAngles)
-      const leftHip = safeLandmark(poseFrame, LANDMARK_INDICES.LEFT_HIP)
-      const rightHip = safeLandmark(poseFrame, LANDMARK_INDICES.RIGHT_HIP)
-      const hipY =
-        leftHip && rightHip ? (leftHip.y + rightHip.y) / 2 : null
 
       const phaseResult = updatePhaseDetector(
         phaseDetectorRef.current,
-        {
-          kneeAngle: trackingKneeAngle,
-          hipY,
-        },
+        { kneeAngle: trackingKneeAngle, hipY, timestamp: poseFrame.timestamp },
       )
       phaseDetectorRef.current = phaseResult.state
 
-      setCurrentPhase((previousPhase) =>
-        previousPhase === phaseResult.phase ? previousPhase : phaseResult.phase,
+      setCurrentPhase((prev) =>
+        prev === phaseResult.phase ? prev : phaseResult.phase,
       )
 
       const repResult = updateRepCounter(repCounterRef.current, {
@@ -157,13 +168,15 @@ export function CameraScreen() {
       })
       repCounterRef.current = repResult.state
 
-      setRepCount((previousCount) =>
-        previousCount === repResult.repCount ? previousCount : repResult.repCount,
+      setRepCount((prev) =>
+        prev === repResult.repCount ? prev : repResult.repCount,
       )
 
       if (repResult.completedRep) {
         setCompletedReps(repResult.reps)
       }
+
+      return phaseResult.smoothedKneeAngle
     }
 
     function runLoop() {
@@ -176,18 +189,67 @@ export function CameraScreen() {
 
         const ctx = canvas.getContext('2d')
         if (ctx && canvas.width > 0 && canvas.height > 0) {
-          let currentCalibrated = false
           let currentMissing: string[] = ['Full Body']
 
           if (poseFrame) {
             drawSkeleton(ctx, poseFrame.landmarks, canvas.width, canvas.height)
+
             const calResult = checkCalibration(poseFrame)
-            currentCalibrated = calResult.isCalibrated
             currentMissing = calResult.missingJoints
 
-            if (isAnalyzing) {
-              updateAnalysis(poseFrame)
+            const angles = getJointAngles(poseFrame)
+            const hipY = computeHipY(poseFrame)
+
+            // Drive the auto-start state machine every frame
+            const autoResult = updateAutoStart(autoStartRef.current, {
+              calibration: calResult,
+              angles,
+              hipY,
+              poseConfidence: poseFrame.poseConfidence,
+            })
+            autoStartRef.current = autoResult.state
+
+            // On transition to ACTIVE, reset analysis pipeline
+            if (autoResult.transitioned && autoResult.phase === 'ACTIVE') {
+              phaseDetectorRef.current = createPhaseDetectorState()
+              repCounterRef.current = createRepCounterState()
+              setCurrentPhase('STANDING')
+              setRepCount(0)
+              setCompletedReps([])
             }
+
+            // Update UI phase
+            setAutoStartPhase((prev) =>
+              prev === autoResult.phase ? prev : autoResult.phase,
+            )
+
+            // Update calibration progress during CALIBRATING phase
+            if (autoResult.phase === 'CALIBRATING') {
+              const progress = Math.round(
+                (autoResult.state.stableFrameCount / 60) * 100,
+              )
+              setCalibrationProgress((prev) =>
+                prev === progress ? prev : progress,
+              )
+            }
+
+            // Run analysis pipeline when ACTIVE
+            let smoothedKnee: number | null =
+              phaseDetectorRef.current.emaKneeAngle
+            if (autoResult.phase === 'ACTIVE') {
+              smoothedKnee = runAnalysis(poseFrame, angles, hipY)
+            }
+
+            // ── Debug overlay (always drawn) ─────────────────────
+            const debugData: DebugOverlayData = {
+              autoStartPhase: autoResult.phase,
+              squatPhase: phaseDetectorRef.current.phase,
+              emaKneeAngle: smoothedKnee,
+              hipY,
+              repCount: repCounterRef.current.repCount,
+              poseConfidence: poseFrame.poseConfidence,
+            }
+            drawDebugOverlay(ctx, debugData, canvas.width)
 
             frameIndex++
           } else {
@@ -195,10 +257,6 @@ export function CameraScreen() {
           }
 
           drawCalibrationGuides(ctx, poseFrame, canvas.width, canvas.height)
-          setIsCalibrated((prev) => {
-            if (prev !== currentCalibrated) return currentCalibrated
-            return prev
-          })
 
           setMissingJoints((prev) => {
             if (JSON.stringify(prev) !== JSON.stringify(currentMissing)) {
@@ -219,7 +277,7 @@ export function CameraScreen() {
     return () => {
       cancelAnimationFrame(animationFrameId)
     }
-  }, [isLoading, isModelLoading, error, isAnalyzing])
+  }, [isLoading, isModelLoading, error])
 
   const handleLoadedMetadata = () => {
     if (videoRef.current && canvasRef.current) {
@@ -228,17 +286,10 @@ export function CameraScreen() {
     }
   }
 
-  const handleBeginSet = () => {
-    phaseDetectorRef.current = createPhaseDetectorState()
-    repCounterRef.current = createRepCounterState()
-    setCurrentPhase('STANDING')
-    setRepCount(0)
-    setCompletedReps([])
-    setIsAnalyzing(true)
-  }
-
   const handleDone = () => {
-    setIsAnalyzing(false)
+    autoStartRef.current = createAutoStartState()
+    setAutoStartPhase('WAITING')
+    setCalibrationProgress(0)
   }
 
   return (
@@ -281,21 +332,47 @@ export function CameraScreen() {
           title="Initializing Camera..."
           subtitle="Please grant webcam access to start the analysis."
         />
-      ) : isAnalyzing ? (
+      ) : autoStartPhase === 'ACTIVE' ? (
         <Card
           variant="status"
           title={`Analyzing Set: ${repCount} rep${repCount === 1 ? '' : 's'}`}
           subtitle={`Current phase: ${currentPhase}. Press Done when your set is complete.`}
         />
-      ) : isCalibrated ? (
+      ) : autoStartPhase === 'READY' ? (
         <Card
           variant="status"
-          title="Calibration Successful"
-          subtitle="Tracking is stable. Press Begin Set when you are ready to squat."
+          title="Ready"
+          subtitle="Begin squatting to start the set. Your first descent will start tracking automatically."
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '12px', color: '#22c55e', fontSize: '0.875rem', fontWeight: 600 }}>
             <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#22c55e', boxShadow: '0 0 8px #22c55e' }} />
-            Ready to begin a set
+            Calibrated — start moving when ready
+          </div>
+        </Card>
+      ) : autoStartPhase === 'CALIBRATING' ? (
+        <Card
+          variant="status"
+          title="Calibrating..."
+          subtitle="Hold still in an upright standing position."
+        >
+          <div style={{ marginTop: '12px' }}>
+            <div style={{
+              height: '4px',
+              borderRadius: '2px',
+              background: 'rgba(255,255,255,0.1)',
+              overflow: 'hidden',
+            }}>
+              <div style={{
+                height: '100%',
+                width: `${calibrationProgress}%`,
+                background: '#facc15',
+                borderRadius: '2px',
+                transition: 'width 0.15s ease-out',
+              }} />
+            </div>
+            <p style={{ color: '#facc15', fontSize: '0.75rem', marginTop: '6px', fontWeight: 600 }}>
+              {calibrationProgress}% — stay still
+            </p>
           </div>
         </Card>
       ) : (
@@ -336,7 +413,7 @@ export function CameraScreen() {
 
         {!isLoading && !isModelLoading && !error && (
           <div className="camera-preview__stage">
-            <RepCounter repCount={repCount} isAnalyzing={isAnalyzing} />
+            <RepCounter repCount={repCount} isAnalyzing={autoStartPhase === 'ACTIVE'} />
             <video
               ref={videoRef}
               className="camera-preview__media"
@@ -352,16 +429,9 @@ export function CameraScreen() {
 
       <div className="btn-group btn-group--row">
         <Button
-          variant="primary"
-          onClick={handleBeginSet}
-          disabled={!!error || isLoading || isModelLoading || !isCalibrated || isAnalyzing}
-        >
-          {isCalibrated ? 'Begin Set' : 'Awaiting Calibration'}
-        </Button>
-        <Button
           variant="secondary"
           onClick={handleDone}
-          disabled={!isAnalyzing}
+          disabled={autoStartPhase !== 'ACTIVE'}
         >
           Done
         </Button>

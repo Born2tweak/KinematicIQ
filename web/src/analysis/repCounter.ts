@@ -23,6 +23,8 @@ export interface RepCounterState {
   reps: RepMetrics[]
   activeRep: ActiveRep | null
   previousPhase: SquatState
+  /** Whether the active rep has reached the BOTTOM phase (full descent). */
+  reachedBottom: boolean
 }
 
 export interface RepCounterInput {
@@ -48,6 +50,7 @@ export function createRepCounterState(): RepCounterState {
     reps: [],
     activeRep: null,
     previousPhase: 'STANDING',
+    reachedBottom: false,
   }
 }
 
@@ -200,13 +203,20 @@ export function updateRepCounter(
   let repCount = state.repCount
   let reps = state.reps
   let completedRep: RepMetrics | null = null
+  let reachedBottom = state.reachedBottom
 
   if (activeRep === null && input.transitioned && input.phase === 'DESCENDING') {
     activeRep = createActiveRep(input.frame, input.angles)
+    reachedBottom = false
   }
 
   if (activeRep !== null) {
     activeRep = updateActiveRep(activeRep, input.frame, input.angles, input.phase)
+  }
+
+  // Track whether the rep has gone through the full BOTTOM phase
+  if (input.phase === 'BOTTOM') {
+    reachedBottom = true
   }
 
   if (
@@ -215,10 +225,15 @@ export function updateRepCounter(
     input.phase === 'STANDING' &&
     state.previousPhase === 'ASCENDING'
   ) {
-    repCount += 1
-    completedRep = finalizeRep(activeRep, repCount, input.frame)
-    reps = [...reps, completedRep]
+    if (reachedBottom) {
+      // Full cycle: DESCENDING -> BOTTOM -> ASCENDING -> STANDING (lockout)
+      repCount += 1
+      completedRep = finalizeRep(activeRep, repCount, input.frame)
+      reps = [...reps, completedRep]
+    }
+    // Discard partial reps that never reached BOTTOM
     activeRep = null
+    reachedBottom = false
   }
 
   const nextState: RepCounterState = {
@@ -226,6 +241,7 @@ export function updateRepCounter(
     reps,
     activeRep,
     previousPhase: input.phase,
+    reachedBottom,
   }
 
   return {
