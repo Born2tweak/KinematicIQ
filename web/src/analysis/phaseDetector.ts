@@ -252,6 +252,10 @@ export function updatePhaseDetector(
   }
 
   // ── Transition confirmed ─────────────────────────────────────────
+  console.log(
+    `[PhaseDetector] TRANSITION: ${state.phase} -> ${targetPhase} | emaKnee=${smoothedKnee?.toFixed(1)} rawKnee=${input.kneeAngle?.toFixed(1)} hipY=${input.hipY?.toFixed(4)} standingHipY=${standingHipY?.toFixed(4)} hipDrop=${(input.hipY !== null && standingHipY !== null ? input.hipY - standingHipY : null)?.toFixed(4)}`,
+  )
+
   const nextDeepestHipY =
     targetPhase === 'STANDING' ? input.hipY : deepestHipY
 

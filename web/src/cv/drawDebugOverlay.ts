@@ -1,13 +1,23 @@
 import type { SquatState } from './types'
 import type { AutoStartPhase } from '../analysis/autoStart'
+import type { RepValidation } from '../analysis/repCounter'
 
 export interface DebugOverlayData {
   autoStartPhase: AutoStartPhase
   squatPhase: SquatState
   emaKneeAngle: number | null
+  leftKneeAngle: number | null
+  rightKneeAngle: number | null
   hipY: number | null
+  hipDrop: number | null
   repCount: number
+  repCountDisplayed: number
   poseConfidence: number
+  lastValidation: RepValidation | null
+  repAttemptActive: boolean
+  hasReachedBottom: boolean
+  completedRepThisFrame: boolean
+  previousPhase: SquatState
 }
 
 const PHASE_COLORS: Record<SquatState, string> = {
@@ -71,11 +81,24 @@ interface DebugLine {
   color: string
 }
 
+const PASS = '#22c55e'
+const FAIL = '#ef4444'
+
+function gate(label: string, passed: boolean): DebugLine {
+  return { label, value: passed ? 'PASS' : 'FAIL', color: passed ? PASS : FAIL }
+}
+
 function buildLines(data: DebugOverlayData): DebugLine[] {
   const kneeStr =
     data.emaKneeAngle !== null ? `${data.emaKneeAngle.toFixed(1)}°` : '---'
+  const leftStr =
+    data.leftKneeAngle !== null ? `${data.leftKneeAngle.toFixed(1)}°` : '---'
+  const rightStr =
+    data.rightKneeAngle !== null ? `${data.rightKneeAngle.toFixed(1)}°` : '---'
   const hipStr =
     data.hipY !== null ? data.hipY.toFixed(4) : '---'
+  const hipDropStr =
+    data.hipDrop !== null ? data.hipDrop.toFixed(4) : '---'
   const confStr = `${(data.poseConfidence * 100).toFixed(0)}%`
   const confColor =
     data.poseConfidence >= 0.7
@@ -84,7 +107,7 @@ function buildLines(data: DebugOverlayData): DebugLine[] {
         ? '#facc15'
         : '#ef4444'
 
-  return [
+  const lines: DebugLine[] = [
     {
       label: 'SESSION',
       value: data.autoStartPhase,
@@ -96,8 +119,39 @@ function buildLines(data: DebugOverlayData): DebugLine[] {
       color: PHASE_COLORS[data.squatPhase],
     },
     { label: 'KNEE (EMA)', value: kneeStr, color: '#a78bfa' },
+    { label: 'L KNEE', value: leftStr, color: '#a78bfa' },
+    { label: 'R KNEE', value: rightStr, color: '#a78bfa' },
     { label: 'HIP Y', value: hipStr, color: '#67e8f9' },
-    { label: 'REPS', value: String(data.repCount), color: '#f9a8d4' },
+    { label: 'HIP DROP', value: hipDropStr, color: '#67e8f9' },
+    { label: 'REPS(state)', value: String(data.repCount), color: '#f9a8d4' },
+    { label: 'REPS(disp)', value: String(data.repCountDisplayed), color: data.repCount !== data.repCountDisplayed ? '#ef4444' : '#f9a8d4' },
     { label: 'CONFIDENCE', value: confStr, color: confColor },
+    { label: '── REP ──', value: '', color: '#6b7280' },
+    { label: 'ATTEMPT', value: data.repAttemptActive ? 'YES' : 'no', color: data.repAttemptActive ? '#22c55e' : '#6b7280' },
+    { label: 'HIT BOTTOM', value: data.hasReachedBottom ? 'YES' : 'no', color: data.hasReachedBottom ? '#22c55e' : '#6b7280' },
+    { label: 'COMPLETED', value: data.completedRepThisFrame ? 'YES' : '—', color: data.completedRepThisFrame ? '#22c55e' : '#6b7280' },
+    { label: 'PREV PHASE', value: data.previousPhase, color: PHASE_COLORS[data.previousPhase] },
   ]
+
+  const v = data.lastValidation
+  if (v) {
+    lines.push(
+      { label: '── GATES ──', value: '', color: '#6b7280' },
+      gate('REACHED BTM', v.reachedBottom),
+      gate('BILATERAL', v.bilateralBend),
+      gate('HIP DESC', v.hipDescended),
+      gate('FEET STABLE', v.feetStable),
+      gate('DURATION', v.validDuration),
+      gate('KNEE LIFT', !v.isKneeLift),
+    )
+    if (v.rejectionReason) {
+      lines.push({
+        label: 'REJECTED',
+        value: v.rejectionReason,
+        color: '#ef4444',
+      })
+    }
+  }
+
+  return lines
 }

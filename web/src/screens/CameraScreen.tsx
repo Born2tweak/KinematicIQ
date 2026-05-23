@@ -136,12 +136,12 @@ export function CameraScreen() {
       return leftHip && rightHip ? (leftHip.y + rightHip.y) / 2 : null
     }
 
-    /** Returns the smoothed knee angle for the debug overlay. */
+    /** Returns the smoothed knee angle and whether a rep completed this frame. */
     function runAnalysis(
       poseFrame: PoseFrame,
       angles: ReturnType<typeof getJointAngles>,
       hipY: number | null,
-    ): number | null {
+    ): { smoothedKnee: number | null; completedRep: boolean } {
       const kneeAngles = [angles.leftKnee, angles.rightKnee].filter(
         (value): value is number => value !== null,
       )
@@ -165,6 +165,7 @@ export function CameraScreen() {
         transitioned: phaseResult.transitioned,
         frame: poseFrame,
         angles,
+        hipY,
       })
       repCounterRef.current = repResult.state
 
@@ -173,10 +174,11 @@ export function CameraScreen() {
       )
 
       if (repResult.completedRep) {
+        console.log(`[CameraScreen] completedRep emitted #${repResult.completedRep.repNumber}, repCount=${repResult.repCount}`)
         setCompletedReps(repResult.reps)
       }
 
-      return phaseResult.smoothedKneeAngle
+      return { smoothedKnee: phaseResult.smoothedKneeAngle, completedRep: repResult.completedRep !== null }
     }
 
     function runLoop() {
@@ -236,18 +238,36 @@ export function CameraScreen() {
             // Run analysis pipeline when ACTIVE
             let smoothedKnee: number | null =
               phaseDetectorRef.current.emaKneeAngle
+            let completedRepThisFrame = false
             if (autoResult.phase === 'ACTIVE') {
-              smoothedKnee = runAnalysis(poseFrame, angles, hipY)
+              const analysisResult = runAnalysis(poseFrame, angles, hipY)
+              smoothedKnee = analysisResult.smoothedKnee
+              completedRepThisFrame = analysisResult.completedRep
             }
 
             // ── Debug overlay (always drawn) ─────────────────────
+            const startHipY = repCounterRef.current.activeRep?.startHipY ?? null
+            const currentHipDrop =
+              startHipY !== null && hipY !== null ? hipY - startHipY : null
+
+            const rcState = repCounterRef.current
+
             const debugData: DebugOverlayData = {
               autoStartPhase: autoResult.phase,
               squatPhase: phaseDetectorRef.current.phase,
               emaKneeAngle: smoothedKnee,
+              leftKneeAngle: angles.leftKnee,
+              rightKneeAngle: angles.rightKnee,
               hipY,
-              repCount: repCounterRef.current.repCount,
+              hipDrop: currentHipDrop,
+              repCount: rcState.repCount,
+              repCountDisplayed: repCount,
               poseConfidence: poseFrame.poseConfidence,
+              lastValidation: rcState.lastValidation,
+              repAttemptActive: rcState.activeRep !== null,
+              hasReachedBottom: rcState.reachedBottom,
+              completedRepThisFrame,
+              previousPhase: rcState.previousPhase,
             }
             drawDebugOverlay(ctx, debugData, canvas.width)
 
