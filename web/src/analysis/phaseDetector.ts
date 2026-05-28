@@ -18,7 +18,7 @@ const RETURN_TO_STANDING_DELTA = 0.05
 // ── Frame debouncing ───────────────────────────────────────────────
 const REQUIRED_CONSECUTIVE_FRAMES = 3
 /** Extra frames required for lockout (ASCENDING -> STANDING) to avoid false reps. */
-const LOCKOUT_CONSECUTIVE_FRAMES = 5
+const LOCKOUT_CONSECUTIVE_FRAMES = 4
 
 // ── EMA smoothing ──────────────────────────────────────────────────
 /** EMA alpha — higher = more responsive, lower = smoother. 0.35 is ~3-frame lag. */
@@ -43,6 +43,8 @@ export interface PhaseDetectorState {
   deepestHipY: number | null
   /** EMA-smoothed knee angle. null until the first valid reading. */
   emaKneeAngle: number | null
+  /** Learned upright knee angle while in STANDING (for lockout + rep completion). */
+  standingKneeAngle: number | null
   /** Timestamp (ms) of the last frame with valid knee/hip data. */
   lastValidTimestamp: number | null
 }
@@ -63,8 +65,27 @@ export function createPhaseDetectorState(): PhaseDetectorState {
     standingHipY: null,
     deepestHipY: null,
     emaKneeAngle: null,
+    standingKneeAngle: null,
     lastValidTimestamp: null,
   }
+}
+
+/** Standing lockout threshold from calibrated upright knee (squat-specific, not global loosening). */
+export function standingKneeThreshold(state: PhaseDetectorState): number {
+  if (state.standingKneeAngle !== null) {
+    return Math.max(state.standingKneeAngle - 12, 152)
+  }
+  return STANDING_KNEE_ANGLE
+}
+
+function updateStandingKneeBaseline(
+  phase: SquatState,
+  smoothedKnee: number | null,
+  prev: number | null,
+): number | null {
+  if (phase !== 'STANDING' || smoothedKnee === null) return prev
+  if (prev === null) return smoothedKnee
+  return 0.92 * prev + 0.08 * smoothedKnee
 }
 
 // ── EMA helper ─────────────────────────────────────────────────────
@@ -81,7 +102,11 @@ const getTargetPhase = (
   hipY: number | null,
   standingHipY: number | null,
   deepestHipY: number | null,
+  standingKneeBaseline: number | null,
 ): SquatState => {
+  const lockoutKnee = standingKneeBaseline !== null
+    ? Math.max(standingKneeBaseline - 12, 152)
+    : STANDING_KNEE_ANGLE
   const hipDrop =
     hipY === null || standingHipY === null ? null : hipY - standingHipY
 
@@ -102,6 +127,10 @@ const getTargetPhase = (
       ) {
         return 'BOTTOM'
       }
+      // Escape hatch: if knees straighten back to standing, allow exit
+      if (kneeAngle !== null && kneeAngle >= lockoutKnee) {
+        return 'STANDING'
+      }
       return 'DESCENDING'
 
     case 'BOTTOM':
@@ -120,7 +149,7 @@ const getTargetPhase = (
     case 'ASCENDING':
       if (
         (hipDrop !== null && hipDrop <= RETURN_TO_STANDING_DELTA) ||
-        (kneeAngle !== null && kneeAngle >= STANDING_KNEE_ANGLE)
+        (kneeAngle !== null && kneeAngle >= lockoutKnee)
       ) {
         return 'STANDING'
       }
@@ -188,12 +217,19 @@ export function updatePhaseDetector(
     : state.deepestHipY
 
   // Use EMA-smoothed knee angle for phase decisions
+  const standingKneeAngle = updateStandingKneeBaseline(
+    state.phase,
+    smoothedKnee,
+    state.standingKneeAngle,
+  )
+
   const targetPhase = getTargetPhase(
     state.phase,
     smoothedKnee,
     input.hipY,
     standingHipY,
     deepestHipY,
+    standingKneeAngle,
   )
 
   // ── No transition requested ──────────────────────────────────────
@@ -218,6 +254,7 @@ export function updatePhaseDetector(
         standingHipY: nextStandingHipY,
         deepestHipY: state.phase === 'STANDING' ? input.hipY : deepestHipY,
         emaKneeAngle: smoothedKnee,
+        standingKneeAngle,
         lastValidTimestamp,
       },
       smoothedKneeAngle: smoothedKnee,
@@ -245,6 +282,7 @@ export function updatePhaseDetector(
         standingHipY,
         deepestHipY,
         emaKneeAngle: smoothedKnee,
+        standingKneeAngle,
         lastValidTimestamp,
       },
       smoothedKneeAngle: smoothedKnee,
@@ -269,6 +307,7 @@ export function updatePhaseDetector(
       standingHipY,
       deepestHipY: nextDeepestHipY,
       emaKneeAngle: smoothedKnee,
+      standingKneeAngle,
       lastValidTimestamp,
     },
     smoothedKneeAngle: smoothedKnee,

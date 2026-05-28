@@ -54,6 +54,7 @@ export interface RepMetrics {
   averageTrunkLean: number | null
   maxTrunkLean: number | null
   hipShiftAtBottom: number | null
+  shoulderAsymmetryAtBottom: number | null
   kneeAsymmetry: number | null
   confidence: number
   durationMs: number

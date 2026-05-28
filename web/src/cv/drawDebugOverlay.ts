@@ -14,10 +14,18 @@ export interface DebugOverlayData {
   repCountDisplayed: number
   poseConfidence: number
   lastValidation: RepValidation | null
-  repAttemptActive: boolean
-  hasReachedBottom: boolean
+  candidateRepActive: boolean
+  reachedBottom: boolean
+  awaitingStandingCompletion: boolean
+  standingFrames: number
+  standingKneeBaseline: number | null
+  lockoutKneeThreshold: number | null
+  blockingGate: string | null
+  lastMissedRepReason: string | null
   completedRepThisFrame: boolean
   previousPhase: SquatState
+  seatedLive: boolean
+  maxHipDropLive: number
 }
 
 const PHASE_COLORS: Record<SquatState, string> = {
@@ -49,7 +57,7 @@ export function drawDebugOverlay(
   const lineHeight = 18
   const fontSize = 13
   const panelHeight = padding * 2 + lines.length * lineHeight
-  const panelWidth = Math.min(280, canvasWidth * 0.45)
+  const panelWidth = Math.min(320, canvasWidth * 0.52)
 
   ctx.save()
 
@@ -127,10 +135,60 @@ function buildLines(data: DebugOverlayData): DebugLine[] {
     { label: 'REPS(disp)', value: String(data.repCountDisplayed), color: data.repCount !== data.repCountDisplayed ? '#ef4444' : '#f9a8d4' },
     { label: 'CONFIDENCE', value: confStr, color: confColor },
     { label: '── REP ──', value: '', color: '#6b7280' },
-    { label: 'ATTEMPT', value: data.repAttemptActive ? 'YES' : 'no', color: data.repAttemptActive ? '#22c55e' : '#6b7280' },
-    { label: 'HIT BOTTOM', value: data.hasReachedBottom ? 'YES' : 'no', color: data.hasReachedBottom ? '#22c55e' : '#6b7280' },
-    { label: 'COMPLETED', value: data.completedRepThisFrame ? 'YES' : '—', color: data.completedRepThisFrame ? '#22c55e' : '#6b7280' },
+    {
+      label: 'CANDIDATE',
+      value: data.candidateRepActive ? 'YES' : 'no',
+      color: data.candidateRepActive ? '#22c55e' : '#6b7280',
+    },
+    {
+      label: 'HIT BOTTOM',
+      value: data.reachedBottom ? 'YES' : 'no',
+      color: data.reachedBottom ? '#22c55e' : '#6b7280',
+    },
+    {
+      label: 'AWAIT STAND',
+      value: data.awaitingStandingCompletion ? 'YES' : 'no',
+      color: data.awaitingStandingCompletion ? '#facc15' : '#6b7280',
+    },
+    {
+      label: 'STAND FR',
+      value: String(data.standingFrames),
+      color: data.standingFrames >= 4 ? '#22c55e' : '#e5e7eb',
+    },
+    {
+      label: 'CAL KNEE',
+      value:
+        data.standingKneeBaseline !== null
+          ? `${data.standingKneeBaseline.toFixed(0)}°`
+          : '---',
+      color: '#a78bfa',
+    },
+    {
+      label: 'LOCKOUT ≥',
+      value:
+        data.lockoutKneeThreshold !== null
+          ? `${data.lockoutKneeThreshold.toFixed(0)}°`
+          : '---',
+      color: '#a78bfa',
+    },
+    {
+      label: 'BLOCK GATE',
+      value: data.blockingGate ?? '—',
+      color: data.blockingGate ? '#facc15' : '#6b7280',
+    },
+    {
+      label: 'MISSED',
+      value: data.lastMissedRepReason ?? '—',
+      color: data.lastMissedRepReason ? '#ef4444' : '#6b7280',
+    },
+    {
+      label: 'COMPLETED',
+      value: data.completedRepThisFrame ? 'YES' : '—',
+      color: data.completedRepThisFrame ? '#22c55e' : '#6b7280',
+    },
     { label: 'PREV PHASE', value: data.previousPhase, color: PHASE_COLORS[data.previousPhase] },
+    { label: 'SEATED', value: data.seatedLive ? 'YES' : 'no', color: data.seatedLive ? '#ef4444' : '#6b7280' },
+    { label: 'MAX H.DROP', value: data.maxHipDropLive.toFixed(3), color: data.maxHipDropLive > 0.30 ? '#ef4444' : '#6b7280' },
   ]
 
   const v = data.lastValidation
@@ -143,6 +201,9 @@ function buildLines(data: DebugOverlayData): DebugLine[] {
       gate('FEET STABLE', v.feetStable),
       gate('DURATION', v.validDuration),
       gate('KNEE LIFT', !v.isKneeLift),
+      gate('SEATED', !v.seatedMovementDetected),
+      { label: 'MAX HIP DR', value: v.maxHipDrop.toFixed(3), color: v.maxHipDrop > 0.30 ? '#ef4444' : '#e5e7eb' },
+      { label: 'BTM HOLD', value: `${v.bottomHoldMs.toFixed(0)}ms`, color: v.bottomHoldMs > 1200 ? '#ef4444' : '#e5e7eb' },
     )
     if (v.rejectionReason) {
       lines.push({

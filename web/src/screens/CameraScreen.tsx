@@ -1,5 +1,6 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { buildSessionResult } from '../session/buildSessionResult'
 import { Button } from '../components/Button'
 import { Card } from '../components/Card'
 import { RepCounter } from '../components/RepCounter'
@@ -9,48 +10,65 @@ import {
   drawSkeleton,
 } from '../components/SkeletonOverlay'
 import { getJointAngles } from '../analysis/angles'
+import {
+  createAutoFinishState,
+  updateAutoFinish,
+} from '../analysis/autoFinish'
 import { safeLandmark } from '../analysis/geometry'
 import {
-  createPhaseDetectorState,
+  standingKneeThreshold,
   updatePhaseDetector,
 } from '../analysis/phaseDetector'
 import {
-  createRepCounterState,
   updateRepCounter,
 } from '../analysis/repCounter'
 import {
-  type AutoStartPhase,
+  STABLE_FRAMES_REQUIRED,
   createAutoStartState,
   updateAutoStart,
 } from '../analysis/autoStart'
+import {
+  activateAnalysisPipeline,
+  createFreshAnalysisPipeline,
+} from '../analysis/setActivation'
 import { poseEngine } from '../cv/poseEngine'
 import {
   LANDMARK_INDICES,
   type PoseFrame,
   type RepMetrics,
-  type SquatState,
 } from '../cv/types'
 import { drawCalibrationGuides, checkCalibration } from '../cv/drawCalibration'
 import { drawDebugOverlay, type DebugOverlayData } from '../cv/drawDebugOverlay'
+import {
+  type CameraSessionPhase,
+  getSessionStatusCopy,
+} from './cameraSessionUi'
 
 export function CameraScreen() {
   const navigate = useNavigate()
   const videoRef = useRef<HTMLVideoElement | null>(null)
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
-  const phaseDetectorRef = useRef(createPhaseDetectorState())
-  const repCounterRef = useRef(createRepCounterState())
+  const initialPipelineRef = useRef(createFreshAnalysisPipeline())
+  const phaseDetectorRef = useRef(initialPipelineRef.current.phaseDetector)
+  const repCounterRef = useRef(initialPipelineRef.current.repCounter)
   const autoStartRef = useRef(createAutoStartState())
+  const autoFinishRef = useRef(createAutoFinishState())
+  const poseConfidenceSamplesRef = useRef<number[]>([])
+  const isFinishingRef = useRef(false)
 
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [isModelLoading, setIsModelLoading] = useState(true)
   const [missingJoints, setMissingJoints] = useState<string[]>(['Full Body'])
-  const [autoStartPhase, setAutoStartPhase] = useState<AutoStartPhase>('WAITING')
-  const [currentPhase, setCurrentPhase] = useState<SquatState>('STANDING')
+  const [autoStartPhase, setAutoStartPhase] =
+    useState<CameraSessionPhase>('WAITING')
   const [repCount, setRepCount] = useState(0)
   const [completedReps, setCompletedReps] = useState<RepMetrics[]>([])
-  /** Calibration progress 0-100 shown during CALIBRATING phase. */
   const [calibrationProgress, setCalibrationProgress] = useState(0)
+  const [autoFinishPending, setAutoFinishPending] = useState(false)
+  const [finishCountdown, setFinishCountdown] = useState<number | null>(null)
+  const [isFinishing, setIsFinishing] = useState(false)
+  const [showDebug, setShowDebug] = useState(false)
 
   useEffect(() => {
     async function initModel() {
@@ -126,6 +144,35 @@ export function CameraScreen() {
 
   const handleCancel = () => navigate('/')
 
+  const finishSet = useCallback(() => {
+    if (isFinishingRef.current) return
+    isFinishingRef.current = true
+    setIsFinishing(true)
+
+    const reps = repCounterRef.current.reps
+    const result = buildSessionResult(
+      reps,
+      poseConfidenceSamplesRef.current,
+    )
+
+    autoStartRef.current = createAutoStartState()
+    autoFinishRef.current = createAutoFinishState()
+    phaseDetectorRef.current = createFreshAnalysisPipeline().phaseDetector
+    repCounterRef.current = createFreshAnalysisPipeline().repCounter
+    poseConfidenceSamplesRef.current = []
+    setAutoStartPhase('WAITING')
+    setCalibrationProgress(0)
+    setRepCount(0)
+    setCompletedReps([])
+    setAutoFinishPending(false)
+    setFinishCountdown(null)
+
+    navigate('/results', { state: { result } })
+  }, [navigate])
+
+  const finishSetRef = useRef(finishSet)
+  finishSetRef.current = finishSet
+
   useEffect(() => {
     let animationFrameId: number
     let frameIndex = 0
@@ -156,16 +203,15 @@ export function CameraScreen() {
       )
       phaseDetectorRef.current = phaseResult.state
 
-      setCurrentPhase((prev) =>
-        prev === phaseResult.phase ? prev : phaseResult.phase,
-      )
-
       const repResult = updateRepCounter(repCounterRef.current, {
         phase: phaseResult.phase,
         transitioned: phaseResult.transitioned,
         frame: poseFrame,
         angles,
         hipY,
+        smoothedKneeAngle: phaseResult.smoothedKneeAngle,
+        standingKneeBaseline: phaseDetectorRef.current.standingKneeAngle,
+        standingHipY: phaseDetectorRef.current.standingHipY,
       })
       repCounterRef.current = repResult.state
 
@@ -211,13 +257,54 @@ export function CameraScreen() {
             })
             autoStartRef.current = autoResult.state
 
-            // On transition to ACTIVE, reset analysis pipeline
-            if (autoResult.transitioned && autoResult.phase === 'ACTIVE') {
-              phaseDetectorRef.current = createPhaseDetectorState()
-              repCounterRef.current = createRepCounterState()
-              setCurrentPhase('STANDING')
+            if (autoResult.transitioned && autoResult.phase === 'READY') {
+              const fresh = createFreshAnalysisPipeline()
+              phaseDetectorRef.current = fresh.phaseDetector
+              repCounterRef.current = fresh.repCounter
+              autoFinishRef.current = createAutoFinishState()
+              setAutoFinishPending(false)
+              setFinishCountdown(null)
               setRepCount(0)
               setCompletedReps([])
+            }
+
+            if (autoResult.transitioned && autoResult.phase === 'ACTIVE') {
+              autoFinishRef.current = createAutoFinishState()
+              setAutoFinishPending(false)
+              setFinishCountdown(null)
+              poseConfidenceSamplesRef.current = []
+
+              const kneeAngles = [angles.leftKnee, angles.rightKnee].filter(
+                (value): value is number => value !== null,
+              )
+              const trackingKneeAngle =
+                kneeAngles.length === 0
+                  ? null
+                  : Math.min(...kneeAngles)
+
+              if (autoResult.activatedByDescent) {
+                const activated = activateAnalysisPipeline({
+                  frame: poseFrame,
+                  angles,
+                  hipY,
+                  calibratedHipY: autoStartRef.current.calibratedHipY,
+                  trackingKneeAngle,
+                  standingKneeAngle:
+                    phaseDetectorRef.current.standingKneeAngle,
+                })
+                phaseDetectorRef.current = activated.phaseDetector
+                repCounterRef.current = activated.repCounter
+              } else {
+                const fresh = createFreshAnalysisPipeline()
+                phaseDetectorRef.current = fresh.phaseDetector
+                repCounterRef.current = fresh.repCounter
+              }
+              setRepCount(0)
+              setCompletedReps([])
+            }
+
+            if (autoResult.phase === 'ACTIVE' && poseFrame) {
+              poseConfidenceSamplesRef.current.push(poseFrame.poseConfidence)
             }
 
             // Update UI phase
@@ -228,7 +315,8 @@ export function CameraScreen() {
             // Update calibration progress during CALIBRATING phase
             if (autoResult.phase === 'CALIBRATING') {
               const progress = Math.round(
-                (autoResult.state.stableFrameCount / 60) * 100,
+                (autoResult.state.stableFrameCount / STABLE_FRAMES_REQUIRED) *
+                  100,
               )
               setCalibrationProgress((prev) =>
                 prev === progress ? prev : progress,
@@ -239,22 +327,42 @@ export function CameraScreen() {
             let smoothedKnee: number | null =
               phaseDetectorRef.current.emaKneeAngle
             let completedRepThisFrame = false
-            if (autoResult.phase === 'ACTIVE') {
+            if (
+              autoResult.phase === 'ACTIVE' &&
+              !isFinishingRef.current
+            ) {
               const analysisResult = runAnalysis(poseFrame, angles, hipY)
               smoothedKnee = analysisResult.smoothedKnee
               completedRepThisFrame = analysisResult.completedRep
+
+              const finishResult = updateAutoFinish(autoFinishRef.current, {
+                timestamp: poseFrame.timestamp,
+                squatPhase: phaseDetectorRef.current.phase,
+                kneeAngle: smoothedKnee,
+                completedRepCount: repCounterRef.current.repCount,
+                isActive: true,
+              })
+              autoFinishRef.current = finishResult.state
+              setAutoFinishPending(finishResult.pending)
+              setFinishCountdown(finishResult.countdown)
+
+              if (finishResult.shouldFinish) {
+                finishSetRef.current()
+              }
             }
 
-            // ── Debug overlay (always drawn) ─────────────────────
+            // ── Debug overlay (dev toggle) ─────────────────────
             const startHipY = repCounterRef.current.activeRep?.startHipY ?? null
             const currentHipDrop =
               startHipY !== null && hipY !== null ? hipY - startHipY : null
 
             const rcState = repCounterRef.current
 
+            const pdState = phaseDetectorRef.current
+
             const debugData: DebugOverlayData = {
               autoStartPhase: autoResult.phase,
-              squatPhase: phaseDetectorRef.current.phase,
+              squatPhase: pdState.phase,
               emaKneeAngle: smoothedKnee,
               leftKneeAngle: angles.leftKnee,
               rightKneeAngle: angles.rightKnee,
@@ -264,12 +372,25 @@ export function CameraScreen() {
               repCountDisplayed: repCount,
               poseConfidence: poseFrame.poseConfidence,
               lastValidation: rcState.lastValidation,
-              repAttemptActive: rcState.activeRep !== null,
-              hasReachedBottom: rcState.reachedBottom,
+              candidateRepActive: rcState.activeRep !== null,
+              reachedBottom: rcState.reachedBottom,
+              awaitingStandingCompletion:
+                rcState.activeRep !== null &&
+                rcState.reachedBottom &&
+                rcState.standingCompletionFrames < 4,
+              standingFrames: rcState.standingCompletionFrames,
+              standingKneeBaseline: pdState.standingKneeAngle,
+              lockoutKneeThreshold: standingKneeThreshold(pdState),
+              blockingGate: rcState.blockingGate,
+              lastMissedRepReason: rcState.lastMissedRepReason,
               completedRepThisFrame,
               previousPhase: rcState.previousPhase,
+              seatedLive: rcState.activeRep?.seatedMovementDetected ?? false,
+              maxHipDropLive: rcState.activeRep?.maxHipDrop ?? 0,
             }
-            drawDebugOverlay(ctx, debugData, canvas.width)
+            if (showDebug) {
+              drawDebugOverlay(ctx, debugData, canvas.width)
+            }
 
             frameIndex++
           } else {
@@ -297,7 +418,7 @@ export function CameraScreen() {
     return () => {
       cancelAnimationFrame(animationFrameId)
     }
-  }, [isLoading, isModelLoading, error])
+  }, [isLoading, isModelLoading, error, showDebug])
 
   const handleLoadedMetadata = () => {
     if (videoRef.current && canvasRef.current) {
@@ -306,11 +427,17 @@ export function CameraScreen() {
     }
   }
 
-  const handleDone = () => {
-    autoStartRef.current = createAutoStartState()
-    setAutoStartPhase('WAITING')
-    setCalibrationProgress(0)
-  }
+  const displayPhase: CameraSessionPhase = isFinishing
+    ? 'FINISHED'
+    : autoFinishPending
+      ? 'AUTO_FINISH_PENDING'
+      : autoStartPhase
+
+  const statusCopy = getSessionStatusCopy(displayPhase, {
+    repCount,
+    finishCountdown,
+    missingJoints,
+  })
 
   return (
     <div className="stack-lg">
@@ -352,59 +479,92 @@ export function CameraScreen() {
           title="Initializing Camera..."
           subtitle="Please grant webcam access to start the analysis."
         />
-      ) : autoStartPhase === 'ACTIVE' ? (
-        <Card
-          variant="status"
-          title={`Analyzing Set: ${repCount} rep${repCount === 1 ? '' : 's'}`}
-          subtitle={`Current phase: ${currentPhase}. Press Done when your set is complete.`}
-        />
-      ) : autoStartPhase === 'READY' ? (
-        <Card
-          variant="status"
-          title="Ready"
-          subtitle="Begin squatting to start the set. Your first descent will start tracking automatically."
-        >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '12px', color: '#22c55e', fontSize: '0.875rem', fontWeight: 600 }}>
-            <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#22c55e', boxShadow: '0 0 8px #22c55e' }} />
-            Calibrated — start moving when ready
-          </div>
-        </Card>
-      ) : autoStartPhase === 'CALIBRATING' ? (
-        <Card
-          variant="status"
-          title="Calibrating..."
-          subtitle="Hold still in an upright standing position."
-        >
-          <div style={{ marginTop: '12px' }}>
-            <div style={{
-              height: '4px',
-              borderRadius: '2px',
-              background: 'rgba(255,255,255,0.1)',
-              overflow: 'hidden',
-            }}>
-              <div style={{
-                height: '100%',
-                width: `${calibrationProgress}%`,
-                background: '#facc15',
-                borderRadius: '2px',
-                transition: 'width 0.15s ease-out',
-              }} />
-            </div>
-            <p style={{ color: '#facc15', fontSize: '0.75rem', marginTop: '6px', fontWeight: 600 }}>
-              {calibrationProgress}% — stay still
-            </p>
-          </div>
-        </Card>
       ) : (
         <Card
           variant="status"
-          title="Positioning Body..."
-          subtitle={`Step back until your entire body is visible. Missing: ${missingJoints.join(', ')}`}
+          title={statusCopy.title}
+          subtitle={statusCopy.subtitle}
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '12px', color: '#ef4444', fontSize: '0.875rem', fontWeight: 600 }}>
-            <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#ef4444', boxShadow: '0 0 8px #ef4444' }} />
-            Align shoulders, hips, knees & feet
-          </div>
+          {autoStartPhase === 'READY' && (
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                marginTop: '12px',
+                color: '#22c55e',
+                fontSize: '0.875rem',
+                fontWeight: 600,
+              }}
+            >
+              <span
+                style={{
+                  width: '8px',
+                  height: '8px',
+                  borderRadius: '50%',
+                  background: '#22c55e',
+                  boxShadow: '0 0 8px #22c55e',
+                }}
+              />
+              Calibrated — squat when ready
+            </div>
+          )}
+          {autoStartPhase === 'CALIBRATING' && (
+            <div style={{ marginTop: '12px' }}>
+              <div
+                style={{
+                  height: '4px',
+                  borderRadius: '2px',
+                  background: 'rgba(255,255,255,0.1)',
+                  overflow: 'hidden',
+                }}
+              >
+                <div
+                  style={{
+                    height: '100%',
+                    width: `${calibrationProgress}%`,
+                    background: '#facc15',
+                    borderRadius: '2px',
+                    transition: 'width 0.15s ease-out',
+                  }}
+                />
+              </div>
+              <p
+                style={{
+                  color: '#facc15',
+                  fontSize: '0.75rem',
+                  marginTop: '6px',
+                  fontWeight: 600,
+                }}
+              >
+                {calibrationProgress}% — stay still
+              </p>
+            </div>
+          )}
+          {autoStartPhase === 'WAITING' && (
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                marginTop: '12px',
+                color: '#ef4444',
+                fontSize: '0.875rem',
+                fontWeight: 600,
+              }}
+            >
+              <span
+                style={{
+                  width: '8px',
+                  height: '8px',
+                  borderRadius: '50%',
+                  background: '#ef4444',
+                  boxShadow: '0 0 8px #ef4444',
+                }}
+              />
+              Align shoulders, hips, knees & feet
+            </div>
+          )}
         </Card>
       )}
 
@@ -443,6 +603,21 @@ export function CameraScreen() {
               onLoadedMetadata={handleLoadedMetadata}
             />
             <SkeletonOverlay ref={canvasRef} />
+            {finishCountdown !== null && autoStartPhase === 'ACTIVE' && (
+              <div className="camera-finish-countdown" aria-live="polite">
+                <p className="camera-finish-countdown__text">
+                  Finishing set in {finishCountdown}…
+                </p>
+              </div>
+            )}
+            <button
+              type="button"
+              className={`camera-debug-toggle${showDebug ? ' camera-debug-toggle--on' : ''}`}
+              onClick={() => setShowDebug((prev) => !prev)}
+              aria-pressed={showDebug}
+            >
+              Debug {showDebug ? 'On' : 'Off'}
+            </button>
           </div>
         )}
       </div>
@@ -450,10 +625,10 @@ export function CameraScreen() {
       <div className="btn-group btn-group--row">
         <Button
           variant="secondary"
-          onClick={handleDone}
-          disabled={autoStartPhase !== 'ACTIVE'}
+          onClick={finishSet}
+          disabled={autoStartPhase !== 'ACTIVE' || isFinishing}
         >
-          Done
+          Finish Now
         </Button>
         <Button variant="ghost" onClick={handleCancel}>
           Cancel

@@ -15,7 +15,7 @@ import type { CalibrationResult } from '../cv/drawCalibration'
 export type AutoStartPhase = 'WAITING' | 'CALIBRATING' | 'READY' | 'ACTIVE'
 
 /** ~2s at 30fps = 60 frames of consecutive stability required. */
-const STABLE_FRAMES_REQUIRED = 60
+export const STABLE_FRAMES_REQUIRED = 60
 
 /** Knee angle must be above this to count as "upright standing". */
 const UPRIGHT_KNEE_THRESHOLD = 150
@@ -50,6 +50,8 @@ export interface AutoStartResult {
   phase: AutoStartPhase
   transitioned: boolean
   state: AutoStartState
+  /** True when READY → ACTIVE because descent was already underway. */
+  activatedByDescent: boolean
 }
 
 export function createAutoStartState(): AutoStartState {
@@ -114,6 +116,7 @@ export function updateAutoStart(
         return {
           phase: 'CALIBRATING',
           transitioned: true,
+          activatedByDescent: false,
           state: {
             phase: 'CALIBRATING',
             stableFrameCount: 1,
@@ -126,6 +129,7 @@ export function updateAutoStart(
       return {
         phase: 'WAITING',
         transitioned: false,
+        activatedByDescent: false,
         state: {
           ...state,
           lastHipY: input.hipY,
@@ -143,6 +147,7 @@ export function updateAutoStart(
         return {
           phase: 'WAITING',
           transitioned: true,
+          activatedByDescent: false,
           state: {
             phase: 'WAITING',
             stableFrameCount: 0,
@@ -158,6 +163,7 @@ export function updateAutoStart(
         return {
           phase: 'READY',
           transitioned: true,
+          activatedByDescent: false,
           state: {
             phase: 'READY',
             stableFrameCount: nextCount,
@@ -170,6 +176,7 @@ export function updateAutoStart(
       return {
         phase: 'CALIBRATING',
         transitioned: false,
+        activatedByDescent: false,
         state: {
           ...state,
           stableFrameCount: nextCount,
@@ -183,6 +190,7 @@ export function updateAutoStart(
         return {
           phase: 'WAITING',
           transitioned: true,
+          activatedByDescent: false,
           state: {
             phase: 'WAITING',
             stableFrameCount: 0,
@@ -196,6 +204,7 @@ export function updateAutoStart(
         return {
           phase: 'ACTIVE',
           transitioned: true,
+          activatedByDescent: true,
           state: {
             ...state,
             phase: 'ACTIVE',
@@ -207,6 +216,7 @@ export function updateAutoStart(
       return {
         phase: 'READY',
         transitioned: false,
+        activatedByDescent: false,
         state: {
           ...state,
           lastHipY: input.hipY,
@@ -218,6 +228,7 @@ export function updateAutoStart(
       return {
         phase: 'ACTIVE',
         transitioned: false,
+        activatedByDescent: false,
         state: {
           ...state,
           lastHipY: input.hipY,

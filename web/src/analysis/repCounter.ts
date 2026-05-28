@@ -1,3 +1,4 @@
+import { measureFrameAsymmetry } from './asymmetryDetector'
 import { midpoint, safeLandmark } from './geometry'
 import type { JointAngles, PoseFrame, RepMetrics, SquatState } from '../cv/types'
 import { LANDMARK_INDICES } from '../cv/types'
@@ -23,6 +24,33 @@ const KNEE_LIFT_SINGLE_KNEE_MAX = 120
 const KNEE_LIFT_OTHER_KNEE_MIN = 155
 const KNEE_LIFT_HIP_DROP_MAX = 0.025
 
+// ── Chair / sit-to-stand rejection ────────────────────────────────
+/** Hip drop (normalized) beyond which the movement looks like sitting. */
+const SEATED_HIP_DROP_THRESHOLD = 0.30
+/** Consecutive frames of seated signal before flagging. */
+const SEATED_MIN_FRAMES = 3
+/** Bottom hold duration (ms) that triggers seated flag when hipDrop stays high. */
+const SEATED_BOTTOM_HOLD_MS = 1200
+/** Hip drop considered "high" for bottom-hold detection. */
+const SEATED_BOTTOM_HOLD_HIP_DROP = 0.20
+/** Minimum hip confidence to count as "visible" near bottom. */
+const HIP_CONFIDENCE_MIN = 0.4
+
+/** Consecutive near-standing frames to count a rep without perfect phase lockout. */
+const STANDING_COMPLETION_FRAMES = 4
+/** Degrees below calibrated upright knee that still counts as lockout. */
+const STANDING_KNEE_TOLERANCE = 14
+/** Fallback lockout knee when no calibration exists. */
+const STANDING_KNEE_FALLBACK = 152
+/** Hip returned within this delta of rep start (normalized Y). */
+const HIP_RETURN_TOLERANCE = 0.08
+/** Minimum pose confidence while finishing a rep. */
+const MIN_COMPLETION_POSE_CONFIDENCE = 0.42
+/** Average rep confidence floor — rejects reps mostly tracked poorly. */
+const MIN_REP_AVG_CONFIDENCE = 0.38
+/** Knee angle fallback when phase never reports BOTTOM. */
+const BOTTOM_KNEE_ANGLE_THRESHOLD = 105
+
 // ── Types ──────────────────────────────────────────────────────────
 
 export interface RepValidation {
@@ -32,6 +60,9 @@ export interface RepValidation {
   feetStable: boolean
   validDuration: boolean
   isKneeLift: boolean
+  seatedMovementDetected: boolean
+  maxHipDrop: number
+  bottomHoldMs: number
   /** null = rep accepted; string = reason it was rejected. */
   rejectionReason: string | null
 }
@@ -48,12 +79,19 @@ interface ActiveRep {
   bottomTimestamp: number
   bottomAverageKneeAngle: number | null
   hipShiftAtBottom: number | null
+  shoulderAsymmetryAtBottom: number | null
   confidenceSamples: number
   confidenceSum: number
   startHipY: number | null
   deepestHipY: number | null
   totalFrames: number
   ankleVisibleFrames: number
+  // Chair / seated detection
+  maxHipDrop: number
+  seatedConsecutiveFrames: number
+  seatedMovementDetected: boolean
+  bottomHoldStartTimestamp: number | null
+  bottomHoldMs: number
 }
 
 export interface RepCounterState {
@@ -64,6 +102,12 @@ export interface RepCounterState {
   reachedBottom: boolean
   /** Persists until next rep attempt so the debug overlay can show it. */
   lastValidation: RepValidation | null
+  /** Frames with near-standing lockout after bottom (grace completion). */
+  standingCompletionFrames: number
+  /** Live gate blocking rep completion (debug HUD). */
+  blockingGate: string | null
+  /** Last failed attempt after bottom was reached (debug HUD). */
+  lastMissedRepReason: string | null
 }
 
 export interface RepCounterInput {
@@ -72,6 +116,9 @@ export interface RepCounterInput {
   frame: PoseFrame
   angles: JointAngles
   hipY: number | null
+  smoothedKneeAngle: number | null
+  standingKneeBaseline: number | null
+  standingHipY: number | null
 }
 
 export interface RepCounterResult {
@@ -89,6 +136,48 @@ export function createRepCounterState(): RepCounterState {
     previousPhase: 'STANDING',
     reachedBottom: false,
     lastValidation: null,
+    standingCompletionFrames: 0,
+    blockingGate: null,
+    lastMissedRepReason: null,
+  }
+}
+
+/**
+ * Start rep 1 when the set activates mid-descent (READY → ACTIVE handoff).
+ * Does not relax validation gates — only preserves the in-progress attempt.
+ */
+export function beginSetDuringDescent(
+  state: RepCounterState,
+  frame: PoseFrame,
+  angles: JointAngles,
+  hipY: number | null,
+  initialPhase: SquatState,
+): RepCounterState {
+  const activeRep = createActiveRep(frame, angles, hipY)
+  let reachedBottom = initialPhase === 'BOTTOM'
+
+  if (!reachedBottom) {
+    const avgKnee = averageKneeAngle(angles)
+    if (avgKnee !== null && avgKnee <= 105) {
+      reachedBottom = true
+    }
+  }
+
+  console.log(
+    `[RepCounter] SET ACTIVATED mid-descent | phase=${initialPhase} reachedBottom=${reachedBottom} frame=${frame.frameIndex}`,
+  )
+
+  return {
+    ...state,
+    activeRep,
+    previousPhase: initialPhase,
+    reachedBottom,
+    lastValidation: null,
+    standingCompletionFrames: 0,
+    blockingGate: reachedBottom
+      ? 'Awaiting standing completion'
+      : 'Awaiting bottom',
+    lastMissedRepReason: null,
   }
 }
 
@@ -127,6 +216,114 @@ const calculateHipShiftAtBottom = (frame: PoseFrame): number | null => {
   return Math.abs(hipMidpoint.x - footMidpoint.x)
 }
 
+function lockoutKneeThreshold(standingKneeBaseline: number | null): number {
+  if (standingKneeBaseline !== null) {
+    return Math.max(standingKneeBaseline - STANDING_KNEE_TOLERANCE, STANDING_KNEE_FALLBACK)
+  }
+  return STANDING_KNEE_FALLBACK
+}
+
+function isNearStandingLockout(
+  input: RepCounterInput,
+  activeRep: ActiveRep,
+  reachedBottom: boolean,
+): boolean {
+  if (!reachedBottom) return false
+  if (input.phase === 'DESCENDING' || input.phase === 'BOTTOM') return false
+  if (input.phase !== 'ASCENDING' && input.phase !== 'STANDING') return false
+
+  if (input.frame.poseConfidence < MIN_COMPLETION_POSE_CONFIDENCE) {
+    return false
+  }
+
+  const avgKnee = averageKneeAngle(input.angles)
+  const kneeForLockout = input.smoothedKneeAngle ?? avgKnee
+  if (kneeForLockout === null) return false
+
+  if (kneeForLockout < lockoutKneeThreshold(input.standingKneeBaseline)) {
+    return false
+  }
+
+  const hipReturned =
+    activeRep.startHipY !== null &&
+    input.hipY !== null &&
+    Math.abs(input.hipY - activeRep.startHipY) <= HIP_RETURN_TOLERANCE
+
+  const hipDropFromCalibrated =
+    input.standingHipY !== null &&
+    input.hipY !== null &&
+    input.hipY - input.standingHipY <= 0.07
+
+  return hipReturned || hipDropFromCalibrated
+}
+
+function computeBlockingGate(
+  activeRep: ActiveRep | null,
+  reachedBottom: boolean,
+  standingCompletionFrames: number,
+  input: RepCounterInput,
+): string | null {
+  if (activeRep === null) return null
+
+  if (activeRep.seatedMovementDetected) {
+    return 'Movement looked seated'
+  }
+
+  if (!reachedBottom) {
+    if (input.phase === 'DESCENDING' || input.phase === 'BOTTOM') {
+      return 'Awaiting bottom'
+    }
+    return 'Bottom not held long enough'
+  }
+
+  if (input.frame.poseConfidence < MIN_COMPLETION_POSE_CONFIDENCE) {
+    return 'Pose confidence dropped'
+  }
+
+  if (!isNearStandingLockout(input, activeRep, reachedBottom)) {
+    if (input.phase === 'ASCENDING' || input.phase === 'STANDING') {
+      const threshold = lockoutKneeThreshold(input.standingKneeBaseline)
+      const knee = input.smoothedKneeAngle ?? averageKneeAngle(input.angles)
+      if (knee !== null && knee < threshold) {
+        return 'Knee angle never passed standing threshold'
+      }
+    }
+    return 'Did not return to standing'
+  }
+
+  if (standingCompletionFrames < STANDING_COMPLETION_FRAMES) {
+    return `Awaiting standing completion (${standingCompletionFrames}/${STANDING_COMPLETION_FRAMES})`
+  }
+
+  return null
+}
+
+function missedRepReason(
+  activeRep: ActiveRep,
+  standingCompletionFrames: number,
+  reachedBottom: boolean,
+  input: RepCounterInput,
+): string {
+  if (activeRep.seatedMovementDetected) {
+    return 'Movement looked seated'
+  }
+  if (input.frame.poseConfidence < MIN_COMPLETION_POSE_CONFIDENCE) {
+    return 'Pose confidence dropped'
+  }
+  if (!reachedBottom) {
+    return 'Bottom not held long enough'
+  }
+  if (standingCompletionFrames > 0) {
+    return 'Tracking lost during ascent'
+  }
+  const knee = input.smoothedKneeAngle ?? averageKneeAngle(input.angles)
+  const threshold = lockoutKneeThreshold(input.standingKneeBaseline)
+  if (knee !== null && knee < threshold) {
+    return 'Knee angle never passed standing threshold'
+  }
+  return 'Did not return to standing'
+}
+
 function bothAnklesVisible(frame: PoseFrame): boolean {
   const left = safeLandmark(frame, LANDMARK_INDICES.LEFT_ANKLE)
   const right = safeLandmark(frame, LANDMARK_INDICES.RIGHT_ANKLE)
@@ -151,13 +348,29 @@ const createActiveRep = (
   bottomTimestamp: frame.timestamp,
   bottomAverageKneeAngle: averageKneeAngle(angles),
   hipShiftAtBottom: calculateHipShiftAtBottom(frame),
+  shoulderAsymmetryAtBottom: measureFrameAsymmetry(frame).shoulderAsymmetry,
   confidenceSamples: 1,
   confidenceSum: frame.poseConfidence,
   startHipY: hipY,
   deepestHipY: hipY,
   totalFrames: 1,
   ankleVisibleFrames: bothAnklesVisible(frame) ? 1 : 0,
+  maxHipDrop: 0,
+  seatedConsecutiveFrames: 0,
+  seatedMovementDetected: false,
+  bottomHoldStartTimestamp: null,
+  bottomHoldMs: 0,
 })
+
+function hipLandmarksLowConfidence(frame: PoseFrame): boolean {
+  const leftHip = frame.landmarks[LANDMARK_INDICES.LEFT_HIP]
+  const rightHip = frame.landmarks[LANDMARK_INDICES.RIGHT_HIP]
+  if (!leftHip || !rightHip) return true
+  return (
+    (leftHip.visibility ?? 0) < HIP_CONFIDENCE_MIN ||
+    (rightHip.visibility ?? 0) < HIP_CONFIDENCE_MIN
+  )
+}
 
 const updateActiveRep = (
   activeRep: ActiveRep,
@@ -174,6 +387,45 @@ const updateActiveRep = (
       nextBottomAverageKneeAngle < activeRep.bottomAverageKneeAngle)
 
   const nextDeepestHipY = maxOrValue(activeRep.deepestHipY, hipY)
+
+  // ── Seated / chair detection per-frame ──────────────────────────
+  const currentHipDrop =
+    activeRep.startHipY !== null && hipY !== null
+      ? hipY - activeRep.startHipY
+      : 0
+  const nextMaxHipDrop = Math.max(activeRep.maxHipDrop, currentHipDrop)
+
+  // Check seated signals this frame
+  const excessiveHipDrop = currentHipDrop > SEATED_HIP_DROP_THRESHOLD
+  const hipOccluded = hipLandmarksLowConfidence(frame)
+  const seatedSignalThisFrame = excessiveHipDrop || hipOccluded
+
+  const nextSeatedConsecutive = seatedSignalThisFrame
+    ? activeRep.seatedConsecutiveFrames + 1
+    : 0
+  const nextSeatedDetected =
+    activeRep.seatedMovementDetected ||
+    nextSeatedConsecutive >= SEATED_MIN_FRAMES
+
+  // Bottom hold tracking: time spent with high hip drop
+  const inHighDrop = currentHipDrop >= SEATED_BOTTOM_HOLD_HIP_DROP
+  let nextBottomHoldStart = activeRep.bottomHoldStartTimestamp
+  let nextBottomHoldMs = activeRep.bottomHoldMs
+
+  if (inHighDrop) {
+    if (nextBottomHoldStart === null) {
+      nextBottomHoldStart = frame.timestamp
+    }
+    nextBottomHoldMs = frame.timestamp - nextBottomHoldStart
+  } else {
+    nextBottomHoldStart = null
+  }
+
+  // Prolonged bottom hold with high drop also triggers seated flag
+  const seatedFromHold =
+    !nextSeatedDetected &&
+    nextBottomHoldMs >= SEATED_BOTTOM_HOLD_MS &&
+    nextMaxHipDrop >= SEATED_BOTTOM_HOLD_HIP_DROP
 
   return {
     ...activeRep,
@@ -196,12 +448,20 @@ const updateActiveRep = (
     hipShiftAtBottom: shouldReplaceBottomFrame
       ? calculateHipShiftAtBottom(frame)
       : activeRep.hipShiftAtBottom,
+    shoulderAsymmetryAtBottom: shouldReplaceBottomFrame
+      ? measureFrameAsymmetry(frame).shoulderAsymmetry
+      : activeRep.shoulderAsymmetryAtBottom,
     confidenceSamples: activeRep.confidenceSamples + 1,
     confidenceSum: activeRep.confidenceSum + frame.poseConfidence,
     deepestHipY: nextDeepestHipY,
     totalFrames: activeRep.totalFrames + 1,
     ankleVisibleFrames:
       activeRep.ankleVisibleFrames + (bothAnklesVisible(frame) ? 1 : 0),
+    maxHipDrop: nextMaxHipDrop,
+    seatedConsecutiveFrames: nextSeatedConsecutive,
+    seatedMovementDetected: nextSeatedDetected || seatedFromHold,
+    bottomHoldStartTimestamp: nextBottomHoldStart,
+    bottomHoldMs: nextBottomHoldMs,
   }
 }
 
@@ -244,22 +504,35 @@ function validateRep(
   const validDuration =
     durationMs >= MIN_REP_DURATION_MS && durationMs <= MAX_REP_DURATION_MS
 
+  const avgConfidence =
+    activeRep.confidenceSamples > 0
+      ? activeRep.confidenceSum / activeRep.confidenceSamples
+      : 0
+  const confidenceOk = avgConfidence >= MIN_REP_AVG_CONFIDENCE
+
   // Knee-lift detector: one knee bends deeply, other stays straight, hips don't move
   const isKneeLift = detectKneeLift(minLeft, minRight, hipDrop)
 
-  // ── Temporarily loosened: only require reachedBottom + validDuration ──
-  // All other gates are computed and displayed but do NOT block counting.
+  // Chair / seated detection
+  const seatedMovementDetected = activeRep.seatedMovementDetected
+  const maxHipDrop = activeRep.maxHipDrop
+  const bottomHoldMs = activeRep.bottomHoldMs
+
+  // ── Rejection logic ─────────────────────────────────────────────
   let rejectionReason: string | null = null
 
   if (!reachedBottom) {
-    rejectionReason = 'Never reached bottom'
+    rejectionReason = 'Bottom not held long enough'
   } else if (!validDuration) {
     rejectionReason =
       durationMs < MIN_REP_DURATION_MS ? 'Too fast (<500ms)' : 'Too slow (>8s)'
+  } else if (!confidenceOk) {
+    rejectionReason = 'Pose confidence dropped'
+  } else if (isKneeLift) {
+    rejectionReason = 'Knee lift detected'
+  } else if (seatedMovementDetected) {
+    rejectionReason = 'Movement looked seated'
   }
-  // TODO: re-enable after reps count reliably
-  // if (isKneeLift) rejectionReason = 'Knee lift detected'
-  // if (!bilateralBend && !hipDescended) rejectionReason = 'No bilateral bend AND no hip descent'
 
   return {
     reachedBottom,
@@ -268,6 +541,9 @@ function validateRep(
     feetStable,
     validDuration,
     isKneeLift,
+    seatedMovementDetected,
+    maxHipDrop,
+    bottomHoldMs,
     rejectionReason,
   }
 }
@@ -315,6 +591,7 @@ const finalizeRep = (
     averageTrunkLean,
     maxTrunkLean: activeRep.maxTrunkLean,
     hipShiftAtBottom: activeRep.hipShiftAtBottom,
+    shoulderAsymmetryAtBottom: activeRep.shoulderAsymmetryAtBottom,
     kneeAsymmetry:
       activeRep.minLeftKneeAngle === null || activeRep.minRightKneeAngle === null
         ? null
@@ -326,6 +603,45 @@ const finalizeRep = (
 
 // ── Main update ─────────────────────────────────────────────────────
 
+function tryFinishRep(
+  activeRep: ActiveRep,
+  reachedBottom: boolean,
+  frame: PoseFrame,
+  repCount: number,
+): {
+  repCount: number
+  reps: RepMetrics[]
+  completedRep: RepMetrics | null
+  lastValidation: RepValidation
+} {
+  const durationMs = frame.timestamp - activeRep.startTimestamp
+  const validation = validateRep(activeRep, reachedBottom, durationMs)
+
+  console.log(
+    `[RepCounter] VALIDATION | reason=${validation.rejectionReason} duration=${durationMs}ms bilateral=${validation.bilateralBend} hipDesc=${validation.hipDescended} feet=${validation.feetStable} kneeLift=${validation.isKneeLift}`,
+  )
+
+  if (validation.rejectionReason === null) {
+    const nextCount = repCount + 1
+    const completedRep = finalizeRep(activeRep, nextCount, frame)
+    console.log(`[RepCounter] REP COUNTED #${nextCount}`)
+    return {
+      repCount: nextCount,
+      reps: [], // caller merges
+      completedRep,
+      lastValidation: validation,
+    }
+  }
+
+  console.log(`[RepCounter] REP REJECTED: ${validation.rejectionReason}`)
+  return {
+    repCount,
+    reps: [],
+    completedRep: null,
+    lastValidation: validation,
+  }
+}
+
 export function updateRepCounter(
   state: RepCounterState,
   input: RepCounterInput,
@@ -336,13 +652,41 @@ export function updateRepCounter(
   let completedRep: RepMetrics | null = null
   let reachedBottom = state.reachedBottom
   let lastValidation = state.lastValidation
+  let standingCompletionFrames = state.standingCompletionFrames
+  let blockingGate = state.blockingGate
+  let lastMissedRepReason = state.lastMissedRepReason
+
+  const prevPhase = state.previousPhase
+
+  // Abandon incomplete rep when a new descent starts (double-dip without lockout)
+  if (
+    activeRep !== null &&
+    input.transitioned &&
+    input.phase === 'DESCENDING' &&
+    prevPhase !== 'DESCENDING'
+  ) {
+    const reason = missedRepReason(
+      activeRep,
+      standingCompletionFrames,
+      reachedBottom,
+      input,
+    )
+    lastMissedRepReason = reason
+    console.log(`[RepCounter] MISSED REP: ${reason}`)
+    activeRep = null
+    reachedBottom = false
+    standingCompletionFrames = 0
+  }
 
   // Start tracking a new rep on descent
   if (activeRep === null && input.transitioned && input.phase === 'DESCENDING') {
     activeRep = createActiveRep(input.frame, input.angles, input.hipY)
     reachedBottom = false
+    standingCompletionFrames = 0
     lastValidation = null
-    console.log(`[RepCounter] REP ATTEMPT STARTED | frame=${input.frame.frameIndex} hipY=${input.hipY?.toFixed(4)}`)
+    console.log(
+      `[RepCounter] REP ATTEMPT STARTED | frame=${input.frame.frameIndex} hipY=${input.hipY?.toFixed(4)}`,
+    )
   }
 
   // Update per-frame tracking
@@ -356,42 +700,81 @@ export function updateRepCounter(
     )
   }
 
-  if (input.phase === 'BOTTOM' && !reachedBottom) {
-    console.log(`[RepCounter] BOTTOM REACHED | frame=${input.frame.frameIndex}`)
-    reachedBottom = true
+  // Mark bottom reached via phase OR knee angle fallback
+  if (!reachedBottom && activeRep !== null) {
+    if (input.phase === 'BOTTOM') {
+      console.log(
+        `[RepCounter] BOTTOM REACHED (phase) | frame=${input.frame.frameIndex}`,
+      )
+      reachedBottom = true
+    } else {
+      const avgKnee = averageKneeAngle(input.angles)
+      if (avgKnee !== null && avgKnee <= BOTTOM_KNEE_ANGLE_THRESHOLD) {
+        console.log(
+          `[RepCounter] BOTTOM REACHED (knee=${avgKnee.toFixed(1)}°) | frame=${input.frame.frameIndex}`,
+        )
+        reachedBottom = true
+      }
+    }
   }
 
-  // Rep completion attempt: full cycle ASCENDING -> STANDING
+  // Grace standing completion (does not require phase FSM lockout)
+  if (activeRep !== null && reachedBottom) {
+    if (isNearStandingLockout(input, activeRep, reachedBottom)) {
+      standingCompletionFrames += 1
+    } else {
+      standingCompletionFrames = 0
+    }
+  } else {
+    standingCompletionFrames = 0
+  }
+
+  blockingGate = computeBlockingGate(
+    activeRep,
+    reachedBottom,
+    standingCompletionFrames,
+    input,
+  )
+
+  const finishRep = (): void => {
+    if (activeRep === null) return
+    const outcome = tryFinishRep(activeRep, reachedBottom, input.frame, repCount)
+    repCount = outcome.repCount
+    lastValidation = outcome.lastValidation
+    if (outcome.completedRep) {
+      completedRep = outcome.completedRep
+      reps = [...reps, completedRep]
+    } else {
+      lastMissedRepReason =
+        outcome.lastValidation.rejectionReason ?? 'Rep rejected'
+    }
+    activeRep = null
+    reachedBottom = false
+    standingCompletionFrames = 0
+    blockingGate = null
+  }
+
+  if (
+    activeRep !== null &&
+    reachedBottom &&
+    standingCompletionFrames === STANDING_COMPLETION_FRAMES
+  ) {
+    console.log(
+      `[RepCounter] GRACE COMPLETION | standingFrames=${standingCompletionFrames}`,
+    )
+    finishRep()
+  }
+
+  // Rep completion: phase detector confirmed STANDING
   if (
     activeRep !== null &&
     input.transitioned &&
     input.phase === 'STANDING'
   ) {
-    console.log(`[RepCounter] STANDING RETURN | prevPhase=${state.previousPhase} reachedBottom=${reachedBottom}`)
-
-    if (state.previousPhase === 'ASCENDING') {
-      const durationMs = input.frame.timestamp - activeRep.startTimestamp
-      const validation = validateRep(activeRep, reachedBottom, durationMs)
-      lastValidation = validation
-
-      console.log(`[RepCounter] VALIDATION | reason=${validation.rejectionReason} duration=${durationMs}ms bilateral=${validation.bilateralBend} hipDesc=${validation.hipDescended} feet=${validation.feetStable} kneeLift=${validation.isKneeLift}`)
-
-      if (validation.rejectionReason === null) {
-        repCount += 1
-        completedRep = finalizeRep(activeRep, repCount, input.frame)
-        reps = [...reps, completedRep]
-        console.log(`[RepCounter] REP COUNTED #${repCount}`)
-      } else {
-        console.log(`[RepCounter] REP REJECTED: ${validation.rejectionReason}`)
-      }
-      // Clean reset after return to standing regardless of outcome
-      activeRep = null
-      reachedBottom = false
-    } else {
-      console.log(`[RepCounter] STANDING but previousPhase=${state.previousPhase} (not ASCENDING) — rep attempt abandoned`)
-      activeRep = null
-      reachedBottom = false
-    }
+    console.log(
+      `[RepCounter] STANDING RETURN | prevPhase=${prevPhase} reachedBottom=${reachedBottom}`,
+    )
+    finishRep()
   }
 
   return {
@@ -405,6 +788,9 @@ export function updateRepCounter(
       previousPhase: input.phase,
       reachedBottom,
       lastValidation,
+      standingCompletionFrames,
+      blockingGate,
+      lastMissedRepReason,
     },
   }
 }
