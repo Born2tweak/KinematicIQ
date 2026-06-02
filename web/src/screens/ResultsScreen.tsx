@@ -29,18 +29,18 @@ export function ResultsScreen() {
 
   if (!result) {
     return (
-      <div className="stack-lg">
-        <h1 className="page-title">Squat set analysis</h1>
+      <div className="results-page stack-lg">
+        <h1 className="page-title">Your set</h1>
         <Card
-          title="No session data"
-          subtitle="Complete a set on the camera screen — it will finish automatically when you stand still, or use Finish Now."
+          title="No session yet"
+          subtitle="Record a set on the camera page. It finishes when you stand still, or tap Finish Now."
         />
         <div className="results-actions">
           <Button to="/camera" variant="primary">
-            Start Camera
+            Open camera
           </Button>
           <Button to="/" variant="secondary">
-            Back Home
+            Home
           </Button>
         </div>
       </div>
@@ -53,105 +53,125 @@ export function ResultsScreen() {
   const confidenceMessage = confidenceResultsMessage(sessionConfidence)
 
   return (
-    <div className="stack-lg">
-      <h1 className="page-title">Squat set analysis</h1>
+    <div className="results-page stack-lg">
+      <header className="results-page__header">
+        <h1 className="page-title">Your set</h1>
+        <DisclaimerBanner />
+      </header>
 
-      <DisclaimerBanner />
+      <section className="results-lead-card" aria-label="Set summary">
+        <p className="results-lead">{summary}</p>
+      </section>
 
-      <Card className="result-card">
-        <p className="result-card__summary">{summary}</p>
-
-        {scoring && (
-          <div className="results-score-block">
+      {scoring && (
+        <section className="results-panel" aria-label="Scores and confidence">
+          <div className="results-panel__score">
+            <h2 className="results-panel__heading">Movement score</h2>
             <ScoreDisplay score={scoring.totalScore} band={scoring.band} />
             <p className="score-formula-note">{SCORE_FORMULA_SUMMARY}</p>
           </div>
-        )}
 
-        <div className="confidence">
-          <div className="confidence__header">
-            <span className="confidence__label">Observation confidence</span>
-            <span className="confidence__value">{sessionConfidenceScore}%</span>
-          </div>
-          <div className="confidence__bar">
-            <div
-              className="confidence__fill"
-              style={{ width: `${sessionConfidenceScore}%` }}
-              role="progressbar"
-              aria-valuenow={sessionConfidenceScore}
-              aria-valuemin={0}
-              aria-valuemax={100}
-            />
-          </div>
-          <div style={{ marginTop: 'var(--space-sm)' }}>
+          <div className="results-panel__confidence confidence">
+            <div className="confidence__header">
+              <span className="confidence__label">Camera confidence</span>
+              <span className="confidence__value">{sessionConfidenceScore}%</span>
+            </div>
+            <div className="confidence__bar">
+              <div
+                className={`confidence__fill confidence__fill--${sessionConfidence.toLowerCase()}`}
+                style={{ width: `${sessionConfidenceScore}%` }}
+                role="progressbar"
+                aria-valuenow={sessionConfidenceScore}
+                aria-valuemin={0}
+                aria-valuemax={100}
+              />
+            </div>
             <ConfidenceBadge level={sessionConfidence} />
           </div>
-        </div>
 
-        {result.noRepsDetected && (
-          <p className="results-alert">{NO_REPS_MESSAGE}</p>
-        )}
-
-        {result.insufficientData && !result.noRepsDetected && (
-          <p className="results-alert results-alert--warning">
-            {INSUFFICIENT_DATA_MESSAGE}
-          </p>
-        )}
-
-        {confidenceMessage && (
-          <p
-            className={
-              sessionConfidence === 'Low'
-                ? 'results-alert results-alert--warning'
-                : 'results-alert results-alert--info'
-            }
-          >
-            {confidenceMessage}
-          </p>
-        )}
-
-        {scoring && componentExplanations.length > 0 && (
-          <section className="component-scores" aria-label="Score breakdown">
-            <h2 className="results-section-title results-section-title--inline">
-              How your score was built
-            </h2>
-            <ul className="component-scores__list">
-              {componentExplanations.map((item) => (
-                <li key={item.key} className="component-score-card">
-                  <div className="component-score-card__header">
-                    <span className="component-score-card__label">{item.label}</span>
-                    <span className="component-score-card__score">
-                      {item.score}{' '}
-                      <span className="component-score-card__score-max">/ 100</span>
-                    </span>
-                  </div>
-                  <p className="component-score-card__weight">
-                    {item.weightPercent}% of total score
-                  </p>
-                  <dl className="component-score-card__details">
-                    <div>
-                      <dt>Measured</dt>
-                      <dd>{item.measured}</dd>
-                    </div>
-                    <div>
-                      <dt>Why this score</dt>
-                      <dd>{item.explanation}</dd>
-                    </div>
-                  </dl>
-                </li>
-              ))}
-            </ul>
-          </section>
-        )}
-
-        {metrics.reps.length > 0 && (
-          <div className="detail-rows" style={{ marginTop: 'var(--space-md)' }}>
-            <p
-              className="detail-row__label"
-              style={{ paddingTop: 'var(--space-md)', fontWeight: 600 }}
-            >
-              Per-rep depth
+          {result.noRepsDetected && (
+            <p className="results-alert" role="alert">
+              {NO_REPS_MESSAGE}
             </p>
+          )}
+
+          {result.insufficientData && !result.noRepsDetected && (
+            <p className="results-alert results-alert--warning" role="alert">
+              {INSUFFICIENT_DATA_MESSAGE}
+            </p>
+          )}
+
+          {confidenceMessage && (
+            <p
+              className={
+                sessionConfidence === 'Low'
+                  ? 'results-alert results-alert--warning'
+                  : 'results-alert results-alert--info'
+              }
+              role="status"
+            >
+              {confidenceMessage}
+            </p>
+          )}
+
+          {componentExplanations.length > 0 && (
+            <div className="component-scores">
+              <h2 className="results-panel__heading">Score breakdown</h2>
+              <p className="results-panel__intro">
+                Each area is scored 0–100, then weighted into your total.
+              </p>
+              <ul className="component-scores__list">
+                {componentExplanations.map((item) => (
+                  <li key={item.key} className="component-score-card">
+                    <div className="component-score-card__header">
+                      <span className="component-score-card__label">{item.label}</span>
+                      <span className="component-score-card__score">
+                        {item.score}
+                        <span className="component-score-card__score-max"> / 100</span>
+                      </span>
+                    </div>
+                    <p className="component-score-card__weight">
+                      {item.weightPercent}% of total
+                    </p>
+                    <dl className="component-score-card__details">
+                      <div>
+                        <dt>What we measured</dt>
+                        <dd>{item.measured}</dd>
+                      </div>
+                      <div>
+                        <dt>Why this score</dt>
+                        <dd>{item.explanation}</dd>
+                      </div>
+                    </dl>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </section>
+      )}
+
+      {feedback.length > 0 && (
+        <section className="results-coaching" aria-label="Coaching">
+          <h2 className="results-section-title">What to try next</h2>
+          <p className="results-coaching__intro">
+            Based on the weakest areas in this set — not medical advice.
+          </p>
+          <div className="results-coaching__list stack">
+            {feedback.map((cue) => (
+              <FeedbackCard key={cue.issue} cue={cue} />
+            ))}
+          </div>
+        </section>
+      )}
+
+      {metrics.reps.length > 0 && (
+        <Card
+          className="results-reps-card"
+          title="Rep-by-rep"
+          subtitle="Bottom-of-rep knee angle and average trunk lean"
+        >
+          <div className="detail-rows">
             {metrics.reps.map((rep) => {
               const depth = Math.min(
                 rep.minLeftKneeAngle ?? 180,
@@ -161,33 +181,24 @@ export function ResultsScreen() {
                 <div key={rep.repNumber} className="detail-row">
                   <span className="detail-row__label">Rep {rep.repNumber}</span>
                   <span className="detail-row__value">
-                    {Math.round(depth)}° ·{' '}
+                    {Math.round(depth)}° depth
                     {rep.averageTrunkLean === null
-                      ? 'trunk n/a'
-                      : `${Math.round(rep.averageTrunkLean)}° trunk`}
+                      ? ''
+                      : ` · ${Math.round(rep.averageTrunkLean)}° trunk`}
                   </span>
                 </div>
               )
             })}
           </div>
-        )}
-      </Card>
-
-      {feedback.length > 0 && (
-        <section className="stack" aria-label="Coaching cues">
-          <h2 className="results-section-title">What to work on next</h2>
-          {feedback.map((cue) => (
-            <FeedbackCard key={cue.issue} cue={cue} />
-          ))}
-        </section>
+        </Card>
       )}
 
       <div className="results-actions">
         <Button to="/camera" variant="primary">
-          Try Again
+          Record another set
         </Button>
         <Button to="/" variant="secondary">
-          Back Home
+          Home
         </Button>
       </div>
     </div>

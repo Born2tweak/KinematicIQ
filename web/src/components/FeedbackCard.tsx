@@ -14,18 +14,16 @@ export function FeedbackCard({ cue }: FeedbackCardProps) {
       </div>
       <dl className="feedback-card__sections">
         <div className="feedback-card__section">
-          <dt className="feedback-card__label">Observed</dt>
+          <dt className="feedback-card__label">What we saw</dt>
           <dd className="feedback-card__text">{cue.observed}</dd>
         </div>
         <div className="feedback-card__section">
           <dt className="feedback-card__label">Why it matters</dt>
           <dd className="feedback-card__text">{cue.whyItMatters}</dd>
         </div>
-        <div className="feedback-card__section">
-          <dt className="feedback-card__label">Try this next</dt>
-          <dd className="feedback-card__text feedback-card__text--cue">
-            {cue.tryNext}
-          </dd>
+        <div className="feedback-card__section feedback-card__section--cue">
+          <dt className="feedback-card__label">Try next</dt>
+          <dd className="feedback-card__text feedback-card__text--cue">{cue.tryNext}</dd>
         </div>
       </dl>
       {cue.confidenceNote && (

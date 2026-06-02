@@ -1,0 +1,15 @@
+KinematicIQ — quick pointer for prompt writing (Claude, Cursor, Antigravity, Codex, ChatGPT)
+
+Full live context (paste this into your prompt-factory chat):
+  docs/00_context_pack.md
+
+Agent workspace bootstrap (paste at start of coding sessions):
+  AGENT-BOOTSTRAP.md
+
+Refresh file tree in context pack after adding files:
+  powershell -NoProfile -ExecutionPolicy Bypass -File scripts\generate-context-pack.ps1
+
+Also useful (not auto-inlined in pack):
+  docs/scoring_notes.md      — scoring thresholds & limitations
+  docs/video_upload_plan.md  — M15A video upload (plan only)
+  docs/expert_outreach.md    — M15B expert outreach packet

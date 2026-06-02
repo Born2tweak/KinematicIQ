@@ -293,4 +293,4 @@ export function buildComponentScoreExplanations(
 }
 
 export const SCORE_FORMULA_SUMMARY =
-  'Total score = depth (30%) + trunk control (25%) + knee tracking (20%) + consistency (15%) + symmetry (10%). Each component is 0–100 from camera metrics, then combined.'
+  'Weighted from depth (30%), trunk (25%), knees (20%), consistency (15%), and symmetry (10%).'

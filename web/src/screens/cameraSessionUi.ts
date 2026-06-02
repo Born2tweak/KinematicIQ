@@ -22,40 +22,42 @@ export function getSessionStatusCopy(
     case 'WAITING':
       return {
         title: 'Step into frame',
-        subtitle: `Back up until your full body is visible. Missing: ${options.missingJoints.join(', ')}`,
+        subtitle:
+          'Back up until head, shoulders, hips, knees, and feet are visible side-on.',
       }
     case 'CALIBRATING':
       return {
         title: 'Hold still, calibrating',
-        subtitle: 'Stand upright with arms visible. This only takes a moment.',
+        subtitle: 'Stand tall with arms relaxed at your sides for a few seconds.',
       }
     case 'READY':
       return {
         title: 'Start squatting when ready',
-        subtitle:
-          'Your set begins automatically on the first descent — no button needed.',
+        subtitle: 'Your set starts on the first descent — no button to press.',
       }
     case 'ACTIVE':
       return {
         title: 'Set in progress',
-        subtitle: `${options.repCount} rep${options.repCount === 1 ? '' : 's'} so far. Stand still after your last rep to finish automatically.`,
+        subtitle:
+          options.repCount === 0
+            ? 'Perform full squats. When you’re done, stand still to finish.'
+            : `${options.repCount} rep${options.repCount === 1 ? '' : 's'} counted. Stand still after your last rep to finish.`,
       }
     case 'AUTO_FINISH_PENDING':
       if (options.finishCountdown !== null) {
         return {
-          title: `Finishing set in ${options.finishCountdown}…`,
-          subtitle: 'Hold your finish position. Squat again to keep going.',
+          title: `Finishing in ${options.finishCountdown}…`,
+          subtitle: 'Hold your finish position, or squat again to keep the set going.',
         }
       }
       return {
         title: 'Stand still to finish',
-        subtitle:
-          'Stay upright to complete the set, or squat again to continue.',
+        subtitle: 'Stay upright to complete the set, or move into another squat to continue.',
       }
     case 'FINISHED':
       return {
         title: 'Building your report',
-        subtitle: 'Analyzing reps, depth, and symmetry from this set…',
+        subtitle: 'Pulling together depth, control, and rep-by-rep details…',
       }
     default:
       return {

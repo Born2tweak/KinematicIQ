@@ -39,7 +39,7 @@ export function calculateSessionConfidence(
 export function confidenceResultsMessage(level: ConfidenceLevel): string | null {
   if (level === 'High') return null
   if (level === 'Medium') {
-    return 'Observation confidence is moderate. Scores reflect what the camera could see — use them to compare sets, not as exact measurements.'
+    return 'Tracking was decent but not perfect. Use these scores to compare sets in similar lighting — not as exact measurements.'
   }
-  return 'Observation confidence is low. Component scores are shown for reference, but coaching cues are hidden until tracking improves (lighting, distance, full body in frame).'
+  return 'Camera confidence was low, so treat this as a rough read. Try better lighting and a full-body view, then run another set.'
 }

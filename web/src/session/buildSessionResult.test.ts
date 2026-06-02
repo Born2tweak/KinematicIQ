@@ -53,6 +53,6 @@ describe('buildSessionResult', () => {
 
   it('summary uses no-reps message when empty', () => {
     const result = buildSessionResult([])
-    expect(buildResultsSummary(result)).toMatch(/no squats were detected/i)
+    expect(buildResultsSummary(result)).toMatch(/no full squats were counted/i)
   })
 })

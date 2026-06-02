@@ -34,7 +34,7 @@ export function generateFeedback(
 }
 
 export const INSUFFICIENT_DATA_MESSAGE =
-  "We couldn't get a clear enough view to provide specific coaching cues. Try adjusting your distance and lighting, then run another set."
+  'Tracking was too weak for coaching tips. Scores below are directional only — improve lighting, step back for a full-body view, and try again.'
 
 export const NO_REPS_MESSAGE =
-  'No squats were detected in this set. Stand in frame, calibrate, then perform full up-and-down reps.'
+  'No full squats were counted. Get calibrated on camera, then do clear down-and-up reps with a pause at the bottom.'

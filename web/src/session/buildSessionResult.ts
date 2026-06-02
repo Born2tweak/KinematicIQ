@@ -51,28 +51,24 @@ export function buildSessionResult(
 export function buildResultsSummary(result: SessionResult): string {
   if (result.noRepsDetected) return NO_REPS_MESSAGE
   if (result.insufficientData) return INSUFFICIENT_DATA_MESSAGE
-  if (!result.scoring) return 'Set complete. Review your squat analysis below.'
+  if (!result.scoring) return 'Set complete — your breakdown is below.'
 
   const { metrics, scoring, sessionConfidence } = result
-  const repLine = `We tracked ${metrics.repCount} bodyweight squat${
-    metrics.repCount === 1 ? '' : 's'
-  } from your camera view.`
+  const repLine = `${metrics.repCount} squat${metrics.repCount === 1 ? '' : 's'} from this camera view`
 
   const depthPart =
     metrics.avgDepth !== null
-      ? ` Average depth was about ${Math.round(metrics.avgDepth)}° knee bend`
+      ? ` · avg depth ~${Math.round(metrics.avgDepth)}° knee bend`
       : ''
 
-  const scorePart = ` Overall movement quality: ${scoring.totalScore}/100 (${scoring.band}).`
+  const scorePart = ` · movement score ${scoring.totalScore}/100 (${scoring.band})`
 
-  let summary = `${repLine}${depthPart}.${scorePart}`
+  let summary = `${repLine}${depthPart}${scorePart}.`
 
   if (sessionConfidence === 'Medium') {
-    summary +=
-      ' This read is directional — stepping farther back or improving lighting can change what the camera sees.'
+    summary += ' Good enough to compare sets — brighter light or a bit more distance can sharpen the read.'
   } else if (sessionConfidence === 'Low') {
-    summary +=
-      ' Camera tracking was limited this set, so treat these numbers as a rough guide only.'
+    summary += ' Low camera confidence — use as a rough guide, not a precise grade.'
   }
 
   return summary

@@ -4,6 +4,7 @@ import { buildSessionResult } from '../session/buildSessionResult'
 import { Button } from '../components/Button'
 import { Card } from '../components/Card'
 import { RepCounter } from '../components/RepCounter'
+import { SessionStatusCard } from '../components/SessionStatusCard'
 import {
   SkeletonOverlay,
   clearSkeleton,
@@ -480,92 +481,13 @@ export function CameraScreen() {
           subtitle="Please grant webcam access to start the analysis."
         />
       ) : (
-        <Card
-          variant="status"
+        <SessionStatusCard
+          phase={displayPhase}
           title={statusCopy.title}
           subtitle={statusCopy.subtitle}
-        >
-          {autoStartPhase === 'READY' && (
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-                marginTop: '12px',
-                color: '#22c55e',
-                fontSize: '0.875rem',
-                fontWeight: 600,
-              }}
-            >
-              <span
-                style={{
-                  width: '8px',
-                  height: '8px',
-                  borderRadius: '50%',
-                  background: '#22c55e',
-                  boxShadow: '0 0 8px #22c55e',
-                }}
-              />
-              Calibrated — squat when ready
-            </div>
-          )}
-          {autoStartPhase === 'CALIBRATING' && (
-            <div style={{ marginTop: '12px' }}>
-              <div
-                style={{
-                  height: '4px',
-                  borderRadius: '2px',
-                  background: 'rgba(255,255,255,0.1)',
-                  overflow: 'hidden',
-                }}
-              >
-                <div
-                  style={{
-                    height: '100%',
-                    width: `${calibrationProgress}%`,
-                    background: '#facc15',
-                    borderRadius: '2px',
-                    transition: 'width 0.15s ease-out',
-                  }}
-                />
-              </div>
-              <p
-                style={{
-                  color: '#facc15',
-                  fontSize: '0.75rem',
-                  marginTop: '6px',
-                  fontWeight: 600,
-                }}
-              >
-                {calibrationProgress}% — stay still
-              </p>
-            </div>
-          )}
-          {autoStartPhase === 'WAITING' && (
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-                marginTop: '12px',
-                color: '#ef4444',
-                fontSize: '0.875rem',
-                fontWeight: 600,
-              }}
-            >
-              <span
-                style={{
-                  width: '8px',
-                  height: '8px',
-                  borderRadius: '50%',
-                  background: '#ef4444',
-                  boxShadow: '0 0 8px #ef4444',
-                }}
-              />
-              Align shoulders, hips, knees & feet
-            </div>
-          )}
-        </Card>
+          calibrationProgress={calibrationProgress}
+          missingJoints={missingJoints}
+        />
       )}
 
       <div className="camera-preview" style={{ overflow: 'hidden', padding: 0, position: 'relative' }}>
@@ -606,7 +528,7 @@ export function CameraScreen() {
             {finishCountdown !== null && autoStartPhase === 'ACTIVE' && (
               <div className="camera-finish-countdown" aria-live="polite">
                 <p className="camera-finish-countdown__text">
-                  Finishing set in {finishCountdown}…
+                  Finishing in {finishCountdown}…
                 </p>
               </div>
             )}
@@ -615,30 +537,37 @@ export function CameraScreen() {
               className={`camera-debug-toggle${showDebug ? ' camera-debug-toggle--on' : ''}`}
               onClick={() => setShowDebug((prev) => !prev)}
               aria-pressed={showDebug}
+              aria-label={showDebug ? 'Hide developer debug overlay' : 'Show developer debug overlay'}
+              title="Developer debug overlay"
             >
-              Debug {showDebug ? 'On' : 'Off'}
+              {showDebug ? 'DBG' : 'dbg'}
             </button>
           </div>
         )}
       </div>
 
-      <div className="btn-group btn-group--row">
-        <Button
-          variant="secondary"
-          onClick={finishSet}
-          disabled={autoStartPhase !== 'ACTIVE' || isFinishing}
-        >
-          Finish Now
-        </Button>
-        <Button variant="ghost" onClick={handleCancel}>
-          Cancel
-        </Button>
+      <div className="camera-actions">
+        <div className="btn-group btn-group--row">
+          <Button
+            variant="secondary"
+            onClick={finishSet}
+            disabled={autoStartPhase !== 'ACTIVE' || isFinishing}
+          >
+            Finish Now
+          </Button>
+          <Button variant="ghost" onClick={handleCancel}>
+            Cancel
+          </Button>
+        </div>
+        <p className="camera-actions__hint">
+          Sets usually end when you stand still after your last rep. Use Finish Now if you need to stop early.
+        </p>
       </div>
 
       {completedReps.length > 0 && (
         <Card
-          title="Captured Reps"
-          subtitle={`${completedReps.length} completed rep${completedReps.length === 1 ? '' : 's'} recorded in this set.`}
+          title="Reps so far"
+          subtitle={`${completedReps.length} counted in this set`}
         >
           <div className="detail-rows">
             {completedReps.map((rep) => (
