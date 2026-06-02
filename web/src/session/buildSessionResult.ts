@@ -35,7 +35,7 @@ export function buildSessionResult(
   const insufficientData = sessionConfidence === 'Low'
   const feedback = insufficientData
     ? []
-    : generateFeedback(scoring, sessionConfidence)
+    : generateFeedback(scoring, sessionConfidence, metrics)
 
   return {
     metrics,

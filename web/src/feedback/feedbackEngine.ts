@@ -1,32 +1,18 @@
 import type {
   CoachingCue,
-  ComponentScores,
   ConfidenceLevel,
   ScoringResult,
+  SetMetricsSummary,
 } from '../session/types'
-import type { FeedbackIssueKey } from './feedbackTemplates'
-import { FEEDBACK_TEMPLATES } from './feedbackTemplates'
-
-const COMPONENT_ORDER: FeedbackIssueKey[] = [
-  'depth',
-  'trunkControl',
-  'kneeTracking',
-  'consistency',
-  'symmetry',
-]
-
-function lowestComponents(
-  components: ComponentScores,
-  maxCues: number,
-): FeedbackIssueKey[] {
-  return [...COMPONENT_ORDER]
-    .sort((a, b) => components[a] - components[b])
-    .slice(0, maxCues)
-}
+import {
+  buildBiomechanicalCue,
+  lowestComponents,
+} from './feedbackReasoning'
 
 export function generateFeedback(
   scoring: ScoringResult,
   sessionConfidence: ConfidenceLevel,
+  metrics: SetMetricsSummary,
   maxCues = 2,
 ): CoachingCue[] {
   if (sessionConfidence === 'Low') {
@@ -35,13 +21,14 @@ export function generateFeedback(
 
   const keys = lowestComponents(scoring.components, maxCues)
   return keys.map((key) => {
-    const template = FEEDBACK_TEMPLATES[key]
+    const cue = buildBiomechanicalCue(key, metrics, sessionConfidence)
     return {
-      issue: template.issue,
-      observation: template.observation,
-      cue: template.cue,
-      confidence: sessionConfidence,
-      note: template.note,
+      issue: cue.issue,
+      observed: cue.observed,
+      whyItMatters: cue.whyItMatters,
+      tryNext: cue.tryNext,
+      confidence: cue.confidence,
+      confidenceNote: cue.confidenceNote,
     }
   })
 }

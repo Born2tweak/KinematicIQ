@@ -12,9 +12,25 @@ export function FeedbackCard({ cue }: FeedbackCardProps) {
         <h3 className="feedback-card__issue">{cue.issue}</h3>
         <ConfidenceBadge level={cue.confidence} />
       </div>
-      <p className="feedback-card__observation">{cue.observation}</p>
-      <p className="feedback-card__cue">{cue.cue}</p>
-      <p className="feedback-card__note">{cue.note}</p>
+      <dl className="feedback-card__sections">
+        <div className="feedback-card__section">
+          <dt className="feedback-card__label">Observed</dt>
+          <dd className="feedback-card__text">{cue.observed}</dd>
+        </div>
+        <div className="feedback-card__section">
+          <dt className="feedback-card__label">Why it matters</dt>
+          <dd className="feedback-card__text">{cue.whyItMatters}</dd>
+        </div>
+        <div className="feedback-card__section">
+          <dt className="feedback-card__label">Try this next</dt>
+          <dd className="feedback-card__text feedback-card__text--cue">
+            {cue.tryNext}
+          </dd>
+        </div>
+      </dl>
+      {cue.confidenceNote && (
+        <p className="feedback-card__confidence-note">{cue.confidenceNote}</p>
+      )}
     </article>
   )
 }

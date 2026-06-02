@@ -34,10 +34,15 @@ export type ConfidenceLevel = 'High' | 'Medium' | 'Low'
 
 export interface CoachingCue {
   issue: string
-  observation: string
-  cue: string
+  /** What the camera measured in this set. */
+  observed: string
+  /** Biomechanical context — coaching only, not medical advice. */
+  whyItMatters: string
+  /** One actionable cue for the next set. */
+  tryNext: string
   confidence: ConfidenceLevel
-  note: string
+  /** Shown when camera confidence is medium (or low if cues are ever shown). */
+  confidenceNote: string | null
 }
 
 export interface SessionResult {
