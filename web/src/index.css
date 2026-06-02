@@ -665,6 +665,93 @@ img {
   border-color: rgba(99, 102, 241, 0.25);
 }
 
+.results-alert--warning {
+  background: rgba(251, 146, 60, 0.1);
+  border-color: rgba(251, 146, 60, 0.35);
+  color: var(--color-text);
+}
+
+.score-formula-note {
+  margin: var(--space-sm) 0 0;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+.results-section-title--inline {
+  margin: var(--space-lg) 0 var(--space-md);
+}
+
+.component-scores__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.component-score-card {
+  padding: var(--space-md);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.component-score-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--space-md);
+}
+
+.component-score-card__label {
+  font-weight: 600;
+  font-size: 0.9375rem;
+}
+
+.component-score-card__score {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--color-accent-hover);
+}
+
+.component-score-card__score-max {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--color-text-muted);
+}
+
+.component-score-card__weight {
+  margin: var(--space-xs) 0 var(--space-sm);
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}
+
+.component-score-card__details {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.component-score-card__details dt {
+  margin: 0;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.component-score-card__details dd {
+  margin: var(--space-xs) 0 0;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--color-text);
+}
+
 .detail-row--stacked {
   flex-direction: column;
   align-items: stretch;

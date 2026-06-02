@@ -78,13 +78,3 @@ export function buildResultsSummary(result: SessionResult): string {
   return summary
 }
 
-export const COMPONENT_SCORE_HINTS: Record<
-  keyof import('./types').ComponentScores,
-  string
-> = {
-  depth: 'How deep you sat on each rep (knee bend at the bottom)',
-  trunkControl: 'How much your chest leaned forward during the squat',
-  kneeTracking: 'How evenly your left and right knees bent',
-  consistency: 'How similar your depth was rep to rep',
-  symmetry: 'Whether your hips stayed centered over your feet',
-}

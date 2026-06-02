@@ -4,7 +4,9 @@ import {
   DEPTH_THRESHOLDS,
   HIP_SHIFT_THRESHOLDS,
   KNEE_ASYMMETRY_THRESHOLDS,
+  MISSING_METRIC_NEUTRAL_SCORE,
   SCORE_WEIGHTS,
+  SINGLE_REP_CONSISTENCY_SCORE,
   TRUNK_THRESHOLDS,
   bandFromScore,
 } from './scoringConfig'
@@ -12,7 +14,14 @@ import {
 const clamp = (value: number, min: number, max: number): number =>
   Math.min(max, Math.max(min, value))
 
-/** Lower measured value is better (depth angle, trunk lean, CV, asymmetry). */
+/**
+ * Piecewise scoring for metrics where lower raw values are better.
+ *
+ * - At or below excellentMax → 100
+ * - excellentMax–goodMax → 100 down to 80 (linear)
+ * - goodMax–needsWorkMax → 80 down to 50 (linear)
+ * - Above needsWorkMax → 50 minus penalty (floor 0)
+ */
 function scoreLowerIsBetter(
   value: number,
   excellentMax: number,
@@ -53,7 +62,7 @@ function scoreTrunk(avgTrunkLean: number | null): number {
 }
 
 function scoreKneeTracking(avgKneeAsymmetry: number | null): number {
-  if (avgKneeAsymmetry === null) return 50
+  if (avgKneeAsymmetry === null) return MISSING_METRIC_NEUTRAL_SCORE
   return scoreLowerIsBetter(
     avgKneeAsymmetry,
     KNEE_ASYMMETRY_THRESHOLDS.excellentMax,
@@ -63,8 +72,8 @@ function scoreKneeTracking(avgKneeAsymmetry: number | null): number {
 }
 
 function scoreConsistency(depthCV: number | null, repCount: number): number {
-  if (repCount < 2) return 70
-  if (depthCV === null) return 50
+  if (repCount < 2) return SINGLE_REP_CONSISTENCY_SCORE
+  if (depthCV === null) return MISSING_METRIC_NEUTRAL_SCORE
   return scoreLowerIsBetter(
     depthCV,
     CONSISTENCY_CV_THRESHOLDS.excellentMax,
@@ -74,7 +83,7 @@ function scoreConsistency(depthCV: number | null, repCount: number): number {
 }
 
 function scoreSymmetry(avgHipShift: number | null): number {
-  if (avgHipShift === null) return 50
+  if (avgHipShift === null) return MISSING_METRIC_NEUTRAL_SCORE
   return scoreLowerIsBetter(
     avgHipShift,
     HIP_SHIFT_THRESHOLDS.excellentMax,
@@ -93,6 +102,7 @@ export function computeComponentScores(metrics: SetMetricsSummary): ComponentSco
   }
 }
 
+/** Weighted sum of component scores; weights defined in SCORE_WEIGHTS. */
 export function scoreSet(metrics: SetMetricsSummary): ScoringResult {
   const components = computeComponentScores(metrics)
   const totalScore = Math.round(

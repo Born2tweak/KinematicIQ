@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import { useLocation } from 'react-router-dom'
 import { Button } from '../components/Button'
 import { Card } from '../components/Card'
@@ -5,27 +6,26 @@ import { ConfidenceBadge } from '../components/ConfidenceBadge'
 import { DisclaimerBanner } from '../components/DisclaimerBanner'
 import { FeedbackCard } from '../components/FeedbackCard'
 import { ScoreDisplay } from '../components/ScoreDisplay'
+import { confidenceResultsMessage } from '../feedback/confidenceCalculator'
 import {
   INSUFFICIENT_DATA_MESSAGE,
   NO_REPS_MESSAGE,
 } from '../feedback/feedbackEngine'
+import { buildResultsSummary } from '../session/buildSessionResult'
 import {
-  COMPONENT_SCORE_HINTS,
-  buildResultsSummary,
-} from '../session/buildSessionResult'
+  SCORE_FORMULA_SUMMARY,
+  buildComponentScoreExplanations,
+} from '../scoring/scoringExplanations'
 import type { SessionResult } from '../session/types'
-
-const COMPONENT_LABELS = {
-  depth: 'Depth',
-  trunkControl: 'Trunk control',
-  kneeTracking: 'Knee tracking',
-  consistency: 'Consistency',
-  symmetry: 'Symmetry',
-} as const
 
 export function ResultsScreen() {
   const location = useLocation()
   const result = (location.state as { result?: SessionResult } | null)?.result
+
+  const componentExplanations = useMemo(() => {
+    if (!result?.scoring) return []
+    return buildComponentScoreExplanations(result.metrics, result.scoring.components)
+  }, [result])
 
   if (!result) {
     return (
@@ -50,6 +50,7 @@ export function ResultsScreen() {
   const summary = buildResultsSummary(result)
   const { metrics, scoring, feedback, sessionConfidence, sessionConfidenceScore } =
     result
+  const confidenceMessage = confidenceResultsMessage(sessionConfidence)
 
   return (
     <div className="stack-lg">
@@ -63,6 +64,7 @@ export function ResultsScreen() {
         {scoring && (
           <div className="results-score-block">
             <ScoreDisplay score={scoring.totalScore} band={scoring.band} />
+            <p className="score-formula-note">{SCORE_FORMULA_SUMMARY}</p>
           </div>
         )}
 
@@ -91,56 +93,55 @@ export function ResultsScreen() {
         )}
 
         {result.insufficientData && !result.noRepsDetected && (
-          <p className="results-alert">{INSUFFICIENT_DATA_MESSAGE}</p>
-        )}
-
-        {sessionConfidence !== 'High' && scoring && !result.insufficientData && (
-          <p className="results-alert results-alert--info">
-            Camera angle and distance affect these readings. Use them to spot
-            trends in your squat, not as a clinical measure.
+          <p className="results-alert results-alert--warning">
+            {INSUFFICIENT_DATA_MESSAGE}
           </p>
         )}
 
-        {scoring && (
-          <div className="detail-rows">
-            <div className="detail-row">
-              <span className="detail-row__label">Reps tracked</span>
-              <span className="detail-row__value">{metrics.repCount}</span>
-            </div>
-            {(Object.keys(COMPONENT_LABELS) as Array<keyof typeof COMPONENT_LABELS>).map(
-              (key) => (
-                <div key={key} className="detail-row detail-row--stacked">
-                  <div className="detail-row__main">
-                    <span className="detail-row__label">
-                      {COMPONENT_LABELS[key]}
-                    </span>
-                    <span className="detail-row__value">
-                      {scoring.components[key]} / 100
+        {confidenceMessage && (
+          <p
+            className={
+              sessionConfidence === 'Low'
+                ? 'results-alert results-alert--warning'
+                : 'results-alert results-alert--info'
+            }
+          >
+            {confidenceMessage}
+          </p>
+        )}
+
+        {scoring && componentExplanations.length > 0 && (
+          <section className="component-scores" aria-label="Score breakdown">
+            <h2 className="results-section-title results-section-title--inline">
+              How your score was built
+            </h2>
+            <ul className="component-scores__list">
+              {componentExplanations.map((item) => (
+                <li key={item.key} className="component-score-card">
+                  <div className="component-score-card__header">
+                    <span className="component-score-card__label">{item.label}</span>
+                    <span className="component-score-card__score">
+                      {item.score}{' '}
+                      <span className="component-score-card__score-max">/ 100</span>
                     </span>
                   </div>
-                  <span className="detail-row__hint">
-                    {COMPONENT_SCORE_HINTS[key]}
-                  </span>
-                </div>
-              ),
-            )}
-            {metrics.avgDepth !== null && (
-              <div className="detail-row">
-                <span className="detail-row__label">Avg depth (knee)</span>
-                <span className="detail-row__value">
-                  {Math.round(metrics.avgDepth)}°
-                </span>
-              </div>
-            )}
-            {metrics.avgTrunkLean !== null && (
-              <div className="detail-row">
-                <span className="detail-row__label">Avg trunk lean</span>
-                <span className="detail-row__value">
-                  {Math.round(metrics.avgTrunkLean)}°
-                </span>
-              </div>
-            )}
-          </div>
+                  <p className="component-score-card__weight">
+                    {item.weightPercent}% of total score
+                  </p>
+                  <dl className="component-score-card__details">
+                    <div>
+                      <dt>Measured</dt>
+                      <dd>{item.measured}</dd>
+                    </div>
+                    <div>
+                      <dt>Why this score</dt>
+                      <dd>{item.explanation}</dd>
+                    </div>
+                  </dl>
+                </li>
+              ))}
+            </ul>
+          </section>
         )}
 
         {metrics.reps.length > 0 && (
