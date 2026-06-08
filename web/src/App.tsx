@@ -3,6 +3,7 @@ import { AppShell } from './components/AppShell'
 import { CameraScreen } from './screens/CameraScreen'
 import { LandingScreen } from './screens/LandingScreen'
 import { ResultsScreen } from './screens/ResultsScreen'
+import { UploadScreen } from './screens/UploadScreen'
 
 export default function App() {
   return (
@@ -11,6 +12,7 @@ export default function App() {
         <Route element={<AppShell />}>
           <Route path="/" element={<LandingScreen />} />
           <Route path="/camera" element={<CameraScreen />} />
+          <Route path="/upload" element={<UploadScreen />} />
           <Route path="/results" element={<ResultsScreen />} />
         </Route>
       </Routes>

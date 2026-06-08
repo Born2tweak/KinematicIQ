@@ -577,6 +577,27 @@ img {
   pointer-events: none;
 }
 
+/* Upload preview — bounded, in-flow (NOT absolutely positioned like the
+   live camera stage) so it stays inside its card and never overlays controls. */
+.upload-preview {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+  border-radius: var(--radius-md);
+  background: var(--color-bg-elevated);
+}
+
+.upload-preview__media {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  max-height: 360px;
+  object-fit: contain;
+  border-radius: inherit;
+}
+
 .camera-preview__icon {
   width: 3rem;
   height: 3rem;

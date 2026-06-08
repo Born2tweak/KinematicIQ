@@ -18,6 +18,9 @@ export function AppShell() {
             <NavLink to="/camera" className={navLinkClass}>
               Camera
             </NavLink>
+            <NavLink to="/upload" className={navLinkClass}>
+              Upload
+            </NavLink>
             <NavLink to="/results" className={navLinkClass}>
               Results
             </NavLink>

@@ -31,7 +31,10 @@ export function LandingScreen() {
           <Button to="/camera" variant="primary">
             Start Camera
           </Button>
-          <Button to="/results" variant="secondary">
+          <Button to="/upload" variant="secondary">
+            Analyze Video
+          </Button>
+          <Button to="/results" variant="ghost">
             View Results
           </Button>
         </div>
