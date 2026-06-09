@@ -584,6 +584,10 @@ img {
   border-radius: var(--radius-lg);
 }
 
+.camera-preview__media--mirror {
+  transform: scaleX(-1);
+}
+
 .skeleton-overlay {
   pointer-events: none;
 }

@@ -45,6 +45,25 @@ import {
   getSessionStatusCopy,
 } from './cameraSessionUi'
 
+const FRONT_CAMERA_MIRROR = true
+
+function syncCanvasToVideo(
+  video: HTMLVideoElement,
+  canvas: HTMLCanvasElement,
+): boolean {
+  const { videoWidth, videoHeight } = video
+  if (videoWidth <= 0 || videoHeight <= 0) {
+    return false
+  }
+
+  if (canvas.width !== videoWidth || canvas.height !== videoHeight) {
+    canvas.width = videoWidth
+    canvas.height = videoHeight
+  }
+
+  return true
+}
+
 export function CameraScreen() {
   const navigate = useNavigate()
   const videoRef = useRef<HTMLVideoElement | null>(null)
@@ -203,6 +222,29 @@ export function CameraScreen() {
     })()
   }, [isLoading, isModelLoading, error])
 
+  useEffect(() => {
+    const video = videoRef.current
+    const canvas = canvasRef.current
+    if (!video || !canvas || isLoading || isModelLoading || error) {
+      return
+    }
+
+    const sync = () => {
+      if (videoRef.current && canvasRef.current) {
+        syncCanvasToVideo(videoRef.current, canvasRef.current)
+      }
+    }
+
+    sync()
+    video.addEventListener('loadedmetadata', sync)
+    video.addEventListener('resize', sync)
+
+    return () => {
+      video.removeEventListener('loadedmetadata', sync)
+      video.removeEventListener('resize', sync)
+    }
+  }, [isLoading, isModelLoading, error])
+
   const handleCancel = () => navigate('/')
 
   const finishSet = useCallback(() => {
@@ -293,15 +335,24 @@ export function CameraScreen() {
       const canvas = canvasRef.current
 
       if (video && video.readyState >= 2 && poseEngine.getReadyState() && canvas) {
+        if (!syncCanvasToVideo(video, canvas)) {
+          animationFrameId = requestAnimationFrame(runLoop)
+          return
+        }
+
         const timestamp = performance.now()
         const poseFrame = poseEngine.detect(video, timestamp, frameIndex)
+        const overlayMirrored = FRONT_CAMERA_MIRROR
+        const setupPhase = autoStartRef.current.phase === 'WAITING'
 
         const ctx = canvas.getContext('2d')
         if (ctx && canvas.width > 0 && canvas.height > 0) {
           let currentMissing: string[] = ['Full Body']
 
           if (poseFrame) {
-            drawSkeleton(ctx, poseFrame.landmarks, canvas.width, canvas.height)
+            drawSkeleton(ctx, poseFrame.landmarks, canvas.width, canvas.height, {
+              mirrored: overlayMirrored,
+            })
 
             const calResult = checkCalibration(poseFrame)
             currentMissing = calResult.missingJoints
@@ -458,7 +509,11 @@ export function CameraScreen() {
             clearSkeleton(ctx, canvas.width, canvas.height)
           }
 
-          drawCalibrationGuides(ctx, poseFrame, canvas.width, canvas.height)
+          if (setupPhase) {
+            drawCalibrationGuides(ctx, poseFrame, canvas.width, canvas.height, {
+              mirrored: overlayMirrored,
+            })
+          }
 
           setMissingJoints((prev) => {
             if (JSON.stringify(prev) !== JSON.stringify(currentMissing)) {
@@ -483,8 +538,7 @@ export function CameraScreen() {
 
   const handleLoadedMetadata = () => {
     if (videoRef.current && canvasRef.current) {
-      canvasRef.current.width = videoRef.current.videoWidth
-      canvasRef.current.height = videoRef.current.videoHeight
+      syncCanvasToVideo(videoRef.current, canvasRef.current)
     }
   }
 
@@ -575,7 +629,7 @@ export function CameraScreen() {
         >
           <video
             ref={videoRef}
-            className="camera-preview__media"
+            className={`camera-preview__media${FRONT_CAMERA_MIRROR ? ' camera-preview__media--mirror' : ''}`}
             autoPlay
             playsInline
             muted
@@ -592,16 +646,18 @@ export function CameraScreen() {
                   </p>
                 </div>
               )}
-              <button
-                type="button"
-                className={`camera-debug-toggle${showDebug ? ' camera-debug-toggle--on' : ''}`}
-                onClick={() => setShowDebug((prev) => !prev)}
-                aria-pressed={showDebug}
-                aria-label={showDebug ? 'Hide developer debug overlay' : 'Show developer debug overlay'}
-                title="Developer debug overlay"
-              >
-                {showDebug ? 'DBG' : 'dbg'}
-              </button>
+              {import.meta.env.DEV && (
+                <button
+                  type="button"
+                  className={`camera-debug-toggle${showDebug ? ' camera-debug-toggle--on' : ''}`}
+                  onClick={() => setShowDebug((prev) => !prev)}
+                  aria-pressed={showDebug}
+                  aria-label={showDebug ? 'Hide developer debug overlay' : 'Show developer debug overlay'}
+                  title="Developer debug overlay"
+                >
+                  {showDebug ? 'DBG' : 'dbg'}
+                </button>
+              )}
             </>
           )}
         </div>
