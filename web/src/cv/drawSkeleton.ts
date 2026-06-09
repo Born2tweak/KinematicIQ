@@ -1,10 +1,10 @@
 import { POSE_CONNECTIONS } from './poseConnections'
 import { CONFIDENCE_THRESHOLD, type NormalizedLandmark } from './types'
 
-const BONE_COLOR = 'rgba(34, 211, 238, 0.85)'
-const JOINT_COLOR = 'rgba(255, 255, 255, 0.9)'
-const BONE_WIDTH = 2
-const JOINT_RADIUS = 4
+const BONE_COLOR = 'rgba(34, 211, 238, 0.9)'
+const JOINT_COLOR = 'rgba(255, 255, 255, 0.95)'
+const BONE_WIDTH = 6
+const JOINT_RADIUS = 9
 
 export interface DrawSkeletonOptions {
   mirrored?: boolean

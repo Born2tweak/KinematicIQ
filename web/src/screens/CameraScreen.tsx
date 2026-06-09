@@ -45,7 +45,7 @@ import {
   getSessionStatusCopy,
 } from './cameraSessionUi'
 
-const FRONT_CAMERA_MIRROR = true
+const FRONT_CAMERA_MIRROR = false
 
 function syncCanvasToVideo(
   video: HTMLVideoElement,
