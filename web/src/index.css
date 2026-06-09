@@ -564,6 +564,17 @@ img {
   height: 100%;
 }
 
+.camera-preview__overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-md);
+  background: var(--color-bg-elevated);
+}
+
 .camera-preview__media {
   position: absolute;
   inset: 0;

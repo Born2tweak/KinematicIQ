@@ -56,8 +56,10 @@ export function CameraScreen() {
   const autoFinishRef = useRef(createAutoFinishState())
   const poseConfidenceSamplesRef = useRef<number[]>([])
   const isFinishingRef = useRef(false)
+  const streamRef = useRef<MediaStream | null>(null)
 
   const [error, setError] = useState<string | null>(null)
+  const [cameraAttempt, setCameraAttempt] = useState(0)
   const [isLoading, setIsLoading] = useState(true)
   const [isModelLoading, setIsModelLoading] = useState(true)
   const [missingJoints, setMissingJoints] = useState<string[]>(['Full Body'])
@@ -90,10 +92,35 @@ export function CameraScreen() {
 
   useEffect(() => {
     let activeStream: MediaStream | null = null
+    let cancelled = false
+
+    async function attachStreamToVideo(stream: MediaStream): Promise<boolean> {
+      const video = videoRef.current
+      if (!video) return false
+
+      video.srcObject = stream
+      try {
+        await video.play()
+        return true
+      } catch (playErr: unknown) {
+        console.error('Error playing camera preview:', playErr)
+        return false
+      }
+    }
 
     async function startCamera() {
       setIsLoading(true)
       setError(null)
+      streamRef.current = null
+
+      if (!navigator.mediaDevices?.getUserMedia) {
+        setError(
+          'Camera access is not available. Open this site over HTTPS and use a supported browser.',
+        )
+        setIsLoading(false)
+        return
+      }
+
       try {
         const mediaStream = await navigator.mediaDevices.getUserMedia({
           video: {
@@ -104,10 +131,19 @@ export function CameraScreen() {
           audio: false,
         })
 
-        activeStream = mediaStream
+        if (cancelled) {
+          mediaStream.getTracks().forEach((track) => track.stop())
+          return
+        }
 
-        if (videoRef.current) {
-          videoRef.current.srcObject = mediaStream
+        activeStream = mediaStream
+        streamRef.current = mediaStream
+
+        const attached = await attachStreamToVideo(mediaStream)
+        if (!attached && !cancelled) {
+          setError(
+            'Could not start the camera preview. Allow camera access in your browser, then try again.',
+          )
         }
       } catch (err: unknown) {
         console.error('Error accessing camera:', err)
@@ -117,7 +153,7 @@ export function CameraScreen() {
           error.name === 'PermissionDeniedError'
         ) {
           setError(
-            'Camera permission denied. Please allow camera access in your browser settings to continue.',
+            'Camera permission denied. Click the camera icon in the address bar, allow access for this site, then press Try again.',
           )
         } else if (
           error.name === 'NotFoundError' ||
@@ -130,18 +166,42 @@ export function CameraScreen() {
           setError(`Unable to access camera: ${error.message || 'Unknown error'}`)
         }
       } finally {
-        setIsLoading(false)
+        if (!cancelled) {
+          setIsLoading(false)
+        }
       }
     }
 
     startCamera()
 
     return () => {
+      cancelled = true
       if (activeStream) {
         activeStream.getTracks().forEach((track) => track.stop())
       }
+      streamRef.current = null
+      if (videoRef.current) {
+        videoRef.current.srcObject = null
+      }
     }
-  }, [])
+  }, [cameraAttempt])
+
+  useEffect(() => {
+    const stream = streamRef.current
+    if (!stream || isLoading || error) return
+
+    void (async () => {
+      const video = videoRef.current
+      if (!video || video.srcObject === stream) return
+
+      video.srcObject = stream
+      try {
+        await video.play()
+      } catch (playErr: unknown) {
+        console.error('Error resuming camera preview:', playErr)
+      }
+    })()
+  }, [isLoading, isModelLoading, error])
 
   const handleCancel = () => navigate('/')
 
@@ -467,6 +527,14 @@ export function CameraScreen() {
             Camera Error
           </h2>
           <p className="card__subtitle">{error}</p>
+          <div className="btn-group btn-group--row" style={{ marginTop: 'var(--space-md)' }}>
+            <Button variant="secondary" onClick={() => setCameraAttempt((n) => n + 1)}>
+              Try again
+            </Button>
+            <Button variant="ghost" onClick={handleCancel}>
+              Back to home
+            </Button>
+          </div>
         </Card>
       ) : isModelLoading ? (
         <Card
@@ -499,49 +567,48 @@ export function CameraScreen() {
           </div>
         )}
 
-        {error && (
-          <div
-            className="stack"
-            style={{ alignItems: 'center', padding: 'var(--space-md)' }}
-          >
-            <p
-              className="camera-preview__label"
-              style={{ color: 'var(--color-text-muted)' }}
-            >
-              Webcam preview unavailable
-            </p>
-          </div>
-        )}
+        <div
+          className="camera-preview__stage"
+          style={{
+            visibility: error ? 'hidden' : 'visible',
+          }}
+        >
+          <video
+            ref={videoRef}
+            className="camera-preview__media"
+            autoPlay
+            playsInline
+            muted
+            onLoadedMetadata={handleLoadedMetadata}
+          />
+          {!isLoading && !isModelLoading && !error && (
+            <>
+              <RepCounter repCount={repCount} isAnalyzing={autoStartPhase === 'ACTIVE'} />
+              <SkeletonOverlay ref={canvasRef} />
+              {finishCountdown !== null && autoStartPhase === 'ACTIVE' && (
+                <div className="camera-finish-countdown" aria-live="polite">
+                  <p className="camera-finish-countdown__text">
+                    Finishing in {finishCountdown}…
+                  </p>
+                </div>
+              )}
+              <button
+                type="button"
+                className={`camera-debug-toggle${showDebug ? ' camera-debug-toggle--on' : ''}`}
+                onClick={() => setShowDebug((prev) => !prev)}
+                aria-pressed={showDebug}
+                aria-label={showDebug ? 'Hide developer debug overlay' : 'Show developer debug overlay'}
+                title="Developer debug overlay"
+              >
+                {showDebug ? 'DBG' : 'dbg'}
+              </button>
+            </>
+          )}
+        </div>
 
-        {!isLoading && !isModelLoading && !error && (
-          <div className="camera-preview__stage">
-            <RepCounter repCount={repCount} isAnalyzing={autoStartPhase === 'ACTIVE'} />
-            <video
-              ref={videoRef}
-              className="camera-preview__media"
-              autoPlay
-              playsInline
-              muted
-              onLoadedMetadata={handleLoadedMetadata}
-            />
-            <SkeletonOverlay ref={canvasRef} />
-            {finishCountdown !== null && autoStartPhase === 'ACTIVE' && (
-              <div className="camera-finish-countdown" aria-live="polite">
-                <p className="camera-finish-countdown__text">
-                  Finishing in {finishCountdown}…
-                </p>
-              </div>
-            )}
-            <button
-              type="button"
-              className={`camera-debug-toggle${showDebug ? ' camera-debug-toggle--on' : ''}`}
-              onClick={() => setShowDebug((prev) => !prev)}
-              aria-pressed={showDebug}
-              aria-label={showDebug ? 'Hide developer debug overlay' : 'Show developer debug overlay'}
-              title="Developer debug overlay"
-            >
-              {showDebug ? 'DBG' : 'dbg'}
-            </button>
+        {error && (
+          <div className="camera-preview__overlay">
+            <p className="camera-preview__label">Webcam preview unavailable</p>
           </div>
         )}
       </div>
