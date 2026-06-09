@@ -510,9 +510,7 @@ export function CameraScreen() {
           }
 
           if (setupPhase) {
-            drawCalibrationGuides(ctx, poseFrame, canvas.width, canvas.height, {
-              mirrored: overlayMirrored,
-            })
+            drawCalibrationGuides(ctx, poseFrame, canvas.width, canvas.height)
           }
 
           setMissingJoints((prev) => {

@@ -35,29 +35,18 @@ export function checkCalibration(poseFrame: PoseFrame | null): CalibrationResult
   }
 }
 
-export interface DrawCalibrationOptions {
-  mirrored?: boolean
-}
-
 export function drawCalibrationGuides(
   ctx: CanvasRenderingContext2D,
   poseFrame: PoseFrame | null,
   width: number,
   height: number,
-  options: DrawCalibrationOptions = {},
 ): boolean {
-  const { mirrored = false } = options
   const { isCalibrated } = checkCalibration(poseFrame)
   
   const accentColor = isCalibrated ? '#22c55e' : '#ef4444' // Neon green vs neon red
   const labelColor = isCalibrated ? '#4ade80' : '#f87171'
 
   ctx.save()
-
-  if (mirrored) {
-    ctx.translate(width, 0)
-    ctx.scale(-1, 1)
-  }
 
   // 1. Draw Ground/Feet Line
   const groundY = height * 0.85
