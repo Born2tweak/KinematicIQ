@@ -1,56 +1,242 @@
+import { useState } from 'react'
 import { Button } from '../components/Button'
-import { Card } from '../components/Card'
+import { LiveSquatDemo } from '../components/landing/LiveSquatDemo'
+import { SessionDemoPlayer } from '../components/landing/SessionDemoPlayer'
 
-const features = [
+const PIPELINE_STEPS = [
   {
-    icon: '📷',
     title: 'Capture',
-    text: 'Record your movement with the camera to collect pose data for analysis.',
+    short: 'Any camera',
+    text: 'Use your webcam live or upload a recorded video. No sensors, no markers, no special hardware — a laptop or phone camera is the whole setup.',
   },
   {
-    icon: '⚡',
-    title: 'Analyze',
-    text: 'On-device biomechanics processing evaluates form, symmetry, and quality.',
+    title: 'Track',
+    short: '33 landmarks',
+    text: 'On-device pose estimation locks onto 33 body landmarks every frame. Your video never leaves the browser — nothing is uploaded, ever.',
   },
   {
-    icon: '📊',
-    title: 'Review Results',
-    text: 'View scores, confidence levels, and actionable insights from your session.',
+    title: 'Measure',
+    short: 'Joint angles',
+    text: 'Knee and hip angles, trunk lean, and left/right symmetry are computed from real geometry on every frame — the same math a motion lab uses, minus the lab.',
+  },
+  {
+    title: 'Detect',
+    short: 'Phases & reps',
+    text: 'A movement state machine identifies descent, bottom, and ascent, then counts reps — and rejects ones that don\'t qualify, so partial squats never inflate your numbers.',
+  },
+  {
+    title: 'Score',
+    short: '0–100, transparent',
+    text: 'Each set is scored across five weighted components: depth, trunk control, knee tracking, consistency, and symmetry. Every number comes with the exact thresholds behind it.',
+  },
+  {
+    title: 'Coach',
+    short: 'Plain language',
+    text: 'Results become coaching: what the camera observed, why it matters biomechanically, and one cue to focus on next set — with an honest confidence level attached.',
   },
 ] as const
 
+const AUDIENCES = [
+  {
+    icon: '🩺',
+    title: 'Physical therapists',
+    text: 'Objective movement baselines and visible progress you can show patients — no motion lab, no extra appointment time.',
+  },
+  {
+    icon: '🦵',
+    title: 'Rehab & recovery',
+    text: 'Patients watch their own mechanics improve session to session, which keeps home exercise programs honest and motivating.',
+  },
+  {
+    icon: '📋',
+    title: 'Coaches & trainers',
+    text: 'Screen squat mechanics for an entire roster with nothing but a laptop. Spot asymmetries before they become injuries.',
+  },
+  {
+    icon: '🏃',
+    title: 'Athletes',
+    text: 'Instant, honest feedback on depth, control, and symmetry — every single rep, without booking time with a specialist.',
+  },
+] as const
+
+const BENEFITS = [
+  {
+    title: 'Private by design',
+    text: 'All analysis runs in your browser. Video is processed on your device and never uploaded — there is no server to send it to.',
+  },
+  {
+    title: 'Zero hardware',
+    text: 'No wearables, force plates, or reflective markers. If you have a camera, you have a movement lab.',
+  },
+  {
+    title: 'Transparent scoring',
+    text: 'No black box. Every score shows its components, weights, and the exact angle thresholds it measured against.',
+  },
+  {
+    title: 'Honest about confidence',
+    text: 'When the camera view limits what can be measured, the analysis says so — and lowers its confidence instead of guessing.',
+  },
+] as const
+
+const STATS = [
+  { value: '33', label: 'body landmarks tracked per frame' },
+  { value: '5', label: 'weighted scoring components' },
+  { value: '0', label: 'videos uploaded — fully on-device' },
+  { value: '100%', label: 'browser-based, nothing to install' },
+] as const
+
 export function LandingScreen() {
+  const [activeStep, setActiveStep] = useState(0)
+  const step = PIPELINE_STEPS[activeStep]
+
   return (
-    <div className="stack-xl">
-      <section className="hero">
-        <h1 className="hero__title">KinematicIQ</h1>
-        <p className="hero__description">
-          Biomechanics made simple. From Camera to understanding your movement. 
+    <div className="landing">
+      {/* Hero */}
+      <section className="landing-hero">
+        <div className="landing-hero__copy">
+          <p className="landing-eyebrow">Movement intelligence · in your browser</p>
+          <h1 className="landing-hero__title">
+            See what your movement is <span className="landing-hero__highlight">telling you</span>
+          </h1>
+          <p className="landing-hero__lead">
+            KinematicIQ turns any camera into a biomechanics lab. Real-time squat
+            analysis with joint angles, validated rep counting, and coaching you
+            can actually act on — built for therapy, rehab, and training
+            professionals.
+          </p>
+          <div className="landing-hero__actions">
+            <Button to="/camera" variant="primary">
+              Try live analysis
+            </Button>
+            <Button to="/upload" variant="secondary">
+              Analyze a video
+            </Button>
+          </div>
+          <ul className="landing-hero__trust">
+            <li>No hardware</li>
+            <li>No installs</li>
+            <li>No video ever leaves your device</li>
+          </ul>
+        </div>
+        <div className="landing-hero__demo">
+          <LiveSquatDemo />
+        </div>
+      </section>
+
+      {/* Stats band */}
+      <section className="landing-stats" aria-label="Product facts">
+        {STATS.map((stat) => (
+          <div key={stat.label} className="landing-stat">
+            <span className="landing-stat__value">{stat.value}</span>
+            <span className="landing-stat__label">{stat.label}</span>
+          </div>
+        ))}
+      </section>
+
+      {/* Demo video */}
+      <section className="landing-section" id="demo">
+        <p className="landing-eyebrow">Product demo</p>
+        <h2 className="landing-section__title">Watch a full session, start to score</h2>
+        <p className="landing-section__lead">
+          Calibration, tracking, validated reps, auto-finish, and a transparent
+          score — all in under a minute, all on your own device.
         </p>
-        <div className="hero__actions">
+        <SessionDemoPlayer />
+      </section>
+
+      {/* How it works */}
+      <section className="landing-section" id="how-it-works">
+        <p className="landing-eyebrow">How it works</p>
+        <h2 className="landing-section__title">From camera to coaching in six steps</h2>
+        <div className="pipeline">
+          <div className="pipeline__steps" role="tablist" aria-label="Analysis pipeline">
+            {PIPELINE_STEPS.map((s, i) => (
+              <button
+                key={s.title}
+                type="button"
+                role="tab"
+                aria-selected={i === activeStep}
+                className={`pipeline__step${i === activeStep ? ' pipeline__step--active' : ''}`}
+                onClick={() => setActiveStep(i)}
+              >
+                <span className="pipeline__step-num">{i + 1}</span>
+                <span className="pipeline__step-title">{s.title}</span>
+                <span className="pipeline__step-short">{s.short}</span>
+              </button>
+            ))}
+          </div>
+          <div className="pipeline__detail" role="tabpanel">
+            <h3 className="pipeline__detail-title">
+              {activeStep + 1}. {step.title}
+            </h3>
+            <p className="pipeline__detail-text">{step.text}</p>
+          </div>
+        </div>
+      </section>
+
+      {/* Who it's for */}
+      <section className="landing-section" id="who-its-for">
+        <p className="landing-eyebrow">Who it&apos;s for</p>
+        <h2 className="landing-section__title">
+          Built for the people who build people back up
+        </h2>
+        <div className="landing-grid landing-grid--audiences">
+          {AUDIENCES.map((a) => (
+            <div key={a.title} className="audience-card">
+              <span className="audience-card__icon" aria-hidden>
+                {a.icon}
+              </span>
+              <h3 className="audience-card__title">{a.title}</h3>
+              <p className="audience-card__text">{a.text}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Why KinematicIQ */}
+      <section className="landing-section" id="why">
+        <p className="landing-eyebrow">Why KinematicIQ</p>
+        <h2 className="landing-section__title">
+          Lab-grade insight without the lab
+        </h2>
+        <div className="landing-grid landing-grid--benefits">
+          {BENEFITS.map((b) => (
+            <div key={b.title} className="benefit-card">
+              <h3 className="benefit-card__title">{b.title}</h3>
+              <p className="benefit-card__text">{b.text}</p>
+            </div>
+          ))}
+        </div>
+        <p className="landing-section__note">
+          Starting with the movement that matters most — the bodyweight squat,
+          the foundation of nearly every rehab and strength program. More
+          movements are on the roadmap.
+        </p>
+      </section>
+
+      {/* Final CTA */}
+      <section className="landing-cta">
+        <h2 className="landing-cta__title">Ready to see your movement clearly?</h2>
+        <p className="landing-cta__text">
+          Open your camera, do a few squats, and get a transparent movement
+          score in under a minute.
+        </p>
+        <div className="landing-cta__actions">
           <Button to="/camera" variant="primary">
-            Start Camera
+            Start a live session
           </Button>
-          <Button to="/upload" variant="secondary">
-            Analyze Video
-          </Button>
-          <Button to="/results" variant="ghost">
-            View Results
+          <Button to="/upload" variant="ghost">
+            Upload a video instead
           </Button>
         </div>
       </section>
 
-      <section className="grid-features" aria-label="How it works">
-        {features.map((feature) => (
-          <Card key={feature.title}>
-            <div className="feature-card__icon" aria-hidden>
-              {feature.icon}
-            </div>
-            <h3 className="feature-card__title">{feature.title}</h3>
-            <p className="feature-card__text">{feature.text}</p>
-          </Card>
-        ))}
-      </section>
+      <footer className="landing-footer">
+        <p>
+          KinematicIQ provides movement insights for training and education. It
+          is not a medical device and does not replace clinical judgment.
+        </p>
+      </footer>
     </div>
   )
 }

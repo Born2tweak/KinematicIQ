@@ -1,9 +1,10 @@
-import { NavLink, Outlet } from 'react-router-dom'
+import { NavLink, Outlet, useLocation } from 'react-router-dom'
 
 const navLinkClass = ({ isActive }: { isActive: boolean }) =>
   `navbar__link${isActive ? ' navbar__link--active' : ''}`
 
 export function AppShell() {
+  const isLanding = useLocation().pathname === '/'
   return (
     <>
       <header className="navbar">
@@ -27,7 +28,7 @@ export function AppShell() {
           </nav>
         </div>
       </header>
-      <main className="container page">
+      <main className={`container page${isLanding ? ' container--wide' : ''}`}>
         <Outlet />
       </main>
     </>
