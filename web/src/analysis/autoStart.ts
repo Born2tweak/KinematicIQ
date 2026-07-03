@@ -14,23 +14,34 @@ import type { CalibrationResult } from '../cv/drawCalibration'
 
 export type AutoStartPhase = 'WAITING' | 'CALIBRATING' | 'READY' | 'ACTIVE'
 
-/** ~2s at 30fps = 60 frames of consecutive stability required. */
-export const STABLE_FRAMES_REQUIRED = 60
+/** Movement-specific auto-start tuning. */
+export interface AutoStartConfig {
+  /** Consecutive stable frames before READY (~2s at 30fps = 60). */
+  stableFramesRequired: number
+  /** Knee angle must be above this to count as "upright standing". */
+  uprightKneeThreshold: number
+  /** Max frame-to-frame hip Y jitter (normalized) allowed during calibration. */
+  hipStabilityThreshold: number
+  /** Minimum pose confidence to accept a frame during calibration. */
+  minCalibrationConfidence: number
+  /** Knee angle below this triggers session start from READY. */
+  descentTriggerAngle: number
+  /** Hip drop (normalized) that triggers session start from READY. */
+  descentTriggerHipDrop: number
+}
 
-/** Knee angle must be above this to count as "upright standing". */
-const UPRIGHT_KNEE_THRESHOLD = 150
+/** Bodyweight-squat auto-start tuning. */
+export const SQUAT_AUTO_START_CONFIG: AutoStartConfig = {
+  stableFramesRequired: 60,
+  uprightKneeThreshold: 150,
+  hipStabilityThreshold: 0.012,
+  minCalibrationConfidence: 0.55,
+  descentTriggerAngle: 148,
+  descentTriggerHipDrop: 0.04,
+}
 
-/** Max frame-to-frame hip Y jitter (normalized coords) allowed during calibration. */
-const HIP_STABILITY_THRESHOLD = 0.012
-
-/** Minimum pose confidence to accept a frame during calibration. */
-const MIN_CALIBRATION_CONFIDENCE = 0.55
-
-/** Knee angle below this triggers session start from READY state. */
-const DESCENT_TRIGGER_ANGLE = 148
-
-/** Hip drop (normalized) that triggers session start from READY state. */
-const DESCENT_TRIGGER_HIP_DROP = 0.04
+/** Back-compat alias for UI progress display. */
+export const STABLE_FRAMES_REQUIRED = SQUAT_AUTO_START_CONFIG.stableFramesRequired
 
 export interface AutoStartState {
   phase: AutoStartPhase
@@ -63,36 +74,41 @@ export function createAutoStartState(): AutoStartState {
   }
 }
 
-function isUprightStanding(angles: JointAngles): boolean {
+function isUprightStanding(angles: JointAngles, cfg: AutoStartConfig): boolean {
   const knees = [angles.leftKnee, angles.rightKnee].filter(
     (v): v is number => v !== null,
   )
   if (knees.length === 0) return false
-  return knees.every((k) => k >= UPRIGHT_KNEE_THRESHOLD)
+  return knees.every((k) => k >= cfg.uprightKneeThreshold)
 }
 
-function isHipStable(currentHipY: number | null, lastHipY: number | null): boolean {
+function isHipStable(
+  currentHipY: number | null,
+  lastHipY: number | null,
+  cfg: AutoStartConfig,
+): boolean {
   if (currentHipY === null || lastHipY === null) return true
-  return Math.abs(currentHipY - lastHipY) <= HIP_STABILITY_THRESHOLD
+  return Math.abs(currentHipY - lastHipY) <= cfg.hipStabilityThreshold
 }
 
 function isDescentStarted(
   angles: JointAngles | null,
   hipY: number | null,
   calibratedHipY: number | null,
+  cfg: AutoStartConfig,
 ): boolean {
   if (angles !== null) {
     const knees = [angles.leftKnee, angles.rightKnee].filter(
       (v): v is number => v !== null,
     )
-    if (knees.length > 0 && Math.min(...knees) < DESCENT_TRIGGER_ANGLE) {
+    if (knees.length > 0 && Math.min(...knees) < cfg.descentTriggerAngle) {
       return true
     }
   }
 
   if (hipY !== null && calibratedHipY !== null) {
     const hipDrop = hipY - calibratedHipY
-    if (hipDrop > DESCENT_TRIGGER_HIP_DROP) {
+    if (hipDrop > cfg.descentTriggerHipDrop) {
       return true
     }
   }
@@ -103,15 +119,16 @@ function isDescentStarted(
 export function updateAutoStart(
   state: AutoStartState,
   input: AutoStartInput,
+  cfg: AutoStartConfig = SQUAT_AUTO_START_CONFIG,
 ): AutoStartResult {
   switch (state.phase) {
     case 'WAITING': {
       if (
         input.calibration.isCalibrated &&
-        input.poseConfidence >= MIN_CALIBRATION_CONFIDENCE &&
+        input.poseConfidence >= cfg.minCalibrationConfidence &&
         input.angles !== null &&
-        isUprightStanding(input.angles) &&
-        isHipStable(input.hipY, state.lastHipY)
+        isUprightStanding(input.angles, cfg) &&
+        isHipStable(input.hipY, state.lastHipY, cfg)
       ) {
         return {
           phase: 'CALIBRATING',
@@ -139,9 +156,9 @@ export function updateAutoStart(
 
     case 'CALIBRATING': {
       const bodyVisible = input.calibration.isCalibrated
-      const confident = input.poseConfidence >= MIN_CALIBRATION_CONFIDENCE
-      const upright = input.angles !== null && isUprightStanding(input.angles)
-      const stable = isHipStable(input.hipY, state.lastHipY)
+      const confident = input.poseConfidence >= cfg.minCalibrationConfidence
+      const upright = input.angles !== null && isUprightStanding(input.angles, cfg)
+      const stable = isHipStable(input.hipY, state.lastHipY, cfg)
 
       if (!bodyVisible || !confident || !upright || !stable) {
         return {
@@ -159,7 +176,7 @@ export function updateAutoStart(
 
       const nextCount = state.stableFrameCount + 1
 
-      if (nextCount >= STABLE_FRAMES_REQUIRED) {
+      if (nextCount >= cfg.stableFramesRequired) {
         return {
           phase: 'READY',
           transitioned: true,
@@ -200,7 +217,7 @@ export function updateAutoStart(
         }
       }
 
-      if (isDescentStarted(input.angles, input.hipY, state.calibratedHipY)) {
+      if (isDescentStarted(input.angles, input.hipY, state.calibratedHipY, cfg)) {
         return {
           phase: 'ACTIVE',
           transitioned: true,

@@ -3,53 +3,82 @@ import { midpoint, safeLandmark } from './geometry'
 import type { JointAngles, PoseFrame, RepMetrics, SquatState } from '../cv/types'
 import { LANDMARK_INDICES } from '../cv/types'
 
-// ── Validation thresholds (relaxed) ────────────────────────────────
-/** Average knee angle must drop below this during the rep. */
-const AVG_KNEE_DEPTH_THRESHOLD = 145
-/** Max left/right asymmetry before bilateral check fails. */
-const BILATERAL_ASYMMETRY_MAX = 35
-/** Minimum hip descent (normalized Y, downward = positive). Low bar — just needs real drop. */
-const MIN_HIP_DESCENT = 0.03
-/** Ankle visibility ratio — only reject obvious knee lifts where a foot vanishes. */
-const ANKLE_VISIBILITY_RATIO = 0.4
-/** Minimum realistic rep duration. */
-const MIN_REP_DURATION_MS = 500
-/** Maximum realistic rep duration. */
-const MAX_REP_DURATION_MS = 8_000
 /**
- * Knee-lift detector: if one knee bends deeply while the other stays
- * nearly straight AND hips barely move, it's a knee lift, not a squat.
+ * Rep validation gates. Movement-specific — each MovementProfile
+ * supplies its own instance; the exported default is the bodyweight-
+ * squat tuning (see analysis/movement/profiles/squat.ts).
  */
-const KNEE_LIFT_SINGLE_KNEE_MAX = 120
-const KNEE_LIFT_OTHER_KNEE_MIN = 155
-const KNEE_LIFT_HIP_DROP_MAX = 0.025
+export interface RepGateConfig {
+  /** Average knee angle must drop below this during the rep. */
+  avgKneeDepthThreshold: number
+  /** Max left/right asymmetry before bilateral check fails. */
+  bilateralAsymmetryMax: number
+  /** Minimum hip descent (normalized Y, downward = positive). */
+  minHipDescent: number
+  /** Ankle visibility ratio — only reject obvious lifts where a foot vanishes. */
+  ankleVisibilityRatio: number
+  minRepDurationMs: number
+  maxRepDurationMs: number
+  /**
+   * Knee-lift detector: one knee bends deeply while the other stays
+   * nearly straight AND hips barely move.
+   */
+  kneeLiftSingleKneeMax: number
+  kneeLiftOtherKneeMin: number
+  kneeLiftHipDropMax: number
+  /** Hip drop beyond which the movement looks like sitting. */
+  seatedHipDropThreshold: number
+  /** Consecutive frames of seated signal before flagging. */
+  seatedMinFrames: number
+  /** Bottom hold (ms) that triggers seated flag when hipDrop stays high. */
+  seatedBottomHoldMs: number
+  /** Hip drop considered "high" for bottom-hold detection. */
+  seatedBottomHoldHipDrop: number
+  /** Minimum hip confidence to count as "visible" near bottom. */
+  hipConfidenceMin: number
+  /** Consecutive near-standing frames to count a rep without perfect lockout. */
+  standingCompletionFrames: number
+  /** Degrees below calibrated upright knee that still counts as lockout. */
+  standingKneeTolerance: number
+  /** Fallback lockout knee when no calibration exists. */
+  standingKneeFallback: number
+  /** Hip returned within this delta of rep start (normalized Y). */
+  hipReturnTolerance: number
+  /** Hip drop from the calibrated stand that still counts as returned. */
+  hipDropFromCalibratedMax: number
+  /** Minimum pose confidence while finishing a rep. */
+  minCompletionPoseConfidence: number
+  /** Average rep confidence floor. */
+  minRepAvgConfidence: number
+  /** Knee angle fallback when phase never reports BOTTOM. */
+  bottomKneeAngleThreshold: number
+}
 
-// ── Chair / sit-to-stand rejection ────────────────────────────────
-/** Hip drop (normalized) beyond which the movement looks like sitting. */
-const SEATED_HIP_DROP_THRESHOLD = 0.30
-/** Consecutive frames of seated signal before flagging. */
-const SEATED_MIN_FRAMES = 3
-/** Bottom hold duration (ms) that triggers seated flag when hipDrop stays high. */
-const SEATED_BOTTOM_HOLD_MS = 1200
-/** Hip drop considered "high" for bottom-hold detection. */
-const SEATED_BOTTOM_HOLD_HIP_DROP = 0.20
-/** Minimum hip confidence to count as "visible" near bottom. */
-const HIP_CONFIDENCE_MIN = 0.4
-
-/** Consecutive near-standing frames to count a rep without perfect phase lockout. */
-const STANDING_COMPLETION_FRAMES = 4
-/** Degrees below calibrated upright knee that still counts as lockout. */
-const STANDING_KNEE_TOLERANCE = 14
-/** Fallback lockout knee when no calibration exists. */
-const STANDING_KNEE_FALLBACK = 152
-/** Hip returned within this delta of rep start (normalized Y). */
-const HIP_RETURN_TOLERANCE = 0.08
-/** Minimum pose confidence while finishing a rep. */
-const MIN_COMPLETION_POSE_CONFIDENCE = 0.42
-/** Average rep confidence floor — rejects reps mostly tracked poorly. */
-const MIN_REP_AVG_CONFIDENCE = 0.38
-/** Knee angle fallback when phase never reports BOTTOM. */
-const BOTTOM_KNEE_ANGLE_THRESHOLD = 105
+/** Bodyweight-squat gate tuning (deliberately relaxed). */
+export const SQUAT_REP_GATES: RepGateConfig = {
+  avgKneeDepthThreshold: 145,
+  bilateralAsymmetryMax: 35,
+  minHipDescent: 0.03,
+  ankleVisibilityRatio: 0.4,
+  minRepDurationMs: 500,
+  maxRepDurationMs: 8_000,
+  kneeLiftSingleKneeMax: 120,
+  kneeLiftOtherKneeMin: 155,
+  kneeLiftHipDropMax: 0.025,
+  seatedHipDropThreshold: 0.3,
+  seatedMinFrames: 3,
+  seatedBottomHoldMs: 1200,
+  seatedBottomHoldHipDrop: 0.2,
+  hipConfidenceMin: 0.4,
+  standingCompletionFrames: 4,
+  standingKneeTolerance: 14,
+  standingKneeFallback: 152,
+  hipReturnTolerance: 0.08,
+  hipDropFromCalibratedMax: 0.07,
+  minCompletionPoseConfidence: 0.42,
+  minRepAvgConfidence: 0.38,
+  bottomKneeAngleThreshold: 105,
+}
 
 // ── Types ──────────────────────────────────────────────────────────
 
@@ -108,6 +137,8 @@ export interface RepCounterState {
   blockingGate: string | null
   /** Last failed attempt after bottom was reached (debug HUD). */
   lastMissedRepReason: string | null
+  /** Movement-specific validation gates, fixed at creation. */
+  config: RepGateConfig
 }
 
 export interface RepCounterInput {
@@ -128,7 +159,9 @@ export interface RepCounterResult {
   state: RepCounterState
 }
 
-export function createRepCounterState(): RepCounterState {
+export function createRepCounterState(
+  config: RepGateConfig = SQUAT_REP_GATES,
+): RepCounterState {
   return {
     repCount: 0,
     reps: [],
@@ -139,6 +172,7 @@ export function createRepCounterState(): RepCounterState {
     standingCompletionFrames: 0,
     blockingGate: null,
     lastMissedRepReason: null,
+    config,
   }
 }
 
@@ -158,7 +192,7 @@ export function beginSetDuringDescent(
 
   if (!reachedBottom) {
     const avgKnee = averageKneeAngle(angles)
-    if (avgKnee !== null && avgKnee <= 105) {
+    if (avgKnee !== null && avgKnee <= state.config.bottomKneeAngleThreshold) {
       reachedBottom = true
     }
   }
@@ -216,23 +250,30 @@ const calculateHipShiftAtBottom = (frame: PoseFrame): number | null => {
   return Math.abs(hipMidpoint.x - footMidpoint.x)
 }
 
-function lockoutKneeThreshold(standingKneeBaseline: number | null): number {
+function lockoutKneeThreshold(
+  standingKneeBaseline: number | null,
+  cfg: RepGateConfig,
+): number {
   if (standingKneeBaseline !== null) {
-    return Math.max(standingKneeBaseline - STANDING_KNEE_TOLERANCE, STANDING_KNEE_FALLBACK)
+    return Math.max(
+      standingKneeBaseline - cfg.standingKneeTolerance,
+      cfg.standingKneeFallback,
+    )
   }
-  return STANDING_KNEE_FALLBACK
+  return cfg.standingKneeFallback
 }
 
 function isNearStandingLockout(
   input: RepCounterInput,
   activeRep: ActiveRep,
   reachedBottom: boolean,
+  cfg: RepGateConfig,
 ): boolean {
   if (!reachedBottom) return false
   if (input.phase === 'DESCENDING' || input.phase === 'BOTTOM') return false
   if (input.phase !== 'ASCENDING' && input.phase !== 'STANDING') return false
 
-  if (input.frame.poseConfidence < MIN_COMPLETION_POSE_CONFIDENCE) {
+  if (input.frame.poseConfidence < cfg.minCompletionPoseConfidence) {
     return false
   }
 
@@ -240,19 +281,19 @@ function isNearStandingLockout(
   const kneeForLockout = input.smoothedKneeAngle ?? avgKnee
   if (kneeForLockout === null) return false
 
-  if (kneeForLockout < lockoutKneeThreshold(input.standingKneeBaseline)) {
+  if (kneeForLockout < lockoutKneeThreshold(input.standingKneeBaseline, cfg)) {
     return false
   }
 
   const hipReturned =
     activeRep.startHipY !== null &&
     input.hipY !== null &&
-    Math.abs(input.hipY - activeRep.startHipY) <= HIP_RETURN_TOLERANCE
+    Math.abs(input.hipY - activeRep.startHipY) <= cfg.hipReturnTolerance
 
   const hipDropFromCalibrated =
     input.standingHipY !== null &&
     input.hipY !== null &&
-    input.hipY - input.standingHipY <= 0.07
+    input.hipY - input.standingHipY <= cfg.hipDropFromCalibratedMax
 
   return hipReturned || hipDropFromCalibrated
 }
@@ -262,6 +303,7 @@ function computeBlockingGate(
   reachedBottom: boolean,
   standingCompletionFrames: number,
   input: RepCounterInput,
+  cfg: RepGateConfig,
 ): string | null {
   if (activeRep === null) return null
 
@@ -276,13 +318,13 @@ function computeBlockingGate(
     return 'Bottom not held long enough'
   }
 
-  if (input.frame.poseConfidence < MIN_COMPLETION_POSE_CONFIDENCE) {
+  if (input.frame.poseConfidence < cfg.minCompletionPoseConfidence) {
     return 'Pose confidence dropped'
   }
 
-  if (!isNearStandingLockout(input, activeRep, reachedBottom)) {
+  if (!isNearStandingLockout(input, activeRep, reachedBottom, cfg)) {
     if (input.phase === 'ASCENDING' || input.phase === 'STANDING') {
-      const threshold = lockoutKneeThreshold(input.standingKneeBaseline)
+      const threshold = lockoutKneeThreshold(input.standingKneeBaseline, cfg)
       const knee = input.smoothedKneeAngle ?? averageKneeAngle(input.angles)
       if (knee !== null && knee < threshold) {
         return 'Knee angle never passed standing threshold'
@@ -291,8 +333,8 @@ function computeBlockingGate(
     return 'Did not return to standing'
   }
 
-  if (standingCompletionFrames < STANDING_COMPLETION_FRAMES) {
-    return `Awaiting standing completion (${standingCompletionFrames}/${STANDING_COMPLETION_FRAMES})`
+  if (standingCompletionFrames < cfg.standingCompletionFrames) {
+    return `Awaiting standing completion (${standingCompletionFrames}/${cfg.standingCompletionFrames})`
   }
 
   return null
@@ -303,11 +345,12 @@ function missedRepReason(
   standingCompletionFrames: number,
   reachedBottom: boolean,
   input: RepCounterInput,
+  cfg: RepGateConfig,
 ): string {
   if (activeRep.seatedMovementDetected) {
     return 'Movement looked seated'
   }
-  if (input.frame.poseConfidence < MIN_COMPLETION_POSE_CONFIDENCE) {
+  if (input.frame.poseConfidence < cfg.minCompletionPoseConfidence) {
     return 'Pose confidence dropped'
   }
   if (!reachedBottom) {
@@ -317,7 +360,7 @@ function missedRepReason(
     return 'Tracking lost during ascent'
   }
   const knee = input.smoothedKneeAngle ?? averageKneeAngle(input.angles)
-  const threshold = lockoutKneeThreshold(input.standingKneeBaseline)
+  const threshold = lockoutKneeThreshold(input.standingKneeBaseline, cfg)
   if (knee !== null && knee < threshold) {
     return 'Knee angle never passed standing threshold'
   }
@@ -362,13 +405,16 @@ const createActiveRep = (
   bottomHoldMs: 0,
 })
 
-function hipLandmarksLowConfidence(frame: PoseFrame): boolean {
+function hipLandmarksLowConfidence(
+  frame: PoseFrame,
+  cfg: RepGateConfig,
+): boolean {
   const leftHip = frame.landmarks[LANDMARK_INDICES.LEFT_HIP]
   const rightHip = frame.landmarks[LANDMARK_INDICES.RIGHT_HIP]
   if (!leftHip || !rightHip) return true
   return (
-    (leftHip.visibility ?? 0) < HIP_CONFIDENCE_MIN ||
-    (rightHip.visibility ?? 0) < HIP_CONFIDENCE_MIN
+    (leftHip.visibility ?? 0) < cfg.hipConfidenceMin ||
+    (rightHip.visibility ?? 0) < cfg.hipConfidenceMin
   )
 }
 
@@ -378,6 +424,7 @@ const updateActiveRep = (
   angles: JointAngles,
   phase: SquatState,
   hipY: number | null,
+  cfg: RepGateConfig,
 ): ActiveRep => {
   const nextBottomAverageKneeAngle = averageKneeAngle(angles)
   const shouldReplaceBottomFrame =
@@ -396,8 +443,8 @@ const updateActiveRep = (
   const nextMaxHipDrop = Math.max(activeRep.maxHipDrop, currentHipDrop)
 
   // Check seated signals this frame
-  const excessiveHipDrop = currentHipDrop > SEATED_HIP_DROP_THRESHOLD
-  const hipOccluded = hipLandmarksLowConfidence(frame)
+  const excessiveHipDrop = currentHipDrop > cfg.seatedHipDropThreshold
+  const hipOccluded = hipLandmarksLowConfidence(frame, cfg)
   const seatedSignalThisFrame = excessiveHipDrop || hipOccluded
 
   const nextSeatedConsecutive = seatedSignalThisFrame
@@ -405,10 +452,10 @@ const updateActiveRep = (
     : 0
   const nextSeatedDetected =
     activeRep.seatedMovementDetected ||
-    nextSeatedConsecutive >= SEATED_MIN_FRAMES
+    nextSeatedConsecutive >= cfg.seatedMinFrames
 
   // Bottom hold tracking: time spent with high hip drop
-  const inHighDrop = currentHipDrop >= SEATED_BOTTOM_HOLD_HIP_DROP
+  const inHighDrop = currentHipDrop >= cfg.seatedBottomHoldHipDrop
   let nextBottomHoldStart = activeRep.bottomHoldStartTimestamp
   let nextBottomHoldMs = activeRep.bottomHoldMs
 
@@ -424,8 +471,8 @@ const updateActiveRep = (
   // Prolonged bottom hold with high drop also triggers seated flag
   const seatedFromHold =
     !nextSeatedDetected &&
-    nextBottomHoldMs >= SEATED_BOTTOM_HOLD_MS &&
-    nextMaxHipDrop >= SEATED_BOTTOM_HOLD_HIP_DROP
+    nextBottomHoldMs >= cfg.seatedBottomHoldMs &&
+    nextMaxHipDrop >= cfg.seatedBottomHoldHipDrop
 
   return {
     ...activeRep,
@@ -471,8 +518,9 @@ function validateRep(
   activeRep: ActiveRep,
   reachedBottom: boolean,
   durationMs: number,
+  cfg: RepGateConfig,
 ): RepValidation {
-  // Bilateral bend: use average of both knees, allow asymmetry up to 35°
+  // Bilateral bend: use average of both knees, allow configured asymmetry
   const minLeft = activeRep.minLeftKneeAngle
   const minRight = activeRep.minRightKneeAngle
   const avgMin =
@@ -483,35 +531,35 @@ function validateRep(
     minLeft !== null && minRight !== null ? Math.abs(minLeft - minRight) : 0
   const bilateralBend =
     avgMin !== null &&
-    avgMin <= AVG_KNEE_DEPTH_THRESHOLD &&
-    asymmetry <= BILATERAL_ASYMMETRY_MAX
+    avgMin <= cfg.avgKneeDepthThreshold &&
+    asymmetry <= cfg.bilateralAsymmetryMax
 
   // Hip descent
   const hipDrop =
     activeRep.startHipY !== null && activeRep.deepestHipY !== null
       ? activeRep.deepestHipY - activeRep.startHipY
       : 0
-  const hipDescended = hipDrop >= MIN_HIP_DESCENT
+  const hipDescended = hipDrop >= cfg.minHipDescent
 
   // Feet stability — only catches obvious lifts
   const ankleRatio =
     activeRep.totalFrames > 0
       ? activeRep.ankleVisibleFrames / activeRep.totalFrames
       : 0
-  const feetStable = ankleRatio >= ANKLE_VISIBILITY_RATIO
+  const feetStable = ankleRatio >= cfg.ankleVisibilityRatio
 
   // Duration
   const validDuration =
-    durationMs >= MIN_REP_DURATION_MS && durationMs <= MAX_REP_DURATION_MS
+    durationMs >= cfg.minRepDurationMs && durationMs <= cfg.maxRepDurationMs
 
   const avgConfidence =
     activeRep.confidenceSamples > 0
       ? activeRep.confidenceSum / activeRep.confidenceSamples
       : 0
-  const confidenceOk = avgConfidence >= MIN_REP_AVG_CONFIDENCE
+  const confidenceOk = avgConfidence >= cfg.minRepAvgConfidence
 
   // Knee-lift detector: one knee bends deeply, other stays straight, hips don't move
-  const isKneeLift = detectKneeLift(minLeft, minRight, hipDrop)
+  const isKneeLift = detectKneeLift(minLeft, minRight, hipDrop, cfg)
 
   // Chair / seated detection
   const seatedMovementDetected = activeRep.seatedMovementDetected
@@ -525,7 +573,7 @@ function validateRep(
     rejectionReason = 'Bottom not held long enough'
   } else if (!validDuration) {
     rejectionReason =
-      durationMs < MIN_REP_DURATION_MS ? 'Too fast (<500ms)' : 'Too slow (>8s)'
+      durationMs < cfg.minRepDurationMs ? 'Too fast (<500ms)' : 'Too slow (>8s)'
   } else if (!confidenceOk) {
     rejectionReason = 'Pose confidence dropped'
   } else if (isKneeLift) {
@@ -552,19 +600,20 @@ function detectKneeLift(
   minLeft: number | null,
   minRight: number | null,
   hipDrop: number,
+  cfg: RepGateConfig,
 ): boolean {
   if (minLeft === null || minRight === null) return false
 
   const leftDeep =
-    minLeft <= KNEE_LIFT_SINGLE_KNEE_MAX &&
-    minRight >= KNEE_LIFT_OTHER_KNEE_MIN
+    minLeft <= cfg.kneeLiftSingleKneeMax &&
+    minRight >= cfg.kneeLiftOtherKneeMin
   const rightDeep =
-    minRight <= KNEE_LIFT_SINGLE_KNEE_MAX &&
-    minLeft >= KNEE_LIFT_OTHER_KNEE_MIN
+    minRight <= cfg.kneeLiftSingleKneeMax &&
+    minLeft >= cfg.kneeLiftOtherKneeMin
 
   if (!leftDeep && !rightDeep) return false
 
-  return hipDrop < KNEE_LIFT_HIP_DROP_MAX
+  return hipDrop < cfg.kneeLiftHipDropMax
 }
 
 // ── Finalize ────────────────────────────────────────────────────────
@@ -608,6 +657,7 @@ function tryFinishRep(
   reachedBottom: boolean,
   frame: PoseFrame,
   repCount: number,
+  cfg: RepGateConfig,
 ): {
   repCount: number
   reps: RepMetrics[]
@@ -615,7 +665,7 @@ function tryFinishRep(
   lastValidation: RepValidation
 } {
   const durationMs = frame.timestamp - activeRep.startTimestamp
-  const validation = validateRep(activeRep, reachedBottom, durationMs)
+  const validation = validateRep(activeRep, reachedBottom, durationMs, cfg)
 
   console.log(
     `[RepCounter] VALIDATION | reason=${validation.rejectionReason} duration=${durationMs}ms bilateral=${validation.bilateralBend} hipDesc=${validation.hipDescended} feet=${validation.feetStable} kneeLift=${validation.isKneeLift}`,
@@ -646,6 +696,7 @@ export function updateRepCounter(
   state: RepCounterState,
   input: RepCounterInput,
 ): RepCounterResult {
+  const cfg = state.config
   let activeRep = state.activeRep
   let repCount = state.repCount
   let reps = state.reps
@@ -670,6 +721,7 @@ export function updateRepCounter(
       standingCompletionFrames,
       reachedBottom,
       input,
+      cfg,
     )
     lastMissedRepReason = reason
     console.log(`[RepCounter] MISSED REP: ${reason}`)
@@ -697,6 +749,7 @@ export function updateRepCounter(
       input.angles,
       input.phase,
       input.hipY,
+      cfg,
     )
   }
 
@@ -709,7 +762,7 @@ export function updateRepCounter(
       reachedBottom = true
     } else {
       const avgKnee = averageKneeAngle(input.angles)
-      if (avgKnee !== null && avgKnee <= BOTTOM_KNEE_ANGLE_THRESHOLD) {
+      if (avgKnee !== null && avgKnee <= cfg.bottomKneeAngleThreshold) {
         console.log(
           `[RepCounter] BOTTOM REACHED (knee=${avgKnee.toFixed(1)}°) | frame=${input.frame.frameIndex}`,
         )
@@ -720,7 +773,7 @@ export function updateRepCounter(
 
   // Grace standing completion (does not require phase FSM lockout)
   if (activeRep !== null && reachedBottom) {
-    if (isNearStandingLockout(input, activeRep, reachedBottom)) {
+    if (isNearStandingLockout(input, activeRep, reachedBottom, cfg)) {
       standingCompletionFrames += 1
     } else {
       standingCompletionFrames = 0
@@ -734,11 +787,18 @@ export function updateRepCounter(
     reachedBottom,
     standingCompletionFrames,
     input,
+    cfg,
   )
 
   const finishRep = (): void => {
     if (activeRep === null) return
-    const outcome = tryFinishRep(activeRep, reachedBottom, input.frame, repCount)
+    const outcome = tryFinishRep(
+      activeRep,
+      reachedBottom,
+      input.frame,
+      repCount,
+      cfg,
+    )
     repCount = outcome.repCount
     lastValidation = outcome.lastValidation
     if (outcome.completedRep) {
@@ -757,7 +817,7 @@ export function updateRepCounter(
   if (
     activeRep !== null &&
     reachedBottom &&
-    standingCompletionFrames === STANDING_COMPLETION_FRAMES
+    standingCompletionFrames === cfg.standingCompletionFrames
   ) {
     console.log(
       `[RepCounter] GRACE COMPLETION | standingFrames=${standingCompletionFrames}`,
@@ -791,6 +851,7 @@ export function updateRepCounter(
       standingCompletionFrames,
       blockingGate,
       lastMissedRepReason,
+      config: cfg,
     },
   }
 }

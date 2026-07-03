@@ -1,10 +1,20 @@
 import type { SquatState } from '../cv/types'
 
-/** Stand upright this long after the last rep before the finish countdown. */
-const STANDING_STABLE_MS = 5000
-const COUNTDOWN_SECONDS = 3
+/** Movement-specific auto-finish tuning. */
+export interface AutoFinishConfig {
+  /** Stand upright this long after the last rep before the finish countdown. */
+  standingStableMs: number
+  countdownSeconds: number
+  /** Knee angle at/above this counts as standing for the finish check. */
+  standingKneeMin: number
+}
 
-const STANDING_KNEE_MIN = 155
+/** Bodyweight-squat auto-finish tuning. */
+export const SQUAT_AUTO_FINISH_CONFIG: AutoFinishConfig = {
+  standingStableMs: 5000,
+  countdownSeconds: 3,
+  standingKneeMin: 155,
+}
 
 export interface AutoFinishState {
   stableStandingSince: number | null
@@ -38,15 +48,17 @@ export function createAutoFinishState(): AutoFinishState {
 function isStableStanding(
   squatPhase: SquatState,
   kneeAngle: number | null,
+  cfg: AutoFinishConfig,
 ): boolean {
   if (squatPhase !== 'STANDING') return false
   if (kneeAngle === null) return true
-  return kneeAngle >= STANDING_KNEE_MIN
+  return kneeAngle >= cfg.standingKneeMin
 }
 
 export function updateAutoFinish(
   state: AutoFinishState,
   input: AutoFinishInput,
+  cfg: AutoFinishConfig = SQUAT_AUTO_FINISH_CONFIG,
 ): AutoFinishResult {
   const reset = (): AutoFinishResult => ({
     state: createAutoFinishState(),
@@ -59,14 +71,14 @@ export function updateAutoFinish(
     return reset()
   }
 
-  if (!isStableStanding(input.squatPhase, input.kneeAngle)) {
+  if (!isStableStanding(input.squatPhase, input.kneeAngle, cfg)) {
     return reset()
   }
 
   const stableSince = state.stableStandingSince ?? input.timestamp
   const stableDuration = input.timestamp - stableSince
 
-  if (stableDuration < STANDING_STABLE_MS) {
+  if (stableDuration < cfg.standingStableMs) {
     return {
       state: { stableStandingSince: stableSince, countdownStart: null },
       pending: true,
@@ -77,7 +89,7 @@ export function updateAutoFinish(
 
   const countdownStart = state.countdownStart ?? input.timestamp
   const elapsedSec = Math.floor((input.timestamp - countdownStart) / 1000)
-  const secondsLeft = COUNTDOWN_SECONDS - elapsedSec
+  const secondsLeft = cfg.countdownSeconds - elapsedSec
 
   if (secondsLeft <= 0) {
     return {

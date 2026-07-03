@@ -1,32 +1,52 @@
 import type { SquatState } from '../cv/types'
 
-// ── Hysteresis thresholds ──────────────────────────────────────────
-// Wide band prevents oscillation between adjacent states.
-// Entry into STANDING requires knees straighter than 160°.
-// Entry into BOTTOM requires knees deeper than 105°.
-const STANDING_KNEE_ANGLE = 160
-const DESCENDING_KNEE_ANGLE = 145
-const BOTTOM_KNEE_ANGLE = 105
-const ASCENDING_KNEE_ANGLE = 120
+/**
+ * Thresholds for the cyclic phase FSM. Movement-specific — each
+ * MovementProfile supplies its own instance; the exported default is
+ * the bodyweight-squat tuning (see analysis/movement/profiles/squat.ts).
+ */
+export interface CyclicPhaseConfig {
+  /** Entry into STANDING requires knees straighter than this (degrees). */
+  standingKneeAngle: number
+  descendingKneeAngle: number
+  /** Entry into BOTTOM requires knees deeper than this (degrees). */
+  bottomKneeAngle: number
+  ascendingKneeAngle: number
+  /** Hip-displacement thresholds (normalized 0-1 coords, Y increases downward). */
+  descentStartDelta: number
+  bottomDelta: number
+  ascentDelta: number
+  returnToStandingDelta: number
+  /** Frame debouncing before a phase transition is confirmed. */
+  requiredConsecutiveFrames: number
+  /** Extra frames for lockout (ASCENDING -> STANDING) to avoid false reps. */
+  lockoutConsecutiveFrames: number
+  /** EMA alpha — higher = more responsive, lower = smoother. */
+  emaAlpha: number
+  /** Coast through confidence dips this long before resetting candidates. */
+  confidenceDipToleranceMs: number
+  /** Lockout = max(calibrated standing knee − offset, floor). */
+  lockoutKneeOffset: number
+  lockoutKneeFloor: number
+}
 
-// Hip-displacement thresholds (normalized 0-1 coords, Y increases downward)
-const DESCENT_START_DELTA = 0.06
-const BOTTOM_DELTA = 0.14
-const ASCENT_DELTA = 0.04
-const RETURN_TO_STANDING_DELTA = 0.05
-
-// ── Frame debouncing ───────────────────────────────────────────────
-const REQUIRED_CONSECUTIVE_FRAMES = 3
-/** Extra frames required for lockout (ASCENDING -> STANDING) to avoid false reps. */
-const LOCKOUT_CONSECUTIVE_FRAMES = 4
-
-// ── EMA smoothing ──────────────────────────────────────────────────
-/** EMA alpha — higher = more responsive, lower = smoother. 0.35 is ~3-frame lag. */
-const EMA_ALPHA = 0.35
-
-// ── Confidence dip persistence ─────────────────────────────────────
-/** Coast through confidence dips for up to 500 ms before resetting candidates. */
-const CONFIDENCE_DIP_TOLERANCE_MS = 500
+/** Bodyweight-squat phase tuning (hysteresis band prevents oscillation). */
+export const SQUAT_PHASE_CONFIG: CyclicPhaseConfig = {
+  standingKneeAngle: 160,
+  descendingKneeAngle: 145,
+  bottomKneeAngle: 105,
+  ascendingKneeAngle: 120,
+  descentStartDelta: 0.06,
+  bottomDelta: 0.14,
+  ascentDelta: 0.04,
+  returnToStandingDelta: 0.05,
+  requiredConsecutiveFrames: 3,
+  lockoutConsecutiveFrames: 4,
+  emaAlpha: 0.35,
+  confidenceDipToleranceMs: 500,
+  lockoutKneeOffset: 12,
+  lockoutKneeFloor: 152,
+}
 
 export interface PhaseDetectorInput {
   kneeAngle: number | null
@@ -47,6 +67,8 @@ export interface PhaseDetectorState {
   standingKneeAngle: number | null
   /** Timestamp (ms) of the last frame with valid knee/hip data. */
   lastValidTimestamp: number | null
+  /** Movement-specific thresholds, fixed at creation. */
+  config: CyclicPhaseConfig
 }
 
 export interface PhaseDetectorResult {
@@ -57,7 +79,9 @@ export interface PhaseDetectorResult {
   smoothedKneeAngle: number | null
 }
 
-export function createPhaseDetectorState(): PhaseDetectorState {
+export function createPhaseDetectorState(
+  config: CyclicPhaseConfig = SQUAT_PHASE_CONFIG,
+): PhaseDetectorState {
   return {
     phase: 'STANDING',
     candidatePhase: null,
@@ -67,15 +91,20 @@ export function createPhaseDetectorState(): PhaseDetectorState {
     emaKneeAngle: null,
     standingKneeAngle: null,
     lastValidTimestamp: null,
+    config,
   }
 }
 
-/** Standing lockout threshold from calibrated upright knee (squat-specific, not global loosening). */
+/** Standing lockout threshold from calibrated upright knee (movement-specific, not global loosening). */
 export function standingKneeThreshold(state: PhaseDetectorState): number {
+  const cfg = state.config
   if (state.standingKneeAngle !== null) {
-    return Math.max(state.standingKneeAngle - 12, 152)
+    return Math.max(
+      state.standingKneeAngle - cfg.lockoutKneeOffset,
+      cfg.lockoutKneeFloor,
+    )
   }
-  return STANDING_KNEE_ANGLE
+  return cfg.standingKneeAngle
 }
 
 function updateStandingKneeBaseline(
@@ -89,10 +118,14 @@ function updateStandingKneeBaseline(
 }
 
 // ── EMA helper ─────────────────────────────────────────────────────
-function applyEma(prev: number | null, raw: number | null): number | null {
+function applyEma(
+  prev: number | null,
+  raw: number | null,
+  alpha: number,
+): number | null {
   if (raw === null) return prev
   if (prev === null) return raw
-  return EMA_ALPHA * raw + (1 - EMA_ALPHA) * prev
+  return alpha * raw + (1 - alpha) * prev
 }
 
 // ── Target phase resolution (uses smoothed angle) ──────────────────
@@ -103,18 +136,19 @@ const getTargetPhase = (
   standingHipY: number | null,
   deepestHipY: number | null,
   standingKneeBaseline: number | null,
+  cfg: CyclicPhaseConfig,
 ): SquatState => {
   const lockoutKnee = standingKneeBaseline !== null
-    ? Math.max(standingKneeBaseline - 12, 152)
-    : STANDING_KNEE_ANGLE
+    ? Math.max(standingKneeBaseline - cfg.lockoutKneeOffset, cfg.lockoutKneeFloor)
+    : cfg.standingKneeAngle
   const hipDrop =
     hipY === null || standingHipY === null ? null : hipY - standingHipY
 
   switch (phase) {
     case 'STANDING':
       if (
-        (hipDrop !== null && hipDrop > DESCENT_START_DELTA) ||
-        (kneeAngle !== null && kneeAngle < DESCENDING_KNEE_ANGLE)
+        (hipDrop !== null && hipDrop > cfg.descentStartDelta) ||
+        (kneeAngle !== null && kneeAngle < cfg.descendingKneeAngle)
       ) {
         return 'DESCENDING'
       }
@@ -122,8 +156,8 @@ const getTargetPhase = (
 
     case 'DESCENDING':
       if (
-        (hipDrop !== null && hipDrop >= BOTTOM_DELTA) ||
-        (kneeAngle !== null && kneeAngle <= BOTTOM_KNEE_ANGLE)
+        (hipDrop !== null && hipDrop >= cfg.bottomDelta) ||
+        (kneeAngle !== null && kneeAngle <= cfg.bottomKneeAngle)
       ) {
         return 'BOTTOM'
       }
@@ -137,18 +171,18 @@ const getTargetPhase = (
       if (
         hipY !== null &&
         deepestHipY !== null &&
-        deepestHipY - hipY >= ASCENT_DELTA
+        deepestHipY - hipY >= cfg.ascentDelta
       ) {
         return 'ASCENDING'
       }
-      if (kneeAngle !== null && kneeAngle > ASCENDING_KNEE_ANGLE) {
+      if (kneeAngle !== null && kneeAngle > cfg.ascendingKneeAngle) {
         return 'ASCENDING'
       }
       return 'BOTTOM'
 
     case 'ASCENDING':
       if (
-        (hipDrop !== null && hipDrop <= RETURN_TO_STANDING_DELTA) ||
+        (hipDrop !== null && hipDrop <= cfg.returnToStandingDelta) ||
         (kneeAngle !== null && kneeAngle >= lockoutKnee)
       ) {
         return 'STANDING'
@@ -162,17 +196,18 @@ export function updatePhaseDetector(
   state: PhaseDetectorState,
   input: PhaseDetectorInput,
 ): PhaseDetectorResult {
-  const smoothedKnee = applyEma(state.emaKneeAngle, input.kneeAngle)
+  const cfg = state.config
+  const smoothedKnee = applyEma(state.emaKneeAngle, input.kneeAngle, cfg.emaAlpha)
   const hasValidData = input.kneeAngle !== null || input.hipY !== null
 
   // ── Confidence dip persistence ───────────────────────────────────
   // If this frame has no usable data, check whether we're within the
-  // 500 ms tolerance window. If so, coast — keep state and candidates
+  // tolerance window. If so, coast — keep state and candidates
   // intact so a brief tracking glitch doesn't blow away progress.
   if (!hasValidData) {
     const withinTolerance =
       state.lastValidTimestamp !== null &&
-      input.timestamp - state.lastValidTimestamp < CONFIDENCE_DIP_TOLERANCE_MS
+      input.timestamp - state.lastValidTimestamp < cfg.confidenceDipToleranceMs
 
     if (withinTolerance) {
       // Coast: return previous phase unchanged, preserve all state
@@ -230,6 +265,7 @@ export function updatePhaseDetector(
     standingHipY,
     deepestHipY,
     standingKneeAngle,
+    cfg,
   )
 
   // ── No transition requested ──────────────────────────────────────
@@ -238,7 +274,7 @@ export function updatePhaseDetector(
       state.phase === 'STANDING' &&
       input.hipY !== null &&
       (standingHipY === null ||
-        Math.abs(input.hipY - standingHipY) <= RETURN_TO_STANDING_DELTA)
+        Math.abs(input.hipY - standingHipY) <= cfg.returnToStandingDelta)
         ? standingHipY === null
           ? input.hipY
           : standingHipY * 0.9 + input.hipY * 0.1
@@ -268,8 +304,8 @@ export function updatePhaseDetector(
   // Require more consecutive frames for lockout to prevent false rep completions
   const requiredFrames =
     state.phase === 'ASCENDING' && targetPhase === 'STANDING'
-      ? LOCKOUT_CONSECUTIVE_FRAMES
-      : REQUIRED_CONSECUTIVE_FRAMES
+      ? cfg.lockoutConsecutiveFrames
+      : cfg.requiredConsecutiveFrames
 
   if (candidateFrameCount < requiredFrames) {
     return {
@@ -309,6 +345,7 @@ export function updatePhaseDetector(
       emaKneeAngle: smoothedKnee,
       standingKneeAngle,
       lastValidTimestamp,
+      config: cfg,
     },
     smoothedKneeAngle: smoothedKnee,
   }

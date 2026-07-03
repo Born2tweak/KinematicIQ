@@ -125,3 +125,44 @@ export function bandFromScore(score: number): ScoreBand {
   if (score >= TOTAL_SCORE_BAND_THRESHOLDS.needsWorkMin) return 'Needs Work'
   return 'Poor'
 }
+
+/** Lower-is-better banding shared by every scored component. */
+export interface BandThresholds {
+  excellentMax: number
+  goodMax: number
+  needsWorkMax: number
+}
+
+/**
+ * The full scoring surface for one movement. Squat's instance bundles
+ * the constants above; other MovementProfiles supply their own
+ * (see analysis/movement/profiles/).
+ */
+export interface MovementScoringConfig {
+  weights: {
+    depth: number
+    trunkControl: number
+    kneeTracking: number
+    consistency: number
+    symmetry: number
+  }
+  depth: BandThresholds
+  trunk: BandThresholds
+  kneeAsymmetry: BandThresholds
+  consistencyCV: BandThresholds
+  hipShift: BandThresholds
+  missingMetricNeutralScore: number
+  singleRepConsistencyScore: number
+}
+
+/** Bodyweight-squat scoring configuration. */
+export const SQUAT_SCORING_CONFIG: MovementScoringConfig = {
+  weights: SCORE_WEIGHTS,
+  depth: DEPTH_THRESHOLDS,
+  trunk: TRUNK_THRESHOLDS,
+  kneeAsymmetry: KNEE_ASYMMETRY_THRESHOLDS,
+  consistencyCV: CONSISTENCY_CV_THRESHOLDS,
+  hipShift: HIP_SHIFT_THRESHOLDS,
+  missingMetricNeutralScore: MISSING_METRIC_NEUTRAL_SCORE,
+  singleRepConsistencyScore: SINGLE_REP_CONSISTENCY_SCORE,
+}

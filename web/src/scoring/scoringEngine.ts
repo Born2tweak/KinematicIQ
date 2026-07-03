@@ -1,14 +1,9 @@
 import type { ComponentScores, ScoringResult, SetMetricsSummary } from '../session/types'
 import {
-  CONSISTENCY_CV_THRESHOLDS,
-  DEPTH_THRESHOLDS,
-  HIP_SHIFT_THRESHOLDS,
-  KNEE_ASYMMETRY_THRESHOLDS,
-  MISSING_METRIC_NEUTRAL_SCORE,
-  SCORE_WEIGHTS,
-  SINGLE_REP_CONSISTENCY_SCORE,
-  TRUNK_THRESHOLDS,
+  SQUAT_SCORING_CONFIG,
   bandFromScore,
+  type BandThresholds,
+  type MovementScoringConfig,
 } from './scoringConfig'
 
 const clamp = (value: number, min: number, max: number): number =>
@@ -41,76 +36,76 @@ function scoreLowerIsBetter(
   return clamp(Math.round(50 - excess * 2), 0, 49)
 }
 
-function scoreDepth(avgDepth: number | null): number {
+function scoreBanded(value: number, bands: BandThresholds): number {
+  return scoreLowerIsBetter(
+    value,
+    bands.excellentMax,
+    bands.goodMax,
+    bands.needsWorkMax,
+  )
+}
+
+function scoreDepth(avgDepth: number | null, cfg: MovementScoringConfig): number {
   if (avgDepth === null) return 0
-  return scoreLowerIsBetter(
-    avgDepth,
-    DEPTH_THRESHOLDS.excellentMax,
-    DEPTH_THRESHOLDS.goodMax,
-    DEPTH_THRESHOLDS.needsWorkMax,
-  )
+  return scoreBanded(avgDepth, cfg.depth)
 }
 
-function scoreTrunk(avgTrunkLean: number | null): number {
+function scoreTrunk(avgTrunkLean: number | null, cfg: MovementScoringConfig): number {
   if (avgTrunkLean === null) return 0
-  return scoreLowerIsBetter(
-    avgTrunkLean,
-    TRUNK_THRESHOLDS.excellentMax,
-    TRUNK_THRESHOLDS.goodMax,
-    TRUNK_THRESHOLDS.needsWorkMax,
-  )
+  return scoreBanded(avgTrunkLean, cfg.trunk)
 }
 
-function scoreKneeTracking(avgKneeAsymmetry: number | null): number {
-  if (avgKneeAsymmetry === null) return MISSING_METRIC_NEUTRAL_SCORE
-  return scoreLowerIsBetter(
-    avgKneeAsymmetry,
-    KNEE_ASYMMETRY_THRESHOLDS.excellentMax,
-    KNEE_ASYMMETRY_THRESHOLDS.goodMax,
-    KNEE_ASYMMETRY_THRESHOLDS.needsWorkMax,
-  )
+function scoreKneeTracking(
+  avgKneeAsymmetry: number | null,
+  cfg: MovementScoringConfig,
+): number {
+  if (avgKneeAsymmetry === null) return cfg.missingMetricNeutralScore
+  return scoreBanded(avgKneeAsymmetry, cfg.kneeAsymmetry)
 }
 
-function scoreConsistency(depthCV: number | null, repCount: number): number {
-  if (repCount < 2) return SINGLE_REP_CONSISTENCY_SCORE
-  if (depthCV === null) return MISSING_METRIC_NEUTRAL_SCORE
-  return scoreLowerIsBetter(
-    depthCV,
-    CONSISTENCY_CV_THRESHOLDS.excellentMax,
-    CONSISTENCY_CV_THRESHOLDS.goodMax,
-    CONSISTENCY_CV_THRESHOLDS.needsWorkMax,
-  )
+function scoreConsistency(
+  depthCV: number | null,
+  repCount: number,
+  cfg: MovementScoringConfig,
+): number {
+  if (repCount < 2) return cfg.singleRepConsistencyScore
+  if (depthCV === null) return cfg.missingMetricNeutralScore
+  return scoreBanded(depthCV, cfg.consistencyCV)
 }
 
-function scoreSymmetry(avgHipShift: number | null): number {
-  if (avgHipShift === null) return MISSING_METRIC_NEUTRAL_SCORE
-  return scoreLowerIsBetter(
-    avgHipShift,
-    HIP_SHIFT_THRESHOLDS.excellentMax,
-    HIP_SHIFT_THRESHOLDS.goodMax,
-    HIP_SHIFT_THRESHOLDS.needsWorkMax,
-  )
+function scoreSymmetry(
+  avgHipShift: number | null,
+  cfg: MovementScoringConfig,
+): number {
+  if (avgHipShift === null) return cfg.missingMetricNeutralScore
+  return scoreBanded(avgHipShift, cfg.hipShift)
 }
 
-export function computeComponentScores(metrics: SetMetricsSummary): ComponentScores {
+export function computeComponentScores(
+  metrics: SetMetricsSummary,
+  cfg: MovementScoringConfig = SQUAT_SCORING_CONFIG,
+): ComponentScores {
   return {
-    depth: scoreDepth(metrics.avgDepth),
-    trunkControl: scoreTrunk(metrics.avgTrunkLean),
-    kneeTracking: scoreKneeTracking(metrics.avgKneeAsymmetry),
-    consistency: scoreConsistency(metrics.depthCV, metrics.repCount),
-    symmetry: scoreSymmetry(metrics.avgHipShift),
+    depth: scoreDepth(metrics.avgDepth, cfg),
+    trunkControl: scoreTrunk(metrics.avgTrunkLean, cfg),
+    kneeTracking: scoreKneeTracking(metrics.avgKneeAsymmetry, cfg),
+    consistency: scoreConsistency(metrics.depthCV, metrics.repCount, cfg),
+    symmetry: scoreSymmetry(metrics.avgHipShift, cfg),
   }
 }
 
-/** Weighted sum of component scores; weights defined in SCORE_WEIGHTS. */
-export function scoreSet(metrics: SetMetricsSummary): ScoringResult {
-  const components = computeComponentScores(metrics)
+/** Weighted sum of component scores; weights come from the movement's config. */
+export function scoreSet(
+  metrics: SetMetricsSummary,
+  cfg: MovementScoringConfig = SQUAT_SCORING_CONFIG,
+): ScoringResult {
+  const components = computeComponentScores(metrics, cfg)
   const totalScore = Math.round(
-    components.depth * SCORE_WEIGHTS.depth +
-      components.trunkControl * SCORE_WEIGHTS.trunkControl +
-      components.kneeTracking * SCORE_WEIGHTS.kneeTracking +
-      components.consistency * SCORE_WEIGHTS.consistency +
-      components.symmetry * SCORE_WEIGHTS.symmetry,
+    components.depth * cfg.weights.depth +
+      components.trunkControl * cfg.weights.trunkControl +
+      components.kneeTracking * cfg.weights.kneeTracking +
+      components.consistency * cfg.weights.consistency +
+      components.symmetry * cfg.weights.symmetry,
   )
 
   return {
