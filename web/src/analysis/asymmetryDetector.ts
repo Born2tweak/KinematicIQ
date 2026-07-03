@@ -1,4 +1,5 @@
 import { midpoint, safeLandmark } from './geometry'
+import { weightedMean } from './stats'
 import type { PoseFrame, RepMetrics } from '../cv/types'
 import { LANDMARK_INDICES } from '../cv/types'
 
@@ -37,26 +38,25 @@ export interface SetAsymmetrySummary {
   avgKneeAsymmetry: number | null
 }
 
-const average = (values: number[]): number | null => {
-  if (values.length === 0) return null
-  return values.reduce((sum, value) => sum + value, 0) / values.length
-}
-
-/** Aggregate asymmetry metrics captured per rep at bottom position. */
+/**
+ * Aggregate asymmetry metrics captured per rep at bottom position, weighted by
+ * each rep's pose confidence so poorly-tracked reps contribute less.
+ */
 export function summarizeSetAsymmetry(reps: RepMetrics[]): SetAsymmetrySummary {
-  const hipShifts = reps
-    .map((rep) => rep.hipShiftAtBottom)
-    .filter((value): value is number => value !== null)
-  const shoulderValues = reps
-    .map((rep) => rep.shoulderAsymmetryAtBottom)
-    .filter((value): value is number => value !== null)
-  const kneeValues = reps
-    .map((rep) => rep.kneeAsymmetry)
-    .filter((value): value is number => value !== null)
+  const hipPairs: Array<[number, number]> = []
+  const shoulderPairs: Array<[number, number]> = []
+  const kneePairs: Array<[number, number]> = []
+  for (const rep of reps) {
+    if (rep.hipShiftAtBottom !== null) hipPairs.push([rep.hipShiftAtBottom, rep.confidence])
+    if (rep.shoulderAsymmetryAtBottom !== null) {
+      shoulderPairs.push([rep.shoulderAsymmetryAtBottom, rep.confidence])
+    }
+    if (rep.kneeAsymmetry !== null) kneePairs.push([rep.kneeAsymmetry, rep.confidence])
+  }
 
   return {
-    avgHipShift: average(hipShifts),
-    avgShoulderAsymmetry: average(shoulderValues),
-    avgKneeAsymmetry: average(kneeValues),
+    avgHipShift: weightedMean(hipPairs),
+    avgShoulderAsymmetry: weightedMean(shoulderPairs),
+    avgKneeAsymmetry: weightedMean(kneePairs),
   }
 }

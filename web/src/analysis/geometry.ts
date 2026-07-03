@@ -87,3 +87,14 @@ export function safeLandmark(
 
   return landmark.visibility >= minConfidence ? landmark : null
 }
+
+/**
+ * Visibility of a landmark in [0, 1], or 0 when it is missing or non-finite.
+ * Unlike {@link safeLandmark} this does not gate on a threshold — it exposes the
+ * raw confidence so callers can weight rather than hard-drop.
+ */
+export function landmarkConfidence(frame: PoseFrame, index: number): number {
+  const landmark = frame.landmarks[index]
+  if (!landmark || !Number.isFinite(landmark.visibility)) return 0
+  return landmark.visibility
+}

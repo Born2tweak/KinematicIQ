@@ -4,7 +4,7 @@ import {
   LANDMARK_INDICES,
   PoseFrame,
 } from '../cv/types'
-import { angleBetweenThreePoints, midpoint, safeLandmark } from './geometry'
+import { angleBetweenThreePoints, landmarkConfidence, midpoint, safeLandmark } from './geometry'
 
 const getAngleFromLandmarks = (
   frame: PoseFrame,
@@ -162,6 +162,80 @@ export function getJointAngles(
     rightHip: rightHipAngle(frame, minConfidence),
     leftAnkle: leftAnkleAngle(frame, minConfidence),
     rightAnkle: rightAnkleAngle(frame, minConfidence),
+    trunkAngle: trunk,
+    trunkLean: trunk,
+    pelvisTilt: null,
+  }
+}
+
+/**
+ * Per-angle tracking confidence in [0, 1] — the minimum landmark visibility
+ * among the landmarks that define each angle. Parallel to {@link getJointAngles}
+ * (same keys) so callers can weight metrics by how well an angle was tracked
+ * instead of hard-dropping it. `pelvisTilt` is not computed, so its confidence
+ * is null.
+ */
+export interface JointAngleConfidences {
+  leftKnee: number
+  rightKnee: number
+  leftHip: number
+  rightHip: number
+  leftAnkle: number
+  rightAnkle: number
+  trunkAngle: number
+  trunkLean: number
+  pelvisTilt: number | null
+}
+
+const minConfidenceOf = (frame: PoseFrame, ...indices: number[]): number =>
+  Math.min(...indices.map((i) => landmarkConfidence(frame, i)))
+
+export function getJointAngleConfidences(frame: PoseFrame): JointAngleConfidences {
+  const trunk = minConfidenceOf(
+    frame,
+    LANDMARK_INDICES.LEFT_SHOULDER,
+    LANDMARK_INDICES.RIGHT_SHOULDER,
+    LANDMARK_INDICES.LEFT_HIP,
+    LANDMARK_INDICES.RIGHT_HIP,
+  )
+
+  return {
+    leftKnee: minConfidenceOf(
+      frame,
+      LANDMARK_INDICES.LEFT_HIP,
+      LANDMARK_INDICES.LEFT_KNEE,
+      LANDMARK_INDICES.LEFT_ANKLE,
+    ),
+    rightKnee: minConfidenceOf(
+      frame,
+      LANDMARK_INDICES.RIGHT_HIP,
+      LANDMARK_INDICES.RIGHT_KNEE,
+      LANDMARK_INDICES.RIGHT_ANKLE,
+    ),
+    leftHip: minConfidenceOf(
+      frame,
+      LANDMARK_INDICES.LEFT_SHOULDER,
+      LANDMARK_INDICES.LEFT_HIP,
+      LANDMARK_INDICES.LEFT_KNEE,
+    ),
+    rightHip: minConfidenceOf(
+      frame,
+      LANDMARK_INDICES.RIGHT_SHOULDER,
+      LANDMARK_INDICES.RIGHT_HIP,
+      LANDMARK_INDICES.RIGHT_KNEE,
+    ),
+    leftAnkle: minConfidenceOf(
+      frame,
+      LANDMARK_INDICES.LEFT_KNEE,
+      LANDMARK_INDICES.LEFT_ANKLE,
+      LANDMARK_INDICES.LEFT_FOOT_INDEX,
+    ),
+    rightAnkle: minConfidenceOf(
+      frame,
+      LANDMARK_INDICES.RIGHT_KNEE,
+      LANDMARK_INDICES.RIGHT_ANKLE,
+      LANDMARK_INDICES.RIGHT_FOOT_INDEX,
+    ),
     trunkAngle: trunk,
     trunkLean: trunk,
     pelvisTilt: null,
