@@ -8,7 +8,7 @@ export const SkeletonOverlay = forwardRef<HTMLCanvasElement>(
     return (
       <canvas
         ref={ref}
-        className="skeleton-overlay camera-preview__media"
+        className="skeleton-overlay camera-stage__media"
         aria-hidden
       />
     )

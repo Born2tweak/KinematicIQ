@@ -54,7 +54,7 @@ export function buildResultsSummary(result: SessionResult): string {
   if (!result.scoring) return 'Set complete — your breakdown is below.'
 
   const { metrics, scoring, sessionConfidence } = result
-  const repLine = `${metrics.repCount} squat${metrics.repCount === 1 ? '' : 's'} from this camera view`
+  const repLine = `${metrics.repCount} rep${metrics.repCount === 1 ? '' : 's'} from this camera view`
 
   const depthPart =
     metrics.avgDepth !== null
@@ -73,4 +73,3 @@ export function buildResultsSummary(result: SessionResult): string {
 
   return summary
 }
-

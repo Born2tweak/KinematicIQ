@@ -1,8 +1,8 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { Suspense, lazy, useCallback, useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { buildSessionResult } from '../session/buildSessionResult'
 import { Button } from '../components/Button'
-import { Card } from '../components/Card'
+import { DisclaimerBanner } from '../components/DisclaimerBanner'
 import { RepCounter } from '../components/RepCounter'
 import { SessionStatusCard } from '../components/SessionStatusCard'
 import {
@@ -33,19 +33,26 @@ import {
   createFreshAnalysisPipeline,
 } from '../analysis/setActivation'
 import { poseEngine } from '../cv/poseEngine'
+import { createLiveStreamFilter } from '../cv/landmarkFilter'
+import { createEmptyPose3DRef, hipCenter } from '../cv/pose3d'
 import {
   LANDMARK_INDICES,
   type PoseFrame,
-  type RepMetrics,
 } from '../cv/types'
 import { drawCalibrationGuides, checkCalibration } from '../cv/drawCalibration'
 import { drawDebugOverlay, type DebugOverlayData } from '../cv/drawDebugOverlay'
+import { DepthSparkline } from '../components/DepthSparkline'
 import {
   type CameraSessionPhase,
   getSessionStatusCopy,
 } from './cameraSessionUi'
 
+// Lazy: keeps three.js/@react-three/fiber out of the main bundle until toggled on.
+const PoseScene3D = lazy(() => import('../components/PoseScene3D'))
+
 const FRONT_CAMERA_MIRROR = false
+const HIP_TRAIL_MAX_SAMPLES = 90
+const DEPTH_HISTORY_MAX_SAMPLES = 300
 
 function syncCanvasToVideo(
   video: HTMLVideoElement,
@@ -76,6 +83,8 @@ export function CameraScreen() {
   const poseConfidenceSamplesRef = useRef<number[]>([])
   const isFinishingRef = useRef(false)
   const streamRef = useRef<MediaStream | null>(null)
+  const liveFilterRef = useRef(createLiveStreamFilter())
+  const pose3DRef = useRef(createEmptyPose3DRef())
 
   const [error, setError] = useState<string | null>(null)
   const [cameraAttempt, setCameraAttempt] = useState(0)
@@ -85,12 +94,12 @@ export function CameraScreen() {
   const [autoStartPhase, setAutoStartPhase] =
     useState<CameraSessionPhase>('WAITING')
   const [repCount, setRepCount] = useState(0)
-  const [completedReps, setCompletedReps] = useState<RepMetrics[]>([])
   const [calibrationProgress, setCalibrationProgress] = useState(0)
   const [autoFinishPending, setAutoFinishPending] = useState(false)
   const [finishCountdown, setFinishCountdown] = useState<number | null>(null)
   const [isFinishing, setIsFinishing] = useState(false)
   const [showDebug, setShowDebug] = useState(false)
+  const [show3D, setShow3D] = useState(false)
 
   useEffect(() => {
     async function initModel() {
@@ -262,11 +271,11 @@ export function CameraScreen() {
     autoFinishRef.current = createAutoFinishState()
     phaseDetectorRef.current = createFreshAnalysisPipeline().phaseDetector
     repCounterRef.current = createFreshAnalysisPipeline().repCounter
+    liveFilterRef.current.reset()
     poseConfidenceSamplesRef.current = []
     setAutoStartPhase('WAITING')
     setCalibrationProgress(0)
     setRepCount(0)
-    setCompletedReps([])
     setAutoFinishPending(false)
     setFinishCountdown(null)
 
@@ -322,11 +331,6 @@ export function CameraScreen() {
         prev === repResult.repCount ? prev : repResult.repCount,
       )
 
-      if (repResult.completedRep) {
-        console.log(`[CameraScreen] completedRep emitted #${repResult.completedRep.repNumber}, repCount=${repResult.repCount}`)
-        setCompletedReps(repResult.reps)
-      }
-
       return { smoothedKnee: phaseResult.smoothedKneeAngle, completedRep: repResult.completedRep !== null }
     }
 
@@ -341,7 +345,9 @@ export function CameraScreen() {
         }
 
         const timestamp = performance.now()
-        const poseFrame = poseEngine.detect(video, timestamp, frameIndex)
+        const rawFrame = poseEngine.detect(video, timestamp, frameIndex)
+        // Smooth landmark jitter in real time (One-Euro) before any analysis.
+        const poseFrame = rawFrame ? liveFilterRef.current.filter(rawFrame) : null
         const overlayMirrored = FRONT_CAMERA_MIRROR
         const setupPhase = autoStartRef.current.phase === 'WAITING'
 
@@ -360,6 +366,27 @@ export function CameraScreen() {
             const angles = getJointAngles(poseFrame)
             const hipY = computeHipY(poseFrame)
 
+            // Hand off to the 3D overlay via a mutable ref (no React re-render).
+            // Written unconditionally and cheaply so toggling `show3D` never
+            // depends on this loop's effect deps.
+            const pose3D = pose3DRef.current
+            pose3D.worldLandmarks = poseFrame.worldLandmarks
+            pose3D.angles = angles
+            pose3D.timestamp = poseFrame.timestamp
+            pose3D.poseConfidence = poseFrame.poseConfidence
+            if (poseFrame.worldLandmarks.length > 0) {
+              pose3D.hipTrail.push(hipCenter(poseFrame.worldLandmarks))
+              if (pose3D.hipTrail.length > HIP_TRAIL_MAX_SAMPLES) {
+                pose3D.hipTrail.shift()
+              }
+            }
+            if (hipY !== null) {
+              pose3D.depthHistory.push({ t: poseFrame.timestamp, y: hipY })
+              if (pose3D.depthHistory.length > DEPTH_HISTORY_MAX_SAMPLES) {
+                pose3D.depthHistory.shift()
+              }
+            }
+
             // Drive the auto-start state machine every frame
             const autoResult = updateAutoStart(autoStartRef.current, {
               calibration: calResult,
@@ -371,13 +398,15 @@ export function CameraScreen() {
 
             if (autoResult.transitioned && autoResult.phase === 'READY') {
               const fresh = createFreshAnalysisPipeline()
+              liveFilterRef.current.reset()
+              pose3DRef.current.hipTrail = []
+              pose3DRef.current.depthHistory = []
               phaseDetectorRef.current = fresh.phaseDetector
               repCounterRef.current = fresh.repCounter
               autoFinishRef.current = createAutoFinishState()
               setAutoFinishPending(false)
               setFinishCountdown(null)
               setRepCount(0)
-              setCompletedReps([])
             }
 
             if (autoResult.transitioned && autoResult.phase === 'ACTIVE') {
@@ -412,7 +441,6 @@ export function CameraScreen() {
                 repCounterRef.current = fresh.repCounter
               }
               setRepCount(0)
-              setCompletedReps([])
             }
 
             if (autoResult.phase === 'ACTIVE' && poseFrame) {
@@ -553,156 +581,132 @@ export function CameraScreen() {
   })
 
   return (
-    <div className="stack-lg">
-      <h1 className="page-title">Camera</h1>
+    <div className="camera-stage">
+      <video
+        ref={videoRef}
+        className={`camera-stage__media${FRONT_CAMERA_MIRROR ? ' camera-stage__media--mirror' : ''}`}
+        autoPlay
+        playsInline
+        muted
+        onLoadedMetadata={handleLoadedMetadata}
+      />
+      <SkeletonOverlay ref={canvasRef} />
+      <div className="camera-stage__vignette" aria-hidden />
 
       {error ? (
-        <Card>
-          <h2
-            className="card__title"
-            style={{
-              color: 'var(--color-text)',
-              display: 'flex',
-              alignItems: 'center',
-              gap: 'var(--space-sm)',
-            }}
-          >
-            <span
-              style={{
-                width: '0.5rem',
-                height: '0.5rem',
-                borderRadius: 'var(--radius-full)',
-                background: '#ef4444',
-                boxShadow: '0 0 8px #ef4444',
-              }}
-            />
-            Camera Error
-          </h2>
-          <p className="card__subtitle">{error}</p>
-          <div className="btn-group btn-group--row" style={{ marginTop: 'var(--space-md)' }}>
-            <Button variant="secondary" onClick={() => setCameraAttempt((n) => n + 1)}>
-              Try again
-            </Button>
-            <Button variant="ghost" onClick={handleCancel}>
-              Back to home
-            </Button>
+        <div className="camera-stage__notice" role="alert">
+          <div className="camera-stage__notice-panel">
+            <h2 className="camera-stage__notice-title">Camera error</h2>
+            <p className="camera-stage__notice-text">{error}</p>
+            <div className="btn-group btn-group--row">
+              <Button
+                variant="secondary"
+                onClick={() => setCameraAttempt((n) => n + 1)}
+              >
+                Try again
+              </Button>
+              <Button variant="ghost" onClick={handleCancel}>
+                Back to home
+              </Button>
+            </div>
           </div>
-        </Card>
-      ) : isModelLoading ? (
-        <Card
-          variant="status"
-          title="Initializing AI Model..."
-          subtitle="Downloading and preparing on-device neural network (WASM)..."
-        />
-      ) : isLoading ? (
-        <Card
-          variant="status"
-          title="Initializing Camera..."
-          subtitle="Please grant webcam access to start the analysis."
-        />
-      ) : (
-        <SessionStatusCard
-          phase={displayPhase}
-          title={statusCopy.title}
-          subtitle={statusCopy.subtitle}
-          calibrationProgress={calibrationProgress}
-          missingJoints={missingJoints}
-        />
-      )}
-
-      <div className="camera-preview" style={{ overflow: 'hidden', padding: 0, position: 'relative' }}>
-        {(isLoading || isModelLoading) && !error && (
-          <div className="stack" style={{ alignItems: 'center' }}>
-            <p className="camera-preview__label">
-              {isModelLoading ? 'Loading AI Model...' : 'Loading camera feed...'}
+        </div>
+      ) : isModelLoading || isLoading ? (
+        <div className="camera-stage__notice">
+          <div className="camera-stage__notice-panel">
+            <h2 className="camera-stage__notice-title">
+              {isModelLoading ? 'Preparing movement model…' : 'Starting camera…'}
+            </h2>
+            <p className="camera-stage__notice-text">
+              {isModelLoading
+                ? 'Loading the on-device tracking model — nothing leaves this device.'
+                : 'Allow camera access in your browser to begin.'}
             </p>
           </div>
-        )}
+        </div>
+      ) : (
+        <>
+          <div className="camera-hud--top-left">
+            <SessionStatusCard
+              compact
+              phase={displayPhase}
+              title={statusCopy.title}
+              subtitle={statusCopy.subtitle}
+              calibrationProgress={calibrationProgress}
+              missingJoints={missingJoints}
+            />
+          </div>
 
-        <div
-          className="camera-preview__stage"
-          style={{
-            visibility: error ? 'hidden' : 'visible',
-          }}
-        >
-          <video
-            ref={videoRef}
-            className={`camera-preview__media${FRONT_CAMERA_MIRROR ? ' camera-preview__media--mirror' : ''}`}
-            autoPlay
-            playsInline
-            muted
-            onLoadedMetadata={handleLoadedMetadata}
+          <RepCounter
+            repCount={repCount}
+            isAnalyzing={autoStartPhase === 'ACTIVE'}
           />
-          {!isLoading && !isModelLoading && !error && (
-            <>
-              <RepCounter repCount={repCount} isAnalyzing={autoStartPhase === 'ACTIVE'} />
-              <SkeletonOverlay ref={canvasRef} />
-              {finishCountdown !== null && autoStartPhase === 'ACTIVE' && (
-                <div className="camera-finish-countdown" aria-live="polite">
-                  <p className="camera-finish-countdown__text">
-                    Finishing in {finishCountdown}…
-                  </p>
-                </div>
-              )}
-              {import.meta.env.DEV && (
-                <button
-                  type="button"
-                  className={`camera-debug-toggle${showDebug ? ' camera-debug-toggle--on' : ''}`}
-                  onClick={() => setShowDebug((prev) => !prev)}
-                  aria-pressed={showDebug}
-                  aria-label={showDebug ? 'Hide developer debug overlay' : 'Show developer debug overlay'}
-                  title="Developer debug overlay"
-                >
-                  {showDebug ? 'DBG' : 'dbg'}
-                </button>
-              )}
-            </>
+
+          {finishCountdown !== null && autoStartPhase === 'ACTIVE' && (
+            <div className="camera-finish-countdown" aria-live="polite">
+              <p className="camera-finish-countdown__text">
+                Finishing in {finishCountdown}…
+              </p>
+            </div>
           )}
-        </div>
 
-        {error && (
-          <div className="camera-preview__overlay">
-            <p className="camera-preview__label">Webcam preview unavailable</p>
+          <div className="camera-hud--tools">
+            <button
+              type="button"
+              className={`hud-tool${show3D ? ' hud-tool--on' : ''}`}
+              onClick={() => setShow3D((prev) => !prev)}
+              aria-pressed={show3D}
+              aria-label={show3D ? 'Hide live 3D pose view' : 'Show live 3D pose view'}
+              title="Live 3D pose view"
+            >
+              3D
+            </button>
+            {import.meta.env.DEV && (
+              <button
+                type="button"
+                className={`hud-tool${showDebug ? ' hud-tool--on' : ''}`}
+                onClick={() => setShowDebug((prev) => !prev)}
+                aria-pressed={showDebug}
+                aria-label={
+                  showDebug
+                    ? 'Hide developer debug overlay'
+                    : 'Show developer debug overlay'
+                }
+                title="Developer debug overlay"
+              >
+                DBG
+              </button>
+            )}
           </div>
-        )}
-      </div>
 
-      <div className="camera-actions">
-        <div className="btn-group btn-group--row">
-          <Button
-            variant="secondary"
-            onClick={finishSet}
-            disabled={autoStartPhase !== 'ACTIVE' || isFinishing}
-          >
-            Finish Now
-          </Button>
-          <Button variant="ghost" onClick={handleCancel}>
-            Cancel
-          </Button>
-        </div>
-        <p className="camera-actions__hint">
-          Sets usually end when you stand still after your last rep. Use Finish Now if you need to stop early.
-        </p>
-      </div>
+          {show3D && (
+            <div className="camera-3d-panel">
+              <Suspense fallback={null}>
+                <PoseScene3D poseRef={pose3DRef} mirror={FRONT_CAMERA_MIRROR} />
+              </Suspense>
+              <DepthSparkline dataRef={pose3DRef} />
+            </div>
+          )}
 
-      {completedReps.length > 0 && (
-        <Card
-          title="Reps so far"
-          subtitle={`${completedReps.length} counted in this set`}
-        >
-          <div className="detail-rows">
-            {completedReps.map((rep) => (
-              <div key={rep.repNumber} className="detail-row">
-                <span className="detail-row__label">Rep {rep.repNumber}</span>
-                <span className="detail-row__value">
-                  Depth {Math.round(Math.min(rep.minLeftKneeAngle ?? 180, rep.minRightKneeAngle ?? 180))}° ·
-                  {' '}
-                  Trunk {rep.averageTrunkLean === null ? 'n/a' : `${Math.round(rep.averageTrunkLean)}°`}
-                </span>
-              </div>
-            ))}
+          <div className="camera-hud--bottom">
+            <div className="camera-action-bar">
+              <Button
+                variant="secondary"
+                onClick={finishSet}
+                disabled={autoStartPhase !== 'ACTIVE' || isFinishing}
+              >
+                Finish Now
+              </Button>
+              <Button variant="ghost" onClick={handleCancel}>
+                Cancel
+              </Button>
+            </div>
+            <p className="camera-hud__hint">
+              Sets end automatically when you stand still after your last rep.
+            </p>
+            {displayPhase !== 'ACTIVE' && <DisclaimerBanner />}
           </div>
-        </Card>
+        </>
       )}
     </div>
   )

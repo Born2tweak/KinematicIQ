@@ -120,7 +120,7 @@ const STATUS_TEXT: Record<Stage, { title: string; subtitle: string }> = {
     title: 'Calibrating…',
     subtitle: 'Hold still — learning your standing baseline.',
   },
-  ready: { title: 'Ready', subtitle: 'Begin your first squat whenever you like.' },
+  ready: { title: 'Ready', subtitle: 'Begin your first rep whenever you like.' },
   active: { title: 'Tracking', subtitle: 'Reps are counted and validated automatically.' },
   finishing: { title: 'Stand still to finish', subtitle: 'Auto-finish countdown…' },
   results: {

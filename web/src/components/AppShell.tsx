@@ -3,11 +3,24 @@ import { NavLink, Outlet, useLocation } from 'react-router-dom'
 const navLinkClass = ({ isActive }: { isActive: boolean }) =>
   `navbar__link${isActive ? ' navbar__link--active' : ''}`
 
+/**
+ * Route-specific layout: the landing page keeps the wide marketing
+ * container, the camera becomes a full-bleed stage with the navbar
+ * floating over the feed, and the app screens (upload/results) get a
+ * wider report container than the old reading column.
+ */
+function mainClassFor(pathname: string): string {
+  if (pathname === '/') return 'container page container--wide'
+  if (pathname === '/camera') return 'page-stage'
+  return 'container page container--app'
+}
+
 export function AppShell() {
-  const isLanding = useLocation().pathname === '/'
+  const { pathname } = useLocation()
+  const isCamera = pathname === '/camera'
   return (
     <>
-      <header className="navbar">
+      <header className={`navbar${isCamera ? ' navbar--overlay' : ''}`}>
         <div className="navbar__inner">
           <NavLink to="/" className="navbar__brand">
             KinematicIQ
@@ -28,7 +41,7 @@ export function AppShell() {
           </nav>
         </div>
       </header>
-      <main className={`container page${isLanding ? ' container--wide' : ''}`}>
+      <main className={mainClassFor(pathname)}>
         <Outlet />
       </main>
     </>

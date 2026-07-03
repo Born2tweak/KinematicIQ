@@ -22,7 +22,7 @@ const PIPELINE_STEPS = [
   {
     title: 'Detect',
     short: 'Phases & reps',
-    text: 'A movement state machine identifies descent, bottom, and ascent, then counts reps — and rejects ones that don\'t qualify, so partial squats never inflate your numbers.',
+    text: 'A movement state machine identifies descent, bottom, and ascent, then counts reps — and rejects ones that don\'t qualify, so partial reps never inflate your numbers.',
   },
   {
     title: 'Score',
@@ -50,7 +50,7 @@ const AUDIENCES = [
   {
     icon: '📋',
     title: 'Coaches & trainers',
-    text: 'Screen squat mechanics for an entire roster with nothing but a laptop. Spot asymmetries before they become injuries.',
+    text: 'Screen movement mechanics for an entire roster with nothing but a laptop. Surface asymmetries and deviations from an athlete\'s own pattern — the reads worth a closer look.',
   },
   {
     icon: '🏃',
@@ -99,10 +99,10 @@ export function LandingScreen() {
             See what your movement is <span className="landing-hero__highlight">telling you</span>
           </h1>
           <p className="landing-hero__lead">
-            KinematicIQ turns any camera into a biomechanics lab. Real-time squat
-            analysis with joint angles, validated rep counting, and coaching you
-            can actually act on — built for therapy, rehab, and training
-            professionals.
+            KinematicIQ turns any camera into a movement-intelligence layer:
+            posture-first reads in coaching language — tall chest, even base,
+            repeatable depth — with honest confidence on every observation.
+            Built for coaches, performance staff, and training professionals.
           </p>
           <div className="landing-hero__actions">
             <Button to="/camera" variant="primary">
@@ -208,9 +208,9 @@ export function LandingScreen() {
           ))}
         </div>
         <p className="landing-section__note">
-          Starting with the movement that matters most — the bodyweight squat,
-          the foundation of nearly every rehab and strength program. More
-          movements are on the roadmap.
+          Starting with the bodyweight squat — the reference movement behind
+          nearly every strength and rehab program. Hip hinge, jump, and sprint
+          are next, each with its own movement-specific reads.
         </p>
       </section>
 
@@ -218,8 +218,8 @@ export function LandingScreen() {
       <section className="landing-cta">
         <h2 className="landing-cta__title">Ready to see your movement clearly?</h2>
         <p className="landing-cta__text">
-          Open your camera, do a few squats, and get a transparent movement
-          score in under a minute.
+          Open your camera, move through a set, and get a transparent,
+          posture-first movement report in under a minute.
         </p>
         <div className="landing-cta__actions">
           <Button to="/camera" variant="primary">

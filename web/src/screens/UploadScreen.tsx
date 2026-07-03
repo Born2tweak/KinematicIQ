@@ -21,6 +21,15 @@ const HIGH_RESOLUTION_HEIGHT = 1080
 
 type UploadStatus = 'idle' | 'loading' | 'ready' | 'analyzing' | 'error'
 
+/** Pipeline stages lit progressively as offline analysis advances. */
+const ANALYZE_STEPS = [
+  { label: 'Capture', at: 2 },
+  { label: 'Track', at: 20 },
+  { label: 'Measure', at: 45 },
+  { label: 'Detect', at: 70 },
+  { label: 'Score', at: 92 },
+] as const
+
 function formatDuration(seconds: number): string {
   const total = Math.round(seconds)
   const mins = Math.floor(total / 60)
@@ -51,6 +60,7 @@ export function UploadScreen() {
   const abortRef = useRef<AbortController | null>(null)
 
   const [status, setStatus] = useState<UploadStatus>('idle')
+  const [isDragging, setIsDragging] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [warnings, setWarnings] = useState<string[]>([])
   const [fileName, setFileName] = useState<string | null>(null)
@@ -100,13 +110,8 @@ export function UploadScreen() {
     setProgress(0)
   }, [])
 
-  const handleFileChange = useCallback(
-    async (event: React.ChangeEvent<HTMLInputElement>) => {
-      const file = event.target.files?.[0]
-      // Allow re-picking the same file later.
-      event.target.value = ''
-      if (!file) return
-
+  const processFile = useCallback(
+    async (file: File) => {
       resetLoadedVideo()
       setError(null)
       setWarnings([])
@@ -138,6 +143,36 @@ export function UploadScreen() {
     [resetLoadedVideo],
   )
 
+  const handleFileChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      const file = event.target.files?.[0]
+      // Allow re-picking the same file later.
+      event.target.value = ''
+      if (file) void processFile(file)
+    },
+    [processFile],
+  )
+
+  const handleDragOver = useCallback((event: React.DragEvent) => {
+    event.preventDefault()
+    setIsDragging(true)
+  }, [])
+
+  const handleDragLeave = useCallback((event: React.DragEvent) => {
+    event.preventDefault()
+    setIsDragging(false)
+  }, [])
+
+  const handleDrop = useCallback(
+    (event: React.DragEvent) => {
+      event.preventDefault()
+      setIsDragging(false)
+      const file = event.dataTransfer.files?.[0]
+      if (file) void processFile(file)
+    },
+    [processFile],
+  )
+
   const handleAnalyze = useCallback(async () => {
     const loaded = loadedRef.current
     if (!loaded) return
@@ -155,6 +190,8 @@ export function UploadScreen() {
 
       const result = await runVideoAnalysis({
         durationSeconds: loaded.durationSeconds,
+        // Offline path can afford the full-signal zero-phase Butterworth filter.
+        filterLandmarks: true,
         seek: (seconds) => seekVideo(loaded.video, seconds),
         detect: (timestampMs, frameIndex) =>
           poseEngine.detect(loaded.video, timestampMs, frameIndex),
@@ -213,9 +250,10 @@ export function UploadScreen() {
   const openFilePicker = () => fileInputRef.current?.click()
 
   return (
-    <div className="stack-lg">
-      <header className="results-page__header">
-        <h1 className="page-title">Analyze a video</h1>
+    <div className="stack-lg upload-page">
+      <header className="upload-header">
+        <p className="landing-eyebrow">Video analysis</p>
+        <h1 className="page-title">Analyze a movement video</h1>
         <DisclaimerBanner />
       </header>
 
@@ -224,16 +262,16 @@ export function UploadScreen() {
         type="file"
         accept="video/mp4,video/webm,video/quicktime,video/*"
         onChange={handleFileChange}
-        style={{ display: 'none' }}
+        className="upload-file-input"
       />
 
       {status === 'error' && error && (
         <Card>
-          <h2 className="card__title" style={{ color: 'var(--color-text)' }}>
+          <h2 className="card__title card__title--plain">
             Couldn’t analyze this video
           </h2>
           <p className="card__subtitle">{error}</p>
-          <div className="btn-group btn-group--row" style={{ marginTop: 'var(--space-md)' }}>
+          <div className="btn-group btn-group--row card__footer-actions">
             <Button variant="primary" onClick={handleChooseAnother}>
               Choose another video
             </Button>
@@ -245,37 +283,38 @@ export function UploadScreen() {
       )}
 
       {status === 'idle' && (
-        <Card
-          title="Pick a squat video"
-          subtitle="Choose a clip from this device. It stays on your device — nothing is uploaded."
+        <button
+          type="button"
+          className={`upload-drop${isDragging ? ' upload-drop--drag' : ''}`}
+          onClick={openFilePicker}
+          onDragOver={handleDragOver}
+          onDragEnter={handleDragOver}
+          onDragLeave={handleDragLeave}
+          onDrop={handleDrop}
         >
-          <button
-            type="button"
-            className="upload-dropzone"
-            onClick={openFilePicker}
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              gap: 'var(--space-sm)',
-              width: '100%',
-              padding: 'var(--space-xl)',
-              border: '2px dashed var(--color-border)',
-              borderRadius: 'var(--radius-lg)',
-              background: 'transparent',
-              color: 'var(--color-text-muted)',
-              cursor: 'pointer',
-            }}
-          >
-            <span style={{ fontSize: '2rem' }} aria-hidden>
-              🎬
-            </span>
-            <span>Tap to choose an MP4, MOV, or WebM</span>
-            <span style={{ fontSize: '0.85rem' }}>
-              Film one set from the side, full body in frame.
-            </span>
-          </button>
-        </Card>
+          <span className="upload-drop__icon" aria-hidden>
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M12 16V4" />
+              <path d="m7 9 5-5 5 5" />
+              <path d="M4 16.5V19a1.5 1.5 0 0 0 1.5 1.5h13A1.5 1.5 0 0 0 20 19v-2.5" />
+            </svg>
+          </span>
+          <span className="upload-drop__title">Drop a video here</span>
+          <span className="upload-drop__sub">
+            or tap to choose an MP4, MOV, or WebM
+          </span>
+          <span className="upload-drop__meta">
+            One set, filmed from the side, full body in frame.
+            Everything stays on this device — nothing is uploaded.
+          </span>
+        </button>
       )}
 
       {status === 'loading' && (
@@ -288,7 +327,7 @@ export function UploadScreen() {
 
       {(status === 'ready' || status === 'analyzing') && previewUrl && (
         <div className="stack-lg">
-          <Card>
+          <div className="upload-preview-panel">
             <div className="upload-preview">
               <video
                 src={previewUrl}
@@ -297,73 +336,77 @@ export function UploadScreen() {
                 muted
                 className="upload-preview__media"
               />
+              <div className="upload-preview__glow" aria-hidden />
             </div>
-            <div className="detail-rows" style={{ marginTop: 'var(--space-md)' }}>
+            <div className="stat-pills">
               {fileName && (
-                <div className="detail-row">
-                  <span className="detail-row__label">File</span>
-                  <span className="detail-row__value">{fileName}</span>
+                <div className="stat-pill">
+                  <span className="stat-pill__label">File</span>
+                  <span className="stat-pill__value">{fileName}</span>
                 </div>
               )}
               {durationSeconds !== null && (
-                <div className="detail-row">
-                  <span className="detail-row__label">Length</span>
-                  <span className="detail-row__value">
+                <div className="stat-pill">
+                  <span className="stat-pill__label">Length</span>
+                  <span className="stat-pill__value">
                     {formatDuration(durationSeconds)}
                   </span>
                 </div>
               )}
               {dimensions && (
-                <div className="detail-row">
-                  <span className="detail-row__label">Resolution</span>
-                  <span className="detail-row__value">
+                <div className="stat-pill">
+                  <span className="stat-pill__label">Resolution</span>
+                  <span className="stat-pill__value">
                     {dimensions.w}×{dimensions.h}
                   </span>
                 </div>
               )}
             </div>
-          </Card>
-
-          {warnings.length > 0 && status === 'ready' && (
-            <Card>
-              <ul className="stack" style={{ margin: 0, paddingLeft: '1.1rem' }}>
+            {warnings.length > 0 && status === 'ready' && (
+              <div className="upload-warnings">
                 {warnings.map((warning) => (
-                  <li key={warning} className="card__subtitle">
+                  <p key={warning} className="upload-warning">
                     {warning}
-                  </li>
+                  </p>
                 ))}
-              </ul>
-            </Card>
-          )}
+              </div>
+            )}
+          </div>
 
           {status === 'analyzing' ? (
-            <Card
-              variant="status"
-              title={`Analyzing… ${progress}%`}
-              subtitle="Detecting pose, counting reps, and scoring your set on-device."
-            >
-              <div
-                className="confidence__bar"
-                style={{ marginTop: 'var(--space-md)' }}
-              >
-                <div
-                  className="confidence__fill confidence__fill--high"
-                  style={{ width: `${progress}%` }}
-                  role="progressbar"
-                  aria-valuenow={progress}
-                  aria-valuemin={0}
-                  aria-valuemax={100}
-                />
+            <div className="upload-analyzing" aria-live="polite">
+              <div className="upload-steps">
+                {ANALYZE_STEPS.map((step) => (
+                  <span
+                    key={step.label}
+                    className={`upload-step${progress >= step.at ? ' upload-step--done' : ''}`}
+                  >
+                    {step.label}
+                  </span>
+                ))}
               </div>
               <div
-                className="btn-group btn-group--row"
-                style={{ marginTop: 'var(--space-md)' }}
+                className="upload-progress"
+                role="progressbar"
+                aria-valuenow={progress}
+                aria-valuemin={0}
+                aria-valuemax={100}
               >
+                <div
+                  className="upload-progress__fill"
+                  style={{ width: `${progress}%` }}
+                />
+              </div>
+              <p className="upload-analyzing__caption">
+                Analyzing on-device — {progress}%. Tracking pose, counting
+                reps, and scoring this set.
+              </p>
+              <div className="btn-group btn-group--row">
                 <Button variant="ghost" onClick={handleCancelAnalysis}>
                   Cancel analysis
                 </Button>
               </div>
-            </Card>
+            </div>
           ) : (
             <div className="camera-actions">
               <div className="btn-group btn-group--row">
@@ -372,7 +415,7 @@ export function UploadScreen() {
                   onClick={handleAnalyze}
                   disabled={isModelLoading}
                 >
-                  {isModelLoading ? 'Preparing model…' : 'Analyze squat'}
+                  {isModelLoading ? 'Preparing model…' : 'Analyze movement'}
                 </Button>
                 <Button variant="ghost" onClick={handleChooseAnother}>
                   Choose another

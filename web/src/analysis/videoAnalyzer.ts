@@ -19,6 +19,7 @@ import {
   createRepCounterState,
   updateRepCounter,
 } from './repCounter'
+import { filterFrameSequence } from '../cv/landmarkFilter'
 import { LANDMARK_INDICES, type JointAngles, type PoseFrame, type RepMetrics } from '../cv/types'
 
 /** Analysis sampling rate — fewer inferences than display FPS, still smooth. */
@@ -43,6 +44,12 @@ export interface VideoAnalysisDeps {
   onProgress?: (fraction: number) => void
   /** Abort signal to cancel an in-flight analysis. */
   signal?: AbortSignal
+  /**
+   * Apply zero-phase Butterworth landmark filtering (+ gap-interp + Hampel) over
+   * the full captured sequence before running the FSM. Off by default so callers
+   * opt in explicitly and existing behavior is preserved. See `cv/landmarkFilter`.
+   */
+  filterLandmarks?: boolean
 }
 
 export interface VideoAnalysisResult {
@@ -70,8 +77,55 @@ function computeHipY(frame: PoseFrame): number | null {
 }
 
 /**
+ * Run the phase-detection + rep-counting FSM over an ordered list of detected
+ * pose frames. This is the single source of truth for the analysis loop, shared
+ * by {@link runVideoAnalysis} and the offline replay harness so both exercise the
+ * exact same logic. Pure: no seeking, no detection, no DOM.
+ */
+export function runPipelineOnFrames(frames: readonly PoseFrame[]): {
+  reps: RepMetrics[]
+  poseConfidenceSamples: number[]
+} {
+  let phaseDetector = createPhaseDetectorState()
+  let repCounter = createRepCounterState()
+  const poseConfidenceSamples: number[] = []
+
+  for (const frame of frames) {
+    poseConfidenceSamples.push(frame.poseConfidence)
+
+    const angles = getJointAngles(frame)
+    const hipY = computeHipY(frame)
+
+    const phaseResult = updatePhaseDetector(phaseDetector, {
+      kneeAngle: trackingKneeAngle(angles),
+      hipY,
+      timestamp: frame.timestamp,
+    })
+    phaseDetector = phaseResult.state
+
+    const repResult = updateRepCounter(repCounter, {
+      phase: phaseResult.phase,
+      transitioned: phaseResult.transitioned,
+      frame,
+      angles,
+      hipY,
+      smoothedKneeAngle: phaseResult.smoothedKneeAngle,
+      standingKneeBaseline: phaseDetector.standingKneeAngle,
+      standingHipY: phaseDetector.standingHipY,
+    })
+    repCounter = repResult.state
+  }
+
+  return { reps: repCounter.reps, poseConfidenceSamples }
+}
+
+/**
  * Analyze a video timeline and return the reps + confidence samples needed to
  * build a `SessionResult`. Forward-only; throws `AbortError` if `signal` aborts.
+ *
+ * Two passes: (1) seek + detect every sampled frame into an ordered array, then
+ * optionally filter the whole sequence (zero-phase Butterworth needs the full
+ * signal); (2) run the shared FSM via {@link runPipelineOnFrames}.
  */
 export async function runVideoAnalysis(
   deps: VideoAnalysisDeps,
@@ -81,17 +135,15 @@ export async function runVideoAnalysis(
   const base = deps.timestampBaseMs ?? 0
   const duration = Math.max(deps.durationSeconds, 0)
 
-  let phaseDetector = createPhaseDetectorState()
-  let repCounter = createRepCounterState()
-  const poseConfidenceSamples: number[] = []
   let framesAnalyzed = 0
-  let framesWithPose = 0
   let lastTimestampMs = -1
+  const detectedFrames: PoseFrame[] = []
 
   // Compute the frame count up front so floating-point drift on the timeline
   // can't add or drop a sample. Always includes t = 0 and t = duration.
   const totalFrames = Math.max(1, Math.floor(duration / step + 1e-9) + 1)
 
+  // ── Pass 1: capture ──────────────────────────────────────────────
   for (let i = 0; i < totalFrames; i++) {
     if (deps.signal?.aborted) {
       throw new DOMException('Video analysis was cancelled.', 'AbortError')
@@ -111,39 +163,24 @@ export async function runVideoAnalysis(
     framesAnalyzed++
 
     if (frame) {
-      framesWithPose++
-      poseConfidenceSamples.push(frame.poseConfidence)
-
-      const angles = getJointAngles(frame)
-      const hipY = computeHipY(frame)
-
-      const phaseResult = updatePhaseDetector(phaseDetector, {
-        kneeAngle: trackingKneeAngle(angles),
-        hipY,
-        timestamp: frame.timestamp,
-      })
-      phaseDetector = phaseResult.state
-
-      const repResult = updateRepCounter(repCounter, {
-        phase: phaseResult.phase,
-        transitioned: phaseResult.transitioned,
-        frame,
-        angles,
-        hipY,
-        smoothedKneeAngle: phaseResult.smoothedKneeAngle,
-        standingKneeBaseline: phaseDetector.standingKneeAngle,
-        standingHipY: phaseDetector.standingHipY,
-      })
-      repCounter = repResult.state
+      detectedFrames.push(frame)
     }
 
     deps.onProgress?.(duration > 0 ? Math.min(clamped / duration, 1) : 1)
   }
 
+  // ── Optional filtering over the full captured sequence ───────────
+  const analyzedFrames = deps.filterLandmarks
+    ? filterFrameSequence(detectedFrames, { fps })
+    : detectedFrames
+
+  // ── Pass 2: analyze ──────────────────────────────────────────────
+  const { reps, poseConfidenceSamples } = runPipelineOnFrames(analyzedFrames)
+
   return {
-    reps: repCounter.reps,
+    reps,
     poseConfidenceSamples,
     framesAnalyzed,
-    framesWithPose,
+    framesWithPose: detectedFrames.length,
   }
 }

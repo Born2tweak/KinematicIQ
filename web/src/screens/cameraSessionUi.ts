@@ -32,7 +32,7 @@ export function getSessionStatusCopy(
       }
     case 'READY':
       return {
-        title: 'Start squatting when ready',
+        title: 'Start your set when ready',
         subtitle: 'Your set starts on the first descent — no button to press.',
       }
     case 'ACTIVE':
@@ -40,7 +40,7 @@ export function getSessionStatusCopy(
         title: 'Set in progress',
         subtitle:
           options.repCount === 0
-            ? 'Perform full squats. When you’re done, stand still to finish.'
+            ? 'Perform full reps. When you’re done, stand still to finish.'
             : `${options.repCount} rep${options.repCount === 1 ? '' : 's'} counted. Stand still after your last rep to finish.`,
       }
     case 'AUTO_FINISH_PENDING':
@@ -52,7 +52,7 @@ export function getSessionStatusCopy(
       }
       return {
         title: 'Stand still to finish',
-        subtitle: 'Stay upright to complete the set, or move into another squat to continue.',
+        subtitle: 'Stay upright to complete the set, or move into another rep to continue.',
       }
     case 'FINISHED':
       return {

@@ -37,4 +37,4 @@ export const INSUFFICIENT_DATA_MESSAGE =
   'Tracking was too weak for coaching tips. Scores below are directional only — improve lighting, step back for a full-body view, and try again.'
 
 export const NO_REPS_MESSAGE =
-  'No full squats were counted. Get calibrated on camera, then do clear down-and-up reps with a pause at the bottom.'
+  'No full reps were counted. Get calibrated on camera, then do clear down-and-up reps with a pause at the bottom.'

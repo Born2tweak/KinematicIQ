@@ -54,66 +54,72 @@ export function ResultsScreen() {
 
   return (
     <div className="results-page stack-lg">
-      <header className="results-page__header">
-        <h1 className="page-title">Your set</h1>
-        <DisclaimerBanner />
+      <header className="results-page__header report-header">
+        <div className="report-header__titles">
+          <p className="landing-eyebrow">Movement report</p>
+          <h1 className="page-title">Your set</h1>
+        </div>
       </header>
+      <DisclaimerBanner />
 
       <section className="results-lead-card" aria-label="Set summary">
         <p className="results-lead">{summary}</p>
       </section>
 
       {scoring && (
-        <section className="results-panel" aria-label="Scores and confidence">
-          <div className="results-panel__score">
-            <h2 className="results-panel__heading">Movement score</h2>
+        <section className="report-hero" aria-label="Score">
+          <aside className="report-hero__score report-section">
+            <h2 className="report-section__title">Movement score</h2>
             <ScoreDisplay score={scoring.totalScore} band={scoring.band} />
             <p className="score-formula-note">{SCORE_FORMULA_SUMMARY}</p>
-          </div>
-
-          <div className="results-panel__confidence confidence">
-            <div className="confidence__header">
-              <span className="confidence__label">Camera confidence</span>
-              <span className="confidence__value">{sessionConfidenceScore}%</span>
+            <div className="report-hero__confidence confidence">
+              <div className="confidence__header">
+                <span className="confidence__label">Camera confidence</span>
+                <span className="confidence__value">{sessionConfidenceScore}%</span>
+              </div>
+              <div className="confidence__bar">
+                <div
+                  className={`confidence__fill confidence__fill--${sessionConfidence.toLowerCase()}`}
+                  style={{ width: `${sessionConfidenceScore}%` }}
+                  role="progressbar"
+                  aria-valuenow={sessionConfidenceScore}
+                  aria-valuemin={0}
+                  aria-valuemax={100}
+                />
+              </div>
+              <ConfidenceBadge level={sessionConfidence} />
             </div>
-            <div className="confidence__bar">
-              <div
-                className={`confidence__fill confidence__fill--${sessionConfidence.toLowerCase()}`}
-                style={{ width: `${sessionConfidenceScore}%` }}
-                role="progressbar"
-                aria-valuenow={sessionConfidenceScore}
-                aria-valuemin={0}
-                aria-valuemax={100}
-              />
-            </div>
-            <ConfidenceBadge level={sessionConfidence} />
-          </div>
+          </aside>
+        </section>
+      )}
 
-          {result.noRepsDetected && (
-            <p className="results-alert" role="alert">
-              {NO_REPS_MESSAGE}
-            </p>
-          )}
+      {result.noRepsDetected && (
+        <p className="results-alert" role="alert">
+          {NO_REPS_MESSAGE}
+        </p>
+      )}
 
-          {result.insufficientData && !result.noRepsDetected && (
-            <p className="results-alert results-alert--warning" role="alert">
-              {INSUFFICIENT_DATA_MESSAGE}
-            </p>
-          )}
+      {result.insufficientData && !result.noRepsDetected && (
+        <p className="results-alert results-alert--warning" role="alert">
+          {INSUFFICIENT_DATA_MESSAGE}
+        </p>
+      )}
 
-          {confidenceMessage && (
-            <p
-              className={
-                sessionConfidence === 'Low'
-                  ? 'results-alert results-alert--warning'
-                  : 'results-alert results-alert--info'
-              }
-              role="status"
-            >
-              {confidenceMessage}
-            </p>
-          )}
+      {confidenceMessage && (
+        <p
+          className={
+            sessionConfidence === 'Low'
+              ? 'results-alert results-alert--warning'
+              : 'results-alert results-alert--info'
+          }
+          role="status"
+        >
+          {confidenceMessage}
+        </p>
+      )}
 
+      {scoring && (
+        <section className="results-panel" aria-label="Score breakdown">
           {componentExplanations.length > 0 && (
             <div className="component-scores">
               <h2 className="results-panel__heading">Score breakdown</h2>
