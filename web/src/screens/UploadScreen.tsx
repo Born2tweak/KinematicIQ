@@ -190,8 +190,7 @@ export function UploadScreen() {
 
       const result = await runVideoAnalysis({
         durationSeconds: loaded.durationSeconds,
-        // Offline path can afford the full-signal zero-phase Butterworth filter.
-        filterLandmarks: true,
+        // Zero-phase Butterworth filtering is the default for the offline path.
         seek: (seconds) => seekVideo(loaded.video, seconds),
         detect: (timestampMs, frameIndex) =>
           poseEngine.detect(loaded.video, timestampMs, frameIndex),

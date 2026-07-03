@@ -54,8 +54,9 @@ export interface VideoAnalysisDeps {
   signal?: AbortSignal
   /**
    * Apply zero-phase Butterworth landmark filtering (+ gap-interp + Hampel) over
-   * the full captured sequence before running the FSM. Off by default so callers
-   * opt in explicitly and existing behavior is preserved. See `cv/landmarkFilter`.
+   * the full captured sequence before running the FSM. ON by default — upload is
+   * the multi-pass, highest-fidelity path (M19 two-tier tracking). Pass `false`
+   * only to replay the raw pipeline (eval variants). See `cv/landmarkFilter`.
    */
   filterLandmarks?: boolean
 }
@@ -198,8 +199,8 @@ export async function runVideoAnalysis(
     deps.onProgress?.(duration > 0 ? Math.min(clamped / duration, 1) : 1)
   }
 
-  // ── Optional filtering over the full captured sequence ───────────
-  const analyzedFrames = deps.filterLandmarks
+  // ── Filtering over the full captured sequence (default on) ───────
+  const analyzedFrames = (deps.filterLandmarks ?? true)
     ? filterFrameSequence(detectedFrames, { fps })
     : detectedFrames
 

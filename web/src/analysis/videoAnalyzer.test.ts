@@ -193,4 +193,37 @@ describe('runVideoAnalysis', () => {
     expect(bottom?.signedHipOffsetX).not.toBeNull()
     expect(bottom?.hipY).not.toBeNull()
   })
+
+  it('filters landmarks by default, smoothing jitter relative to the raw path', async () => {
+    const frames = expandScript(SQUAT_SCRIPT)
+    const fps = DEFAULT_ANALYSIS_FPS
+    // Deterministic high-frequency hip jitter on top of the clean script.
+    const jitter = (i: number) => 0.004 * Math.sin(i * 2.7)
+    const deps = {
+      durationSeconds: (frames.length - 1) / fps,
+      fps,
+      seek: async () => {},
+      detect: (timestampMs: number, frameIndex: number) => {
+        const spec = frames[Math.min(frameIndex, frames.length - 1)]
+        return squatFrame(spec.knee, spec.hipY + jitter(frameIndex), frameIndex, timestampMs)
+      },
+    }
+
+    const filtered = await runVideoAnalysis(deps)
+    const raw = await runVideoAnalysis({ ...deps, filterLandmarks: false })
+
+    // Second-difference roughness of the hip-Y trace: lower = smoother.
+    const roughness = (trace: typeof raw.frameTrace) => {
+      const ys = trace
+        .map((s) => s.hipY)
+        .filter((y): y is number => y !== null)
+      let sum = 0
+      for (let i = 2; i < ys.length; i++) {
+        sum += Math.abs(ys[i] - 2 * ys[i - 1] + ys[i - 2])
+      }
+      return sum
+    }
+
+    expect(roughness(filtered.frameTrace)).toBeLessThan(roughness(raw.frameTrace))
+  })
 })
