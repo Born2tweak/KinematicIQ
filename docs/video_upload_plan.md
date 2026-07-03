@@ -1,6 +1,6 @@
 # Video upload support — planning document (M15A)
 
-**Status:** Planning only — not implemented.  
+**Status:** ✅ Implemented (shipped as Milestone 17, June 2026 — `/upload` route, `analysis/videoAnalyzer.ts`, `cv/videoFrameSource.ts`). This document is retained as the design reference.  
 **Constraints:** Browser-only, client-side, no backend, no cloud storage, no server upload.
 
 This document describes how KinematicIQ could add **pre-recorded squat video analysis** while reusing the existing MediaPipe pose engine, analysis pipeline, scoring, and results UI.

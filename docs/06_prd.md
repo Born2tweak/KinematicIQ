@@ -1,4 +1,6 @@
-# KinematicIQ — Product Requirements Document (Layer 1 MVP)
+# KinematicIQ — Product Requirements Document
+
+> **Revised 2026-07-02.** Video upload (`/upload`) shipped in Milestone 17 and is now in scope (originally a non-goal). The product direction has evolved from "squat analyzer" to a posture-first, movement-specific movement-intelligence layer — see `docs/strategy/product-direction.md`. Squat remains the reference movement; hip hinge, jump/landing, and sprint are planned expansions.
 
 ## 1. Product Summary
 
@@ -45,12 +47,13 @@ Athletes and fitness enthusiasts have no accessible, low-friction way to get obj
 - Human-readable feedback (1–2 coaching cues)
 - Confidence and limitations messaging
 - Results display after completing a set
+- Pre-recorded video upload and offline analysis (`/upload`) — shipped M17; all bytes stay on device
 
 ### Non-goals
 - User accounts, authentication, or profiles
 - Backend server or database
-- Video upload, recording, or storage
-- Multiple movement types (only bodyweight squat)
+- Video storage or persistence (upload is analyze-in-memory only)
+- Movement types beyond the current roadmap phase (squat now; hinge/jump/sprint per `docs/strategy/execution-roadmap.md`)
 - Custom ML model training
 - Medical claims, injury prediction, or diagnosis language
 - Force estimation, load calculations, or true 3D biomechanics

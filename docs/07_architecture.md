@@ -1,4 +1,6 @@
-# KinematicIQ — Architecture Document (Layer 1 MVP)
+# KinematicIQ — Architecture Document
+
+> **Revised 2026-07-02.** Updated to match the shipped codebase: **TypeScript**, **React Router** (`/`, `/camera`, `/upload`, `/results`), pose code in **`cv/`** (not `pose/`), plus `session/`, `eval/`, and `test/` modules and a Vitest suite. For the always-current generated snapshot, see `docs/00_context_pack.md`.
 
 ## 1. Architecture Overview
 
@@ -42,51 +44,63 @@ Layer 1 is a **fully client-side** web application. There is no backend, no data
 
 ```
 web/
-├── public/
-│   └── index.html
 ├── src/
-│   ├── app/
-│   │   ├── App.jsx                  # Root component, screen routing
-│   │   └── App.css                  # Global styles
+│   ├── App.tsx                       # Root component, React Router routes
+│   ├── main.tsx                      # Entry point
+│   ├── index.css                     # Global styles (liquid-glass token system)
 │   ├── screens/
-│   │   ├── LandingScreen.jsx        # Welcome / start screen
-│   │   ├── CameraScreen.jsx         # Camera preview + analysis mode
-│   │   └── ResultsScreen.jsx        # Score, feedback, and results display
+│   │   ├── LandingScreen.tsx         # Marketing landing page ("/")
+│   │   ├── CameraScreen.tsx          # Live camera analysis ("/camera")
+│   │   ├── UploadScreen.tsx          # Pre-recorded video analysis ("/upload")
+│   │   ├── ResultsScreen.tsx         # Score, feedback, results ("/results")
+│   │   └── cameraSessionUi.ts        # Camera session status copy helpers
 │   ├── components/
-│   │   ├── SkeletonOverlay.jsx      # Canvas-based skeleton drawing
-│   │   ├── RepCounter.jsx           # Live rep count display
-│   │   ├── SetupGuide.jsx           # Camera positioning guidance
-│   │   ├── ScoreDisplay.jsx         # Visual score indicator (arc/ring)
-│   │   ├── FeedbackCard.jsx         # Coaching cue card
-│   │   ├── ConfidenceBadge.jsx      # Confidence level indicator
-│   │   └── DisclaimerBanner.jsx     # Safety disclaimer
-│   ├── pose/
-│   │   ├── poseEngine.js            # MediaPipe initialization and inference
-│   │   ├── landmarkExtractor.js     # Extract and structure relevant landmarks
-│   │   └── smoother.js              # Temporal smoothing for landmarks
+│   │   ├── AppShell.tsx              # Nav + layout wrapper around routes
+│   │   ├── SkeletonOverlay.tsx       # Canvas-based skeleton drawing
+│   │   ├── RepCounter.tsx            # Live rep count display
+│   │   ├── SessionStatusCard.tsx     # Calibration/session status
+│   │   ├── ScoreDisplay.tsx          # Visual score ring
+│   │   ├── FeedbackCard.tsx          # Coaching cue card
+│   │   ├── ConfidenceBadge.tsx       # Confidence level indicator
+│   │   ├── DisclaimerBanner.tsx      # Safety disclaimer
+│   │   ├── DepthSparkline.tsx        # Depth-over-time sparkline (analyst)
+│   │   ├── PoseScene3D.tsx           # 3D world-landmark viewer (analyst)
+│   │   └── landing/                  # Landing-page demo components
+│   ├── cv/                           # Pose estimation + drawing (was "pose/")
+│   │   ├── poseEngine.ts             # MediaPipe init + per-frame inference
+│   │   ├── types.ts                  # PoseFrame, landmark types
+│   │   ├── poseConnections.ts        # Skeleton edge definitions
+│   │   ├── landmarkFilter.ts         # Temporal landmark filtering
+│   │   ├── pose3d.ts                 # worldLandmark (3D) helpers
+│   │   ├── drawSkeleton.ts / drawCalibration.ts / drawDebugOverlay.ts
+│   │   └── videoFrameSource.ts       # Frame stepping for uploaded video
 │   ├── analysis/
-│   │   ├── angleCalculator.js       # Joint angle math (knee, hip, trunk)
-│   │   ├── phaseDetector.js         # Squat phase state machine
-│   │   ├── repCounter.js            # Rep counting logic
-│   │   ├── asymmetryDetector.js     # Left-right comparison logic
-│   │   └── metricCollector.js       # Aggregate per-rep and per-set metrics
+│   │   ├── angles.ts / geometry.ts / stats.ts   # Pure math
+│   │   ├── phaseDetector.ts          # Squat phase state machine
+│   │   ├── repCounter.ts             # Rep counting + validation gates
+│   │   ├── autoStart.ts / autoFinish.ts / setActivation.ts
+│   │   ├── asymmetryDetector.ts      # Left-right comparison
+│   │   ├── metricCollector.ts        # Per-rep and per-set aggregation
+│   │   └── videoAnalyzer.ts          # Offline pipeline for uploaded video
 │   ├── scoring/
-│   │   ├── scoringEngine.js         # Rule-based score calculation
-│   │   └── scoringConfig.js         # Thresholds, weights, band definitions
+│   │   ├── scoringEngine.ts          # Rule-based score calculation
+│   │   ├── scoringConfig.ts          # Thresholds, weights, bands
+│   │   └── scoringExplanations.ts    # Human-readable score explanations
 │   ├── feedback/
-│   │   ├── feedbackEngine.js        # Select top cues from scores
-│   │   ├── feedbackTemplates.js     # Template library for coaching cues
-│   │   └── confidenceCalculator.js  # Compute observation confidence
-│   ├── utils/
-│   │   ├── mathUtils.js             # Vector math, angle calculations
-│   │   └── constants.js             # Landmark indices, threshold values
-│   └── index.jsx                    # Entry point
+│   │   ├── feedbackEngine.ts / feedbackReasoning.ts
+│   │   ├── feedbackTemplates.ts      # Coaching cue library
+│   │   └── confidenceCalculator.ts   # Observation confidence
+│   ├── session/
+│   │   ├── types.ts                  # SessionResult shape
+│   │   └── buildSessionResult.ts     # Assemble results payload
+│   ├── eval/                         # Replay/eval harness (pose tapes)
+│   └── test/                         # Fixtures, simulations, helpers
 ├── package.json
-└── vite.config.js
+└── vite.config.ts                    # Includes COOP/COEP headers for MediaPipe
 ```
 
 ### Why this structure
-- **`pose/`** isolates the pose estimation dependency so it can be swapped later
+- **`cv/`** isolates the pose estimation dependency so it can be swapped later
 - **`analysis/`** contains pure functions — no UI, no side effects
 - **`scoring/`** is separate from analysis so thresholds and weights are configurable
 - **`feedback/`** is separate from scoring so language and cue selection are independently testable
@@ -147,7 +161,7 @@ Results Screen (UI)
 | ResultsScreen | Display score, feedback, asymmetry, confidence, disclaimer | Computed results object |
 
 ### Screen routing
-Use simple React state-based routing (no React Router needed for 3 screens). A `currentScreen` state variable controls which screen renders.
+React Router with four routes: `/` (Landing), `/camera`, `/upload`, `/results`. `AppShell.tsx` wraps all routes with the navbar and layout container.
 
 ### Components
 
@@ -163,9 +177,9 @@ Use simple React state-based routing (no React Router needed for 3 screens). A `
 
 ---
 
-## 5. Computer Vision Module (`pose/`)
+## 5. Computer Vision Module (`cv/`)
 
-### poseEngine.js
+### poseEngine.ts
 - Initialize MediaPipe Pose Landmarker
 - Accept video element as input
 - Return raw landmark results per frame
@@ -362,18 +376,15 @@ poseEngine → landmarkExtractor → smoother → angleCalculator
 
 | Do not add | Why |
 |-----------|-----|
-| React Router | Only 3 screens; state-based routing is simpler |
 | Redux, Zustand, or other state libs | useState/useRef is sufficient |
-| Backend server or API routes | Fully client-side MVP |
+| Backend server or API routes | Fully client-side |
 | Database or ORM | No persistence needed |
 | Authentication (Clerk, Auth0, etc.) | No user accounts |
-| Testing framework (yet) | Add after core logic works |
-| CI/CD pipeline | Premature for Layer 1 |
-| Docker or containerization | No deployment infrastructure yet |
-| TypeScript | Can adopt later; JS is faster to iterate for MVP |
+| Docker or containerization | Vercel deployment only |
 | Storybook | No component library needed yet |
 | Analytics or telemetry | No data collection |
 | Internationalization (i18n) | English only for now |
-| PWA/service worker | Not needed for MVP |
-| Video recording/playback | Out of scope |
+| PWA/service worker | Not needed yet |
 | Multiple pose models | MediaPipe only first |
+
+**Already adopted (were previously deferred):** React Router, TypeScript, Vitest test suite, video upload/playback (`/upload`).

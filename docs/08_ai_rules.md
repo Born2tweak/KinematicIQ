@@ -1,6 +1,8 @@
-# KinematicIQ — AI Rules (Layer 1 MVP)
+# KinematicIQ — AI Rules
 
-These rules govern all coding agent behavior when building KinematicIQ Layer 1. Every agent session must follow these rules without exception. If a rule conflicts with a coding suggestion, the rule wins.
+> **Revised 2026-07-02.** This doc originally described the Layer 1 JavaScript MVP. The shipped app now uses **TypeScript, React Router, Vitest, and a `cv/` module layout** — those are the current standards, not violations. Video upload (`/upload`) is shipped. Movement expansion beyond squat (hip hinge, jump, sprint) is planned via the MovementProfile architecture in `docs/strategy/movement-expansion.md`. The safety/claims rules (Section 6) remain fully in force and are expanded in `docs/strategy/safety-claims.md`.
+
+These rules govern all coding agent behavior when building KinematicIQ. Every agent session must follow these rules without exception. If a rule conflicts with a coding suggestion, the rule wins.
 
 ---
 
@@ -9,9 +11,9 @@ These rules govern all coding agent behavior when building KinematicIQ Layer 1. 
 1. **Work on one milestone at a time.** Complete it, verify acceptance criteria, then move to the next.
 2. **Do not skip milestones.** Each milestone builds on the previous one. Follow the build plan order.
 3. **Do not add features not listed in the current milestone.** If something sounds useful but isn't in scope, leave it.
-4. **The MVP is a bodyweight squat analyzer.** That is the only movement. Do not add other movements.
+4. **Bodyweight squat is the reference movement.** New movements (hip hinge, jump, sprint) are added only as MovementProfiles per the roadmap — never as forked pipelines, and never ahead of their phase.
 5. **The app is fully client-side.** No backend, no API, no server, no database, no network requests after page load.
-6. **No data persistence.** No localStorage, no IndexedDB, no cookies, no session storage. All data lives in memory only.
+6. **No data persistence beyond lightweight UI preferences.** No session/landmark/video data in localStorage, IndexedDB, or cookies. A small UI preference (e.g. Analyst mode toggle) may persist in localStorage; movement data lives in memory only.
 7. **Use MediaPipe Pose as the pose engine.** Do not substitute another model without explicit approval.
 
 ---
@@ -39,19 +41,16 @@ These rules govern all coding agent behavior when building KinematicIQ Layer 1. 
 - Dashboards or admin panels
 - Hardware or wearable integration
 - Multi-camera support
-- Video recording or playback
 - Session history or longitudinal tracking
-- Additional movement types (CMJ, lunge, push-up, etc.)
+- Movement types beyond the current roadmap phase (see `docs/strategy/execution-roadmap.md`)
 - Custom ML model training or fine-tuning
 - Backend server, API routes, or serverless functions
 - Database (SQL, NoSQL, or any persistence layer)
 - Analytics, telemetry, or tracking scripts
-- CI/CD pipelines or deployment infrastructure
+- CI/CD pipelines or deployment infrastructure beyond the existing Vercel setup
 - Docker or containerization
-- TypeScript (use JavaScript for Layer 1)
 - State management libraries (Redux, Zustand, Jotai, etc.)
 - CSS frameworks (Tailwind, Bootstrap, etc.) unless explicitly approved
-- React Router (use state-based screen switching)
 - Internationalization (i18n)
 - PWA features or service workers
 
@@ -81,7 +80,7 @@ These rules govern all coding agent behavior when building KinematicIQ Layer 1. 
 1. **After each milestone, verify every acceptance criterion before proceeding.**
 2. **Run the app in the browser and confirm the milestone's manual test passes.**
 3. **If a milestone's acceptance criteria cannot be met, stop and report the issue.** Do not proceed to the next milestone with broken functionality.
-4. **Do not write automated tests until all core logic milestones (1–13) are complete.** Milestone 14 covers manual testing. Automated tests are future scope.
+4. **Automated tests exist and must stay green.** The Vitest suite (`npm --prefix web run test`) covers analysis, scoring, session, and CV modules. Extend it for new analysis logic; never mark a milestone complete with failing tests.
 5. **If a previous milestone breaks while working on a new one, fix the regression before continuing.**
 
 ---
@@ -149,8 +148,8 @@ The following actions are explicitly prohibited:
 | Creating placeholder/stub files for future features | Anti-overengineering violation |
 | Installing npm packages not needed by current milestone | Scope violation |
 | Modifying research documents | Read-only reference material |
-| Adding TypeScript | JS only for Layer 1 |
-| Adding React Router | State-based routing only |
+| Removing TypeScript types or reverting to JS | TypeScript is the current standard |
+| Replacing React Router with ad-hoc routing | React Router is the current standard |
 | Modifying files outside current milestone scope | File modification violation |
 
 ---

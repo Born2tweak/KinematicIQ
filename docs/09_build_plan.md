@@ -1,5 +1,7 @@
 # KinematicIQ — Build Plan (Layer 1 MVP)
 
+> **Note (2026-07-02):** Milestones 1–17 are complete. The technology constraints embedded in these milestones (no TypeScript, no React Router, no tests) are **superseded** — the shipped app uses TypeScript, React Router, and Vitest; see the revision note in `docs/08_ai_rules.md`. Current roadmap: `docs/strategy/execution-roadmap.md`. This document is retained as historical reference for how Layer 1 was built.
+
 Work through milestones 1–15 in order. Complete each one fully before starting the next. Verify acceptance criteria after every milestone.
 
 **Before every milestone:** Read `docs/06_prd.md`, `docs/07_architecture.md`, and `docs/08_ai_rules.md`.

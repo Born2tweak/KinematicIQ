@@ -1,5 +1,5 @@
 ﻿# KinematicIQ Context Pack
-<!-- AUTO-GENERATED 2026-06-02 15:12 â€” do not hand-edit, run scripts/generate-context-pack.ps1 -->
+<!-- AUTO-GENERATED 2026-07-02 22:31 â€” do not hand-edit, run scripts/generate-context-pack.ps1 -->
 
 ## Workspace
 | Key | Value |
@@ -13,7 +13,7 @@
 ## Product
 Browser-only **bodyweight squat** analyzer. Camera -> MediaPipe Pose -> angles -> phases -> reps -> metrics -> score -> coaching. No backend, no auth, no persistence.
 
-## Milestones (1-16 done, next: 17 - Video upload impl)
+## Milestones (1-17 done, next: 18 - Cleanup)
 | # | Name | Status |
 |---|------|--------|
 | 1 | App shell + routing | **Done** |
@@ -32,14 +32,14 @@ Browser-only **bodyweight squat** analyzer. Camera -> MediaPipe Pose -> angles -
 | 14 | Testing + scoring transparency | **Done** |
 | 15 | UI polish (results/camera) | **Done** |
 | 16 | Planning (video + outreach) | **Done** |
-| 17 | Video upload impl | Not started |
+| 17 | Video upload impl | **Done** |
 | 18 | Cleanup | Not started |
 
 ## Divergences (repo vs docs)
 | Topic | Docs say | Repo has |
 |-------|----------|----------|
 | Language | JS | **TypeScript** |
-| Routing | State in App | **react-router-dom** `/` `/camera` `/results` |
+| Routing | State in App | **react-router-dom** `/` `/camera` `/upload` `/results` |
 | Pose folder | `pose/` | **`cv/`** |
 | Analysis | not specified | **`analysis/`** |
 | Session start | manual button | **auto-start FSM** |
@@ -64,7 +64,6 @@ Browser-only **bodyweight squat** analyzer. Camera -> MediaPipe Pose -> angles -
 **Debug** (toggle in CameraScreen): candidate rep, blocking gate, missed-rep reason, validation gates
 
 ## Gaps
-- Video upload (see docs/video_upload_plan.md) not implemented
 - Expert outreach is doc-only (docs/expert_outreach.md)
 
 ## Planning & reference docs
@@ -72,7 +71,7 @@ Browser-only **bodyweight squat** analyzer. Camera -> MediaPipe Pose -> angles -
 - `docs/video_upload_plan.md`
 - `docs/expert_outreach.md`
 
-## File tree (57 files in `web/src/`)
+## File tree (77 files in `web/src/`)
 ```
 analysis/
   angles.test.ts
@@ -92,13 +91,23 @@ analysis/
   setActivation.test.ts
   setActivation.ts
   squatRegressions.test.ts
+  stats.ts
+  videoAnalyzer.test.ts
+  videoAnalyzer.ts
 components/
+  landing/
+    LiveSquatDemo.tsx
+    SessionDemoPlayer.tsx
+    SquatFigure.tsx
+    squatPose.ts
   AppShell.tsx
   Button.tsx
   Card.tsx
   ConfidenceBadge.tsx
+  DepthSparkline.tsx
   DisclaimerBanner.tsx
   FeedbackCard.tsx
+  PoseScene3D.tsx
   RepCounter.tsx
   ScoreDisplay.tsx
   SessionStatusCard.tsx
@@ -107,9 +116,19 @@ cv/
   drawCalibration.ts
   drawDebugOverlay.ts
   drawSkeleton.ts
+  landmarkFilter.test.ts
+  landmarkFilter.ts
+  pose3d.test.ts
+  pose3d.ts
   poseConnections.ts
   poseEngine.ts
   types.ts
+  videoFrameSource.ts
+eval/
+  metrics.ts
+  poseTape.ts
+  replayHarness.test.ts
+  replayHarness.ts
 feedback/
   confidenceCalculator.ts
   feedbackEngine.ts
@@ -127,6 +146,7 @@ screens/
   cameraSessionUi.ts
   LandingScreen.tsx
   ResultsScreen.tsx
+  UploadScreen.tsx
 session/
   buildSessionResult.test.ts
   buildSessionResult.ts
@@ -141,6 +161,7 @@ test/
 App.tsx
 index.css
 main.tsx
+vite-env.d.ts
 ```
 
 ## Rules
@@ -155,7 +176,7 @@ main.tsx
 KinematicIQ â€” Repo: C:\Users\acetu\KinematicIQ (master, pull first)
 App: web/ â€” npm run dev -> http://localhost:5173/
 READ: docs/00_context_pack.md (auto-generated ground truth)
-State: M1-16 done. Next: M17 (Video upload impl).
+State: M1-17 done. Next: M18 (Cleanup).
 Results: live session via buildSessionResult.
 No backend/auth/storage. Folders: cv/, analysis/, scoring/, feedback/, session/.
 ```
