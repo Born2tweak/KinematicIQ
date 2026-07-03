@@ -771,11 +771,17 @@ img {
   margin-bottom: 0;
 }
 
-/* Report hero: score ring in a polished panel. */
+/* Report hero: posture profile concepts + score ring side by side. */
 .report-hero {
   display: grid;
   gap: var(--space-lg);
   align-items: start;
+}
+
+@media (min-width: 680px) {
+  .report-hero {
+    grid-template-columns: minmax(0, 1.6fr) minmax(240px, 1fr);
+  }
 }
 
 .report-hero__score {
@@ -795,6 +801,173 @@ img {
 
 .report-hero__confidence {
   width: 100%;
+}
+
+/* Posture profile concept chips */
+.posture-profile {
+  display: grid;
+  gap: var(--space-sm);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.posture-chip {
+  display: flex;
+  gap: var(--space-md);
+  align-items: flex-start;
+  padding: var(--space-md);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  box-shadow: var(--glass-highlight);
+}
+
+.posture-chip__badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: var(--radius-full);
+  font-size: 0.9375rem;
+  font-weight: 700;
+  border: 1px solid var(--color-border-strong);
+  color: var(--color-text-muted);
+  background: rgba(7, 11, 20, 0.4);
+}
+
+.posture-chip--ok {
+  border-color: rgba(52, 211, 153, 0.22);
+}
+
+.posture-chip--ok .posture-chip__badge {
+  color: var(--color-success);
+  border-color: rgba(52, 211, 153, 0.4);
+  background: rgba(52, 211, 153, 0.1);
+}
+
+.posture-chip--watch {
+  border-color: rgba(251, 191, 36, 0.28);
+}
+
+.posture-chip--watch .posture-chip__badge {
+  color: #fbbf24;
+  border-color: rgba(251, 191, 36, 0.45);
+  background: rgba(251, 191, 36, 0.1);
+}
+
+.posture-chip__body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 0;
+}
+
+.posture-chip__head {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+}
+
+.posture-chip__label {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.posture-chip__status {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.posture-chip--ok .posture-chip__status {
+  color: var(--color-success);
+}
+
+.posture-chip--watch .posture-chip__status {
+  color: #fbbf24;
+}
+
+.posture-chip__observation {
+  margin: 0;
+  font-size: 0.8438rem;
+  line-height: 1.5;
+  color: var(--color-text-muted);
+}
+
+.posture-chip__confidence {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+}
+
+.posture-chip__confidence--high {
+  color: var(--color-success);
+}
+
+.posture-chip__confidence--medium {
+  color: #fbbf24;
+}
+
+/* Rep timeline: taller bar = deeper rep */
+.rep-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.rep-timeline__bars {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-sm);
+  height: 7.5rem;
+  padding: var(--space-sm) var(--space-xs) 0;
+}
+
+.rep-timeline__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.3rem;
+  flex: 1;
+  max-width: 3.5rem;
+  height: 100%;
+}
+
+.rep-timeline__bar {
+  width: 100%;
+  min-height: 4px;
+  border-radius: var(--radius-sm) var(--radius-sm) 2px 2px;
+  background: linear-gradient(180deg, #38bdf8 0%, #6366f1 100%);
+  box-shadow: 0 0 16px rgba(56, 189, 248, 0.18);
+}
+
+.rep-timeline__angle {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  font-family: ui-monospace, monospace;
+  color: var(--color-text-muted);
+}
+
+.rep-timeline__label {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+}
+
+.rep-timeline__caption {
+  margin: 0;
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
 }
 
 /* ===== Camera stage (full-bleed immersive capture) ===== */

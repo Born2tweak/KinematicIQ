@@ -42,6 +42,7 @@ import {
 import { drawCalibrationGuides, checkCalibration } from '../cv/drawCalibration'
 import { drawDebugOverlay, type DebugOverlayData } from '../cv/drawDebugOverlay'
 import { DepthSparkline } from '../components/DepthSparkline'
+import { useAnalystMode } from '../hooks/useAnalystMode'
 import {
   type CameraSessionPhase,
   getSessionStatusCopy,
@@ -100,6 +101,7 @@ export function CameraScreen() {
   const [isFinishing, setIsFinishing] = useState(false)
   const [showDebug, setShowDebug] = useState(false)
   const [show3D, setShow3D] = useState(false)
+  const [isAnalyst, toggleAnalyst] = useAnalystMode()
 
   useEffect(() => {
     async function initModel() {
@@ -653,15 +655,26 @@ export function CameraScreen() {
           <div className="camera-hud--tools">
             <button
               type="button"
-              className={`hud-tool${show3D ? ' hud-tool--on' : ''}`}
-              onClick={() => setShow3D((prev) => !prev)}
-              aria-pressed={show3D}
-              aria-label={show3D ? 'Hide live 3D pose view' : 'Show live 3D pose view'}
-              title="Live 3D pose view"
+              className={`hud-tool${isAnalyst ? ' hud-tool--on' : ''}`}
+              onClick={toggleAnalyst}
+              aria-pressed={isAnalyst}
+              title="Analyst mode reveals the 3D pose view and debug tools"
             >
-              3D
+              Analyst
             </button>
-            {import.meta.env.DEV && (
+            {isAnalyst && (
+              <button
+                type="button"
+                className={`hud-tool${show3D ? ' hud-tool--on' : ''}`}
+                onClick={() => setShow3D((prev) => !prev)}
+                aria-pressed={show3D}
+                aria-label={show3D ? 'Hide live 3D pose view' : 'Show live 3D pose view'}
+                title="Live 3D pose view"
+              >
+                3D
+              </button>
+            )}
+            {isAnalyst && (
               <button
                 type="button"
                 className={`hud-tool${showDebug ? ' hud-tool--on' : ''}`}
@@ -679,7 +692,7 @@ export function CameraScreen() {
             )}
           </div>
 
-          {show3D && (
+          {isAnalyst && show3D && (
             <div className="camera-3d-panel">
               <Suspense fallback={null}>
                 <PoseScene3D poseRef={pose3DRef} mirror={FRONT_CAMERA_MIRROR} />
