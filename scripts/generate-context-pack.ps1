@@ -45,6 +45,7 @@ $m14c = Has-Src 'scoring\scoringExplanations.ts' -and (Test-Path (Join-Path $rep
 $m14d = Has-Src 'components\SessionStatusCard.tsx'
 $m15a = Test-Path (Join-Path $repoRoot 'docs\video_upload_plan.md')
 $m15b = Test-Path (Join-Path $repoRoot 'docs\expert_outreach.md')
+$m17  = Has-Src 'screens\UploadScreen.tsx','analysis\videoAnalyzer.ts','cv\videoFrameSource.ts'
 
 $milestones = @(
     @{ N=1;  Name='App shell + routing';  Done=$m1 }
@@ -63,7 +64,7 @@ $milestones = @(
     @{ N=14; Name='Testing + scoring transparency'; Done=($m14 -and $m14c) }
     @{ N=15; Name='UI polish (results/camera)';    Done=$m14d }
     @{ N=16; Name='Planning (video + outreach)';    Done=($m15a -and $m15b) }
-    @{ N=17; Name='Video upload impl';             Done=$false }
+    @{ N=17; Name='Video upload impl';             Done=$m17 }
     @{ N=18; Name='Cleanup';                       Done=$false }
 )
 
@@ -116,7 +117,7 @@ if ($hasDebugHUD -and -not $hasDebugToggle) {
     $gaps += '- Debug overlay always drawn (needs toggle)'
 }
 if ($gaps.Count -eq 0) {
-    $gaps += '- Video upload (see docs/video_upload_plan.md) not implemented'
+    if (-not $m17) { $gaps += '- Video upload (see docs/video_upload_plan.md) not implemented' }
     $gaps += '- Expert outreach is doc-only (docs/expert_outreach.md)'
 }
 $gapsBlock = $gaps -join "`n"
@@ -167,7 +168,7 @@ $($msRows -join "`n")
 | Topic | Docs say | Repo has |
 |-------|----------|----------|
 | Language | JS | **TypeScript** |
-| Routing | State in App | **react-router-dom** ``/`` ``/camera`` ``/results`` |
+| Routing | State in App | **react-router-dom** ``/`` ``/camera`` ``/upload`` ``/results`` |
 | Pose folder | ``pose/`` | **``cv/``** |
 | Analysis | not specified | **``analysis/``** |
 | Session start | manual button | **auto-start FSM** |

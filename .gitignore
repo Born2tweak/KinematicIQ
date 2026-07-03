@@ -30,3 +30,9 @@ build/
 
 # AutoClaw KDream data
 .autoclaw/
+
+.vercel
+
+# claude-flow / ruflo local orchestration state
+.claude-flow/
+.swarm/
