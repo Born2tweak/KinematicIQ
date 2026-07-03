@@ -158,4 +158,39 @@ describe('runVideoAnalysis', () => {
     expect(result.reps.length).toBeGreaterThanOrEqual(1)
     expect(result.poseConfidenceSamples.length).toBe(frames.length)
   })
+
+  it('emits a frame trace aligned with rep frame indices', async () => {
+    const frames = expandScript(SQUAT_SCRIPT)
+    const fps = DEFAULT_ANALYSIS_FPS
+    const result = await runVideoAnalysis({
+      durationSeconds: (frames.length - 1) / fps,
+      fps,
+      seek: async () => {},
+      detect: (timestampMs, frameIndex) => {
+        const spec = frames[Math.min(frameIndex, frames.length - 1)]
+        return squatFrame(spec.knee, spec.hipY, frameIndex, timestampMs)
+      },
+    })
+
+    // One trace sample per detected frame, in frame order.
+    expect(result.frameTrace.length).toBe(result.framesWithPose)
+    const traceIndices = new Set(result.frameTrace.map((s) => s.frameIndex))
+
+    // Every rep's bottom frame resolves to a trace sample (evidence lookups
+    // key on frameIndex, so this alignment is load-bearing).
+    for (const rep of result.reps) {
+      expect(traceIndices.has(rep.bottomFrameIndex)).toBe(true)
+    }
+
+    // The trace observed the full phase cycle and carries per-frame signals.
+    const phases = new Set(result.frameTrace.map((s) => s.phase))
+    expect(phases.has('DESCENDING')).toBe(true)
+    expect(phases.has('BOTTOM')).toBe(true)
+    const bottom = result.frameTrace.find(
+      (s) => s.frameIndex === result.reps[0].bottomFrameIndex,
+    )
+    expect(bottom?.kneeAngle).not.toBeNull()
+    expect(bottom?.signedHipOffsetX).not.toBeNull()
+    expect(bottom?.hipY).not.toBeNull()
+  })
 })

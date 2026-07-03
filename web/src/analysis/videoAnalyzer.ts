@@ -25,6 +25,10 @@ import {
   extractPostureFrame,
   type PostureFrameSample,
 } from './posture/postureFrame'
+import {
+  createFrameTraceCollector,
+  type FrameTraceSample,
+} from './frameTrace'
 
 /** Analysis sampling rate — fewer inferences than display FPS, still smooth. */
 export const DEFAULT_ANALYSIS_FPS = 15
@@ -61,6 +65,8 @@ export interface VideoAnalysisResult {
   poseConfidenceSamples: number[]
   /** Per-frame 3D posture samples (empty when worldLandmarks are unavailable). */
   postureSamples: PostureFrameSample[]
+  /** Per-frame 2D reconstruction stream (see analysis/frameTrace). */
+  frameTrace: FrameTraceSample[]
   /** Total frames sampled from the timeline. */
   framesAnalyzed: number
   /** Frames where a pose was actually detected. */
@@ -92,11 +98,13 @@ export function runPipelineOnFrames(frames: readonly PoseFrame[]): {
   reps: RepMetrics[]
   poseConfidenceSamples: number[]
   postureSamples: PostureFrameSample[]
+  frameTrace: FrameTraceSample[]
 } {
   let phaseDetector = createPhaseDetectorState()
   let repCounter = createRepCounterState()
   const poseConfidenceSamples: number[] = []
   const postureSamples: PostureFrameSample[] = []
+  const frameTrace = createFrameTraceCollector()
 
   for (const frame of frames) {
     poseConfidenceSamples.push(frame.poseConfidence)
@@ -128,9 +136,16 @@ export function runPipelineOnFrames(frames: readonly PoseFrame[]): {
       standingHipY: phaseDetector.standingHipY,
     })
     repCounter = repResult.state
+
+    frameTrace.record(frame, angles, phaseResult.phase)
   }
 
-  return { reps: repCounter.reps, poseConfidenceSamples, postureSamples }
+  return {
+    reps: repCounter.reps,
+    poseConfidenceSamples,
+    postureSamples,
+    frameTrace: frameTrace.build(),
+  }
 }
 
 /**
@@ -189,13 +204,14 @@ export async function runVideoAnalysis(
     : detectedFrames
 
   // ── Pass 2: analyze ──────────────────────────────────────────────
-  const { reps, poseConfidenceSamples, postureSamples } =
+  const { reps, poseConfidenceSamples, postureSamples, frameTrace } =
     runPipelineOnFrames(analyzedFrames)
 
   return {
     reps,
     poseConfidenceSamples,
     postureSamples,
+    frameTrace,
     framesAnalyzed,
     framesWithPose: detectedFrames.length,
   }
