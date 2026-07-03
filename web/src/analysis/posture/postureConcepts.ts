@@ -9,6 +9,7 @@ import {
   KNEE_ASYMMETRY_THRESHOLDS,
   TRUNK_THRESHOLDS,
 } from '../../scoring/scoringConfig'
+import type { PostureSetSummary } from './postureCollector'
 
 /**
  * Posture concepts: coach-vocabulary reads derived from set metrics.
@@ -23,8 +24,39 @@ export type PostureConceptId =
   | 'evenBase'
   | 'evenDrive'
   | 'repeatable'
+  | 'hingeStrategy'
+  | 'spineStability'
+  | 'smoothness'
+  | 'deviation'
 
-export type PostureConceptStatus = 'ok' | 'watch' | 'unavailable'
+export type PostureConceptStatus = 'ok' | 'watch' | 'info' | 'unavailable'
+
+/** Hinge ratio ≥ this = hip-led pattern; ≤ inverse threshold = knee-led. */
+export const HINGE_HIP_LED_MIN = 1.15
+export const HINGE_KNEE_LED_MAX = 0.85
+
+/** Trunk-angle drift (std dev, degrees) above this is worth a look. */
+export const TRUNK_DRIFT_WATCH_DEG = 6
+
+/**
+ * Normalized-jerk watch threshold. Expert-review tier and unvalidated —
+ * used only for within-set qualitative banding, never a measurement claim.
+ */
+export const SMOOTHNESS_WATCH_NJ = 150
+
+const CONFIDENCE_ORDER: Record<ConfidenceLevel, number> = {
+  Low: 0,
+  Medium: 1,
+  High: 2,
+}
+
+/** Cap a confidence level (expert-review-tier concepts never claim High). */
+function capConfidence(
+  level: ConfidenceLevel,
+  cap: ConfidenceLevel,
+): ConfidenceLevel {
+  return CONFIDENCE_ORDER[level] <= CONFIDENCE_ORDER[cap] ? level : cap
+}
 
 export interface PostureConcept {
   id: PostureConceptId
@@ -50,13 +82,17 @@ function concept(
 }
 
 /**
- * Derive the posture profile from an existing set summary.
- * Boundaries reuse the scoring thresholds ("good" band = ok) so the
- * chips and the numeric score never disagree.
+ * Derive the posture profile from a set summary plus (optionally) the
+ * 3D posture reads. 2D boundaries reuse the scoring thresholds ("good"
+ * band = ok) so the chips and the numeric score never disagree. 3D
+ * concepts render only when the data was actually usable, and their
+ * confidence is capped to their validation tier
+ * (docs/strategy/validation-strategy.md).
  */
 export function buildPostureConcepts(
   metrics: SetMetricsSummary,
   sessionConfidence: ConfidenceLevel,
+  posture: PostureSetSummary | null = null,
 ): PostureConcept[] {
   const concepts: PostureConcept[] = []
 
@@ -189,5 +225,78 @@ export function buildPostureConcepts(
     )
   }
 
+  if (posture) {
+    appendPostureDepthConcepts(concepts, posture, sessionConfidence)
+  }
+
   return concepts
+}
+
+/** 3D-derived concepts (Phase 2). Omitted entirely when data was unusable. */
+function appendPostureDepthConcepts(
+  concepts: PostureConcept[],
+  posture: PostureSetSummary,
+  sessionConfidence: ConfidenceLevel,
+): void {
+  if (posture.avgHingeRatio !== null) {
+    const ratio = posture.avgHingeRatio
+    const observation =
+      ratio >= HINGE_HIP_LED_MIN
+        ? 'You appear to bend more at the hips than the knees in this set — a hip-led pattern.'
+        : ratio <= HINGE_KNEE_LED_MAX
+          ? 'You appear to bend more at the knees than the hips in this set — a knee-led pattern.'
+          : 'Hip and knee bend appear balanced in this set.'
+    concepts.push(
+      concept(
+        'hingeStrategy',
+        'Hinge vs squat',
+        'info',
+        observation,
+        capConfidence(sessionConfidence, 'Medium'),
+      ),
+    )
+  }
+
+  if (posture.avgTrunkVariability !== null) {
+    const ok = posture.avgTrunkVariability <= TRUNK_DRIFT_WATCH_DEG
+    concepts.push(
+      concept(
+        'spineStability',
+        'Stable trunk',
+        ok ? 'ok' : 'watch',
+        ok
+          ? 'Trunk angle appears steady through each rep in this set (trunk-level read only).'
+          : 'Trunk angle appears to drift within reps in this set (trunk-level read only).',
+        // Markerless video cannot resolve spine segments — always Low.
+        'Low',
+      ),
+    )
+  }
+
+  if (posture.avgNormalizedJerk !== null) {
+    const ok = posture.avgNormalizedJerk <= SMOOTHNESS_WATCH_NJ
+    concepts.push(
+      concept(
+        'smoothness',
+        'Smooth movement',
+        ok ? 'ok' : 'watch',
+        ok
+          ? 'Hip path appears smooth through the reps in this set.'
+          : 'Hip path appears to lose momentum mid-rep in this set.',
+        capConfidence(sessionConfidence, 'Medium'),
+      ),
+    )
+  }
+
+  if (posture.mostDeviantRep !== null) {
+    concepts.push(
+      concept(
+        'deviation',
+        `Rep ${posture.mostDeviantRep} stands out`,
+        'info',
+        `Rep ${posture.mostDeviantRep} appears to differ most from your own pattern in this set — worth a second look.`,
+        sessionConfidence,
+      ),
+    )
+  }
 }

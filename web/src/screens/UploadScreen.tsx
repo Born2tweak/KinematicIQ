@@ -212,6 +212,7 @@ export function UploadScreen() {
       const sessionResult = buildSessionResult(
         result.reps,
         result.poseConfidenceSamples,
+        result.postureSamples,
       )
       navigate('/results', { state: { result: sessionResult } })
     } catch (err: unknown) {

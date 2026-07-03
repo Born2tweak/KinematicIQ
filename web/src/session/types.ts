@@ -1,4 +1,5 @@
 import type { RepMetrics } from '../cv/types'
+import type { PostureSetSummary } from '../analysis/posture/postureCollector'
 
 export interface SetMetricsSummary {
   repCount: number
@@ -45,6 +46,15 @@ export interface CoachingCue {
   confidenceNote: string | null
 }
 
+/**
+ * Seam for future longitudinal comparison against the athlete's own
+ * history. Always null today — within-set deviation lives in
+ * `posture.mostDeviantRep`. No backend, no persistence.
+ */
+export interface SessionBaseline {
+  scope: 'longitudinal'
+}
+
 export interface SessionResult {
   metrics: SetMetricsSummary
   scoring: ScoringResult | null
@@ -53,4 +63,8 @@ export interface SessionResult {
   sessionConfidenceScore: number
   insufficientData: boolean
   noRepsDetected: boolean
+  /** 3D posture reads (hinge ratio, trunk stability, smoothness); null when unavailable. */
+  posture: PostureSetSummary | null
+  /** Future longitudinal baseline comparison — always null today. */
+  baseline: SessionBaseline | null
 }

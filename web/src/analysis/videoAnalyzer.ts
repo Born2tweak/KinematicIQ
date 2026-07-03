@@ -21,6 +21,10 @@ import {
 } from './repCounter'
 import { filterFrameSequence } from '../cv/landmarkFilter'
 import { LANDMARK_INDICES, type JointAngles, type PoseFrame, type RepMetrics } from '../cv/types'
+import {
+  extractPostureFrame,
+  type PostureFrameSample,
+} from './posture/postureFrame'
 
 /** Analysis sampling rate — fewer inferences than display FPS, still smooth. */
 export const DEFAULT_ANALYSIS_FPS = 15
@@ -55,6 +59,8 @@ export interface VideoAnalysisDeps {
 export interface VideoAnalysisResult {
   reps: RepMetrics[]
   poseConfidenceSamples: number[]
+  /** Per-frame 3D posture samples (empty when worldLandmarks are unavailable). */
+  postureSamples: PostureFrameSample[]
   /** Total frames sampled from the timeline. */
   framesAnalyzed: number
   /** Frames where a pose was actually detected. */
@@ -85,13 +91,21 @@ function computeHipY(frame: PoseFrame): number | null {
 export function runPipelineOnFrames(frames: readonly PoseFrame[]): {
   reps: RepMetrics[]
   poseConfidenceSamples: number[]
+  postureSamples: PostureFrameSample[]
 } {
   let phaseDetector = createPhaseDetectorState()
   let repCounter = createRepCounterState()
   const poseConfidenceSamples: number[] = []
+  const postureSamples: PostureFrameSample[] = []
 
   for (const frame of frames) {
     poseConfidenceSamples.push(frame.poseConfidence)
+
+    // 3D posture stream is additive — never gates the 2D pipeline.
+    const postureSample = extractPostureFrame(frame)
+    if (postureSample) {
+      postureSamples.push(postureSample)
+    }
 
     const angles = getJointAngles(frame)
     const hipY = computeHipY(frame)
@@ -116,7 +130,7 @@ export function runPipelineOnFrames(frames: readonly PoseFrame[]): {
     repCounter = repResult.state
   }
 
-  return { reps: repCounter.reps, poseConfidenceSamples }
+  return { reps: repCounter.reps, poseConfidenceSamples, postureSamples }
 }
 
 /**
@@ -175,11 +189,13 @@ export async function runVideoAnalysis(
     : detectedFrames
 
   // ── Pass 2: analyze ──────────────────────────────────────────────
-  const { reps, poseConfidenceSamples } = runPipelineOnFrames(analyzedFrames)
+  const { reps, poseConfidenceSamples, postureSamples } =
+    runPipelineOnFrames(analyzedFrames)
 
   return {
     reps,
     poseConfidenceSamples,
+    postureSamples,
     framesAnalyzed,
     framesWithPose: detectedFrames.length,
   }

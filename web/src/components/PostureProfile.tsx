@@ -10,6 +10,8 @@ function statusGlyph(status: PostureConcept['status']): string {
       return '✓'
     case 'watch':
       return '!'
+    case 'info':
+      return 'i'
     default:
       return '—'
   }
@@ -21,6 +23,8 @@ function statusText(status: PostureConcept['status']): string {
       return 'Looks good'
     case 'watch':
       return 'Worth a look'
+    case 'info':
+      return 'Observation'
     default:
       return 'Not enough data'
   }

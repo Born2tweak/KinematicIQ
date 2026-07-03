@@ -1,4 +1,6 @@
 import { collectSetMetrics } from '../analysis/metricCollector'
+import { collectPostureMetrics } from '../analysis/posture/postureCollector'
+import type { PostureFrameSample } from '../analysis/posture/postureFrame'
 import { calculateSessionConfidence } from '../feedback/confidenceCalculator'
 import {
   INSUFFICIENT_DATA_MESSAGE,
@@ -12,6 +14,7 @@ import type { SessionResult } from './types'
 export function buildSessionResult(
   reps: RepMetrics[],
   poseConfidenceSamples: number[] = [],
+  postureSamples: PostureFrameSample[] = [],
 ): SessionResult {
   const noRepsDetected = reps.length === 0
   const { score: sessionConfidenceScore, level: sessionConfidence } =
@@ -28,6 +31,8 @@ export function buildSessionResult(
       sessionConfidenceScore,
       insufficientData: true,
       noRepsDetected: true,
+      posture: null,
+      baseline: null,
     }
   }
 
@@ -45,6 +50,8 @@ export function buildSessionResult(
     sessionConfidenceScore,
     insufficientData,
     noRepsDetected: false,
+    posture: collectPostureMetrics(reps, postureSamples),
+    baseline: null,
   }
 }
 
@@ -73,3 +80,4 @@ export function buildResultsSummary(result: SessionResult): string {
 
   return summary
 }
+

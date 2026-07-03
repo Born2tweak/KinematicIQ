@@ -34,7 +34,11 @@ export function ResultsScreen() {
 
   const postureConcepts = useMemo(() => {
     if (!result || result.metrics.repCount === 0) return []
-    return buildPostureConcepts(result.metrics, result.sessionConfidence)
+    return buildPostureConcepts(
+      result.metrics,
+      result.sessionConfidence,
+      result.posture,
+    )
   }, [result])
 
   if (!result) {
@@ -210,7 +214,11 @@ export function ResultsScreen() {
               : 'How your depth compared across the set'
           }
         >
-          <RepTimeline reps={metrics.reps} showAngles={isAnalyst} />
+          <RepTimeline
+            reps={metrics.reps}
+            showAngles={isAnalyst}
+            deviantRep={result.posture?.mostDeviantRep ?? null}
+          />
           {isAnalyst && (
             <div className="detail-rows">
               {metrics.reps.map((rep) => {

@@ -4,6 +4,8 @@ interface RepTimelineProps {
   reps: RepMetrics[]
   /** Analyst mode: annotate bars with the measured angles. */
   showAngles?: boolean
+  /** Rep number that deviates most from the set's own pattern, if any. */
+  deviantRep?: number | null
 }
 
 /** Bar heights map knee angle to visual depth: smaller angle = deeper = taller. */
@@ -23,7 +25,11 @@ function depthFraction(angle: number): number {
  * Visual rep-by-rep timeline: one bar per rep, taller = deeper.
  * Replaces the plain text rows; exact angles only appear in analyst mode.
  */
-export function RepTimeline({ reps, showAngles = false }: RepTimelineProps) {
+export function RepTimeline({
+  reps,
+  showAngles = false,
+  deviantRep = null,
+}: RepTimelineProps) {
   if (reps.length === 0) return null
 
   return (
@@ -33,13 +39,14 @@ export function RepTimeline({ reps, showAngles = false }: RepTimelineProps) {
           const depth = repDepth(rep)
           const fraction = depthFraction(depth)
           const heightPercent = Math.max(8, Math.round(fraction * 100))
+          const isDeviant = rep.repNumber === deviantRep
           return (
             <div key={rep.repNumber} className="rep-timeline__item">
               {showAngles && (
                 <span className="rep-timeline__angle">{Math.round(depth)}°</span>
               )}
               <div
-                className="rep-timeline__bar"
+                className={`rep-timeline__bar${isDeviant ? ' rep-timeline__bar--deviant' : ''}`}
                 style={{ height: `${heightPercent}%` }}
                 title={
                   showAngles
@@ -54,6 +61,8 @@ export function RepTimeline({ reps, showAngles = false }: RepTimelineProps) {
       </div>
       <p className="rep-timeline__caption">
         Taller bar = deeper rep{showAngles ? ' (bottom-of-rep knee angle)' : ''} — relative to your own set.
+        {deviantRep !== null &&
+          ` Rep ${deviantRep} appears to differ most from your own pattern.`}
       </p>
     </div>
   )

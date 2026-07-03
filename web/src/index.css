@@ -860,6 +860,22 @@ img {
   background: rgba(251, 191, 36, 0.1);
 }
 
+.posture-chip--info {
+  border-color: rgba(125, 211, 252, 0.24);
+}
+
+.posture-chip--info .posture-chip__badge {
+  color: var(--color-accent-hover);
+  border-color: rgba(125, 211, 252, 0.45);
+  background: rgba(56, 189, 248, 0.1);
+  font-style: italic;
+  font-family: Georgia, serif;
+}
+
+.posture-chip--info .posture-chip__status {
+  color: var(--color-accent-hover);
+}
+
 .posture-chip__body {
   display: flex;
   flex-direction: column;
@@ -949,6 +965,11 @@ img {
   border-radius: var(--radius-sm) var(--radius-sm) 2px 2px;
   background: linear-gradient(180deg, #38bdf8 0%, #6366f1 100%);
   box-shadow: 0 0 16px rgba(56, 189, 248, 0.18);
+}
+
+.rep-timeline__bar--deviant {
+  background: linear-gradient(180deg, #fbbf24 0%, #f59e0b 100%);
+  box-shadow: 0 0 16px rgba(251, 191, 36, 0.28);
 }
 
 .rep-timeline__angle {

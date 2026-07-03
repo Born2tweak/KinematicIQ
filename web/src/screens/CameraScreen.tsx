@@ -44,6 +44,10 @@ import { drawDebugOverlay, type DebugOverlayData } from '../cv/drawDebugOverlay'
 import { DepthSparkline } from '../components/DepthSparkline'
 import { useAnalystMode } from '../hooks/useAnalystMode'
 import {
+  extractPostureFrame,
+  type PostureFrameSample,
+} from '../analysis/posture/postureFrame'
+import {
   type CameraSessionPhase,
   getSessionStatusCopy,
 } from './cameraSessionUi'
@@ -82,6 +86,7 @@ export function CameraScreen() {
   const autoStartRef = useRef(createAutoStartState())
   const autoFinishRef = useRef(createAutoFinishState())
   const poseConfidenceSamplesRef = useRef<number[]>([])
+  const postureSamplesRef = useRef<PostureFrameSample[]>([])
   const isFinishingRef = useRef(false)
   const streamRef = useRef<MediaStream | null>(null)
   const liveFilterRef = useRef(createLiveStreamFilter())
@@ -267,6 +272,7 @@ export function CameraScreen() {
     const result = buildSessionResult(
       reps,
       poseConfidenceSamplesRef.current,
+      postureSamplesRef.current,
     )
 
     autoStartRef.current = createAutoStartState()
@@ -275,6 +281,7 @@ export function CameraScreen() {
     repCounterRef.current = createFreshAnalysisPipeline().repCounter
     liveFilterRef.current.reset()
     poseConfidenceSamplesRef.current = []
+    postureSamplesRef.current = []
     setAutoStartPhase('WAITING')
     setCalibrationProgress(0)
     setRepCount(0)
@@ -416,6 +423,7 @@ export function CameraScreen() {
               setAutoFinishPending(false)
               setFinishCountdown(null)
               poseConfidenceSamplesRef.current = []
+              postureSamplesRef.current = []
 
               const kneeAngles = [angles.leftKnee, angles.rightKnee].filter(
                 (value): value is number => value !== null,
@@ -447,6 +455,10 @@ export function CameraScreen() {
 
             if (autoResult.phase === 'ACTIVE' && poseFrame) {
               poseConfidenceSamplesRef.current.push(poseFrame.poseConfidence)
+              const postureSample = extractPostureFrame(poseFrame)
+              if (postureSample) {
+                postureSamplesRef.current.push(postureSample)
+              }
             }
 
             // Update UI phase
