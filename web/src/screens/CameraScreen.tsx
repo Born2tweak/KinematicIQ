@@ -58,6 +58,7 @@ import {
   type CameraSessionPhase,
   getSessionStatusCopy,
 } from './cameraSessionUi'
+import { nextRepFeedbackHud } from './repRejectionUi'
 
 // Lazy: keeps three.js/@react-three/fiber out of the main bundle until toggled on.
 const PoseScene3D = lazy(() => import('../components/PoseScene3D'))
@@ -108,6 +109,13 @@ export function CameraScreen() {
   const [autoStartPhase, setAutoStartPhase] =
     useState<CameraSessionPhase>('WAITING')
   const [repCount, setRepCount] = useState(0)
+  /** Mirrors `repCount` synchronously for canvas debug HUD (avoids stale closures). */
+  const repCountDisplayRef = useRef(0)
+  const repFeedbackSyncRef = useRef({
+    rejectionCount: 0,
+    lastMissedReason: null as string | null,
+  })
+  const [repFeedback, setRepFeedback] = useState<string | null>(null)
   const [calibrationProgress, setCalibrationProgress] = useState(0)
   const [autoFinishPending, setAutoFinishPending] = useState(false)
   const [finishCountdown, setFinishCountdown] = useState<number | null>(null)
@@ -117,6 +125,9 @@ export function CameraScreen() {
   const [expand3D, setExpand3D] = useState(false)
   const [guidance, setGuidance] = useState<CaptureGuidance | null>(null)
   const [isAnalyst, toggleAnalyst] = useAnalystMode()
+  const isAnalystRef = useRef(isAnalyst)
+  isAnalystRef.current = isAnalyst
+  const repFeedbackMessageRef = useRef<string | null>(null)
 
   useEffect(() => {
     async function initModel() {
@@ -319,6 +330,10 @@ export function CameraScreen() {
     setAutoStartPhase('WAITING')
     setCalibrationProgress(0)
     setRepCount(0)
+    repCountDisplayRef.current = 0
+    repFeedbackSyncRef.current = { rejectionCount: 0, lastMissedReason: null }
+    repFeedbackMessageRef.current = null
+    setRepFeedback(null)
     setAutoFinishPending(false)
     setFinishCountdown(null)
 
@@ -370,6 +385,9 @@ export function CameraScreen() {
       })
       repCounterRef.current = repResult.state
 
+      if (repResult.repCount !== repCountDisplayRef.current) {
+        repCountDisplayRef.current = repResult.repCount
+      }
       setRepCount((prev) =>
         prev === repResult.repCount ? prev : repResult.repCount,
       )
@@ -450,6 +468,13 @@ export function CameraScreen() {
               setAutoFinishPending(false)
               setFinishCountdown(null)
               setRepCount(0)
+              repCountDisplayRef.current = 0
+              repFeedbackSyncRef.current = {
+                rejectionCount: 0,
+                lastMissedReason: null,
+              }
+              repFeedbackMessageRef.current = null
+              setRepFeedback(null)
             }
 
             if (autoResult.transitioned && autoResult.phase === 'ACTIVE') {
@@ -486,6 +511,13 @@ export function CameraScreen() {
                 repCounterRef.current = fresh.repCounter
               }
               setRepCount(0)
+              repCountDisplayRef.current = 0
+              repFeedbackSyncRef.current = {
+                rejectionCount: 0,
+                lastMissedReason: null,
+              }
+              repFeedbackMessageRef.current = null
+              setRepFeedback(null)
             }
 
             if (autoResult.phase === 'ACTIVE' && poseFrame) {
@@ -554,6 +586,25 @@ export function CameraScreen() {
 
             const pdState = phaseDetectorRef.current
 
+            const feedbackSync = repFeedbackSyncRef.current
+            const feedbackResult = nextRepFeedbackHud({
+              phase: autoResult.phase,
+              isAnalyst: isAnalystRef.current,
+              lastMissedReason: rcState.lastMissedRepReason,
+              rejectionCount: rcState.rejections.length,
+              completedRepThisFrame,
+              previousRejectionCount: feedbackSync.rejectionCount,
+              previousMissedReason: feedbackSync.lastMissedReason,
+            })
+            repFeedbackSyncRef.current = {
+              rejectionCount: feedbackResult.rejectionCount,
+              lastMissedReason: feedbackResult.lastMissedReason,
+            }
+            if (feedbackResult.message !== repFeedbackMessageRef.current) {
+              repFeedbackMessageRef.current = feedbackResult.message
+              setRepFeedback(feedbackResult.message)
+            }
+
             const debugData: DebugOverlayData = {
               autoStartPhase: autoResult.phase,
               squatPhase: pdState.phase,
@@ -563,7 +614,7 @@ export function CameraScreen() {
               hipY,
               hipDrop: currentHipDrop,
               repCount: rcState.repCount,
-              repCountDisplayed: repCount,
+              repCountDisplayed: repCountDisplayRef.current,
               poseConfidence: poseFrame.poseConfidence,
               lastValidation: rcState.lastValidation,
               candidateRepActive: rcState.activeRep !== null,
@@ -582,6 +633,7 @@ export function CameraScreen() {
               seatedLive: rcState.activeRep?.seatedMovementDetected ?? false,
               maxHipDropLive: rcState.activeRep?.maxHipDrop ?? 0,
               rejectionCount: rcState.rejections.length,
+              hudLeftReservePx: Math.round(canvas.height * 0.28),
             }
             if (showDebug) {
               drawDebugOverlay(ctx, debugData, canvas.width, canvas.height)
@@ -648,8 +700,18 @@ export function CameraScreen() {
     guidance,
   })
 
+  const stageLayoutClass = [
+    'camera-stage',
+    isAnalyst && 'camera-stage--analyst',
+    isAnalyst && show3D && 'camera-stage--analyst-3d',
+    isAnalyst && show3D && expand3D && 'camera-stage--analyst-3d-expanded',
+    isAnalyst && showDebug && 'camera-stage--analyst-debug',
+  ]
+    .filter(Boolean)
+    .join(' ')
+
   return (
-    <div className="camera-stage">
+    <div className={stageLayoutClass}>
       <video
         ref={videoRef}
         className={`camera-stage__media${FRONT_CAMERA_MIRROR ? ' camera-stage__media--mirror' : ''}`}
@@ -701,6 +763,8 @@ export function CameraScreen() {
               title={statusCopy.title}
               subtitle={statusCopy.subtitle}
               calibrationProgress={calibrationProgress}
+              missingJoints={missingJoints}
+              repFeedback={repFeedback}
             />
           </div>
 

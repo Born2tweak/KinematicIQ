@@ -28,6 +28,8 @@ export interface DebugOverlayData {
   maxHipDropLive: number
   /** Rejected rep candidates so far this set (gate diagnostics). */
   rejectionCount: number
+  /** Pixels reserved at the top-left for DOM HUD (status card + feedback). */
+  hudLeftReservePx?: number
 }
 
 const PHASE_COLORS: Record<SquatState, string> = {
@@ -55,13 +57,14 @@ export function drawDebugOverlay(
   canvasWidth: number,
   canvasHeight: number,
 ): void {
-  const lines = buildLines(data)
+  const lines = buildDebugOverlayLines(data)
 
   const padding = 10
   const fontSize = 13
-  const panelWidth = Math.min(320, canvasWidth * 0.52)
-  // Reserve the top ~22% of the stage for the DOM status card.
-  const panelTop = Math.max(120, Math.round(canvasHeight * 0.22))
+  const panelWidth = Math.min(300, canvasWidth * 0.48)
+  const reserve =
+    data.hudLeftReservePx ?? Math.max(120, Math.round(canvasHeight * 0.22))
+  const panelTop = Math.max(120, reserve)
   // Shrink line height if the panel would run past the bottom edge.
   const available = canvasHeight - panelTop - 16
   const lineHeight = Math.min(18, Math.max(12, Math.floor((available - padding * 2) / lines.length)))
@@ -104,7 +107,7 @@ function gate(label: string, passed: boolean): DebugLine {
   return { label, value: passed ? 'PASS' : 'FAIL', color: passed ? PASS : FAIL }
 }
 
-function buildLines(data: DebugOverlayData): DebugLine[] {
+export function buildDebugOverlayLines(data: DebugOverlayData): DebugLine[] {
   const kneeStr =
     data.emaKneeAngle !== null ? `${data.emaKneeAngle.toFixed(1)}°` : '---'
   const leftStr =

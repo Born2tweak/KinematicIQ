@@ -6,6 +6,8 @@ interface SessionStatusCardProps {
   subtitle: string
   calibrationProgress?: number
   missingJoints?: string[]
+  /** Coach-facing rep rejection notice (normal mode only). */
+  repFeedback?: string | null
   /** Render as a floating HUD pill for the full-bleed camera stage. */
   compact?: boolean
 }
@@ -53,6 +55,7 @@ export function SessionStatusCard({
   subtitle,
   calibrationProgress = 0,
   missingJoints = [],
+  repFeedback = null,
   compact = false,
 }: SessionStatusCardProps) {
   const tone = statusTone(phase)
@@ -65,6 +68,11 @@ export function SessionStatusCard({
           <span>{title}</span>
         </div>
         {subtitle && <p className="hud-status__subtitle">{subtitle}</p>}
+        {phase === 'ACTIVE' && repFeedback && (
+          <p className="hud-status__rep-feedback" role="status">
+            {repFeedback}
+          </p>
+        )}
         {phase === 'WAITING' && missingJoints.length > 0 && (
           <p className="hud-status__hint">
             Still need in frame: {missingJoints.join(', ')}
