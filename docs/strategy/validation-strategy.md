@@ -34,8 +34,27 @@
 - **Marker-based capture:** millimeter-level segmental kinematics, including spine segments. Markerless landmark models track joints coarsely; this is exactly why concept #7 is capped at low-confidence trunk drift.
 - **Multi-camera systems:** out-of-plane accuracy. Single camera means camera-angle sensitivity — hence "from this camera angle" in the allowed language.
 
-## Practical validation path (future, not scheduled)
+## Scientific Validation program (scheduled — runs in parallel with remaining Phase 1 work)
 
-1. Expert (coach) review sessions on real clips for all tier-(b) concepts — cheapest, first.
+Renamed from "Phase 1.5 — ground truth" (2026-07-03 design review, owner-accepted): ground-truth data is one input; **validation is the goal**. This is a data operation, not a coding phase — its lead time (recruiting, filming, labeling) cannot be compressed by engineering, so its clock starts now. No verdict vocabulary freezes (Phase 2) and no verdict label reaches `validated` (ontology §7) before the relevant deliverable below exists.
+
+### Deliverables
+
+1. **Dataset** — 20–30 real recorded squat sessions across **≥5 different bodies** (varied body types, clothing, lighting, settings), each captured as a pose tape (`PoseTapeMeta`) plus raw video, under the defined front-view protocol. Include deliberately induced patterns (hip-led, knee-led, trunk collapse, lateral shift) for tuning; wild/natural clips are **holdout-only**.
+2. **Labeling rubric + hand labels** — written rubric per question; qualified raters label rep count, bottom frames, and the four question verdicts per set. Rubric must state each label's counterfactual (§7 field 7) *before* labeling begins — a label whose counterfactual can't be written can't be validated.
+3. **Inter-rater agreement** — ≥2 qualified raters on the same clips, agreement measured per label **before the Phase 2 verdict vocabularies freeze**. If humans can't agree on `progressive-collapse`, no threshold rescues it — the label gets redefined, not retuned.
+4. **Test-retest reliability** — same athlete, same protocol, two recordings: report verdict stability. This is the foundation of the deviation-from-own-baseline pitch; a deviation flag is meaningless until it exceeds the instrument's own session-to-session noise.
+5. **Counterexample log** — clips/conditions that fool each label, maintained per §7 (`eval-clips/README.md`).
+
+### Recruiting clock (starts immediately — human lead time, no code dependency)
+
+- [ ] Identify 5–8 athletes willing to be filmed (varied bodies/settings); consent covering pose-tape storage and labeling.
+- [ ] Identify ≥2 qualified raters (S&C coach / PT / sport scientist) for the labeling and agreement study.
+- [ ] Fix the front-view capture protocol document (camera height, distance, framing) so every recording is protocol-compliant — protocol drift invalidates the dataset.
+- [ ] Schedule the first recording sessions; each athlete records two sessions (enables test-retest from the same collection effort).
+
+### Later tiers (unchanged in spirit)
+
+1. Expert (coach) review sessions on real clips for all tier-(b) concepts — cheapest, runs alongside labeling.
 2. If a partner offers instrumented facilities: side-by-side force-plate session for jump metrics and smoothness proxies (tier c).
-3. Publish the tiering openly in the product (analyst mode) — the willingness to show this table **is** the trust story.
+3. Publish the tiering openly in the product (analyst mode) — the willingness to show this table **is** the trust story (rendered per `report-design.md` §2.5).
