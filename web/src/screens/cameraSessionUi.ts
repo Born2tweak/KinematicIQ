@@ -1,4 +1,5 @@
 import type { AutoStartPhase } from '../analysis/autoStart'
+import type { CaptureGuidance } from '../cv/captureGuidance'
 
 export type CameraSessionPhase =
   | AutoStartPhase
@@ -16,15 +17,24 @@ export function getSessionStatusCopy(
     repCount: number
     finishCountdown: number | null
     missingJoints: string[]
+    /** Live positioning guidance — drives the WAITING copy dynamically. */
+    guidance?: CaptureGuidance | null
   },
 ): SessionStatusCopy {
   switch (phase) {
-    case 'WAITING':
+    case 'WAITING': {
+      if (options.guidance) {
+        return {
+          title: options.guidance.instruction,
+          subtitle: options.guidance.detail ?? '',
+        }
+      }
       return {
         title: 'Step into frame',
         subtitle:
-          'Back up until head, shoulders, hips, knees, and feet are visible side-on.',
+          'Position the camera at hip height, 3–4 m away, with your whole body in frame.',
       }
+    }
     case 'CALIBRATING':
       return {
         title: 'Hold still, calibrating',

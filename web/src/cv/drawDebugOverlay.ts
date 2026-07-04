@@ -26,6 +26,8 @@ export interface DebugOverlayData {
   previousPhase: SquatState
   seatedLive: boolean
   maxHipDropLive: number
+  /** Rejected rep candidates so far this set (gate diagnostics). */
+  rejectionCount: number
 }
 
 const PHASE_COLORS: Record<SquatState, string> = {
@@ -43,35 +45,41 @@ const AUTO_COLORS: Record<AutoStartPhase, string> = {
 }
 
 /**
- * Draws a translucent debug HUD in the top-left corner of the canvas.
- * All values update every frame so the developer can see the FSM in real time.
+ * Draws a translucent debug HUD along the left edge of the canvas, starting
+ * BELOW the top-left status card zone so the two never overlap. All values
+ * update every frame so the developer can see the FSM in real time.
  */
 export function drawDebugOverlay(
   ctx: CanvasRenderingContext2D,
   data: DebugOverlayData,
   canvasWidth: number,
+  canvasHeight: number,
 ): void {
   const lines = buildLines(data)
 
   const padding = 10
-  const lineHeight = 18
   const fontSize = 13
-  const panelHeight = padding * 2 + lines.length * lineHeight
   const panelWidth = Math.min(320, canvasWidth * 0.52)
+  // Reserve the top ~22% of the stage for the DOM status card.
+  const panelTop = Math.max(120, Math.round(canvasHeight * 0.22))
+  // Shrink line height if the panel would run past the bottom edge.
+  const available = canvasHeight - panelTop - 16
+  const lineHeight = Math.min(18, Math.max(12, Math.floor((available - padding * 2) / lines.length)))
+  const panelHeight = padding * 2 + lines.length * lineHeight
 
   ctx.save()
 
   // Panel background
   ctx.fillStyle = 'rgba(0, 0, 0, 0.65)'
   ctx.beginPath()
-  ctx.roundRect(8, 8, panelWidth, panelHeight, 6)
+  ctx.roundRect(8, panelTop, panelWidth, panelHeight, 6)
   ctx.fill()
 
   // Text
   ctx.font = `bold ${fontSize}px "JetBrains Mono", "Fira Code", monospace`
   ctx.textBaseline = 'top'
 
-  let y = 8 + padding
+  let y = panelTop + padding
   for (const line of lines) {
     ctx.fillStyle = line.color
     ctx.fillText(line.label, 8 + padding, y)
@@ -189,6 +197,11 @@ function buildLines(data: DebugOverlayData): DebugLine[] {
     { label: 'PREV PHASE', value: data.previousPhase, color: PHASE_COLORS[data.previousPhase] },
     { label: 'SEATED', value: data.seatedLive ? 'YES' : 'no', color: data.seatedLive ? '#ef4444' : '#6b7280' },
     { label: 'MAX H.DROP', value: data.maxHipDropLive.toFixed(3), color: data.maxHipDropLive > 0.30 ? '#ef4444' : '#6b7280' },
+    {
+      label: 'REJECTIONS',
+      value: String(data.rejectionCount),
+      color: data.rejectionCount > 0 ? '#facc15' : '#6b7280',
+    },
   ]
 
   const v = data.lastValidation

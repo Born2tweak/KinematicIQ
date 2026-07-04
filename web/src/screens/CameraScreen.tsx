@@ -41,7 +41,12 @@ import {
   LANDMARK_INDICES,
   type PoseFrame,
 } from '../cv/types'
-import { drawCalibrationGuides, checkCalibration } from '../cv/drawCalibration'
+import { checkCalibration } from '../cv/drawCalibration'
+import {
+  deriveCaptureGuidance,
+  drawCaptureStateBorder,
+  type CaptureGuidance,
+} from '../cv/captureGuidance'
 import { drawDebugOverlay, type DebugOverlayData } from '../cv/drawDebugOverlay'
 import { DepthSparkline } from '../components/DepthSparkline'
 import { useAnalystMode } from '../hooks/useAnalystMode'
@@ -109,6 +114,8 @@ export function CameraScreen() {
   const [isFinishing, setIsFinishing] = useState(false)
   const [showDebug, setShowDebug] = useState(false)
   const [show3D, setShow3D] = useState(false)
+  const [expand3D, setExpand3D] = useState(false)
+  const [guidance, setGuidance] = useState<CaptureGuidance | null>(null)
   const [isAnalyst, toggleAnalyst] = useAnalystMode()
 
   useEffect(() => {
@@ -574,9 +581,10 @@ export function CameraScreen() {
               previousPhase: rcState.previousPhase,
               seatedLive: rcState.activeRep?.seatedMovementDetected ?? false,
               maxHipDropLive: rcState.activeRep?.maxHipDrop ?? 0,
+              rejectionCount: rcState.rejections.length,
             }
             if (showDebug) {
-              drawDebugOverlay(ctx, debugData, canvas.width)
+              drawDebugOverlay(ctx, debugData, canvas.width, canvas.height)
             }
 
             frameIndex++
@@ -585,7 +593,19 @@ export function CameraScreen() {
           }
 
           if (setupPhase) {
-            drawCalibrationGuides(ctx, poseFrame, canvas.width, canvas.height)
+            const nextGuidance = deriveCaptureGuidance(poseFrame)
+            drawCaptureStateBorder(
+              ctx,
+              nextGuidance.ok,
+              canvas.width,
+              canvas.height,
+            )
+            setGuidance((prev) =>
+              prev?.instruction === nextGuidance.instruction &&
+              prev?.ok === nextGuidance.ok
+                ? prev
+                : nextGuidance,
+            )
           }
 
           setMissingJoints((prev) => {
@@ -625,6 +645,7 @@ export function CameraScreen() {
     repCount,
     finishCountdown,
     missingJoints,
+    guidance,
   })
 
   return (
@@ -680,7 +701,6 @@ export function CameraScreen() {
               title={statusCopy.title}
               subtitle={statusCopy.subtitle}
               calibrationProgress={calibrationProgress}
-              missingJoints={missingJoints}
             />
           </div>
 
@@ -738,7 +758,22 @@ export function CameraScreen() {
           </div>
 
           {isAnalyst && show3D && (
-            <div className="camera-3d-panel">
+            <div
+              className={`camera-3d-panel${expand3D ? ' camera-3d-panel--expanded' : ''}`}
+            >
+              <button
+                type="button"
+                className="camera-3d-expand"
+                onClick={() => setExpand3D((prev) => !prev)}
+                aria-pressed={expand3D}
+                title={
+                  expand3D
+                    ? 'Collapse the 3D inspection view'
+                    : 'Expand the 3D view for inspection'
+                }
+              >
+                {expand3D ? 'Collapse' : 'Expand'}
+              </button>
               <Suspense fallback={null}>
                 <PoseScene3D poseRef={pose3DRef} mirror={FRONT_CAMERA_MIRROR} />
               </Suspense>
@@ -759,9 +794,6 @@ export function CameraScreen() {
                 Cancel
               </Button>
             </div>
-            <p className="camera-hud__hint">
-              Sets end automatically when you stand still after your last rep.
-            </p>
             {displayPhase !== 'ACTIVE' && <DisclaimerBanner />}
           </div>
         </>
