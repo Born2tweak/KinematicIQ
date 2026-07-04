@@ -27,7 +27,7 @@ const ANALYZE_STEPS = [
   { label: 'Track', at: 20 },
   { label: 'Measure', at: 45 },
   { label: 'Detect', at: 70 },
-  { label: 'Score', at: 92 },
+  { label: 'Report', at: 92 },
 ] as const
 
 function formatDuration(seconds: number): string {
@@ -399,7 +399,7 @@ export function UploadScreen() {
               </div>
               <p className="upload-analyzing__caption">
                 Analyzing on-device — {progress}%. Tracking pose, counting
-                reps, and scoring this set.
+                reps, and reading this set&apos;s movement.
               </p>
               <div className="btn-group btn-group--row">
                 <Button variant="ghost" onClick={handleCancelAnalysis}>

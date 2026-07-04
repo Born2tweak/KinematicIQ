@@ -25,9 +25,9 @@ const PIPELINE_STEPS = [
     text: 'A movement state machine identifies descent, bottom, and ascent, then counts reps — and rejects ones that don\'t qualify, so partial reps never inflate your numbers.',
   },
   {
-    title: 'Score',
-    short: '0–100, transparent',
-    text: 'Each set is scored across five weighted components: depth, trunk control, knee tracking, consistency, and symmetry. Every number comes with the exact thresholds behind it.',
+    title: 'Report',
+    short: 'Posture profile',
+    text: 'Each set becomes a posture profile with per-area observations — depth, trunk control, knee tracking, consistency, and symmetry — each with the exact measurements and confidence behind it.',
   },
   {
     title: 'Coach',
@@ -69,8 +69,8 @@ const BENEFITS = [
     text: 'No wearables, force plates, or reflective markers. If you have a camera, you have a movement lab.',
   },
   {
-    title: 'Transparent scoring',
-    text: 'No black box. Every score shows its components, weights, and the exact angle thresholds it measured against.',
+    title: 'Transparent analysis',
+    text: 'No black box. Every observation shows its evidence, confidence, and the exact angle thresholds it measured against.',
   },
   {
     title: 'Honest about confidence',
@@ -80,7 +80,7 @@ const BENEFITS = [
 
 const STATS = [
   { value: '33', label: 'body landmarks tracked per frame' },
-  { value: '5', label: 'weighted scoring components' },
+  { value: '5', label: 'movement areas observed per set' },
   { value: '0', label: 'videos uploaded — fully on-device' },
   { value: '100%', label: 'browser-based, nothing to install' },
 ] as const
@@ -136,10 +136,10 @@ export function LandingScreen() {
       {/* Demo video */}
       <section className="landing-section" id="demo">
         <p className="landing-eyebrow">Product demo</p>
-        <h2 className="landing-section__title">Watch a full session, start to score</h2>
+        <h2 className="landing-section__title">Watch a full session, start to report</h2>
         <p className="landing-section__lead">
           Calibration, tracking, validated reps, auto-finish, and a transparent
-          score — all in under a minute, all on your own device.
+          movement report — all in under a minute, all on your own device.
         </p>
         <SessionDemoPlayer />
       </section>

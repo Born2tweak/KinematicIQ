@@ -39,7 +39,7 @@ export function calculateSessionConfidence(
 export function confidenceResultsMessage(level: ConfidenceLevel): string | null {
   if (level === 'High') return null
   if (level === 'Medium') {
-    return 'Tracking was decent but not perfect. Use these scores to compare sets in similar lighting — not as exact measurements.'
+    return 'Tracking was decent but not perfect. Use these readings to compare sets recorded in similar lighting — not as exact measurements.'
   }
   return 'Camera confidence was low, so treat this as a rough read. Try better lighting and a full-body view, then run another set.'
 }
