@@ -96,6 +96,87 @@ export interface RepValidation {
   rejectionReason: string | null
 }
 
+/** Machine-readable id of the gate that rejected a rep candidate. */
+export type RepGateId =
+  | 'bottom'
+  | 'duration'
+  | 'confidence'
+  | 'knee-lift'
+  | 'seated'
+  | 'tracking-lost'
+  | 'lockout'
+  | 'standing-return'
+  | 'unknown'
+
+/**
+ * Diagnostic record of a rejected rep candidate — which gate fired, when,
+ * and the supporting values at rejection time. Collected so real sessions
+ * can be audited against ground truth (validation program) WITHOUT any
+ * threshold changes. Never used for live decisions.
+ */
+export interface RepRejection {
+  gate: RepGateId
+  reason: string
+  startFrameIndex: number
+  endFrameIndex: number
+  startTimestamp: number
+  endTimestamp: number
+  durationMs: number
+  values: {
+    minLeftKneeAngle: number | null
+    minRightKneeAngle: number | null
+    maxHipDrop: number
+    bottomHoldMs: number
+    avgConfidence: number
+    reachedBottom: boolean
+  }
+}
+
+/** Bound the diagnostic log so a long noisy session can't grow unbounded. */
+const MAX_REJECTIONS = 50
+
+function gateForReason(reason: string): RepGateId {
+  if (reason.startsWith('Bottom not held')) return 'bottom'
+  if (reason.startsWith('Too fast') || reason.startsWith('Too slow')) {
+    return 'duration'
+  }
+  if (reason.startsWith('Pose confidence')) return 'confidence'
+  if (reason.startsWith('Knee lift')) return 'knee-lift'
+  if (reason.startsWith('Movement looked seated')) return 'seated'
+  if (reason.startsWith('Tracking lost')) return 'tracking-lost'
+  if (reason.startsWith('Knee angle never passed')) return 'lockout'
+  if (reason.startsWith('Did not return')) return 'standing-return'
+  return 'unknown'
+}
+
+function buildRejection(
+  activeRep: ActiveRep,
+  reason: string,
+  frame: PoseFrame,
+  reachedBottom: boolean,
+): RepRejection {
+  return {
+    gate: gateForReason(reason),
+    reason,
+    startFrameIndex: activeRep.startFrameIndex,
+    endFrameIndex: frame.frameIndex,
+    startTimestamp: activeRep.startTimestamp,
+    endTimestamp: frame.timestamp,
+    durationMs: frame.timestamp - activeRep.startTimestamp,
+    values: {
+      minLeftKneeAngle: activeRep.minLeftKneeAngle,
+      minRightKneeAngle: activeRep.minRightKneeAngle,
+      maxHipDrop: activeRep.maxHipDrop,
+      bottomHoldMs: activeRep.bottomHoldMs,
+      avgConfidence:
+        activeRep.confidenceSamples > 0
+          ? activeRep.confidenceSum / activeRep.confidenceSamples
+          : 0,
+      reachedBottom,
+    },
+  }
+}
+
 interface ActiveRep {
   startFrameIndex: number
   startTimestamp: number
@@ -137,6 +218,8 @@ export interface RepCounterState {
   blockingGate: string | null
   /** Last failed attempt after bottom was reached (debug HUD). */
   lastMissedRepReason: string | null
+  /** Diagnostic log of every rejected rep candidate this set (capped). */
+  rejections: RepRejection[]
   /** Movement-specific validation gates, fixed at creation. */
   config: RepGateConfig
 }
@@ -172,6 +255,7 @@ export function createRepCounterState(
     standingCompletionFrames: 0,
     blockingGate: null,
     lastMissedRepReason: null,
+    rejections: [],
     config,
   }
 }
@@ -706,6 +790,7 @@ export function updateRepCounter(
   let standingCompletionFrames = state.standingCompletionFrames
   let blockingGate = state.blockingGate
   let lastMissedRepReason = state.lastMissedRepReason
+  let rejections = state.rejections
 
   const prevPhase = state.previousPhase
 
@@ -724,6 +809,10 @@ export function updateRepCounter(
       cfg,
     )
     lastMissedRepReason = reason
+    rejections = [
+      ...rejections,
+      buildRejection(activeRep, reason, input.frame, reachedBottom),
+    ].slice(-MAX_REJECTIONS)
     console.log(`[RepCounter] MISSED REP: ${reason}`)
     activeRep = null
     reachedBottom = false
@@ -805,8 +894,12 @@ export function updateRepCounter(
       completedRep = outcome.completedRep
       reps = [...reps, completedRep]
     } else {
-      lastMissedRepReason =
-        outcome.lastValidation.rejectionReason ?? 'Rep rejected'
+      const reason = outcome.lastValidation.rejectionReason ?? 'Rep rejected'
+      lastMissedRepReason = reason
+      rejections = [
+        ...rejections,
+        buildRejection(activeRep, reason, input.frame, reachedBottom),
+      ].slice(-MAX_REJECTIONS)
     }
     activeRep = null
     reachedBottom = false
@@ -851,6 +944,7 @@ export function updateRepCounter(
       standingCompletionFrames,
       blockingGate,
       lastMissedRepReason,
+      rejections,
       config: cfg,
     },
   }

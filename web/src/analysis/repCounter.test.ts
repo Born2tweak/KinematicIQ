@@ -43,6 +43,32 @@ describe('repCounter', () => {
     expect(result.reps).toHaveLength(0)
   })
 
+  it('records a gate diagnostic for every rejected rep candidate', () => {
+    const result = runSquatPipeline(partialSquatScript(), {
+      standingKneeBaseline: 168,
+      calibratedHipY: 0.4,
+    })
+    expect(result.repCount).toBe(0)
+    const rejections = result.repState.rejections
+    expect(rejections.length).toBeGreaterThan(0)
+    const first = rejections[0]
+    expect(first.gate).toBe('bottom')
+    expect(first.reason).toMatch(/bottom not held/i)
+    expect(first.durationMs).toBeGreaterThan(0)
+    expect(first.endFrameIndex).toBeGreaterThanOrEqual(first.startFrameIndex)
+    expect(first.values.reachedBottom).toBe(false)
+    expect(first.values.avgConfidence).toBeGreaterThan(0)
+  })
+
+  it('does not record diagnostics for counted reps', () => {
+    const result = runSquatPipeline(deepSquatRepScript(), {
+      standingKneeBaseline: 168,
+      calibratedHipY: 0.4,
+    })
+    expect(result.repCount).toBe(1)
+    expect(result.repState.rejections).toHaveLength(0)
+  })
+
   it('rejects chair bounce (seated movement heuristic)', () => {
     const result = runSquatPipeline(chairBounceScript(), {
       standingKneeBaseline: 168,
