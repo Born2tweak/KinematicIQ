@@ -1,28 +1,3 @@
-import type { ScoreBand } from '../session/types'
-
-/**
- * How much each component contributes to the total score (must sum to 1.0).
- * Depth and trunk matter most for a side-view bodyweight squat read.
- */
-export const SCORE_WEIGHTS = {
-  depth: 0.3,
-  trunkControl: 0.25,
-  kneeTracking: 0.2,
-  consistency: 0.15,
-  symmetry: 0.1,
-} as const
-
-/** Total score → user-facing band labels. */
-export const TOTAL_SCORE_BAND_THRESHOLDS = {
-  /** 80–100: strong set on all weighted components. */
-  excellentMin: 80,
-  /** 60–79: solid with clear room in one or two areas. */
-  goodMin: 60,
-  /** 40–59: several components below target. */
-  needsWorkMin: 40,
-  /** 0–39: multiple limiting factors in this camera view. */
-} as const
-
 /**
  * Depth — average minimum knee angle across reps (degrees).
  * Smaller angle = deeper squat (more hip/knee flexion).
@@ -108,9 +83,9 @@ export const HIP_SHIFT_THRESHOLDS = {
 export const SESSION_CONFIDENCE_THRESHOLDS = {
   /** ≥75: metrics and cues treated as reliable for this setup. */
   highMin: 75,
-  /** 50–74: scores shown with directional disclaimer. */
+  /** 50–74: component reads shown with directional disclaimer. */
   mediumMin: 50,
-  /** <50: insufficient data — total score shown but no coaching cards. */
+  /** <50: insufficient data — reads shown as rough only, no coaching cards. */
 } as const
 
 /** Default component score when a metric cannot be measured (neutral, not punitive). */
@@ -118,13 +93,6 @@ export const MISSING_METRIC_NEUTRAL_SCORE = 50
 
 /** Consistency score when only one rep was tracked (cannot compute CV). */
 export const SINGLE_REP_CONSISTENCY_SCORE = 70
-
-export function bandFromScore(score: number): ScoreBand {
-  if (score >= TOTAL_SCORE_BAND_THRESHOLDS.excellentMin) return 'Excellent'
-  if (score >= TOTAL_SCORE_BAND_THRESHOLDS.goodMin) return 'Good'
-  if (score >= TOTAL_SCORE_BAND_THRESHOLDS.needsWorkMin) return 'Needs Work'
-  return 'Poor'
-}
 
 /** Lower-is-better banding shared by every scored component. */
 export interface BandThresholds {
@@ -139,13 +107,6 @@ export interface BandThresholds {
  * (see analysis/movement/profiles/).
  */
 export interface MovementScoringConfig {
-  weights: {
-    depth: number
-    trunkControl: number
-    kneeTracking: number
-    consistency: number
-    symmetry: number
-  }
   depth: BandThresholds
   trunk: BandThresholds
   kneeAsymmetry: BandThresholds
@@ -157,7 +118,6 @@ export interface MovementScoringConfig {
 
 /** Bodyweight-squat scoring configuration. */
 export const SQUAT_SCORING_CONFIG: MovementScoringConfig = {
-  weights: SCORE_WEIGHTS,
   depth: DEPTH_THRESHOLDS,
   trunk: TRUNK_THRESHOLDS,
   kneeAsymmetry: KNEE_ASYMMETRY_THRESHOLDS,

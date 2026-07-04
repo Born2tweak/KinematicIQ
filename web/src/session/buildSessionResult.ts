@@ -7,7 +7,7 @@ import {
   NO_REPS_MESSAGE,
   generateFeedback,
 } from '../feedback/feedbackEngine'
-import { scoreSet } from '../scoring/scoringEngine'
+import { computeComponentScores } from '../scoring/scoringEngine'
 import type { RepMetrics } from '../cv/types'
 import type { SessionResult } from './types'
 
@@ -36,7 +36,7 @@ export function buildSessionResult(
     }
   }
 
-  const scoring = scoreSet(metrics)
+  const scoring = computeComponentScores(metrics)
   const insufficientData = sessionConfidence === 'Low'
   const feedback = insufficientData
     ? []
@@ -60,7 +60,7 @@ export function buildResultsSummary(result: SessionResult): string {
   if (result.insufficientData) return INSUFFICIENT_DATA_MESSAGE
   if (!result.scoring) return 'Set complete — your breakdown is below.'
 
-  const { metrics, scoring, sessionConfidence } = result
+  const { metrics, sessionConfidence } = result
   const repLine = `${metrics.repCount} rep${metrics.repCount === 1 ? '' : 's'} from this camera view`
 
   const depthPart =
@@ -68,9 +68,7 @@ export function buildResultsSummary(result: SessionResult): string {
       ? ` · avg depth ~${Math.round(metrics.avgDepth)}° knee bend`
       : ''
 
-  const scorePart = ` · movement score ${scoring.totalScore}/100 (${scoring.band})`
-
-  let summary = `${repLine}${depthPart}${scorePart}.`
+  let summary = `${repLine}${depthPart}.`
 
   if (sessionConfidence === 'Medium') {
     summary += ' Good enough to compare sets — brighter light or a bit more distance can sharpen the read.'

@@ -33,22 +33,26 @@ describe('buildSessionResult', () => {
     expect(result.metrics.repCount).toBe(0)
   })
 
-  it('builds scoring and feedback for a valid multi-rep set', () => {
+  it('builds component evidence and feedback for a valid multi-rep set', () => {
     const reps = [makeRep(1), makeRep(2), makeRep(3)]
     const result = buildSessionResult(reps, [0.85, 0.88, 0.9])
     expect(result.noRepsDetected).toBe(false)
     expect(result.metrics.repCount).toBe(3)
     expect(result.scoring).not.toBeNull()
-    expect(result.scoring!.totalScore).toBeGreaterThan(0)
+    // Components survive as evidence; no composite total/band is produced.
+    expect(result.scoring!.depth).toBeGreaterThanOrEqual(0)
+    expect(result.scoring).not.toHaveProperty('totalScore')
+    expect(result.scoring).not.toHaveProperty('band')
     expect(result.sessionConfidence).toBeTruthy()
   })
 
-  it('summary mentions rep count when scoring is available', () => {
+  it('summary mentions rep count and never shows a 0–100 score', () => {
     const reps = [makeRep(1), makeRep(2)]
     const result = buildSessionResult(reps, [0.9, 0.9, 0.88])
     const summary = buildResultsSummary(result)
     expect(summary).toContain('2')
-    expect(summary).toContain('100')
+    expect(summary).not.toMatch(/\/100/)
+    expect(summary).not.toMatch(/movement score/i)
   })
 
   it('summary uses no-reps message when empty', () => {

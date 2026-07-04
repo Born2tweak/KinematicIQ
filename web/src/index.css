@@ -1804,8 +1804,15 @@ img {
   color: var(--color-text-muted);
 }
 
+.component-score-card__measured {
+  margin: var(--space-xs) 0 0;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--color-text);
+}
+
 .component-score-card__details {
-  margin: 0;
+  margin: var(--space-sm) 0 0;
   display: flex;
   flex-direction: column;
   gap: var(--space-sm);
@@ -2469,6 +2476,14 @@ img {
   gap: var(--space-md);
   background: rgba(10, 10, 15, 0.82);
   backdrop-filter: blur(4px);
+}
+
+.demo-player__results-heading {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
 }
 
 .demo-player__score-ring {

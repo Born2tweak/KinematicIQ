@@ -4,18 +4,20 @@ import {
   DEPTH_THRESHOLDS,
   HIP_SHIFT_THRESHOLDS,
   KNEE_ASYMMETRY_THRESHOLDS,
-  SCORE_WEIGHTS,
   TRUNK_THRESHOLDS,
 } from './scoringConfig'
 
 export type ComponentKey = keyof ComponentScores
 
+/**
+ * Per-component evidence surfaced to the user: what the camera measured and
+ * what that observation means for the movement. Deliberately no 0–100 score
+ * and no weighting — the composite score was removed (ontology §6 #15); these
+ * reads survive only as observable evidence.
+ */
 export interface ComponentScoreExplanation {
   key: ComponentKey
   label: string
-  score: number
-  /** Share of total score (e.g. 30). */
-  weightPercent: number
   measured: string
   explanation: string
 }
@@ -28,7 +30,7 @@ const LABELS: Record<ComponentKey, string> = {
   symmetry: 'Symmetry',
 }
 
-function scoreTier(
+function tier(
   value: number,
   excellentMax: number,
   goodMax: number,
@@ -40,20 +42,20 @@ function scoreTier(
   return 'limiting'
 }
 
-function depthExplanation(metrics: SetMetricsSummary, score: number): Omit<ComponentScoreExplanation, 'key' | 'label' | 'weightPercent'> {
+type Partial = Omit<ComponentScoreExplanation, 'key' | 'label'>
+
+function depthExplanation(metrics: SetMetricsSummary): Partial {
   const avg = metrics.avgDepth
-  const weightPercent = Math.round(SCORE_WEIGHTS.depth * 100)
 
   if (avg === null) {
     return {
-      score,
       measured: 'Bottom knee angle not readable on every rep.',
       explanation:
-        'Depth could not be scored reliably. Missing depth data lowers this component and the total score.',
+        'Depth could not be read reliably — the camera did not see a clear bottom knee angle each rep.',
     }
   }
 
-  const tier = scoreTier(
+  const t = tier(
     avg,
     DEPTH_THRESHOLDS.excellentMax,
     DEPTH_THRESHOLDS.goodMax,
@@ -65,40 +67,35 @@ function depthExplanation(metrics: SetMetricsSummary, score: number): Omit<Compo
       : ''
   }.`
 
-  if (tier === 'strong') {
+  if (t === 'strong') {
     return {
-      score,
       measured,
-      explanation: `At or below the ${DEPTH_THRESHOLDS.goodMax}° target, depth counted as a strength (${weightPercent}% of your total).`,
+      explanation: `At or below the ${DEPTH_THRESHOLDS.goodMax}° target, your hips sat low through the bottom of each rep.`,
     }
   }
-  if (tier === 'limiting') {
+  if (t === 'limiting') {
     return {
-      score,
       measured,
-      explanation: `Above ~${DEPTH_THRESHOLDS.goodMax}° reads as shallow from the side camera. That reduced the depth component (${weightPercent}% of total).`,
+      explanation: `Above ~${DEPTH_THRESHOLDS.goodMax}° reads as shallow from the side camera — the hips did not travel as far into the squat.`,
     }
   }
   return {
-    score,
     measured,
-    explanation: `Between deep and shallow targets (${DEPTH_THRESHOLDS.excellentMax}°–${DEPTH_THRESHOLDS.needsWorkMax}° band). Moderate depth score (${weightPercent}% of total).`,
+    explanation: `Between the deep and shallow targets (${DEPTH_THRESHOLDS.excellentMax}°–${DEPTH_THRESHOLDS.needsWorkMax}° band).`,
   }
 }
 
-function trunkExplanation(metrics: SetMetricsSummary, score: number): Omit<ComponentScoreExplanation, 'key' | 'label' | 'weightPercent'> {
+function trunkExplanation(metrics: SetMetricsSummary): Partial {
   const avg = metrics.avgTrunkLean
-  const weightPercent = Math.round(SCORE_WEIGHTS.trunkControl * 100)
 
   if (avg === null) {
     return {
-      score,
       measured: 'Trunk angle not visible on every rep.',
-      explanation: `Trunk control contributes ${weightPercent}% of the total; missing data held this score down.`,
+      explanation: 'The camera could not read the shoulder-to-hip angle on every rep.',
     }
   }
 
-  const tier = scoreTier(
+  const t = tier(
     avg,
     TRUNK_THRESHOLDS.excellentMax,
     TRUNK_THRESHOLDS.goodMax,
@@ -106,40 +103,35 @@ function trunkExplanation(metrics: SetMetricsSummary, score: number): Omit<Compo
   )
   const measured = `Average forward lean: ${Math.round(avg)}° from vertical.`
 
-  if (tier === 'strong') {
+  if (t === 'strong') {
     return {
-      score,
       measured,
-      explanation: `Chest stayed relatively upright (≤${TRUNK_THRESHOLDS.excellentMax}° lean target). Strong trunk score (${weightPercent}% of total).`,
+      explanation: `Chest stayed relatively upright (≤${TRUNK_THRESHOLDS.excellentMax}° lean target) through the set.`,
     }
   }
-  if (tier === 'limiting') {
+  if (t === 'limiting') {
     return {
-      score,
       measured,
-      explanation: `Lean above ${TRUNK_THRESHOLDS.goodMax}° pulled trunk control down (${weightPercent}% of total).`,
+      explanation: `Lean above ${TRUNK_THRESHOLDS.goodMax}° means the chest tipped noticeably toward the floor.`,
     }
   }
   return {
-    score,
     measured,
-    explanation: `Moderate trunk angle for this set (${weightPercent}% of total).`,
+    explanation: 'Moderate forward lean for this set.',
   }
 }
 
-function kneeExplanation(metrics: SetMetricsSummary, score: number): Omit<ComponentScoreExplanation, 'key' | 'label' | 'weightPercent'> {
+function kneeExplanation(metrics: SetMetricsSummary): Partial {
   const asym = metrics.avgKneeAsymmetry
-  const weightPercent = Math.round(SCORE_WEIGHTS.kneeTracking * 100)
 
   if (asym === null) {
     return {
-      score,
       measured: 'Left/right knee bend not clear on both sides.',
-      explanation: `Neutral knee-tracking score applied (${weightPercent}% weight) — not enough side-by-side data.`,
+      explanation: 'Not enough side-by-side data to compare left and right knee bend.',
     }
   }
 
-  const tier = scoreTier(
+  const t = tier(
     asym,
     KNEE_ASYMMETRY_THRESHOLDS.excellentMax,
     KNEE_ASYMMETRY_THRESHOLDS.goodMax,
@@ -147,48 +139,42 @@ function kneeExplanation(metrics: SetMetricsSummary, score: number): Omit<Compon
   )
   const measured = `Average left–right knee difference at bottom: ${Math.round(asym)}°.`
 
-  if (tier === 'strong') {
+  if (t === 'strong') {
     return {
-      score,
       measured,
-      explanation: `Even knee bend (≤${KNEE_ASYMMETRY_THRESHOLDS.excellentMax}° difference). Helped the total via ${weightPercent}% weighting.`,
+      explanation: `Even knee bend (≤${KNEE_ASYMMETRY_THRESHOLDS.excellentMax}° difference) side to side.`,
     }
   }
-  if (tier === 'limiting') {
+  if (t === 'limiting') {
     return {
-      score,
       measured,
-      explanation: `Asymmetry above ${KNEE_ASYMMETRY_THRESHOLDS.goodMax}° lowered knee tracking (${weightPercent}% of total). This reflects uneven bend, not a clinical diagnosis.`,
+      explanation: `Asymmetry above ${KNEE_ASYMMETRY_THRESHOLDS.goodMax}° means one knee bent noticeably more than the other. This reflects uneven bend, not a clinical diagnosis.`,
     }
   }
   return {
-    score,
     measured,
-    explanation: `Some left–right mismatch (${weightPercent}% of total).`,
+    explanation: 'Some left–right mismatch in knee bend.',
   }
 }
 
-function consistencyExplanation(metrics: SetMetricsSummary, score: number): Omit<ComponentScoreExplanation, 'key' | 'label' | 'weightPercent'> {
+function consistencyExplanation(metrics: SetMetricsSummary): Partial {
   const cv = metrics.depthCV
-  const weightPercent = Math.round(SCORE_WEIGHTS.consistency * 100)
 
   if (metrics.repCount < 2) {
     return {
-      score,
-      measured: `Only ${metrics.repCount} rep tracked — variation not scored.`,
-      explanation: `Consistency uses a neutral default until at least two reps are counted (${weightPercent}% weight).`,
+      measured: `Only ${metrics.repCount} rep tracked — variation not compared.`,
+      explanation: 'Consistency needs at least two counted reps to compare bottom positions.',
     }
   }
 
   if (cv === null) {
     return {
-      score,
       measured: 'Depth variation could not be calculated.',
-      explanation: `Neutral consistency score (${weightPercent}% of total).`,
+      explanation: 'Not enough readable depth data to compare reps.',
     }
   }
 
-  const tier = scoreTier(
+  const t = tier(
     cv,
     CONSISTENCY_CV_THRESHOLDS.excellentMax,
     CONSISTENCY_CV_THRESHOLDS.goodMax,
@@ -196,40 +182,35 @@ function consistencyExplanation(metrics: SetMetricsSummary, score: number): Omit
   )
   const measured = `Depth variation across reps: ${cv.toFixed(0)}% (coefficient of variation).`
 
-  if (tier === 'strong') {
+  if (t === 'strong') {
     return {
-      score,
       measured,
-      explanation: `Very repeatable depth (≤${CONSISTENCY_CV_THRESHOLDS.excellentMax}% spread). ${weightPercent}% of total.`,
+      explanation: `Very repeatable depth (≤${CONSISTENCY_CV_THRESHOLDS.excellentMax}% spread) rep to rep.`,
     }
   }
-  if (tier === 'limiting') {
+  if (t === 'limiting') {
     return {
-      score,
       measured,
-      explanation: `Spread above ${CONSISTENCY_CV_THRESHOLDS.goodMax}% reduced consistency (${weightPercent}% of total).`,
+      explanation: `Spread above ${CONSISTENCY_CV_THRESHOLDS.goodMax}% means bottom depth changed a lot between reps.`,
     }
   }
   return {
-    score,
     measured,
-    explanation: `Normal rep-to-rep variation (${weightPercent}% of total).`,
+    explanation: 'Normal rep-to-rep variation in depth.',
   }
 }
 
-function symmetryExplanation(metrics: SetMetricsSummary, score: number): Omit<ComponentScoreExplanation, 'key' | 'label' | 'weightPercent'> {
+function symmetryExplanation(metrics: SetMetricsSummary): Partial {
   const shift = metrics.avgHipShift
-  const weightPercent = Math.round(SCORE_WEIGHTS.symmetry * 100)
 
   if (shift === null) {
     return {
-      score,
       measured: 'Hip position at bottom not clear every rep.',
-      explanation: `Neutral symmetry score (${weightPercent}% weight).`,
+      explanation: 'The camera could not read hip position at the bottom on every rep.',
     }
   }
 
-  const tier = scoreTier(
+  const t = tier(
     shift,
     HIP_SHIFT_THRESHOLDS.excellentMax,
     HIP_SHIFT_THRESHOLDS.goodMax,
@@ -237,31 +218,25 @@ function symmetryExplanation(metrics: SetMetricsSummary, score: number): Omit<Co
   )
   const measured = `Hip shift at bottom: ~${(shift * 100).toFixed(0)}% of frame width off center.`
 
-  if (tier === 'strong') {
+  if (t === 'strong') {
     return {
-      score,
       measured,
-      explanation: `Hips stayed near midline (≤${(HIP_SHIFT_THRESHOLDS.excellentMax * 100).toFixed(0)}% shift). ${weightPercent}% of total.`,
+      explanation: `Hips stayed near midline (≤${(HIP_SHIFT_THRESHOLDS.excellentMax * 100).toFixed(0)}% shift) at the bottom.`,
     }
   }
-  if (tier === 'limiting') {
+  if (t === 'limiting') {
     return {
-      score,
       measured,
-      explanation: `Lateral hip shift above ${(HIP_SHIFT_THRESHOLDS.goodMax * 100).toFixed(0)}% lowered symmetry (${weightPercent}% of total).`,
+      explanation: `Lateral hip shift above ${(HIP_SHIFT_THRESHOLDS.goodMax * 100).toFixed(0)}% means the hips drifted toward one side.`,
     }
   }
   return {
-    score,
     measured,
-    explanation: `Slight off-center pattern (${weightPercent}% of total).`,
+    explanation: 'Slight off-center hip position at the bottom.',
   }
 }
 
-const BUILDERS: Record<
-  ComponentKey,
-  (metrics: SetMetricsSummary, score: number) => Omit<ComponentScoreExplanation, 'key' | 'label' | 'weightPercent'>
-> = {
+const BUILDERS: Record<ComponentKey, (metrics: SetMetricsSummary) => Partial> = {
   depth: depthExplanation,
   trunkControl: trunkExplanation,
   kneeTracking: kneeExplanation,
@@ -271,7 +246,6 @@ const BUILDERS: Record<
 
 export function buildComponentScoreExplanations(
   metrics: SetMetricsSummary,
-  components: ComponentScores,
 ): ComponentScoreExplanation[] {
   const keys: ComponentKey[] = [
     'depth',
@@ -281,16 +255,9 @@ export function buildComponentScoreExplanations(
     'symmetry',
   ]
 
-  return keys.map((key) => {
-    const partial = BUILDERS[key](metrics, components[key])
-    return {
-      key,
-      label: LABELS[key],
-      weightPercent: Math.round(SCORE_WEIGHTS[key] * 100),
-      ...partial,
-    }
-  })
+  return keys.map((key) => ({
+    key,
+    label: LABELS[key],
+    ...BUILDERS[key](metrics),
+  }))
 }
-
-export const SCORE_FORMULA_SUMMARY =
-  'Weighted from depth (30%), trunk (25%), knees (20%), consistency (15%), and symmetry (10%).'

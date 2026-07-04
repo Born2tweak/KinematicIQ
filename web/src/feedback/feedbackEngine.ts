@@ -1,7 +1,7 @@
 import type {
   CoachingCue,
+  ComponentScores,
   ConfidenceLevel,
-  ScoringResult,
   SetMetricsSummary,
 } from '../session/types'
 import {
@@ -10,7 +10,7 @@ import {
 } from './feedbackReasoning'
 
 export function generateFeedback(
-  scoring: ScoringResult,
+  components: ComponentScores,
   sessionConfidence: ConfidenceLevel,
   metrics: SetMetricsSummary,
   maxCues = 2,
@@ -19,7 +19,7 @@ export function generateFeedback(
     return []
   }
 
-  const keys = lowestComponents(scoring.components, maxCues)
+  const keys = lowestComponents(components, maxCues)
   return keys.map((key) => {
     const cue = buildBiomechanicalCue(key, metrics, sessionConfidence)
     return {
@@ -34,7 +34,7 @@ export function generateFeedback(
 }
 
 export const INSUFFICIENT_DATA_MESSAGE =
-  'Tracking was too weak for coaching tips. Scores below are directional only — improve lighting, step back for a full-body view, and try again.'
+  'Tracking was too weak for coaching tips. The reads below are directional only — improve lighting, step back for a full-body view, and try again.'
 
 export const NO_REPS_MESSAGE =
   'No full reps were counted. Get calibrated on camera, then do clear down-and-up reps with a pause at the bottom.'

@@ -13,8 +13,8 @@ import type { ActivationConfig } from '../setActivation'
 import type { MovementScoringConfig } from '../../scoring/scoringConfig'
 import type {
   CoachingCue,
+  ComponentScores,
   ConfidenceLevel,
-  ScoringResult,
   SetMetricsSummary,
 } from '../../session/types'
 
@@ -29,9 +29,9 @@ export type MovementId = 'squat' | 'hipHinge' | 'jump' | 'sprint'
  */
 export type MovementKind = 'cyclic' | 'ballistic' | 'gait'
 
-/** Builds the movement's coaching cues from its scored set. */
+/** Builds the movement's coaching cues from its per-component evidence. */
 export type FeedbackBuilder = (
-  scoring: ScoringResult,
+  components: ComponentScores,
   sessionConfidence: ConfidenceLevel,
   metrics: SetMetricsSummary,
 ) => CoachingCue[]

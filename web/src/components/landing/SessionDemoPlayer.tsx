@@ -52,7 +52,6 @@ const TOTAL_REPS = 3
 const ACTIVE_MS = TOTAL_REPS * CYCLE_TOTAL_MS
 const COUNTDOWN_STEP_MS = 800
 const FINISH_MS = COUNTDOWN_STEP_MS * 3
-const FINAL_SCORE = 88
 
 interface SessionState {
   stage: Stage
@@ -60,7 +59,7 @@ interface SessionState {
   reps: number
   calibrateProgress: number
   countdown: number
-  score: number
+  revealProgress: number
 }
 
 const IDLE_STATE: SessionState = {
@@ -69,7 +68,7 @@ const IDLE_STATE: SessionState = {
   reps: 0,
   calibrateProgress: 0,
   countdown: 3,
-  score: 0,
+  revealProgress: 0,
 }
 
 function sampleSession(elapsed: number): SessionState {
@@ -104,13 +103,13 @@ function sampleSession(elapsed: number): SessionState {
     }
   }
   t -= FINISH_MS
-  // Score counts up over 1.2s, then holds.
-  const scoreT = Math.min(1, t / 1200)
+  // Posture reads fade in over 1.2s, then hold.
+  const revealT = Math.min(1, t / 1200)
   return {
     ...IDLE_STATE,
     stage: 'results',
     reps: TOTAL_REPS,
-    score: Math.round(FINAL_SCORE * (1 - Math.pow(1 - scoreT, 3))),
+    revealProgress: 1 - Math.pow(1 - revealT, 3),
   }
 }
 
@@ -125,7 +124,7 @@ const STATUS_TEXT: Record<Stage, { title: string; subtitle: string }> = {
   finishing: { title: 'Stand still to finish', subtitle: 'Auto-finish countdown…' },
   results: {
     title: 'Session complete',
-    subtitle: 'Scored across depth, trunk control, knee tracking, consistency, and symmetry.',
+    subtitle: 'Reads across depth, trunk control, knee tracking, consistency, and symmetry.',
   },
 }
 
@@ -142,7 +141,7 @@ export function ScriptedSessionDemo() {
     const interval = window.setInterval(() => {
       const next = sampleSession(performance.now() - startRef.current)
       setState(next)
-      if (next.stage === 'results' && next.score >= FINAL_SCORE) {
+      if (next.stage === 'results' && next.revealProgress >= 1) {
         setRunning(false)
       }
     }, 33)
@@ -183,27 +182,16 @@ export function ScriptedSessionDemo() {
         )}
 
         {state.stage === 'results' && (
-          <div className="demo-player__results">
-            <div className="demo-player__score-ring">
-              <svg viewBox="0 0 100 100" aria-hidden>
-                <circle cx="50" cy="50" r="44" className="demo-player__ring-track" />
-                <circle
-                  cx="50"
-                  cy="50"
-                  r="44"
-                  className="demo-player__ring-fill"
-                  strokeDasharray={`${(state.score / 100) * 276.5} 276.5`}
-                />
-              </svg>
-              <div className="demo-player__score-center">
-                <span className="demo-player__score-value">{state.score}</span>
-                <span className="demo-player__score-band">Excellent</span>
-              </div>
-            </div>
+          <div
+            className="demo-player__results"
+            style={{ opacity: state.revealProgress }}
+          >
+            <div className="demo-player__results-heading">Posture profile</div>
             <ul className="demo-player__score-chips">
-              <li>Depth ✓</li>
-              <li>Trunk control ✓</li>
-              <li>Consistency ✓</li>
+              <li>Working depth ✓</li>
+              <li>Tall chest ✓</li>
+              <li>Even base ✓</li>
+              <li>Repeatable ✓</li>
             </ul>
           </div>
         )}

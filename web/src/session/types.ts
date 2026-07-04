@@ -23,14 +23,6 @@ export interface ComponentScores {
   symmetry: number
 }
 
-export type ScoreBand = 'Excellent' | 'Good' | 'Needs Work' | 'Poor'
-
-export interface ScoringResult {
-  totalScore: number
-  band: ScoreBand
-  components: ComponentScores
-}
-
 export type ConfidenceLevel = 'High' | 'Medium' | 'Low'
 
 export interface CoachingCue {
@@ -57,7 +49,12 @@ export interface SessionBaseline {
 
 export interface SessionResult {
   metrics: SetMetricsSummary
-  scoring: ScoringResult | null
+  /**
+   * Per-component evidence inputs (depth, trunk, knee tracking, consistency,
+   * symmetry). These survive as evidence for future verdicts — there is no
+   * composite 0–100 total or band (ontology §6 #15). Null when no reps.
+   */
+  scoring: ComponentScores | null
   feedback: CoachingCue[]
   sessionConfidence: ConfidenceLevel
   sessionConfidenceScore: number

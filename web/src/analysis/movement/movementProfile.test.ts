@@ -5,7 +5,7 @@ import { SQUAT_PHASE_CONFIG, createPhaseDetectorState } from '../phaseDetector'
 import { SQUAT_REP_GATES, createRepCounterState } from '../repCounter'
 import { SQUAT_ACTIVATION_CONFIG } from '../setActivation'
 import { SQUAT_SCORING_CONFIG } from '../../scoring/scoringConfig'
-import { scoreSet } from '../../scoring/scoringEngine'
+import { computeComponentScores } from '../../scoring/scoringEngine'
 import type { SetMetricsSummary } from '../../session/types'
 import { getActiveProfile, getMovementProfile } from './registry'
 
@@ -47,9 +47,9 @@ describe('squat profile is behavior-preserving', () => {
     expect(profile.scoring).toBe(SQUAT_SCORING_CONFIG)
   })
 
-  it('scores identically through the profile and through the defaults', () => {
-    const viaDefaults = scoreSet(SAMPLE_METRICS)
-    const viaProfile = scoreSet(SAMPLE_METRICS, getActiveProfile().scoring)
+  it('scores components identically through the profile and through the defaults', () => {
+    const viaDefaults = computeComponentScores(SAMPLE_METRICS)
+    const viaProfile = computeComponentScores(SAMPLE_METRICS, getActiveProfile().scoring)
     expect(viaProfile).toEqual(viaDefaults)
   })
 

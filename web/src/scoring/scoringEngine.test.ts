@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import type { SetMetricsSummary } from '../session/types'
-import { computeComponentScores, scoreSet } from './scoringEngine'
+import { computeComponentScores } from './scoringEngine'
 
 function mockMetrics(overrides: Partial<SetMetricsSummary> = {}): SetMetricsSummary {
   return {
@@ -28,20 +28,29 @@ describe('scoringEngine', () => {
     }
   })
 
-  it('scores a solid set in Good or Excellent band', () => {
-    const result = scoreSet(mockMetrics())
-    expect(result.totalScore).toBeGreaterThanOrEqual(60)
-    expect(['Excellent', 'Good', 'Needs Work']).toContain(result.band)
+  it('exposes exactly the five evidence components and no composite total', () => {
+    const components = computeComponentScores(mockMetrics())
+    expect(Object.keys(components).sort()).toEqual(
+      ['consistency', 'depth', 'kneeTracking', 'symmetry', 'trunkControl'].sort(),
+    )
+    // No aggregated 0–100 total or band is produced (ontology §6 #15).
+    expect('totalScore' in components).toBe(false)
+    expect('band' in components).toBe(false)
   })
 
-  it('penalizes shallow depth and high asymmetry', () => {
-    const good = scoreSet(mockMetrics({ avgDepth: 95, avgKneeAsymmetry: 3 }))
-    const poor = scoreSet(mockMetrics({ avgDepth: 140, avgKneeAsymmetry: 25 }))
-    expect(poor.totalScore).toBeLessThan(good.totalScore)
+  it('penalizes shallow depth and high asymmetry per component', () => {
+    const good = computeComponentScores(
+      mockMetrics({ avgDepth: 95, avgKneeAsymmetry: 3 }),
+    )
+    const poor = computeComponentScores(
+      mockMetrics({ avgDepth: 140, avgKneeAsymmetry: 25 }),
+    )
+    expect(poor.depth).toBeLessThan(good.depth)
+    expect(poor.kneeTracking).toBeLessThan(good.kneeTracking)
   })
 
-  it('clamps total score to 0–100', () => {
-    const result = scoreSet(
+  it('keeps every component within 0–100 even on a poor set', () => {
+    const components = computeComponentScores(
       mockMetrics({
         avgDepth: 170,
         avgTrunkLean: 80,
@@ -51,7 +60,9 @@ describe('scoringEngine', () => {
         repCount: 1,
       }),
     )
-    expect(result.totalScore).toBeGreaterThanOrEqual(0)
-    expect(result.totalScore).toBeLessThanOrEqual(100)
+    for (const value of Object.values(components)) {
+      expect(value).toBeGreaterThanOrEqual(0)
+      expect(value).toBeLessThanOrEqual(100)
+    }
   })
 })

@@ -1,7 +1,6 @@
-import type { ComponentScores, ScoringResult, SetMetricsSummary } from '../session/types'
+import type { ComponentScores, SetMetricsSummary } from '../session/types'
 import {
   SQUAT_SCORING_CONFIG,
-  bandFromScore,
   type BandThresholds,
   type MovementScoringConfig,
 } from './scoringConfig'
@@ -81,6 +80,12 @@ function scoreSymmetry(
   return scoreBanded(avgHipShift, cfg.hipShift)
 }
 
+/**
+ * Per-component scores (0–100 each) kept as evidence inputs for future
+ * verdicts. There is deliberately no composite aggregation: the ontology
+ * (§6 principle 15) forbids a composite score within a pattern, so no
+ * weighted total or band is produced anywhere.
+ */
 export function computeComponentScores(
   metrics: SetMetricsSummary,
   cfg: MovementScoringConfig = SQUAT_SCORING_CONFIG,
@@ -91,26 +96,5 @@ export function computeComponentScores(
     kneeTracking: scoreKneeTracking(metrics.avgKneeAsymmetry, cfg),
     consistency: scoreConsistency(metrics.depthCV, metrics.repCount, cfg),
     symmetry: scoreSymmetry(metrics.avgHipShift, cfg),
-  }
-}
-
-/** Weighted sum of component scores; weights come from the movement's config. */
-export function scoreSet(
-  metrics: SetMetricsSummary,
-  cfg: MovementScoringConfig = SQUAT_SCORING_CONFIG,
-): ScoringResult {
-  const components = computeComponentScores(metrics, cfg)
-  const totalScore = Math.round(
-    components.depth * cfg.weights.depth +
-      components.trunkControl * cfg.weights.trunkControl +
-      components.kneeTracking * cfg.weights.kneeTracking +
-      components.consistency * cfg.weights.consistency +
-      components.symmetry * cfg.weights.symmetry,
-  )
-
-  return {
-    totalScore: clamp(totalScore, 0, 100),
-    band: bandFromScore(totalScore),
-    components,
   }
 }

@@ -83,10 +83,10 @@ function concept(
 
 /**
  * Derive the posture profile from a set summary plus (optionally) the
- * 3D posture reads. 2D boundaries reuse the scoring thresholds ("good"
- * band = ok) so the chips and the numeric score never disagree. 3D
- * concepts render only when the data was actually usable, and their
- * confidence is capped to their validation tier
+ * 3D posture reads. 2D boundaries reuse the per-component thresholds
+ * ("good" band = ok) so the chips stay consistent with the component
+ * evidence. 3D concepts render only when the data was actually usable,
+ * and their confidence is capped to their validation tier
  * (docs/strategy/validation-strategy.md).
  */
 export function buildPostureConcepts(

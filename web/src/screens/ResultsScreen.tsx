@@ -8,7 +8,6 @@ import { DisclaimerBanner } from '../components/DisclaimerBanner'
 import { FeedbackCard } from '../components/FeedbackCard'
 import { PostureProfile } from '../components/PostureProfile'
 import { RepTimeline } from '../components/RepTimeline'
-import { ScoreDisplay } from '../components/ScoreDisplay'
 import { confidenceResultsMessage } from '../feedback/confidenceCalculator'
 import {
   INSUFFICIENT_DATA_MESSAGE,
@@ -16,10 +15,7 @@ import {
 } from '../feedback/feedbackEngine'
 import { useAnalystMode } from '../hooks/useAnalystMode'
 import { buildResultsSummary } from '../session/buildSessionResult'
-import {
-  SCORE_FORMULA_SUMMARY,
-  buildComponentScoreExplanations,
-} from '../scoring/scoringExplanations'
+import { buildComponentScoreExplanations } from '../scoring/scoringExplanations'
 import type { SessionResult } from '../session/types'
 
 export function ResultsScreen() {
@@ -29,7 +25,7 @@ export function ResultsScreen() {
 
   const componentExplanations = useMemo(() => {
     if (!result?.scoring) return []
-    return buildComponentScoreExplanations(result.metrics, result.scoring.components)
+    return buildComponentScoreExplanations(result.metrics)
   }, [result])
 
   const postureConcepts = useMemo(() => {
@@ -89,38 +85,32 @@ export function ResultsScreen() {
         <p className="results-lead">{summary}</p>
       </section>
 
-      {(postureConcepts.length > 0 || scoring) && (
-        <section className="report-hero" aria-label="Posture profile and score">
-          {postureConcepts.length > 0 && (
-            <div className="report-hero__concepts report-section">
-              <h2 className="report-section__title">Posture profile</h2>
-              <PostureProfile concepts={postureConcepts} />
-            </div>
-          )}
-          {scoring && (
-            <aside className="report-hero__score report-section">
-              <h2 className="report-section__title">Movement score</h2>
-              <ScoreDisplay score={scoring.totalScore} band={scoring.band} />
-              <p className="score-formula-note">{SCORE_FORMULA_SUMMARY}</p>
-              <div className="report-hero__confidence confidence">
-                <div className="confidence__header">
-                  <span className="confidence__label">Camera confidence</span>
-                  <span className="confidence__value">{sessionConfidenceScore}%</span>
-                </div>
-                <div className="confidence__bar">
-                  <div
-                    className={`confidence__fill confidence__fill--${sessionConfidence.toLowerCase()}`}
-                    style={{ width: `${sessionConfidenceScore}%` }}
-                    role="progressbar"
-                    aria-valuenow={sessionConfidenceScore}
-                    aria-valuemin={0}
-                    aria-valuemax={100}
-                  />
-                </div>
-                <ConfidenceBadge level={sessionConfidence} />
+      {postureConcepts.length > 0 && (
+        <section className="report-hero" aria-label="Posture profile">
+          <div className="report-hero__concepts report-section">
+            <h2 className="report-section__title">Posture profile</h2>
+            <PostureProfile concepts={postureConcepts} />
+          </div>
+          <aside className="report-hero__score report-section">
+            <h2 className="report-section__title">Camera confidence</h2>
+            <div className="report-hero__confidence confidence">
+              <div className="confidence__header">
+                <span className="confidence__label">Camera confidence</span>
+                <span className="confidence__value">{sessionConfidenceScore}%</span>
               </div>
-            </aside>
-          )}
+              <div className="confidence__bar">
+                <div
+                  className={`confidence__fill confidence__fill--${sessionConfidence.toLowerCase()}`}
+                  style={{ width: `${sessionConfidenceScore}%` }}
+                  role="progressbar"
+                  aria-valuenow={sessionConfidenceScore}
+                  aria-valuemin={0}
+                  aria-valuemax={100}
+                />
+              </div>
+              <ConfidenceBadge level={sessionConfidence} />
+            </div>
+          </aside>
         </section>
       )}
 
@@ -149,44 +139,32 @@ export function ResultsScreen() {
         </p>
       )}
 
-      {scoring && (
-        <section className="results-panel" aria-label="Score breakdown">
-          {componentExplanations.length > 0 && (
-            <div className="component-scores">
-              <h2 className="results-panel__heading">Score breakdown</h2>
-              <p className="results-panel__intro">
-                Each area is scored 0–100, then weighted into your total.
-              </p>
-              <ul className="component-scores__list">
-                {componentExplanations.map((item) => (
-                  <li key={item.key} className="component-score-card">
-                    <div className="component-score-card__header">
-                      <span className="component-score-card__label">{item.label}</span>
-                      <span className="component-score-card__score">
-                        {item.score}
-                        <span className="component-score-card__score-max"> / 100</span>
-                      </span>
-                    </div>
-                    <p className="component-score-card__weight">
-                      {item.weightPercent}% of total
-                    </p>
-                    {isAnalyst && (
-                      <dl className="component-score-card__details">
-                        <div>
-                          <dt>What we measured</dt>
-                          <dd>{item.measured}</dd>
-                        </div>
-                        <div>
-                          <dt>Why this score</dt>
-                          <dd>{item.explanation}</dd>
-                        </div>
-                      </dl>
-                    )}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
+      {scoring && componentExplanations.length > 0 && (
+        <section className="results-panel" aria-label="What the camera measured">
+          <div className="component-scores">
+            <h2 className="results-panel__heading">What the camera measured</h2>
+            <p className="results-panel__intro">
+              Observable reads from this set, area by area — evidence, not a grade.
+            </p>
+            <ul className="component-scores__list">
+              {componentExplanations.map((item) => (
+                <li key={item.key} className="component-score-card">
+                  <div className="component-score-card__header">
+                    <span className="component-score-card__label">{item.label}</span>
+                  </div>
+                  <p className="component-score-card__measured">{item.measured}</p>
+                  {isAnalyst && (
+                    <dl className="component-score-card__details">
+                      <div>
+                        <dt>What it means</dt>
+                        <dd>{item.explanation}</dd>
+                      </div>
+                    </dl>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
         </section>
       )}
 
