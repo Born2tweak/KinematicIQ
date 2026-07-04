@@ -123,7 +123,7 @@ function buildDepthCue(
       issue: 'Depth',
       observed: depthPhrase,
       whyItMatters:
-        'Limited hip flexion means less range through the quads and glutes. From the side view, the camera reads thigh angle — when the hips do not sit as low, the camera reads less depth even if the rep felt effortful.',
+        'Limited hip flexion means the squat moves through less range of motion. From the side view, the camera reads thigh angle — when the hips do not sit as low, the camera reads less depth even if the rep felt effortful.',
       tryNext:
         'Sit the hips slightly lower while keeping your chest controlled — think “hips back and down” rather than only bending the knees.',
       confidence,

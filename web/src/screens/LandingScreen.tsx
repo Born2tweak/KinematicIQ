@@ -197,7 +197,7 @@ export function LandingScreen() {
       <section className="landing-section" id="why">
         <p className="landing-eyebrow">Why KinematicIQ</p>
         <h2 className="landing-section__title">
-          Lab-grade insight without the lab
+          Movement insight without the lab
         </h2>
         <div className="landing-grid landing-grid--benefits">
           {BENEFITS.map((b) => (
