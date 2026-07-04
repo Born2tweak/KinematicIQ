@@ -34,6 +34,8 @@ import {
 } from '../analysis/setActivation'
 import { poseEngine } from '../cv/poseEngine'
 import { createLiveStreamFilter } from '../cv/landmarkFilter'
+import { createTape, createTapeRecorder, estimateFps } from '../eval/poseTape'
+import { storeSessionTape } from '../eval/tapeStore'
 import { createEmptyPose3DRef, hipCenter } from '../cv/pose3d'
 import {
   LANDMARK_INDICES,
@@ -91,6 +93,7 @@ export function CameraScreen() {
   const streamRef = useRef<MediaStream | null>(null)
   const liveFilterRef = useRef(createLiveStreamFilter())
   const pose3DRef = useRef(createEmptyPose3DRef())
+  const tapeRecorderRef = useRef(createTapeRecorder())
 
   const [error, setError] = useState<string | null>(null)
   const [cameraAttempt, setCameraAttempt] = useState(0)
@@ -275,6 +278,30 @@ export function CameraScreen() {
       postureSamplesRef.current,
     )
 
+    // Preserve the raw session as a replayable pose tape (same substrate as
+    // the upload path) so live sets feed the validation dataset directly.
+    const recorder = tapeRecorderRef.current
+    if (recorder.count > 0) {
+      const frames = recorder.build({ fps: 0 }).frames
+      storeSessionTape(
+        createTape(
+          frames,
+          {
+            fps: estimateFps(frames),
+            label: 'live-session',
+            source: 'live',
+            recordedAt: new Date().toISOString(),
+            filtering: 'one-euro-live',
+          },
+          {
+            countedReps: reps.length,
+            rejections: repCounterRef.current.rejections,
+          },
+        ),
+      )
+    }
+    recorder.reset()
+
     autoStartRef.current = createAutoStartState()
     autoFinishRef.current = createAutoFinishState()
     phaseDetectorRef.current = createFreshAnalysisPipeline().phaseDetector
@@ -424,6 +451,7 @@ export function CameraScreen() {
               setFinishCountdown(null)
               poseConfidenceSamplesRef.current = []
               postureSamplesRef.current = []
+              tapeRecorderRef.current.reset()
 
               const kneeAngles = [angles.leftKnee, angles.rightKnee].filter(
                 (value): value is number => value !== null,
@@ -458,6 +486,11 @@ export function CameraScreen() {
               const postureSample = extractPostureFrame(poseFrame)
               if (postureSample) {
                 postureSamplesRef.current.push(postureSample)
+              }
+              // Tape the RAW frame (pre One-Euro) — the tape substrate is
+              // always exactly what MediaPipe produced.
+              if (rawFrame) {
+                tapeRecorderRef.current.record(rawFrame)
               }
             }
 

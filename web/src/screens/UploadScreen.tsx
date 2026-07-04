@@ -213,12 +213,20 @@ export function UploadScreen() {
       // Keep the raw (pre-filter) frames as a replayable pose tape so the
       // results screen can offer it for download (validation dataset capture).
       storeSessionTape(
-        createTape(result.rawFrames, {
-          fps: DEFAULT_ANALYSIS_FPS,
-          label: fileName ?? undefined,
-          source: 'upload',
-          recordedAt: new Date().toISOString(),
-        }),
+        createTape(
+          result.rawFrames,
+          {
+            fps: DEFAULT_ANALYSIS_FPS,
+            label: fileName ?? undefined,
+            source: 'upload',
+            recordedAt: new Date().toISOString(),
+            filtering: 'butterworth-offline',
+          },
+          {
+            countedReps: result.reps.length,
+            rejections: result.repRejections,
+          },
+        ),
       )
 
       const sessionResult = buildSessionResult(

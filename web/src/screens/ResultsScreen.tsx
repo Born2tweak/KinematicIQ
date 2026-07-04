@@ -24,6 +24,7 @@ export function ResultsScreen() {
   const location = useLocation()
   const result = (location.state as { result?: SessionResult } | null)?.result
   const [isAnalyst, toggleAnalyst] = useAnalystMode()
+  const sessionTape = getSessionTape()
 
   const componentExplanations = useMemo(() => {
     if (!result?.scoring) return []
@@ -223,7 +224,7 @@ export function ResultsScreen() {
         </Card>
       )}
 
-      {isAnalyst && getSessionTape() !== null && (
+      {isAnalyst && sessionTape !== null && (
         <section className="results-panel" aria-label="Pose tape">
           <h2 className="results-panel__heading">Pose tape</h2>
           <p className="results-panel__intro">
@@ -231,15 +232,34 @@ export function ResultsScreen() {
             harness, and the capture format for the validation dataset. Stays on
             this device.
           </p>
-          <Button
-            variant="secondary"
-            onClick={() => {
-              const tape = getSessionTape()
-              if (tape) downloadTape(tape)
-            }}
-          >
+          <Button variant="secondary" onClick={() => downloadTape(sessionTape)}>
             Save pose tape (JSON)
           </Button>
+
+          {(sessionTape.diagnostics?.rejections.length ?? 0) > 0 && (
+            <div className="detail-rows">
+              <h3 className="results-panel__heading">
+                Rejected rep candidates (
+                {sessionTape.diagnostics!.rejections.length})
+              </h3>
+              {sessionTape.diagnostics!.rejections.map((rejection, index) => (
+                <div
+                  key={`${rejection.startFrameIndex}-${index}`}
+                  className="detail-row"
+                >
+                  <span className="detail-row__label">
+                    {rejection.gate} · frames {rejection.startFrameIndex}–
+                    {rejection.endFrameIndex}
+                  </span>
+                  <span className="detail-row__value">
+                    {rejection.reason} · {Math.round(rejection.durationMs)}ms ·
+                    hip drop {rejection.values.maxHipDrop.toFixed(3)} · conf{' '}
+                    {Math.round(rejection.values.avgConfidence * 100)}%
+                  </span>
+                </div>
+              ))}
+            </div>
+          )}
         </section>
       )}
 

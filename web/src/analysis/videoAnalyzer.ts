@@ -29,6 +29,7 @@ import {
   createFrameTraceCollector,
   type FrameTraceSample,
 } from './frameTrace'
+import type { RepRejection } from './repCounter'
 
 /** Analysis sampling rate — fewer inferences than display FPS, still smooth. */
 export const DEFAULT_ANALYSIS_FPS = 15
@@ -78,6 +79,8 @@ export interface VideoAnalysisResult {
    * pipeline variant reproduces the analysis deterministically (eval/poseTape).
    */
   rawFrames: PoseFrame[]
+  /** Rejected rep candidates with gate diagnostics (see analysis/repCounter). */
+  repRejections: RepRejection[]
 }
 
 /** Smallest knee angle (deepest side) used to drive phase detection. */
@@ -106,6 +109,7 @@ export function runPipelineOnFrames(frames: readonly PoseFrame[]): {
   poseConfidenceSamples: number[]
   postureSamples: PostureFrameSample[]
   frameTrace: FrameTraceSample[]
+  repRejections: RepRejection[]
 } {
   let phaseDetector = createPhaseDetectorState()
   let repCounter = createRepCounterState()
@@ -152,6 +156,7 @@ export function runPipelineOnFrames(frames: readonly PoseFrame[]): {
     poseConfidenceSamples,
     postureSamples,
     frameTrace: frameTrace.build(),
+    repRejections: repCounter.rejections,
   }
 }
 
@@ -211,7 +216,7 @@ export async function runVideoAnalysis(
     : detectedFrames
 
   // ── Pass 2: analyze ──────────────────────────────────────────────
-  const { reps, poseConfidenceSamples, postureSamples, frameTrace } =
+  const { reps, poseConfidenceSamples, postureSamples, frameTrace, repRejections } =
     runPipelineOnFrames(analyzedFrames)
 
   return {
@@ -222,5 +227,6 @@ export async function runVideoAnalysis(
     framesAnalyzed,
     framesWithPose: detectedFrames.length,
     rawFrames: detectedFrames,
+    repRejections,
   }
 }

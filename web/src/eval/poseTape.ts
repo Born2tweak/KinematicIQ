@@ -8,14 +8,22 @@
  * are measured, not assumed.
  */
 import type { PoseFrame } from '../cv/types'
+import type { RepRejection } from '../analysis/repCounter'
 
 export interface PoseTapeMeta {
-  /** Sampling rate of the sequence in Hz. */
+  /** Sampling rate of the sequence in Hz (estimated for live capture). */
   fps: number
   label?: string
+  /** Capture path: 'upload' (offline video) or 'live' (camera session). */
   source?: string
   /** ISO-8601 capture time — dataset provenance (see docs/25 capture protocol). */
   recordedAt?: string
+  /** Observation protocol the session claims (e.g. 'front-view-squat-v1'). */
+  protocolId?: string
+  /** Landmark filtering mode the ANALYSIS used. Tape frames are always raw. */
+  filtering?: 'raw' | 'one-euro-live' | 'butterworth-offline'
+  /** Build identifier for provenance, when available. */
+  appVersion?: string
   /** Optional hand-labeled ground truth for benchmarking. */
   truth?: {
     repCount?: number
@@ -24,13 +32,36 @@ export interface PoseTapeMeta {
   }
 }
 
+/** Session diagnostics carried with the tape for offline audit. */
+export interface PoseTapeDiagnostics {
+  countedReps: number
+  /** Every rejected rep candidate with the gate that fired (see repCounter). */
+  rejections: RepRejection[]
+}
+
 export interface PoseTape {
   meta: PoseTapeMeta
   frames: PoseFrame[]
+  diagnostics?: PoseTapeDiagnostics
 }
 
-export function createTape(frames: PoseFrame[], meta: PoseTapeMeta): PoseTape {
-  return { meta, frames }
+export function createTape(
+  frames: PoseFrame[],
+  meta: PoseTapeMeta,
+  diagnostics?: PoseTapeDiagnostics,
+): PoseTape {
+  return diagnostics ? { meta, frames, diagnostics } : { meta, frames }
+}
+
+/**
+ * Estimate the effective sampling rate of a live (rAF-driven) capture from
+ * frame timestamps. Falls back to `fallback` for empty/degenerate sequences.
+ */
+export function estimateFps(frames: readonly PoseFrame[], fallback = 30): number {
+  if (frames.length < 2) return fallback
+  const spanMs = frames[frames.length - 1].timestamp - frames[0].timestamp
+  if (spanMs <= 0) return fallback
+  return Math.round(((frames.length - 1) / spanMs) * 1000 * 10) / 10
 }
 
 export function serializeTape(tape: PoseTape): string {
