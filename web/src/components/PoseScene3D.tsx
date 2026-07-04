@@ -65,6 +65,11 @@ function Skeleton({
   const tmpMatrix = useMemo(() => new THREE.Matrix4(), [])
   const tmpPosition = useMemo(() => new THREE.Vector3(), [])
   const tmpScale = useMemo(() => new THREE.Vector3(1, 1, 1), [])
+  // Smoothed vertical offset planting the lowest visible landmark on the
+  // grid plane. MediaPipe world coords are hip-centered, so without this the
+  // skeleton floats mid-air and drifts as the hip origin moves. Pure
+  // visualization anchoring — no accuracy is implied (see panel badge).
+  const groundOffsetRef = useRef<number | null>(null)
 
   const bonesGeometry = useMemo(() => {
     const geometry = new THREE.BufferGeometry()
@@ -111,6 +116,26 @@ function Skeleton({
 
     const smoothed = smoother.smooth(data.worldLandmarks, data.timestamp)
     const points = smoothed.map((lm) => worldToThree(lm, { mirror }))
+
+    // Ground anchoring: ease the lowest visible point onto the grid plane.
+    let minY = Infinity
+    for (let i = 0; i < JOINT_COUNT; i++) {
+      const lm = smoothed[i]
+      if (lm && lm.visibility >= CONFIDENCE_THRESHOLD && points[i]) {
+        minY = Math.min(minY, points[i].y)
+      }
+    }
+    if (Number.isFinite(minY)) {
+      const target = -minY
+      groundOffsetRef.current =
+        groundOffsetRef.current === null
+          ? target
+          : groundOffsetRef.current + (target - groundOffsetRef.current) * 0.15
+    }
+    const groundOffset = groundOffsetRef.current ?? 0
+    for (const p of points) {
+      p.y += groundOffset
+    }
 
     for (let i = 0; i < JOINT_COUNT; i++) {
       const lm = smoothed[i]
@@ -211,7 +236,7 @@ function Skeleton({
       const flat = new Float32Array(trailPoints.length * 3)
       trailPoints.forEach((pt, i) => {
         flat[i * 3] = pt.x
-        flat[i * 3 + 1] = pt.y
+        flat[i * 3 + 1] = pt.y + groundOffset
         flat[i * 3 + 2] = pt.z
       })
       trailGeometry.setAttribute('position', new THREE.BufferAttribute(flat, 3))

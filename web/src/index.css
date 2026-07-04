@@ -1879,7 +1879,7 @@ img {
   top: calc(var(--navbar-height) + 6.25rem);
   right: var(--space-md);
   z-index: 6;
-  width: min(42%, 260px);
+  width: min(46%, 320px);
   aspect-ratio: 4 / 3;
   display: flex;
   flex-direction: column;
@@ -1889,6 +1889,38 @@ img {
   background: rgba(10, 10, 15, 0.55);
   backdrop-filter: blur(6px);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+
+/* Large inspection mode: the panel takes over most of the stage. */
+.camera-3d-panel--expanded {
+  top: calc(var(--navbar-height) + var(--space-md));
+  left: 50%;
+  right: auto;
+  transform: translateX(-50%);
+  width: min(92vw, 960px);
+  height: min(72dvh, 700px);
+  aspect-ratio: auto;
+  z-index: 15;
+  background: rgba(7, 11, 20, 0.9);
+}
+
+.camera-3d-expand {
+  position: absolute;
+  top: var(--space-xs);
+  right: var(--space-xs);
+  z-index: 2;
+  padding: 0.25rem 0.6rem;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: var(--color-text);
+  background: rgba(7, 11, 20, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: var(--radius-full);
+  cursor: pointer;
+}
+
+.camera-3d-expand:hover {
+  background: rgba(30, 41, 59, 0.85);
 }
 
 .camera-3d-container {
