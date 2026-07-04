@@ -67,6 +67,25 @@ function confidenceNote(level: ConfidenceLevel): string | null {
   return null
 }
 
+export const MISSING_DATA_NOTE =
+  'The camera did not capture enough of this read in this set — treat this as a setup check, not a measurement.'
+
+/**
+ * Confidence belongs to the claim, not the session: when the primary
+ * observation behind a cue is unavailable, the cue can never exceed Low,
+ * no matter how visible the athlete was overall. Session confidence only
+ * applies when the claim's own data exists.
+ */
+function claimGated(
+  dataAvailable: boolean,
+  session: ConfidenceLevel,
+): Pick<BiomechanicalCue, 'confidence' | 'confidenceNote'> {
+  if (!dataAvailable) {
+    return { confidence: 'Low', confidenceNote: MISSING_DATA_NOTE }
+  }
+  return { confidence: session, confidenceNote: confidenceNote(session) }
+}
+
 function buildDepthCue(
   metrics: SetMetricsSummary,
   confidence: ConfidenceLevel,
@@ -122,8 +141,7 @@ function buildDepthCue(
       'Depth is read from the smallest knee angle at the bottom of each rep. Less bend usually means the hips did not travel as far in the squat pattern.',
     tryNext:
       'Film from the side, brace your core, and aim for the same hip height on each rep.',
-    confidence,
-    confidenceNote: confidenceNote(confidence),
+    ...claimGated(avg !== null, confidence),
   }
 }
 
@@ -174,8 +192,7 @@ function buildTrunkCue(
       'A stable trunk keeps your chest and hips moving together instead of folding at the waist.',
     tryNext:
       'Brace before each rep and keep the same torso angle from start to finish.',
-    confidence,
-    confidenceNote: confidenceNote(confidence),
+    ...claimGated(avg !== null, confidence),
   }
 }
 
@@ -216,8 +233,7 @@ function buildKneeTrackingCue(
       'Balanced knee bend keeps the squat centered over your base of support.',
     tryNext:
       'Film from the front or a slight angle and aim for matching knee paths each rep.',
-    confidence,
-    confidenceNote: confidenceNote(confidence),
+    ...claimGated(asym !== null, confidence),
   }
 }
 
@@ -247,8 +263,7 @@ function buildConsistencyCue(
       'Consistency compares bottom positions across reps. Fewer than two tracked reps limits that comparison.',
     tryNext:
       'Complete at least two full reps in frame with the same setup.',
-    confidence,
-    confidenceNote: confidenceNote(confidence),
+    ...claimGated(false, confidence),
   }
 }
 
@@ -281,8 +296,7 @@ function buildSymmetryCue(
       'Side-to-side hip position reflects how centered you are over your base. An off-center pattern appears as a side-to-side difference in this set.',
     tryNext:
       'Set your feet, then sit straight down without leaning toward one leg.',
-    confidence,
-    confidenceNote: confidenceNote(confidence),
+    ...claimGated(shift !== null, confidence),
   }
 }
 

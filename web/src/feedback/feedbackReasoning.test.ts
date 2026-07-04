@@ -58,6 +58,41 @@ describe('feedbackReasoning', () => {
     expect(cue.confidenceNote).toMatch(/moderate|directional/i)
   })
 
+  it('caps every cue at Low confidence when its primary read is missing, even at High session confidence', () => {
+    const sparse = metrics({
+      repCount: 1,
+      reps: [sampleRep({ repNumber: 1 })],
+      avgDepth: null,
+      avgTrunkLean: null,
+      depthCV: null,
+      minDepth: null,
+      maxDepth: null,
+      avgHipShift: null,
+      avgKneeAsymmetry: null,
+    })
+    const issueKeys = [
+      'depth',
+      'trunkControl',
+      'kneeTracking',
+      'consistency',
+      'symmetry',
+    ] as const
+
+    for (const key of issueKeys) {
+      const cue = buildBiomechanicalCue(key, sparse, 'High')
+      expect(cue.confidence, `${key} cue must not inherit session confidence`).toBe('Low')
+      expect(cue.confidenceNote, `${key} cue must explain the missing read`).toMatch(
+        /did not capture enough/i,
+      )
+    }
+  })
+
+  it('keeps session confidence when the claim data exists', () => {
+    const cue = buildBiomechanicalCue('depth', metrics({}), 'High')
+    expect(cue.confidence).toBe('High')
+    expect(cue.confidenceNote).toBeNull()
+  })
+
   it('never uses kinetic or score language in any coaching copy', () => {
     const issueKeys = [
       'depth',
