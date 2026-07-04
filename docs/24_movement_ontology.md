@@ -212,7 +212,7 @@ The unifying rule behind 5–11: **the camera describes observable movement; it 
 
 ## 7. The verdict label contract
 
-Every label in every verdict vocabulary must eventually carry five fields. A label's `validationTier` cannot flip to `validated` for a protocol until all five are populated for that (label, protocol) pair:
+Every label in every verdict vocabulary must eventually carry seven fields. A label's `validationTier` cannot flip to `validated` for a protocol until all seven are populated for that (label, protocol) pair:
 
 | Field | Content | Where it lives |
 |---|---|---|
@@ -221,8 +221,12 @@ Every label in every verdict vocabulary must eventually carry five fields. A lab
 | **Confidence requirements** | the bars to speak: min reps, coverage, agreement fraction, cross-check rules | `verdictConfig.ts` evidence bars |
 | **Validation dataset** | the labeled clips it was tuned on (`tune`) and proven on (`holdout`), with date and numbers | `web/eval-clips/manifest.json` + provenance comment in `verdictConfig.ts` |
 | **Known counterexamples** | clips/conditions that fool it, documented honestly | `eval-clips/README.md` counterexample log |
+| **Decision consequence** | the coaching decision this label changes when emitted — including "confirms current programming, no change." A label that changes no decision does not enter the vocabulary | `verdictConfig.ts` (per-label spec) + the recommendation map |
+| **Counterfactual** | what evidence pattern would have flipped this verdict to a different label in the same vocabulary, stated concretely enough to test | `verdictConfig.ts` (per-label spec); rendered with the verdict in analyst mode |
 
-This is what "scientifically defensible" means operationally: for any verdict the system emits, a technical reviewer can be shown its definition, its evidence, its bars, its dataset, and its known failure modes.
+This is what "scientifically defensible" means operationally: for any verdict the system emits, a technical reviewer can be shown its definition, its evidence, its bars, its dataset, its known failure modes, the decision it informs, and what would have changed the system's mind.
+
+**Counterfactual principle.** A label whose counterfactual cannot be written is a label that cannot be validated: the counterfactual *is* the decision boundary between two labels, stated in evidence terms — which is exactly what a labeled dataset tunes and an inter-rater study tests. Writing it is therefore a precondition for collecting validation data for the label, not documentation added afterward. If two raters cannot agree on the counterfactual, the label is ill-posed and must be redefined before any thresholds are chosen.
 
 ## 8. Seven-pattern roadmap (paper level — no implementation before validation of the previous pattern)
 
