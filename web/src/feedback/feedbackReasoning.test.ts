@@ -52,7 +52,8 @@ describe('feedbackReasoning', () => {
       'Medium',
     )
     expect(cue.observed).toMatch(/left knee|18°/i)
-    expect(cue.whyItMatters).toMatch(/even|load|not a medical/i)
+    expect(cue.whyItMatters).toMatch(/even|not a medical/i)
+    expect(cue.whyItMatters).not.toMatch(/load|force|stress|torque/i)
     expect(cue.tryNext).toMatch(/knee|feet|second toe/i)
     expect(cue.confidenceNote).toMatch(/moderate|directional/i)
   })

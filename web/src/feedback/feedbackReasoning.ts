@@ -86,7 +86,7 @@ function buildDepthCue(
       issue: 'Depth',
       observed: `Depth varied rep to rep (about ${cv!.toFixed(0)}% spread). Deepest knee bend was ${min !== null ? formatDegrees(min) : 'unclear'}; shallowest was ${max !== null ? formatDegrees(max) : 'unclear'}.`,
       whyItMatters:
-        'Squat depth is how far your hips sit at the bottom — the more your knees bend, the deeper the rep. When depth jumps around, the set is harder to compare rep to rep and the depth score drops.',
+        'Squat depth is how far your hips sit at the bottom — the more your knees bend, the deeper the rep. When depth jumps around, the set is harder to compare rep to rep.',
       tryNext:
         'Pick a target depth before the set and hit the same bottom position each rep — pause one second at the bottom to feel it.',
       confidence,
@@ -98,13 +98,13 @@ function buildDepthCue(
     const depthPhrase =
       min !== null && min <= DEPTH_THRESHOLDS.goodMax
         ? `Your deepest rep reached about ${formatDegrees(min)}, but the set average stayed around ${formatDegrees(avg)} — several reps stayed ${parallelNote(avg)}.`
-        : `Your lowest-depth reps stayed around ${formatDegrees(avg)} knee bend (${parallelNote(avg)}), so the app lowered your depth score.`
+        : `Your lowest-depth reps stayed around ${formatDegrees(avg)} knee bend (${parallelNote(avg)}), so the camera read most of the set as shallower.`
 
     return {
       issue: 'Depth',
       observed: depthPhrase,
       whyItMatters:
-        'Limited hip flexion means less range through the quads and glutes. From the side view, the camera reads thigh angle — when the hips do not sit as low, depth scores drop even if the rep felt effortful.',
+        'Limited hip flexion means less range through the quads and glutes. From the side view, the camera reads thigh angle — when the hips do not sit as low, the camera reads less depth even if the rep felt effortful.',
       tryNext:
         'Sit the hips slightly lower while keeping your chest controlled — think “hips back and down” rather than only bending the knees.',
       confidence,
@@ -119,7 +119,7 @@ function buildDepthCue(
         ? `Average bottom knee bend was about ${formatDegrees(avg)} in this set.`
         : 'The camera could not read a clear bottom knee angle on every rep.',
     whyItMatters:
-      'Depth is scored from the smallest knee angle at the bottom of each rep. Less bend usually means the hips did not travel as far in the squat pattern.',
+      'Depth is read from the smallest knee angle at the bottom of each rep. Less bend usually means the hips did not travel as far in the squat pattern.',
     tryNext:
       'Film from the side, brace your core, and aim for the same hip height on each rep.',
     confidence,
@@ -143,7 +143,7 @@ function buildTrunkCue(
       issue: 'Trunk control',
       observed: `Chest lean averaged about ${formatDegrees(avg)} and changed noticeably between reps (roughly ${formatDegrees(spread!)} spread).`,
       whyItMatters:
-        'A forward torso means your chest drops toward the floor through the descent. When lean changes rep to rep, your bracing and balance look less repeatable — that lowers the trunk control score.',
+        'A forward torso means your chest drops toward the floor through the descent. When lean changes rep to rep, your bracing and balance look less repeatable from the camera.',
       tryNext:
         'Take a breath at the top, brace your ribs down, and keep the same chest angle through the descent and drive up.',
       confidence,
@@ -156,7 +156,7 @@ function buildTrunkCue(
       issue: 'Trunk control',
       observed: `Your chest leaned forward about ${formatDegrees(avg)} on average during the squat — more than the upright trunk range the app expects.`,
       whyItMatters:
-        'Extra forward lean makes the squat look more like a hinge, with the hips traveling back while the chest tips toward the floor. The camera scores trunk angle from shoulder to hip, so a tipped chest lowers trunk control.',
+        'Extra forward lean makes the squat look more like a hinge, with the hips traveling back while the chest tips toward the floor. The camera reads trunk angle from shoulder to hip, so a tipped chest appears as more forward lean.',
       tryNext:
         'Keep your ribs stacked over your pelvis and look slightly ahead — “chest tall” on the way down and up.',
       confidence,
@@ -198,7 +198,7 @@ function buildKneeTrackingCue(
       issue: 'Knee tracking',
       observed: `${sideNote} Average left–right knee difference was about ${formatDegrees(asym)}.`,
       whyItMatters:
-        'Even knee bend keeps both legs moving through the same range. When one knee collapses inward or stays straighter, your hips or that knee may drift toward one side — the app scores that as tracking asymmetry, not a medical diagnosis.',
+        'Even knee bend keeps both legs moving through the same range. When one knee stays straighter than the other, your hips or that knee may drift toward one side — the app reads that as a left–right difference in this set, not a medical diagnosis.',
       tryNext:
         'Spread the floor with your feet and drive both knees toward your second toe at the same rate — match the deeper side instead of letting one knee dive in.',
       confidence,
@@ -232,7 +232,7 @@ function buildConsistencyCue(
       issue: 'Consistency',
       observed: `Rep depth varied by about ${cv.toFixed(0)}% in this set${metrics.minDepth !== null && metrics.maxDepth !== null ? ` (from ${formatDegrees(metrics.minDepth)} to ${formatDegrees(metrics.maxDepth)} knee bend)` : ''}.`,
       whyItMatters:
-        'Repeatable depth makes each rep train the same range of motion. Large rep-to-rep changes lower the consistency score because the pattern is less predictable from the camera.',
+        'Repeatable depth makes each rep train the same range of motion. Large rep-to-rep changes make the pattern less predictable from the camera.',
       tryNext:
         'Use the same tempo each rep — control the descent, pause briefly at your chosen depth, then stand.',
       confidence,
@@ -278,7 +278,7 @@ function buildSymmetryCue(
         ? `Hip center drifted slightly off midline at the bottom (about ${(shift * 100).toFixed(0)}% of frame width).`
         : 'Hip position at the bottom was not clear on every rep.',
     whyItMatters:
-      'Side-to-side hip position reflects how centered you are over your base. Off-center patterns lower the symmetry score.',
+      'Side-to-side hip position reflects how centered you are over your base. An off-center pattern appears as a side-to-side difference in this set.',
     tryNext:
       'Set your feet, then sit straight down without leaning toward one leg.',
     confidence,
