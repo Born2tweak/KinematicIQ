@@ -72,6 +72,12 @@ export interface VideoAnalysisResult {
   framesAnalyzed: number
   /** Frames where a pose was actually detected. */
   framesWithPose: number
+  /**
+   * Raw detected frames exactly as MediaPipe produced them (pre-filtering).
+   * This is the pose-tape substrate: replaying these frames through any
+   * pipeline variant reproduces the analysis deterministically (eval/poseTape).
+   */
+  rawFrames: PoseFrame[]
 }
 
 /** Smallest knee angle (deepest side) used to drive phase detection. */
@@ -215,5 +221,6 @@ export async function runVideoAnalysis(
     frameTrace,
     framesAnalyzed,
     framesWithPose: detectedFrames.length,
+    rawFrames: detectedFrames,
   }
 }

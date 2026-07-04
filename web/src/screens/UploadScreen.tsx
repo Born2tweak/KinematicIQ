@@ -3,8 +3,10 @@ import { useNavigate } from 'react-router-dom'
 import { Button } from '../components/Button'
 import { Card } from '../components/Card'
 import { DisclaimerBanner } from '../components/DisclaimerBanner'
-import { runVideoAnalysis } from '../analysis/videoAnalyzer'
+import { DEFAULT_ANALYSIS_FPS, runVideoAnalysis } from '../analysis/videoAnalyzer'
 import { poseEngine } from '../cv/poseEngine'
+import { createTape } from '../eval/poseTape'
+import { storeSessionTape } from '../eval/tapeStore'
 import {
   disposeVideo,
   isLikelySupportedVideo,
@@ -208,6 +210,17 @@ export function UploadScreen() {
         return
       }
 
+      // Keep the raw (pre-filter) frames as a replayable pose tape so the
+      // results screen can offer it for download (validation dataset capture).
+      storeSessionTape(
+        createTape(result.rawFrames, {
+          fps: DEFAULT_ANALYSIS_FPS,
+          label: fileName ?? undefined,
+          source: 'upload',
+          recordedAt: new Date().toISOString(),
+        }),
+      )
+
       const sessionResult = buildSessionResult(
         result.reps,
         result.poseConfidenceSamples,
@@ -231,7 +244,7 @@ export function UploadScreen() {
     } finally {
       abortRef.current = null
     }
-  }, [navigate])
+  }, [navigate, fileName])
 
   const handleCancelAnalysis = useCallback(() => {
     abortRef.current?.abort()

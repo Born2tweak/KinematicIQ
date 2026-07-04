@@ -13,6 +13,8 @@ import {
   INSUFFICIENT_DATA_MESSAGE,
   NO_REPS_MESSAGE,
 } from '../feedback/feedbackEngine'
+import { downloadTape } from '../eval/downloadTape'
+import { getSessionTape } from '../eval/tapeStore'
 import { useAnalystMode } from '../hooks/useAnalystMode'
 import { buildResultsSummary } from '../session/buildSessionResult'
 import { buildComponentScoreExplanations } from '../scoring/scoringExplanations'
@@ -219,6 +221,26 @@ export function ResultsScreen() {
             </div>
           )}
         </Card>
+      )}
+
+      {isAnalyst && getSessionTape() !== null && (
+        <section className="results-panel" aria-label="Pose tape">
+          <h2 className="results-panel__heading">Pose tape</h2>
+          <p className="results-panel__intro">
+            Raw landmark recording of this session — replayable through the eval
+            harness, and the capture format for the validation dataset. Stays on
+            this device.
+          </p>
+          <Button
+            variant="secondary"
+            onClick={() => {
+              const tape = getSessionTape()
+              if (tape) downloadTape(tape)
+            }}
+          >
+            Save pose tape (JSON)
+          </Button>
+        </section>
       )}
 
       <div className="results-actions">

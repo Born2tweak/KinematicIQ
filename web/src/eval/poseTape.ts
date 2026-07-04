@@ -14,6 +14,8 @@ export interface PoseTapeMeta {
   fps: number
   label?: string
   source?: string
+  /** ISO-8601 capture time — dataset provenance (see docs/25 capture protocol). */
+  recordedAt?: string
   /** Optional hand-labeled ground truth for benchmarking. */
   truth?: {
     repCount?: number
