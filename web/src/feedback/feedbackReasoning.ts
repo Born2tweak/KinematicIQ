@@ -86,7 +86,7 @@ function buildDepthCue(
       issue: 'Depth',
       observed: `Depth varied rep to rep (about ${cv!.toFixed(0)}% spread). Deepest knee bend was ${min !== null ? formatDegrees(min) : 'unclear'}; shallowest was ${max !== null ? formatDegrees(max) : 'unclear'}.`,
       whyItMatters:
-        'Squat depth drives how much work the hips and quads do together. When depth jumps around, the set is harder to compare rep to rep and the depth score drops.',
+        'Squat depth is how far your hips sit at the bottom — the more your knees bend, the deeper the rep. When depth jumps around, the set is harder to compare rep to rep and the depth score drops.',
       tryNext:
         'Pick a target depth before the set and hit the same bottom position each rep — pause one second at the bottom to feel it.',
       confidence,
@@ -143,7 +143,7 @@ function buildTrunkCue(
       issue: 'Trunk control',
       observed: `Chest lean averaged about ${formatDegrees(avg)} and changed noticeably between reps (roughly ${formatDegrees(spread!)} spread).`,
       whyItMatters:
-        'A forward torso shifts more load to the lower back and quads. When lean changes rep to rep, bracing and balance are less repeatable — that lowers the trunk control score.',
+        'A forward torso means your chest drops toward the floor through the descent. When lean changes rep to rep, your bracing and balance look less repeatable — that lowers the trunk control score.',
       tryNext:
         'Take a breath at the top, brace your ribs down, and keep the same chest angle through the descent and drive up.',
       confidence,
@@ -156,7 +156,7 @@ function buildTrunkCue(
       issue: 'Trunk control',
       observed: `Your chest leaned forward about ${formatDegrees(avg)} on average during the squat — more than the upright trunk range the app expects.`,
       whyItMatters:
-        'Extra forward lean moves stress away from the hips and can make the squat look more like a hinge. The camera scores trunk angle from shoulder to hip, so a tipped chest lowers trunk control.',
+        'Extra forward lean makes the squat look more like a hinge, with the hips traveling back while the chest tips toward the floor. The camera scores trunk angle from shoulder to hip, so a tipped chest lowers trunk control.',
       tryNext:
         'Keep your ribs stacked over your pelvis and look slightly ahead — “chest tall” on the way down and up.',
       confidence,
@@ -171,7 +171,7 @@ function buildTrunkCue(
         ? `Trunk angle averaged about ${formatDegrees(avg)} across the set.`
         : 'Trunk angle was not visible on every rep.',
     whyItMatters:
-      'Stable trunk position helps force go through the hips and knees together instead of folding at the waist.',
+      'A stable trunk keeps your chest and hips moving together instead of folding at the waist.',
     tryNext:
       'Brace before each rep and keep the same torso angle from start to finish.',
     confidence,
@@ -198,7 +198,7 @@ function buildKneeTrackingCue(
       issue: 'Knee tracking',
       observed: `${sideNote} Average left–right knee difference was about ${formatDegrees(asym)}.`,
       whyItMatters:
-        'Even knee bend helps load both legs similarly. When one knee collapses inward or stays straighter, force can drift to one side — the app scores that as tracking asymmetry, not a medical diagnosis.',
+        'Even knee bend keeps both legs moving through the same range. When one knee collapses inward or stays straighter, your hips or that knee may drift toward one side — the app scores that as tracking asymmetry, not a medical diagnosis.',
       tryNext:
         'Spread the floor with your feet and drive both knees toward your second toe at the same rate — match the deeper side instead of letting one knee dive in.',
       confidence,
@@ -261,9 +261,9 @@ function buildSymmetryCue(
   if (shift !== null && shift > HIP_SHIFT_THRESHOLDS.excellentMax) {
     return {
       issue: 'Symmetry',
-      observed: `Hips shifted sideways about ${(shift * 100).toFixed(0)}% of frame width at the bottom — weight looked heavier on one side.`,
+      observed: `Hips shifted sideways about ${(shift * 100).toFixed(0)}% of frame width at the bottom — your hips drifted toward one side.`,
       whyItMatters:
-        'Centered hips over the feet spread load evenly through both legs. Lateral shift suggests one side is doing more of the work in the squat pattern.',
+        'Keeping your hips centered over your feet keeps the movement even side-to-side. A lateral shift means one hip traveled further sideways than the other in the squat pattern.',
       tryNext:
         'Press evenly through the whole foot (big toe, little toe, heel) and think “hips between your heels” at the bottom.',
       confidence,
