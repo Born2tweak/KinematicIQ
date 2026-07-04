@@ -3,6 +3,8 @@
 **Status:** Canonical, condensed for agents. Full strategy: `product-direction.md`. Written 2026-07-02.
 **Directive:** finish polishing the UI first, then expand beyond squats (hip hinge, jumping, sprinting).
 
+> **Supersession note (2026-07-03).** Where this roadmap conflicts with `docs/24_movement_ontology.md` or `docs/strategy/product-thesis.md`, those documents supersede it — they are the intellectual foundation this roadmap serves. In particular, the Phase 1 acceptance line **"Don't … remove the numeric score" is superseded**: the composite 0–100 movement score (and its band labels) has been **removed** per ontology §6 principle 15 ("no composite score within a pattern") and the product thesis ("no 0–100 anywhere a human can see"). The per-component reads (depth, trunk, knee tracking, consistency, symmetry) are kept as observable evidence, not aggregated into a total. Read every remaining "score" reference below as that per-component evidence, never a composite grade.
+
 ---
 
 ## Phase 0 — Doc & strategy truth alignment ✅ (2026-07-02)
