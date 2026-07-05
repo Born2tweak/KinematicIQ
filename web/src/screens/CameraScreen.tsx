@@ -34,7 +34,12 @@ import {
 } from '../analysis/setActivation'
 import { poseEngine } from '../cv/poseEngine'
 import { createLiveStreamFilter } from '../cv/landmarkFilter'
-import { createTape, createTapeRecorder, estimateFps } from '../eval/poseTape'
+import {
+  createTape,
+  createTapeRecorder,
+  estimateFps,
+  type PoseTapeEntryState,
+} from '../eval/poseTape'
 import { storeSessionTape } from '../eval/tapeStore'
 import { createEmptyPose3DRef, hipCenter } from '../cv/pose3d'
 import {
@@ -104,6 +109,10 @@ export function CameraScreen() {
   const liveFilterRef = useRef(createLiveStreamFilter())
   const pose3DRef = useRef(createEmptyPose3DRef())
   const tapeRecorderRef = useRef(createTapeRecorder())
+  /** Pipeline entry state at set activation — tape replay parity (finding #7). */
+  const tapeEntryStateRef = useRef<PoseTapeEntryState | null>(null)
+  /** Index into the tape where the analysis FSM began (preroll before it). */
+  const tapeAnalysisStartRef = useRef<number | null>(null)
 
   const [error, setError] = useState<string | null>(null)
   const [cameraAttempt, setCameraAttempt] = useState(0)
@@ -315,6 +324,8 @@ export function CameraScreen() {
             source: 'live',
             recordedAt: new Date().toISOString(),
             filtering: 'one-euro-live',
+            entryState: tapeEntryStateRef.current ?? undefined,
+            analysisStartFrameIndex: tapeAnalysisStartRef.current ?? 0,
           },
           {
             countedReps: reps.length,
@@ -324,6 +335,8 @@ export function CameraScreen() {
       )
     }
     recorder.reset()
+    tapeEntryStateRef.current = null
+    tapeAnalysisStartRef.current = null
 
     autoStartRef.current = createAutoStartState()
     autoFinishRef.current = createAutoFinishState()
@@ -465,6 +478,10 @@ export function CameraScreen() {
             if (autoResult.transitioned && autoResult.phase === 'READY') {
               const fresh = createFreshAnalysisPipeline()
               liveFilterRef.current.reset()
+              // Tape from READY onward: the preroll before activation warms
+              // the One-Euro filter exactly as live replay needs (finding #7).
+              tapeRecorderRef.current.reset()
+              tapeAnalysisStartRef.current = null
               pose3DRef.current.hipTrail = []
               pose3DRef.current.depthHistory = []
               phaseDetectorRef.current = fresh.phaseDetector
@@ -483,12 +500,21 @@ export function CameraScreen() {
             }
 
             if (autoResult.transitioned && autoResult.phase === 'ACTIVE') {
+              // Snapshot the entry state BEFORE re-seeding the pipeline so
+              // the tape can replay this session exactly (finding #7).
+              tapeEntryStateRef.current = {
+                calibratedHipY: autoStartRef.current.calibratedHipY,
+                standingKneeAngle: phaseDetectorRef.current.standingKneeAngle,
+                activatedByDescent: autoResult.activatedByDescent,
+              }
               autoFinishRef.current = createAutoFinishState()
               setAutoFinishPending(false)
               setFinishCountdown(null)
               poseConfidenceSamplesRef.current = []
               postureSamplesRef.current = []
-              tapeRecorderRef.current.reset()
+              // Frames recorded so far are calibration preroll; the frame
+              // recorded later this pass is the activation frame.
+              tapeAnalysisStartRef.current = tapeRecorderRef.current.count
 
               const kneeAngles = [angles.leftKnee, angles.rightKnee].filter(
                 (value): value is number => value !== null,
@@ -531,11 +557,19 @@ export function CameraScreen() {
               if (postureSample) {
                 postureSamplesRef.current.push(postureSample)
               }
-              // Tape the RAW frame (pre One-Euro) — the tape substrate is
-              // always exactly what MediaPipe produced.
-              if (rawFrame) {
-                tapeRecorderRef.current.record(rawFrame)
-              }
+            }
+
+            // Tape the RAW frame (pre One-Euro) — the tape substrate is
+            // always exactly what MediaPipe produced. Recording spans READY
+            // (calibration preroll, warms the replay filter) through ACTIVE.
+            // The READY-transition frame itself is skipped: it was filtered
+            // BEFORE the filter reset above, so taping from the next frame
+            // keeps replay's fresh filter bit-identical with live.
+            const tapeThisFrame =
+              (autoResult.phase === 'READY' && !autoResult.transitioned) ||
+              autoResult.phase === 'ACTIVE'
+            if (tapeThisFrame && rawFrame) {
+              tapeRecorderRef.current.record(rawFrame)
             }
 
             // Update UI phase

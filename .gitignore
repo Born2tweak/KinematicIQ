@@ -28,6 +28,10 @@ build/
 # Logs
 *.log
 
+# Pose tapes are athlete motion data (validation dataset) — store them with
+# the recordings, never in git (docs/validation/session-log.md).
+eval-tapes/
+
 # AutoClaw KDream data
 .autoclaw/
 

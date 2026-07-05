@@ -14,10 +14,12 @@ import { safeLandmark } from './geometry'
 import {
   createPhaseDetectorState,
   updatePhaseDetector,
+  type PhaseDetectorState,
 } from './phaseDetector'
 import {
   createRepCounterState,
   updateRepCounter,
+  type RepCounterState,
 } from './repCounter'
 import { filterFrameSequence } from '../cv/landmarkFilter'
 import { LANDMARK_INDICES, type JointAngles, type PoseFrame, type RepMetrics } from '../cv/types'
@@ -99,20 +101,33 @@ function computeHipY(frame: PoseFrame): number | null {
 }
 
 /**
+ * Optional pipeline entry state. Live sessions can activate mid-descent with
+ * seeded FSM state (analysis/setActivation); replay passes the same seeds so
+ * the tape reproduces the live session (finding #7). Omit for a cold start.
+ */
+export interface PipelineInitialState {
+  phaseDetector?: PhaseDetectorState
+  repCounter?: RepCounterState
+}
+
+/**
  * Run the phase-detection + rep-counting FSM over an ordered list of detected
  * pose frames. This is the single source of truth for the analysis loop, shared
  * by {@link runVideoAnalysis} and the offline replay harness so both exercise the
  * exact same logic. Pure: no seeking, no detection, no DOM.
  */
-export function runPipelineOnFrames(frames: readonly PoseFrame[]): {
+export function runPipelineOnFrames(
+  frames: readonly PoseFrame[],
+  initial: PipelineInitialState = {},
+): {
   reps: RepMetrics[]
   poseConfidenceSamples: number[]
   postureSamples: PostureFrameSample[]
   frameTrace: FrameTraceSample[]
   repRejections: RepRejection[]
 } {
-  let phaseDetector = createPhaseDetectorState()
-  let repCounter = createRepCounterState()
+  let phaseDetector = initial.phaseDetector ?? createPhaseDetectorState()
+  let repCounter = initial.repCounter ?? createRepCounterState()
   const poseConfidenceSamples: number[] = []
   const postureSamples: PostureFrameSample[] = []
   const frameTrace = createFrameTraceCollector()

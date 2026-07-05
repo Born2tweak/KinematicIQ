@@ -10,6 +10,20 @@
 import type { PoseFrame } from '../cv/types'
 import type { RepRejection } from '../analysis/repCounter'
 
+/**
+ * Pipeline entry state at the moment the set activated, captured so replay
+ * can reproduce the live session exactly (finding #7: live auto-start /
+ * calibration / beginSetDuringDescent vs cold-start replay).
+ */
+export interface PoseTapeEntryState {
+  /** Auto-start calibrated standing hip Y (normalized) at activation. */
+  calibratedHipY: number | null
+  /** Upright knee baseline learned before descent, if any. */
+  standingKneeAngle: number | null
+  /** True when READY → ACTIVE fired because a descent was already underway. */
+  activatedByDescent: boolean
+}
+
 export interface PoseTapeMeta {
   /** Sampling rate of the sequence in Hz (estimated for live capture). */
   fps: number
@@ -22,6 +36,22 @@ export interface PoseTapeMeta {
   protocolId?: string
   /** Landmark filtering mode the ANALYSIS used. Tape frames are always raw. */
   filtering?: 'raw' | 'one-euro-live' | 'butterworth-offline'
+  /**
+   * True when the SAVED frames already carry the filtering named above
+   * (legacy tapes). Replay must not filter such tapes again. Default
+   * false: frames are raw and replay re-applies `filtering` to match
+   * what the live analysis actually consumed.
+   */
+  framesFiltered?: boolean
+  /** Pipeline entry state at set activation — replay parity (finding #7). */
+  entryState?: PoseTapeEntryState
+  /**
+   * Index into `frames` where the analysis FSM began (the set-activation
+   * frame). Frames before it are calibration preroll, recorded from the
+   * READY transition onward so replay can warm the One-Euro filter with
+   * exactly the frames the live filter saw. Absent = 0 (no preroll).
+   */
+  analysisStartFrameIndex?: number
   /** Build identifier for provenance, when available. */
   appVersion?: string
   /** Optional hand-labeled ground truth for benchmarking. */
