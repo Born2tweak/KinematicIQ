@@ -61,7 +61,7 @@ For each session:
 | Capability | Notes |
 |------------|-------|
 | Live pose tape + gate diagnostics | Rejection reasons surfaced in normal mode; full gate dump in Analyst DBG |
-| Upload path parity | Same analysis pipeline as live |
+| Upload path parity | Same analysis pipeline as live — **caveat:** replaying a live tape does not reproduce live rep counts yet (session-log finding #7: 12 vs 25 on the 2026-07-05 tape); fix before using replay as audit ground truth |
 | Session log fields | Template aligned with `RepRejection.gate` / coach-facing copy |
 | No recruiting automation | Human scheduling only |
 

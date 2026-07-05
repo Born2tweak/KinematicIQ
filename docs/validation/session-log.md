@@ -64,15 +64,22 @@ pose tape. Recordings live outside the repo:
   rendering: summary line "Rep 1 differed most from your set pattern and is
   left out of the averages" and depth copy "Rep 1 excluded as an outlier
   from your own set pattern."
-- Tape file: **fill in** — this tape is the important one; please save it
+- Tape file: `live-session-2026-07-05.posetape.json` (Downloads; backed up
+  next to the recordings in the OneDrive ShareX folder). 1475 frames @
+  15.5 fps, recordedAt 2026-07-05T01:37Z (2026-07-04 21:37 EDT). Kept out
+  of the repo deliberately — it is athlete motion data and part of the
+  validation dataset; store tapes with the recordings, not in git.
 - ACTUAL reps performed (your count): **fill in**
 - Detected reps: **25** — but rep-by-rep chart shows this set is heavily
   polluted (see finding below): reps 1–7 counted at 175°–178° bottom knee
   angle (standing — no knee bend), reps 13/16/17/18 at 13°–20° (tracking
   artifacts, near-impossible flexion), plausible genuine squats roughly
   reps 8–12, 14–15, 19–25 (65°–144° bottoms)
-- Rejected candidates shown in analyst mode: low single digits on the live
-  HUD (1–4 range) — phantom filter appears active
+- Rejected candidates (from tape diagnostics): ledger at its 50-entry cap
+  (`MAX_REJECTIONS`) — **46 phantom** (`bottom` gate, zero descent) + **4
+  real** (`knee-lift` gate). Live HUD correctly showed only the real ones
+  (phantom filter working as designed). Note: the cap means early
+  rejections were truncated; actual candidate churn was ≥50.
 - Movement intent: partly normal squats, partly free movement / walking
   toward camera (effectively an adversarial stress test)
 - Capture issues: close-range frames with legs clipped; skeleton distorted
@@ -83,6 +90,13 @@ pose tape. Recordings live outside the repo:
   outlier is correctly excluded, but a single-outlier exclusion cannot
   clean a set with ~10 artifact reps — as designed; the real problem is
   upstream (false-positive rep counting, below).
+- Offline replay (2026-07-04, `runPipelineOnFrames` on the tape's frames):
+  **12 reps** vs 25 live — see finding #7. The replay independently
+  reproduces the false-positive families: rep 1 at 178° and rep 2 at 175°
+  bottom (standing, 3164 ms / 520 ms), rep 3 counted with **no knee data
+  at all** (both min knee angles null, 63% conf), reps 7–8 at 18°/12°
+  bottoms with the other knee at ~164° (single-leg tracking artifacts).
+  Plausible genuine squats in the replay: reps 4–6 and 9–12 (55°–139°).
 
 ---
 
@@ -95,4 +109,7 @@ pose tape. Recordings live outside the repo:
 | 3 | Phase detection runs on partial-body frames at low confidence (b: BOTTOM @ 28% conf, face-only framing) | Open — validation-phase item (kickoff doc) |
 | 4 | Asymmetry reads carry High confidence despite single-leg dropouts (a: 39°, c: 35° with `---` knees) | Open — validation-phase item (kickoff doc) |
 | 5 | **False-positive reps while standing** (c: reps 1–7 counted at 175–178° bottom knee angle; one rep counted with hip drop −0.014). `reachedBottom` can be satisfied by the phase detector without any knee bend, and `bilateralBend` / `hipDescended` are soft (non-rejecting) validations. Severity: high — inflates rep counts on any set with upper-body motion or close-range framing. | Open — highest-priority validation-phase item; needs the session-c pose tape as the regression fixture |
-| 6 | Extreme-flexion artifacts counted as reps (c: 13°–20° bottoms on reps 13/16–18) | Open — likely same root cause family as #5 (tracking garbage passing soft gates) |
+| 6 | Extreme-flexion artifacts counted as reps (c: 13°–20° bottoms on reps 13/16–18; replay reproduces at 12°/18° with the other knee ~164°) | Open — likely same root cause family as #5 (tracking garbage passing soft gates) |
+| 7 | **Live vs replay parity gap**: replaying the session-c tape through `runPipelineOnFrames` yields 12 reps where the live session counted 25. Same frames, same gates — the difference is pipeline entry state (live auto-start/calibration/`beginSetDuringDescent` vs cold-start replay), and possibly double-filtering semantics (tape is already one-euro filtered). The kickoff doc's "upload path parity" claim does not currently hold for live tapes; validation audits need replay to reproduce live counts. | Open — tooling item, blocks tape-driven regression testing of #5/#6 |
+| 8 | A rep can be counted with zero knee data (replay rep 3: both min knee angles null). `bilateralBend` soft-fails and nothing hard-rejects a knee-less rep. | Open — subset of #5, worth its own guard (hard-reject when no knee angle was ever read during the candidate) |
+| 9 | Rejection ledger cap (`MAX_REJECTIONS` = 50) reached in session c; 46/50 entries were phantoms, so real rejections can be evicted by jitter churn. | Open — minor: stop appending phantoms once flagged, or raise cap / count phantoms separately |
