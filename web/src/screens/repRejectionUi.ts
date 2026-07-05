@@ -109,3 +109,21 @@ export function latestRejectionSummary(rejections: RepRejection[]): string | nul
   if (!latest) return null
   return coachRejectionMessage(latest.reason)
 }
+
+/**
+ * Rejections representing real rep attempts. Phantom candidates (phase
+ * jitter with no hip descent) stay in the ledger for audit but are never
+ * surfaced as "rejected reps" — a coach reading "15 rejections" on a clean
+ * set would distrust a counter that was actually right.
+ */
+export function realRejections(rejections: RepRejection[]): RepRejection[] {
+  return rejections.filter((rejection) => !rejection.phantom)
+}
+
+/** Reason of the most recent non-phantom rejection, or null. */
+export function lastRealRejectionReason(
+  rejections: RepRejection[],
+): string | null {
+  const real = realRejections(rejections)
+  return real.length > 0 ? real[real.length - 1].reason : null
+}

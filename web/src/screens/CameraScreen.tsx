@@ -58,7 +58,11 @@ import {
   type CameraSessionPhase,
   getSessionStatusCopy,
 } from './cameraSessionUi'
-import { nextRepFeedbackHud } from './repRejectionUi'
+import {
+  lastRealRejectionReason,
+  nextRepFeedbackHud,
+  realRejections,
+} from './repRejectionUi'
 
 // Lazy: keeps three.js/@react-three/fiber out of the main bundle until toggled on.
 const PoseScene3D = lazy(() => import('../components/PoseScene3D'))
@@ -586,12 +590,16 @@ export function CameraScreen() {
 
             const pdState = phaseDetectorRef.current
 
+            // Phantom (zero-descent) candidates never reach the coach-facing
+            // HUD — only real rep attempts count as rejections there.
+            const realRejectionCount = realRejections(rcState.rejections).length
+
             const feedbackSync = repFeedbackSyncRef.current
             const feedbackResult = nextRepFeedbackHud({
               phase: autoResult.phase,
               isAnalyst: isAnalystRef.current,
-              lastMissedReason: rcState.lastMissedRepReason,
-              rejectionCount: rcState.rejections.length,
+              lastMissedReason: lastRealRejectionReason(rcState.rejections),
+              rejectionCount: realRejectionCount,
               completedRepThisFrame,
               previousRejectionCount: feedbackSync.rejectionCount,
               previousMissedReason: feedbackSync.lastMissedReason,
@@ -632,7 +640,7 @@ export function CameraScreen() {
               previousPhase: rcState.previousPhase,
               seatedLive: rcState.activeRep?.seatedMovementDetected ?? false,
               maxHipDropLive: rcState.activeRep?.maxHipDrop ?? 0,
-              rejectionCount: rcState.rejections.length,
+              rejectionCount: realRejectionCount,
               hudLeftReservePx: Math.round(canvas.height * 0.28),
             }
             if (showDebug) {

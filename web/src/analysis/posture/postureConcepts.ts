@@ -226,7 +226,12 @@ export function buildPostureConcepts(
   }
 
   if (posture) {
-    appendPostureDepthConcepts(concepts, posture, sessionConfidence)
+    appendPostureDepthConcepts(
+      concepts,
+      posture,
+      sessionConfidence,
+      metrics.excludedRepNumbers,
+    )
   }
 
   return concepts
@@ -237,6 +242,7 @@ function appendPostureDepthConcepts(
   concepts: PostureConcept[],
   posture: PostureSetSummary,
   sessionConfidence: ConfidenceLevel,
+  excludedRepNumbers: readonly number[],
 ): void {
   if (posture.avgHingeRatio !== null) {
     const ratio = posture.avgHingeRatio
@@ -289,12 +295,15 @@ function appendPostureDepthConcepts(
   }
 
   if (posture.mostDeviantRep !== null) {
+    const excluded = excludedRepNumbers.includes(posture.mostDeviantRep)
     concepts.push(
       concept(
         'deviation',
         `Rep ${posture.mostDeviantRep} stands out`,
         'info',
-        `Rep ${posture.mostDeviantRep} appears to differ most from your own pattern in this set — worth a second look.`,
+        `Rep ${posture.mostDeviantRep} appears to differ most from your own pattern in this set — worth a second look.${
+          excluded ? " It is left out of this set's averages." : ''
+        }`,
         sessionConfidence,
       ),
     )

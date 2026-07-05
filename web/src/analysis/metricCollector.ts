@@ -37,8 +37,14 @@ export const depthCoefficientOfVariation = (depths: number[]): number | null => 
 export function collectSetMetrics(
   reps: RepMetrics[],
   sessionConfidenceScore: number,
+  excludedRepNumbers: ReadonlySet<number> = new Set(),
 ): SetMetricsSummary {
-  const depths = reps
+  // Outlier reps (e.g. a setup artifact flagged as deviating from the set's
+  // own pattern) still count as reps but are excluded from the aggregate
+  // metrics — always with disclosure via `excludedRepNumbers` in the summary.
+  const included = reps.filter((rep) => !excludedRepNumbers.has(rep.repNumber))
+
+  const depths = included
     .map(repDepth)
     .filter((value): value is number => value !== null)
 
@@ -46,17 +52,20 @@ export function collectSetMetrics(
   // contribute less to the summary metrics (noisier, less trustworthy).
   const depthPairs: Array<[number, number]> = []
   const trunkPairs: Array<[number, number]> = []
-  for (const rep of reps) {
+  for (const rep of included) {
     const depth = repDepth(rep)
     if (depth !== null) depthPairs.push([depth, rep.confidence])
     if (rep.averageTrunkLean !== null) trunkPairs.push([rep.averageTrunkLean, rep.confidence])
   }
 
-  const asymmetry = summarizeSetAsymmetry(reps)
+  const asymmetry = summarizeSetAsymmetry(included)
 
   return {
     repCount: reps.length,
     reps,
+    excludedRepNumbers: reps
+      .filter((rep) => excludedRepNumbers.has(rep.repNumber))
+      .map((rep) => rep.repNumber),
     avgDepth: weightedMean(depthPairs),
     avgTrunkLean: weightedMean(trunkPairs),
     depthCV: depthCoefficientOfVariation(depths),

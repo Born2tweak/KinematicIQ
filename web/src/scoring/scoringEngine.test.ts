@@ -15,6 +15,7 @@ function mockMetrics(overrides: Partial<SetMetricsSummary> = {}): SetMetricsSumm
     avgKneeAsymmetry: 4,
     avgShoulderAsymmetry: 0.02,
     overallConfidence: 0.82,
+    excludedRepNumbers: [],
     ...overrides,
   }
 }

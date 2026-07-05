@@ -18,6 +18,7 @@ import { getSessionTape } from '../eval/tapeStore'
 import { useAnalystMode } from '../hooks/useAnalystMode'
 import { buildResultsSummary } from '../session/buildSessionResult'
 import { buildComponentScoreExplanations } from '../scoring/scoringExplanations'
+import { realRejections } from './repRejectionUi'
 import type { SessionResult } from '../session/types'
 
 export function ResultsScreen() {
@@ -236,30 +237,43 @@ export function ResultsScreen() {
             Save pose tape (JSON)
           </Button>
 
-          {(sessionTape.diagnostics?.rejections.length ?? 0) > 0 && (
-            <div className="detail-rows">
-              <h3 className="results-panel__heading">
-                Rejected rep candidates (
-                {sessionTape.diagnostics!.rejections.length})
-              </h3>
-              {sessionTape.diagnostics!.rejections.map((rejection, index) => (
-                <div
-                  key={`${rejection.startFrameIndex}-${index}`}
-                  className="detail-row"
-                >
-                  <span className="detail-row__label">
-                    {rejection.gate} · frames {rejection.startFrameIndex}–
-                    {rejection.endFrameIndex}
-                  </span>
-                  <span className="detail-row__value">
-                    {rejection.reason} · {Math.round(rejection.durationMs)}ms ·
-                    hip drop {rejection.values.maxHipDrop.toFixed(3)} · conf{' '}
-                    {Math.round(rejection.values.avgConfidence * 100)}%
-                  </span>
+          {(sessionTape.diagnostics?.rejections.length ?? 0) > 0 &&
+            (() => {
+              const allRejections = sessionTape.diagnostics!.rejections
+              const real = realRejections(allRejections)
+              const phantomCount = allRejections.length - real.length
+              return (
+                <div className="detail-rows">
+                  <h3 className="results-panel__heading">
+                    Rejected rep candidates ({real.length})
+                  </h3>
+                  {real.map((rejection, index) => (
+                    <div
+                      key={`${rejection.startFrameIndex}-${index}`}
+                      className="detail-row"
+                    >
+                      <span className="detail-row__label">
+                        {rejection.gate} · frames {rejection.startFrameIndex}–
+                        {rejection.endFrameIndex}
+                      </span>
+                      <span className="detail-row__value">
+                        {rejection.reason} · {Math.round(rejection.durationMs)}
+                        ms · hip drop {rejection.values.maxHipDrop.toFixed(3)} ·
+                        conf {Math.round(rejection.values.avgConfidence * 100)}%
+                      </span>
+                    </div>
+                  ))}
+                  {phantomCount > 0 && (
+                    <p className="results-panel__intro">
+                      {phantomCount} zero-descent candidate
+                      {phantomCount === 1 ? '' : 's'} (phase jitter while
+                      standing, no hip drop) not shown — retained in the pose
+                      tape for audit.
+                    </p>
+                  )}
                 </div>
-              ))}
-            </div>
-          )}
+              )
+            })()}
         </section>
       )}
 

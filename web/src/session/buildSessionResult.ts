@@ -1,5 +1,8 @@
 import { collectSetMetrics } from '../analysis/metricCollector'
-import { collectPostureMetrics } from '../analysis/posture/postureCollector'
+import {
+  collectPostureMetrics,
+  findMostDeviantRep,
+} from '../analysis/posture/postureCollector'
 import type { PostureFrameSample } from '../analysis/posture/postureFrame'
 import { calculateSessionConfidence } from '../feedback/confidenceCalculator'
 import {
@@ -11,6 +14,12 @@ import { computeComponentScores } from '../scoring/scoringEngine'
 import type { RepMetrics } from '../cv/types'
 import type { SessionResult } from './types'
 
+/**
+ * Exclude a flagged outlier rep from set aggregates only when enough reps
+ * remain for the averages to still describe a pattern (≥3 after exclusion).
+ */
+const MIN_REPS_FOR_OUTLIER_EXCLUSION = 4
+
 export function buildSessionResult(
   reps: RepMetrics[],
   poseConfidenceSamples: number[] = [],
@@ -20,7 +29,19 @@ export function buildSessionResult(
   const { score: sessionConfidenceScore, level: sessionConfidence } =
     calculateSessionConfidence(reps, poseConfidenceSamples)
 
-  const metrics = collectSetMetrics(reps, sessionConfidenceScore)
+  const deviantRep =
+    reps.length >= MIN_REPS_FOR_OUTLIER_EXCLUSION
+      ? findMostDeviantRep(reps)
+      : null
+  const excludedRepNumbers = new Set(
+    deviantRep === null ? [] : [deviantRep],
+  )
+
+  const metrics = collectSetMetrics(
+    reps,
+    sessionConfidenceScore,
+    excludedRepNumbers,
+  )
 
   if (noRepsDetected) {
     return {
@@ -68,7 +89,12 @@ export function buildResultsSummary(result: SessionResult): string {
       ? ` · avg depth ~${Math.round(metrics.avgDepth)}° knee bend`
       : ''
 
-  let summary = `${repLine}${depthPart}.`
+  const exclusionPart =
+    metrics.excludedRepNumbers.length > 0
+      ? ` Rep ${metrics.excludedRepNumbers.join(', ')} differed most from your set pattern and is left out of the averages.`
+      : ''
+
+  let summary = `${repLine}${depthPart}.${exclusionPart}`
 
   if (sessionConfidence === 'Medium') {
     summary += ' Good enough to compare sets — brighter light or a bit more distance can sharpen the read.'

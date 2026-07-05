@@ -15,6 +15,7 @@ describe('scoringExplanations', () => {
       avgKneeAsymmetry: 5,
       avgShoulderAsymmetry: 0.01,
       overallConfidence: 80,
+      excludedRepNumbers: [],
     }
     const explanations = buildComponentScoreExplanations(metrics)
     const depth = explanations.find((e) => e.key === 'depth')!

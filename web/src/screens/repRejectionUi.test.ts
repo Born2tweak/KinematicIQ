@@ -1,8 +1,10 @@
 import { describe, expect, it } from 'vitest'
 import {
   coachRejectionMessage,
+  lastRealRejectionReason,
   latestRejectionSummary,
   nextRepFeedbackHud,
+  realRejections,
 } from './repRejectionUi'
 import type { RepRejection } from '../analysis/repCounter'
 
@@ -87,29 +89,56 @@ describe('nextRepFeedbackHud', () => {
   })
 })
 
+function rejection(overrides: Partial<RepRejection> = {}): RepRejection {
+  return {
+    gate: 'bottom',
+    reason: 'Bottom not held long enough',
+    phantom: false,
+    startFrameIndex: 0,
+    endFrameIndex: 10,
+    startTimestamp: 0,
+    endTimestamp: 500,
+    durationMs: 500,
+    values: {
+      minLeftKneeAngle: 90,
+      minRightKneeAngle: 92,
+      maxHipDrop: 0.2,
+      bottomHoldMs: 1500,
+      avgConfidence: 0.9,
+      reachedBottom: false,
+    },
+    ...overrides,
+  }
+}
+
 describe('latestRejectionSummary', () => {
   it('returns coach copy for the most recent rejection', () => {
-    const rejections: RepRejection[] = [
-      {
-        gate: 'bottom',
-        reason: 'Bottom not held long enough',
-        startFrameIndex: 0,
-        endFrameIndex: 10,
-        startTimestamp: 0,
-        endTimestamp: 500,
-        durationMs: 500,
-        values: {
-          minLeftKneeAngle: 90,
-          minRightKneeAngle: 92,
-          maxHipDrop: 0.2,
-          bottomHoldMs: 1500,
-          avgConfidence: 0.9,
-          reachedBottom: false,
-        },
-      },
-    ]
-    expect(latestRejectionSummary(rejections)).toBe(
+    expect(latestRejectionSummary([rejection()])).toBe(
       'Rep not counted — hold the bottom position a little longer',
     )
+  })
+})
+
+describe('realRejections', () => {
+  it('filters out phantom (zero-descent) candidates', () => {
+    const list = [
+      rejection({ phantom: true, startFrameIndex: 0 }),
+      rejection({ phantom: false, startFrameIndex: 20 }),
+      rejection({ phantom: true, startFrameIndex: 40 }),
+    ]
+    expect(realRejections(list)).toHaveLength(1)
+    expect(realRejections(list)[0].startFrameIndex).toBe(20)
+  })
+
+  it('returns the reason of the last real rejection only', () => {
+    const list = [
+      rejection({ phantom: false, reason: 'Knee lift detected' }),
+      rejection({ phantom: true, reason: 'Bottom not held long enough' }),
+    ]
+    expect(lastRealRejectionReason(list)).toBe('Knee lift detected')
+  })
+
+  it('returns null when every rejection is phantom', () => {
+    expect(lastRealRejectionReason([rejection({ phantom: true })])).toBeNull()
   })
 })

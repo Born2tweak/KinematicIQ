@@ -67,6 +67,17 @@ For each session:
 
 ---
 
+## Known detection-behavior items (deferred to validation phase)
+
+Observed in the 2026-07-04 pilot recordings. These change detection behavior itself, so they wait for ground-truth tapes rather than being tuned by eye:
+
+1. **Phase detection runs on partial-body frames.** With only face/shoulders in frame, the FSM reported `BOTTOM` with an active candidate at 28% pose confidence — the seated block gate was the only thing preventing a phantom count. Candidate: suspend phase detection below a visibility/confidence floor. Measure against labeled tapes first.
+2. **Asymmetry reads carry High confidence despite single-leg dropouts.** Sets showed 39–42° left–right knee difference labeled "high confidence" while one knee read `---` on multiple frames. Candidate: gate asymmetry confidence on bilateral landmark coverage across the set.
+
+(Related fixes that did NOT change detection: phantom zero-descent candidates are now excluded from coach-facing rejection counts (`RepRejection.phantom`), and the within-set outlier rep is excluded from set aggregates with disclosure. Both are reporting-layer only; raw diagnostics stay in the pose tape.)
+
+---
+
 ## Next actions (ordered)
 
 1. Ratify capture protocol on 1–2 pilot clips.

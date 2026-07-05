@@ -117,6 +117,12 @@ export type RepGateId =
 export interface RepRejection {
   gate: RepGateId
   reason: string
+  /**
+   * True when the candidate never showed meaningful hip descent — phase
+   * jitter while standing, not a real rep attempt. Kept in the ledger for
+   * audit but excluded from coach-facing rejection counts and lists.
+   */
+  phantom: boolean
   startFrameIndex: number
   endFrameIndex: number
   startTimestamp: number
@@ -154,10 +160,12 @@ function buildRejection(
   reason: string,
   frame: PoseFrame,
   reachedBottom: boolean,
+  cfg: RepGateConfig,
 ): RepRejection {
   return {
     gate: gateForReason(reason),
     reason,
+    phantom: !reachedBottom && activeRep.maxHipDrop < cfg.minHipDescent,
     startFrameIndex: activeRep.startFrameIndex,
     endFrameIndex: frame.frameIndex,
     startTimestamp: activeRep.startTimestamp,
@@ -811,7 +819,7 @@ export function updateRepCounter(
     lastMissedRepReason = reason
     rejections = [
       ...rejections,
-      buildRejection(activeRep, reason, input.frame, reachedBottom),
+      buildRejection(activeRep, reason, input.frame, reachedBottom, cfg),
     ].slice(-MAX_REJECTIONS)
     console.log(`[RepCounter] MISSED REP: ${reason}`)
     activeRep = null
@@ -898,7 +906,7 @@ export function updateRepCounter(
       lastMissedRepReason = reason
       rejections = [
         ...rejections,
-        buildRejection(activeRep, reason, input.frame, reachedBottom),
+        buildRejection(activeRep, reason, input.frame, reachedBottom, cfg),
       ].slice(-MAX_REJECTIONS)
     }
     activeRep = null

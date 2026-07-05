@@ -5,7 +5,7 @@ import { buildPostureConcepts } from './postureConcepts'
 function summary(overrides: Partial<SetMetricsSummary> = {}): SetMetricsSummary {
   return {
     repCount: 5,
-    reps: [],
+    reps: [    ],
     avgDepth: 95,
     avgTrunkLean: 32,
     depthCV: 4,
@@ -15,6 +15,7 @@ function summary(overrides: Partial<SetMetricsSummary> = {}): SetMetricsSummary 
     avgKneeAsymmetry: 5,
     avgShoulderAsymmetry: 0.01,
     overallConfidence: 90,
+    excludedRepNumbers: [],
     ...overrides,
   }
 }

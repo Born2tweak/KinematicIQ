@@ -65,7 +65,11 @@ function depthExplanation(metrics: SetMetricsSummary): Partial {
     metrics.minDepth !== null && metrics.maxDepth !== null
       ? ` (range ${Math.round(metrics.minDepth)}°–${Math.round(metrics.maxDepth)}°)`
       : ''
-  }.`
+  }.${
+    metrics.excludedRepNumbers.length > 0
+      ? ` Rep ${metrics.excludedRepNumbers.join(', ')} excluded as an outlier from your own set pattern.`
+      : ''
+  }`
 
   if (t === 'strong') {
     return {

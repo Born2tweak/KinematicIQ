@@ -11,7 +11,7 @@ import { getActiveProfile, getMovementProfile } from './registry'
 
 const SAMPLE_METRICS: SetMetricsSummary = {
   repCount: 4,
-  reps: [],
+  reps: [  ],
   avgDepth: 102,
   avgTrunkLean: 38,
   depthCV: 7,
@@ -21,6 +21,7 @@ const SAMPLE_METRICS: SetMetricsSummary = {
   avgKneeAsymmetry: 9,
   avgShoulderAsymmetry: 0.01,
   overallConfidence: 82,
+  excludedRepNumbers: [],
 }
 
 describe('movement registry', () => {

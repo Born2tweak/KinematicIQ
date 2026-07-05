@@ -60,6 +60,7 @@ describe('tape meta round-trip', () => {
           {
             gate: 'bottom',
             reason: 'Bottom not held long enough',
+            phantom: false,
             startFrameIndex: 10,
             endFrameIndex: 40,
             startTimestamp: 1000,

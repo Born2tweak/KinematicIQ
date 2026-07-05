@@ -59,4 +59,36 @@ describe('buildSessionResult', () => {
     const result = buildSessionResult([])
     expect(buildResultsSummary(result)).toMatch(/no full reps were counted/i)
   })
+
+  it('excludes a flagged outlier rep from set aggregates with disclosure', () => {
+    // Rep 1 is a setup artifact: implausibly deep and slow vs the pattern.
+    const reps = [
+      makeRep(1, { minLeftKneeAngle: 41, minRightKneeAngle: 45, durationMs: 6000, endTimestamp: 6000 }),
+      makeRep(2, { minLeftKneeAngle: 100, minRightKneeAngle: 103 }),
+      makeRep(3, { minLeftKneeAngle: 102, minRightKneeAngle: 105 }),
+      makeRep(4, { minLeftKneeAngle: 98, minRightKneeAngle: 101 }),
+      makeRep(5, { minLeftKneeAngle: 101, minRightKneeAngle: 104 }),
+    ]
+    const result = buildSessionResult(reps, Array(12).fill(0.9))
+
+    expect(result.metrics.excludedRepNumbers).toEqual([1])
+    // Rep count still reports every counted rep.
+    expect(result.metrics.repCount).toBe(5)
+    // Aggregates no longer include the 41° artifact.
+    expect(result.metrics.minDepth).toBeGreaterThan(90)
+    expect(result.metrics.avgDepth).toBeGreaterThan(90)
+    // Disclosure is coach-visible.
+    expect(buildResultsSummary(result)).toMatch(/rep 1.*left out of the averages/i)
+  })
+
+  it('keeps every rep in aggregates for small sets (under 4 reps)', () => {
+    const reps = [
+      makeRep(1, { minLeftKneeAngle: 41, minRightKneeAngle: 45 }),
+      makeRep(2, { minLeftKneeAngle: 100, minRightKneeAngle: 103 }),
+      makeRep(3, { minLeftKneeAngle: 102, minRightKneeAngle: 105 }),
+    ]
+    const result = buildSessionResult(reps, [0.85, 0.88, 0.9])
+    expect(result.metrics.excludedRepNumbers).toEqual([])
+    expect(result.metrics.minDepth).toBeLessThan(50)
+  })
 })

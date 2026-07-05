@@ -80,6 +80,28 @@ function deviationScores(reps: readonly RepMetrics[]): Map<number, number> {
   return scores
 }
 
+/**
+ * Rep deviating most from this set's own pattern (depth + duration
+ * z-scores), or null when the set is too small/uniform. Exported so set
+ * aggregation can exclude the outlier from headline metrics (with
+ * disclosure) — flagging a rep as an artifact and then averaging it in
+ * anyway is inconsistent.
+ */
+export function findMostDeviantRep(
+  reps: readonly RepMetrics[],
+): number | null {
+  const scores = deviationScores(reps)
+  let mostDeviantRep: number | null = null
+  let maxZ = 0
+  for (const [repNumber, z] of scores) {
+    if (z >= DEVIATION_Z_THRESHOLD && z > maxZ) {
+      maxZ = z
+      mostDeviantRep = repNumber
+    }
+  }
+  return mostDeviantRep
+}
+
 function analyzeRep(
   rep: RepMetrics,
   samples: readonly PostureFrameSample[],
@@ -145,15 +167,7 @@ export function collectPostureMetrics(
     (r) => r.sampleConfidence >= MIN_REP_SAMPLE_CONFIDENCE,
   )
 
-  const scores = deviationScores(reps)
-  let mostDeviantRep: number | null = null
-  let maxZ = 0
-  for (const [repNumber, z] of scores) {
-    if (z >= DEVIATION_Z_THRESHOLD && z > maxZ) {
-      maxZ = z
-      mostDeviantRep = repNumber
-    }
-  }
+  const mostDeviantRep = findMostDeviantRep(reps)
 
   return {
     repPosture,

@@ -16,6 +16,7 @@ function metrics(overrides: Partial<SetMetricsSummary>): SetMetricsSummary {
     avgKneeAsymmetry: 4,
     avgShoulderAsymmetry: 0.01,
     overallConfidence: 82,
+    excludedRepNumbers: [],
     ...overrides,
   }
 }

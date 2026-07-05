@@ -4,6 +4,12 @@ import type { PostureSetSummary } from '../analysis/posture/postureCollector'
 export interface SetMetricsSummary {
   repCount: number
   reps: RepMetrics[]
+  /**
+   * Reps flagged as within-set outliers and left out of the aggregate
+   * metrics below (avg/min/max depth, CV, asymmetry, trunk lean). Always
+   * disclosed in coach-facing copy; empty when nothing was excluded.
+   */
+  excludedRepNumbers: number[]
   avgDepth: number | null
   avgTrunkLean: number | null
   depthCV: number | null
