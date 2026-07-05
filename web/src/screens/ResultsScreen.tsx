@@ -29,14 +29,24 @@ export function ResultsScreen() {
 
   const componentExplanations = useMemo(() => {
     if (!result?.scoring) return []
+    // Full abstain: an invalid recording renders no metric summary.
+    if (result.quality.verdict === 'invalid') return []
     return buildComponentScoreExplanations(result.metrics)
   }, [result])
 
   const postureConcepts = useMemo(() => {
     if (!result || result.metrics.repCount === 0) return []
+    // Full abstain: no posture profile from an untrustworthy recording.
+    if (result.quality.verdict === 'invalid') return []
+    // Questionable sets never carry High-confidence reads.
+    const conceptConfidence =
+      result.quality.verdict === 'questionable' &&
+      result.sessionConfidence === 'High'
+        ? 'Medium'
+        : result.sessionConfidence
     return buildPostureConcepts(
       result.metrics,
-      result.sessionConfidence,
+      conceptConfidence,
       result.posture,
     )
   }, [result])
@@ -64,7 +74,12 @@ export function ResultsScreen() {
   const summary = buildResultsSummary(result)
   const { metrics, scoring, feedback, sessionConfidence, sessionConfidenceScore } =
     result
-  const confidenceMessage = confidenceResultsMessage(sessionConfidence)
+  const quality = result.quality
+  const isInvalidSet = quality.verdict === 'invalid' && !result.noRepsDetected
+  const isQuestionableSet = quality.verdict === 'questionable'
+  const confidenceMessage = isInvalidSet
+    ? null
+    : confidenceResultsMessage(sessionConfidence)
 
   return (
     <div className="results-page stack-lg">
@@ -88,6 +103,64 @@ export function ResultsScreen() {
       <section className="results-lead-card" aria-label="Set summary">
         <p className="results-lead">{summary}</p>
       </section>
+
+      {isInvalidSet && (
+        <section
+          className="results-panel results-abstain"
+          aria-label="Why there is no movement report"
+        >
+          <h2 className="results-panel__heading">
+            Why there is no movement report
+          </h2>
+          <p className="results-panel__intro">
+            This app reports only what the camera can vouch for. This recording
+            could not support a trustworthy read, so posture reads, metric
+            summaries, and coaching are withheld — the rep-by-rep chart and
+            diagnostics below stay available for audit.
+          </p>
+          <ul className="results-abstain__reasons">
+            {quality.reasons.map((reason) => (
+              <li key={reason.id} className="results-abstain__reason">
+                {reason.detail}
+              </li>
+            ))}
+          </ul>
+          {quality.captureFixes.length > 0 && (
+            <>
+              <h3 className="results-panel__heading">
+                How to get a trustworthy report next set
+              </h3>
+              <ul className="results-abstain__reasons">
+                {quality.captureFixes.map((fix) => (
+                  <li key={fix} className="results-abstain__reason">
+                    {fix}
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
+        </section>
+      )}
+
+      {isQuestionableSet && (
+        <section
+          className="results-panel results-abstain"
+          aria-label="Capture-quality warning"
+        >
+          <p className="results-alert results-alert--warning" role="status">
+            Use this as a capture-quality check, not a movement report. Parts of
+            this recording could not be trusted, so only observations are shown —
+            no recommendations.
+          </p>
+          <ul className="results-abstain__reasons">
+            {quality.reasons.map((reason) => (
+              <li key={reason.id} className="results-abstain__reason">
+                {reason.detail}
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
 
       {postureConcepts.length > 0 && (
         <section className="report-hero" aria-label="Posture profile">
@@ -124,7 +197,7 @@ export function ResultsScreen() {
         </p>
       )}
 
-      {result.insufficientData && !result.noRepsDetected && (
+      {result.insufficientData && !result.noRepsDetected && !isInvalidSet && (
         <p className="results-alert results-alert--warning" role="alert">
           {INSUFFICIENT_DATA_MESSAGE}
         </p>

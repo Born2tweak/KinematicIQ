@@ -298,6 +298,7 @@ export function CameraScreen() {
       reps,
       poseConfidenceSamplesRef.current,
       postureSamplesRef.current,
+      repCounterRef.current.rejections,
     )
 
     // Preserve the raw session as a replayable pose tape (same substrate as

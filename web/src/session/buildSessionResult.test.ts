@@ -47,10 +47,11 @@ describe('buildSessionResult', () => {
   })
 
   it('summary mentions rep count and never shows a 0–100 score', () => {
-    const reps = [makeRep(1), makeRep(2)]
-    const result = buildSessionResult(reps, [0.9, 0.9, 0.88])
+    // 3 trustworthy reps — the minimum for a set to escape the quality gate.
+    const reps = [makeRep(1), makeRep(2), makeRep(3)]
+    const result = buildSessionResult(reps, Array(12).fill(0.9))
     const summary = buildResultsSummary(result)
-    expect(summary).toContain('2')
+    expect(summary).toContain('3')
     expect(summary).not.toMatch(/\/100/)
     expect(summary).not.toMatch(/movement score/i)
   })

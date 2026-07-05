@@ -1759,6 +1759,21 @@ img {
   color: var(--color-text);
 }
 
+/* Quality-gate abstain panel (invalid/questionable recordings) */
+.results-abstain__reasons {
+  margin: 0 0 var(--space-md);
+  padding-left: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.results-abstain__reason {
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--color-text-muted);
+}
+
 .score-formula-note {
   margin: var(--space-sm) 0 0;
   font-size: 0.8125rem;

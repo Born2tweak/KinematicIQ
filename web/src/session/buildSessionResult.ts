@@ -4,6 +4,7 @@ import {
   findMostDeviantRep,
 } from '../analysis/posture/postureCollector'
 import type { PostureFrameSample } from '../analysis/posture/postureFrame'
+import type { RepRejection } from '../analysis/repCounter'
 import { calculateSessionConfidence } from '../feedback/confidenceCalculator'
 import {
   INSUFFICIENT_DATA_MESSAGE,
@@ -12,6 +13,7 @@ import {
 } from '../feedback/feedbackEngine'
 import { computeComponentScores } from '../scoring/scoringEngine'
 import type { RepMetrics } from '../cv/types'
+import { assessSetQuality } from './setQualityGate'
 import type { SessionResult } from './types'
 
 /**
@@ -20,22 +22,40 @@ import type { SessionResult } from './types'
  */
 const MIN_REPS_FOR_OUTLIER_EXCLUSION = 4
 
+/** Full-abstain headline when the recording cannot support a report. */
+export const UNTRUSTWORTHY_REPORT_MESSAGE =
+  'We could not produce a trustworthy squat report from this recording.'
+
+/** Framing line for questionable sets — observations only, no coaching. */
+export const QUESTIONABLE_REPORT_MESSAGE =
+  'Use this as a capture-quality check, not a movement report.'
+
 export function buildSessionResult(
   reps: RepMetrics[],
   poseConfidenceSamples: number[] = [],
   postureSamples: PostureFrameSample[] = [],
+  repRejections: RepRejection[] = [],
 ): SessionResult {
   const noRepsDetected = reps.length === 0
   const { score: sessionConfidenceScore, level: sessionConfidence } =
     calculateSessionConfidence(reps, poseConfidenceSamples)
 
+  // ── Report-level quality gate (session/setQualityGate.ts) ─────────
+  // Classifies the set from already-produced evidence; never re-tunes
+  // rep gates. Untrusted reps (impossible or missing bottom readings)
+  // are excluded from every aggregate below, always with disclosure.
+  const quality = assessSetQuality(reps, repRejections)
+  const untrustedSet = new Set(quality.untrustedRepNumbers)
+  const trustedReps = reps.filter((rep) => !untrustedSet.has(rep.repNumber))
+
   const deviantRep =
-    reps.length >= MIN_REPS_FOR_OUTLIER_EXCLUSION
-      ? findMostDeviantRep(reps)
+    trustedReps.length >= MIN_REPS_FOR_OUTLIER_EXCLUSION
+      ? findMostDeviantRep(trustedReps)
       : null
-  const excludedRepNumbers = new Set(
-    deviantRep === null ? [] : [deviantRep],
-  )
+  const excludedRepNumbers = new Set<number>(quality.untrustedRepNumbers)
+  if (deviantRep !== null) {
+    excludedRepNumbers.add(deviantRep)
+  }
 
   const metrics = collectSetMetrics(
     reps,
@@ -54,14 +74,18 @@ export function buildSessionResult(
       noRepsDetected: true,
       posture: null,
       baseline: null,
+      quality,
     }
   }
 
   const scoring = computeComponentScores(metrics)
   const insufficientData = sessionConfidence === 'Low'
-  const feedback = insufficientData
-    ? []
-    : generateFeedback(scoring, sessionConfidence, metrics)
+  // Coaching only renders for a valid set: questionable = observations
+  // only, invalid = full abstain (verdict-or-abstain, ontology P2).
+  const feedback =
+    insufficientData || quality.verdict !== 'valid'
+      ? []
+      : generateFeedback(scoring, sessionConfidence, metrics)
 
   return {
     metrics,
@@ -71,17 +95,21 @@ export function buildSessionResult(
     sessionConfidenceScore,
     insufficientData,
     noRepsDetected: false,
-    posture: collectPostureMetrics(reps, postureSamples),
+    // 3D posture reads derive from trusted reps only — an impossible
+    // bottom must never drive hinge/trunk/smoothness averages.
+    posture: collectPostureMetrics(trustedReps, postureSamples),
     baseline: null,
+    quality,
   }
 }
 
 export function buildResultsSummary(result: SessionResult): string {
   if (result.noRepsDetected) return NO_REPS_MESSAGE
+  if (result.quality.verdict === 'invalid') return UNTRUSTWORTHY_REPORT_MESSAGE
   if (result.insufficientData) return INSUFFICIENT_DATA_MESSAGE
   if (!result.scoring) return 'Set complete — your breakdown is below.'
 
-  const { metrics, sessionConfidence } = result
+  const { metrics, sessionConfidence, quality } = result
   const repLine = `${metrics.repCount} rep${metrics.repCount === 1 ? '' : 's'} from this camera view`
 
   const depthPart =
@@ -89,10 +117,19 @@ export function buildResultsSummary(result: SessionResult): string {
       ? ` · avg depth ~${Math.round(metrics.avgDepth)}° knee bend`
       : ''
 
-  const exclusionPart =
-    metrics.excludedRepNumbers.length > 0
-      ? ` Rep ${metrics.excludedRepNumbers.join(', ')} differed most from your set pattern and is left out of the averages.`
-      : ''
+  const untrustedSet = new Set(quality.untrustedRepNumbers)
+  const deviantExcluded = metrics.excludedRepNumbers.filter(
+    (repNumber) => !untrustedSet.has(repNumber),
+  )
+
+  let exclusionPart = ''
+  if (quality.untrustedRepNumbers.length > 0) {
+    const list = quality.untrustedRepNumbers.join(', ')
+    exclusionPart += ` Rep${quality.untrustedRepNumbers.length === 1 ? '' : 's'} ${list} carried readings the camera cannot trust and ${quality.untrustedRepNumbers.length === 1 ? 'is' : 'are'} left out of the averages.`
+  }
+  if (deviantExcluded.length > 0) {
+    exclusionPart += ` Rep ${deviantExcluded.join(', ')} differed most from your set pattern and is left out of the averages.`
+  }
 
   let summary = `${repLine}${depthPart}.${exclusionPart}`
 
@@ -104,4 +141,3 @@ export function buildResultsSummary(result: SessionResult): string {
 
   return summary
 }
-

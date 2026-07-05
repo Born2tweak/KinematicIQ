@@ -1,5 +1,6 @@
 import type { RepMetrics } from '../cv/types'
 import type { PostureSetSummary } from '../analysis/posture/postureCollector'
+import type { SetQualityAssessment } from './setQualityGate'
 
 export interface SetMetricsSummary {
   repCount: number
@@ -70,4 +71,11 @@ export interface SessionResult {
   posture: PostureSetSummary | null
   /** Future longitudinal baseline comparison — always null today. */
   baseline: SessionBaseline | null
+  /**
+   * Report-level quality classification (valid / questionable / invalid).
+   * Invalid sets FULLY ABSTAIN from the movement report: no posture profile,
+   * no metric summary, no coaching — only reasons, capture fixes, and
+   * diagnostics. See session/setQualityGate.ts.
+   */
+  quality: SetQualityAssessment
 }

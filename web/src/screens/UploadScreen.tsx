@@ -233,6 +233,7 @@ export function UploadScreen() {
         result.reps,
         result.poseConfidenceSamples,
         result.postureSamples,
+        result.repRejections,
       )
       navigate('/results', { state: { result: sessionResult } })
     } catch (err: unknown) {
