@@ -1,7 +1,7 @@
 import { useMemo, useRef } from 'react'
 import * as THREE from 'three'
 import { Canvas, useFrame } from '@react-three/fiber'
-import { Grid, Html, OrbitControls } from '@react-three/drei'
+import { ContactShadows, Grid, Html, OrbitControls } from '@react-three/drei'
 import {
   createWorldLandmarkSmoother,
   jointArcPoints,
@@ -17,7 +17,10 @@ export { createEmptyPose3DRef } from '../cv/pose3d'
 const FRONT_CAMERA_MIRROR = false
 
 const JOINT_COUNT = 33
-const JOINT_RADIUS = 0.02
+const BONE_COUNT = POSE_CONNECTIONS.length
+const JOINT_RADIUS = 0.022
+const BONE_RADIUS_TOP = 0.011
+const BONE_RADIUS_BOTTOM = 0.017
 const ARC_RADIUS = 0.1
 const ARC_SEGMENTS = 16
 const HIDDEN_SCALE = 0.0001
@@ -55,7 +58,7 @@ function Skeleton({
   mirror: boolean
 }) {
   const jointsRef = useRef<THREE.InstancedMesh>(null)
-  const bonesRef = useRef<THREE.LineSegments>(null)
+  const bonesRef = useRef<THREE.InstancedMesh>(null)
   const trailRef = useRef<THREE.Line>(null)
   const arcRefs = useRef<(THREE.Line | null)[]>([])
   const labelGroupRefs = useRef<(THREE.Group | null)[]>([])
@@ -65,18 +68,15 @@ function Skeleton({
   const tmpMatrix = useMemo(() => new THREE.Matrix4(), [])
   const tmpPosition = useMemo(() => new THREE.Vector3(), [])
   const tmpScale = useMemo(() => new THREE.Vector3(1, 1, 1), [])
+  const tmpQuaternion = useMemo(() => new THREE.Quaternion(), [])
+  const tmpDirection = useMemo(() => new THREE.Vector3(), [])
+  const boneUpAxis = useMemo(() => new THREE.Vector3(0, 1, 0), [])
+  const identityQuaternion = useMemo(() => new THREE.Quaternion(), [])
   // Smoothed vertical offset planting the lowest visible landmark on the
   // grid plane. MediaPipe world coords are hip-centered, so without this the
   // skeleton floats mid-air and drifts as the hip origin moves. Pure
   // visualization anchoring — no accuracy is implied (see panel badge).
   const groundOffsetRef = useRef<number | null>(null)
-
-  const bonesGeometry = useMemo(() => {
-    const geometry = new THREE.BufferGeometry()
-    const positions = new Float32Array(POSE_CONNECTIONS.length * 2 * 3)
-    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3))
-    return geometry
-  }, [])
 
   const trailGeometry = useMemo(() => new THREE.BufferGeometry(), [])
   const trailLineObject = useMemo(
@@ -102,15 +102,19 @@ function Skeleton({
     if (!data || !jointsMesh || !bonesLine) return
 
     if (!data.worldLandmarks || data.worldLandmarks.length === 0) {
+      tmpMatrix.compose(
+        tmpPosition.set(0, 0, 0),
+        identityQuaternion,
+        tmpScale.set(HIDDEN_SCALE, HIDDEN_SCALE, HIDDEN_SCALE),
+      )
       for (let i = 0; i < JOINT_COUNT; i++) {
-        tmpMatrix.compose(
-          tmpPosition.set(0, 0, 0),
-          new THREE.Quaternion(),
-          tmpScale.set(HIDDEN_SCALE, HIDDEN_SCALE, HIDDEN_SCALE),
-        )
         jointsMesh.setMatrixAt(i, tmpMatrix)
       }
+      for (let i = 0; i < BONE_COUNT; i++) {
+        bonesLine.setMatrixAt(i, tmpMatrix)
+      }
       jointsMesh.instanceMatrix.needsUpdate = true
+      bonesLine.instanceMatrix.needsUpdate = true
       return
     }
 
@@ -144,14 +148,14 @@ function Skeleton({
       const scaleValue = visible ? VISIBLE_SCALE : HIDDEN_SCALE
       tmpMatrix.compose(
         tmpPosition.set(visible ? p.x : 0, visible ? p.y : 0, visible ? p.z : 0),
-        new THREE.Quaternion(),
+        identityQuaternion,
         tmpScale.set(scaleValue, scaleValue, scaleValue),
       )
       jointsMesh.setMatrixAt(i, tmpMatrix)
     }
     jointsMesh.instanceMatrix.needsUpdate = true
 
-    const bonePositions = bonesGeometry.attributes.position as THREE.BufferAttribute
+    // Tapered cylinder bones: unit-height cylinder oriented from p0 to p1.
     POSE_CONNECTIONS.forEach(([i0, i1], idx) => {
       const lm0 = smoothed[i0]
       const lm1 = smoothed[i1]
@@ -160,17 +164,38 @@ function Skeleton({
         !!lm1 &&
         lm0.visibility >= CONFIDENCE_THRESHOLD &&
         lm1.visibility >= CONFIDENCE_THRESHOLD
+      if (!visible) {
+        tmpMatrix.compose(
+          tmpPosition.set(0, 0, 0),
+          identityQuaternion,
+          tmpScale.set(HIDDEN_SCALE, HIDDEN_SCALE, HIDDEN_SCALE),
+        )
+        bonesLine.setMatrixAt(idx, tmpMatrix)
+        return
+      }
       const p0 = points[i0]
-      const p1 = visible ? points[i1] : points[i0]
-      const base = idx * 6
-      bonePositions.array[base] = p0.x
-      bonePositions.array[base + 1] = p0.y
-      bonePositions.array[base + 2] = p0.z
-      bonePositions.array[base + 3] = p1.x
-      bonePositions.array[base + 4] = p1.y
-      bonePositions.array[base + 5] = p1.z
+      const p1 = points[i1]
+      tmpDirection.set(p1.x - p0.x, p1.y - p0.y, p1.z - p0.z)
+      const boneLength = tmpDirection.length()
+      if (boneLength < 1e-6) {
+        tmpMatrix.compose(
+          tmpPosition.set(0, 0, 0),
+          identityQuaternion,
+          tmpScale.set(HIDDEN_SCALE, HIDDEN_SCALE, HIDDEN_SCALE),
+        )
+        bonesLine.setMatrixAt(idx, tmpMatrix)
+        return
+      }
+      tmpDirection.multiplyScalar(1 / boneLength)
+      tmpQuaternion.setFromUnitVectors(boneUpAxis, tmpDirection)
+      tmpMatrix.compose(
+        tmpPosition.set((p0.x + p1.x) / 2, (p0.y + p1.y) / 2, (p0.z + p1.z) / 2),
+        tmpQuaternion,
+        tmpScale.set(1, boneLength, 1),
+      )
+      bonesLine.setMatrixAt(idx, tmpMatrix)
     })
-    bonePositions.needsUpdate = true
+    bonesLine.instanceMatrix.needsUpdate = true
 
     // Angle arcs
     ANGLE_ARCS.forEach((spec, idx) => {
@@ -249,13 +274,20 @@ function Skeleton({
 
   return (
     <group>
-      <instancedMesh ref={jointsRef} args={[undefined, undefined, JOINT_COUNT]}>
-        <sphereGeometry args={[JOINT_RADIUS, 12, 12]} />
-        <meshStandardMaterial color="#38bdf8" />
+      <instancedMesh ref={jointsRef} args={[undefined, undefined, JOINT_COUNT]} castShadow>
+        <sphereGeometry args={[JOINT_RADIUS, 16, 16]} />
+        <meshStandardMaterial
+          color="#38bdf8"
+          emissive="#0ea5e9"
+          emissiveIntensity={0.35}
+          roughness={0.35}
+          metalness={0.2}
+        />
       </instancedMesh>
-      <lineSegments ref={bonesRef} geometry={bonesGeometry}>
-        <lineBasicMaterial color="#e2e8f0" />
-      </lineSegments>
+      <instancedMesh ref={bonesRef} args={[undefined, undefined, BONE_COUNT]} castShadow>
+        <cylinderGeometry args={[BONE_RADIUS_TOP, BONE_RADIUS_BOTTOM, 1, 10]} />
+        <meshStandardMaterial color="#e2e8f0" roughness={0.45} metalness={0.25} />
+      </instancedMesh>
       <primitive object={trailLineObject} ref={trailRef} />
       {ANGLE_ARCS.map((spec, idx) => (
         <group key={spec.key}>
@@ -289,15 +321,41 @@ function Skeleton({
 export default function PoseScene3D({ poseRef, mirror = FRONT_CAMERA_MIRROR }: PoseScene3DProps) {
   return (
     <div className="camera-3d-container">
-      <Canvas camera={{ position: [0, 1.2, 2.5], fov: 50 }}>
-        <ambientLight intensity={0.6} />
-        <directionalLight position={[2, 3, 2]} intensity={0.8} />
+      <Canvas shadows camera={{ position: [0, 1.2, 2.5], fov: 50 }}>
+        <color attach="background" args={['#0b1220']} />
+        <fog attach="fog" args={['#0b1220', 6, 14]} />
+        <ambientLight intensity={0.45} />
+        <directionalLight
+          position={[2.5, 4, 2]}
+          intensity={1.1}
+          castShadow
+          shadow-mapSize-width={1024}
+          shadow-mapSize-height={1024}
+          shadow-camera-near={0.5}
+          shadow-camera-far={12}
+          shadow-camera-left={-4}
+          shadow-camera-right={4}
+          shadow-camera-top={4}
+          shadow-camera-bottom={-4}
+        />
+        <directionalLight position={[-2, 2, -2.5]} intensity={0.35} color="#7dd3fc" />
+        <ContactShadows
+          position={[0, 0.001, 0]}
+          opacity={0.55}
+          scale={8}
+          blur={2.4}
+          far={3}
+          resolution={512}
+          color="#020617"
+        />
         <Grid
           args={[6, 6]}
           cellSize={0.25}
           cellThickness={0.5}
           sectionSize={1}
           sectionThickness={1}
+          cellColor="#1e293b"
+          sectionColor="#334155"
           fadeDistance={8}
           infiniteGrid
         />

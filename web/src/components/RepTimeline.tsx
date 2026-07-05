@@ -6,6 +6,8 @@ interface RepTimelineProps {
   showAngles?: boolean
   /** Rep number that deviates most from the set's own pattern, if any. */
   deviantRep?: number | null
+  /** Rep the replay timeline is currently inside, if the replay is open. */
+  activeRep?: number | null
 }
 
 /** Bar heights map knee angle to visual depth: smaller angle = deeper = taller. */
@@ -29,6 +31,7 @@ export function RepTimeline({
   reps,
   showAngles = false,
   deviantRep = null,
+  activeRep = null,
 }: RepTimelineProps) {
   if (reps.length === 0) return null
 
@@ -40,13 +43,14 @@ export function RepTimeline({
           const fraction = depthFraction(depth)
           const heightPercent = Math.max(8, Math.round(fraction * 100))
           const isDeviant = rep.repNumber === deviantRep
+          const isActive = rep.repNumber === activeRep
           return (
             <div key={rep.repNumber} className="rep-timeline__item">
               {showAngles && (
                 <span className="rep-timeline__angle">{Math.round(depth)}°</span>
               )}
               <div
-                className={`rep-timeline__bar${isDeviant ? ' rep-timeline__bar--deviant' : ''}`}
+                className={`rep-timeline__bar${isDeviant ? ' rep-timeline__bar--deviant' : ''}${isActive ? ' rep-timeline__bar--active' : ''}`}
                 style={{ height: `${heightPercent}%` }}
                 title={
                   showAngles

@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { Suspense, lazy, useCallback, useMemo, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { buildPostureConcepts } from '../analysis/posture/postureConcepts'
 import { Button } from '../components/Button'
@@ -21,11 +21,24 @@ import { buildComponentScoreExplanations } from '../scoring/scoringExplanations'
 import { realRejections } from './repRejectionUi'
 import type { SessionResult } from '../session/types'
 
+const SessionReplay = lazy(() =>
+  import('../components/replay/SessionReplay').then((m) => ({
+    default: m.SessionReplay,
+  })),
+)
+
 export function ResultsScreen() {
   const location = useLocation()
   const result = (location.state as { result?: SessionResult } | null)?.result
   const [isAnalyst, toggleAnalyst] = useAnalystMode()
   const sessionTape = getSessionTape()
+
+  // Linked views: the replay timeline reports which rep it is inside so the
+  // rep chart can highlight it. Presentation state only.
+  const [replayRep, setReplayRep] = useState<number | null>(null)
+  const handleActiveRepChange = useCallback((repNumber: number | null) => {
+    setReplayRep((current) => (current === repNumber ? current : repNumber))
+  }, [])
 
   const componentExplanations = useMemo(() => {
     if (!result?.scoring) return []
@@ -166,7 +179,7 @@ export function ResultsScreen() {
         <section className="report-hero" aria-label="Posture profile">
           <div className="report-hero__concepts report-section">
             <h2 className="report-section__title">Posture profile</h2>
-            <PostureProfile concepts={postureConcepts} />
+            <PostureProfile concepts={postureConcepts} result={result} />
           </div>
           <aside className="report-hero__score report-section">
             <h2 className="report-section__title">Camera confidence</h2>
@@ -259,6 +272,15 @@ export function ResultsScreen() {
         </section>
       )}
 
+      {sessionTape !== null && (
+        <Suspense fallback={null}>
+          <SessionReplay
+            tape={sessionTape}
+            onActiveRepChange={handleActiveRepChange}
+          />
+        </Suspense>
+      )}
+
       {metrics.reps.length > 0 && (
         <Card
           className="results-reps-card"
@@ -273,6 +295,7 @@ export function ResultsScreen() {
             reps={metrics.reps}
             showAngles={isAnalyst}
             deviantRep={result.posture?.mostDeviantRep ?? null}
+            activeRep={replayRep}
           />
           {isAnalyst && (
             <div className="detail-rows">
