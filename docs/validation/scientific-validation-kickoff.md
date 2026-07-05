@@ -24,7 +24,7 @@ This checklist wires the product to the validation pipeline so live and upload s
 ### Protocol & logging
 
 - [ ] Ratify `docs/25_capture_protocol_front_squat.md` against the first pilot recordings (distance, framing, lighting).
-- [ ] Create `docs/validation/session-log.md` by copying entries from `session-log-template.md` for each filmed set.
+- [x] Create `docs/validation/session-log.md` by copying entries from `session-log-template.md` for each filmed set. *(Created 2026-07-04 with three pilot sessions; ACTUAL rep counts and tape filenames still to fill in.)*
 - [ ] For every session: record **ACTUAL reps** (human count), **detected reps**, and **rejected candidates** (from Results analyst panel or live HUD feedback).
 
 ### First recording sessions (per athlete)
@@ -73,6 +73,8 @@ Observed in the 2026-07-04 pilot recordings. These change detection behavior its
 
 1. **Phase detection runs on partial-body frames.** With only face/shoulders in frame, the FSM reported `BOTTOM` with an active candidate at 28% pose confidence — the seated block gate was the only thing preventing a phantom count. Candidate: suspend phase detection below a visibility/confidence floor. Measure against labeled tapes first.
 2. **Asymmetry reads carry High confidence despite single-leg dropouts.** Sets showed 39–42° left–right knee difference labeled "high confidence" while one knee read `---` on multiple frames. Candidate: gate asymmetry confidence on bilateral landmark coverage across the set.
+3. **False-positive reps while standing** (session c, post-fix build): reps counted at 175–178° bottom knee angle — no knee bend at all — and one rep counted with *negative* hip drop. Root cause: `reachedBottom` can be satisfied by the phase detector alone, and `bilateralBend` / `hipDescended` are soft (non-rejecting) validations in `validateRep`. Highest-priority detection item; fix must be tuned against the session-c pose tape, not by eye, because promoting soft gates to hard gates risks dropping real reps (see `docs/validation/session-log.md` findings #5–#6).
+4. **Extreme-flexion artifacts counted as reps** (13°–20° bottom angles at close range with clipped legs). Same family as #3 — tracking garbage passing soft gates. A plausibility band on bottom knee angle is the candidate guard.
 
 (Related fixes that did NOT change detection: phantom zero-descent candidates are now excluded from coach-facing rejection counts (`RepRejection.phantom`), and the within-set outlier rep is excluded from set aggregates with disclosure. Both are reporting-layer only; raw diagnostics stay in the pose tape.)
 
