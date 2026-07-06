@@ -18,6 +18,7 @@ import type { ProtocolId } from '../core/protocol'
 import { makeProvenance } from '../core/provenance'
 import { buildSquatMetricResults } from '../metrics/squatMetrics'
 import { buildPostureMetricResults } from '../metrics/postureMetrics'
+import { deriveRootCauses } from '../findings/rootCauses'
 import type { MetricResult } from '../core/metric'
 import { assessSetQuality } from './setQualityGate'
 import type { SessionResult } from './types'
@@ -126,11 +127,16 @@ export function buildSessionResult(
           quality,
         })
 
+  // Root-cause candidates (M22) explain only findings that were surfaced —
+  // an abstaining set gets no cards by construction.
+  const rootCauses = deriveRootCauses(coaching.findings, metrics, metricResults)
+
   return {
     protocolId,
     metrics,
     metricResults,
     findings: coaching.findings,
+    rootCauses,
     scoring,
     feedback: coaching.cues,
     sessionConfidence,

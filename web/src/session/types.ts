@@ -4,6 +4,7 @@ import type { MetricResult } from '../core/metric'
 import type { Finding } from '../core/finding'
 import type { ProtocolId } from '../core/protocol'
 import type { SetQualityAssessment } from './setQualityGate'
+import type { RootCauseCard } from '../findings/rootCauses'
 
 export interface SetMetricsSummary {
   repCount: number
@@ -111,6 +112,12 @@ export interface SessionResult {
   posture: PostureSetSummary | null
   /** Future longitudinal baseline comparison — always null today. */
   baseline: SessionBaseline | null
+  /**
+   * Root-cause concept cards (M22): possible contributors to the surfaced
+   * findings, plausibility language only. Optional; empty/absent when the
+   * set has no findings or predates M22.
+   */
+  rootCauses?: RootCauseCard[]
   /**
    * Report-level quality classification (valid / questionable / invalid).
    * Invalid sets FULLY ABSTAIN from the movement report: no posture profile,

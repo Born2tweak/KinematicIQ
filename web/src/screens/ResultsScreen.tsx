@@ -336,6 +336,28 @@ export function ResultsScreen() {
         </section>
       )}
 
+      {showExpert && (result.rootCauses?.length ?? 0) > 0 && (
+        <section className="results-panel" aria-label="Possible contributors">
+          <h2 className="results-panel__heading">Possible contributors</h2>
+          <p className="results-panel__intro">
+            Candidate explanations for this set&apos;s findings — plausibility,
+            not diagnosis. Each includes a way to check it yourself.
+          </p>
+          <ul className="root-cause__list stack">
+            {result.rootCauses!.map((card) => (
+              <li key={card.id} className="root-cause-card">
+                <h3 className="root-cause-card__title">{card.title}</h3>
+                <p className="root-cause-card__because">{card.plausibleBecause}</p>
+                <p className="root-cause-card__check">
+                  <strong>Check it yourself:</strong> {card.selfCheck}
+                </p>
+                <p className="root-cause-card__framing">{card.framing}</p>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
       {showExpert && sessionTape !== null && (
         <Suspense fallback={null}>
           <SessionReplay
