@@ -9,8 +9,8 @@ import { calculateSessionConfidence } from '../feedback/confidenceCalculator'
 import {
   INSUFFICIENT_DATA_MESSAGE,
   NO_REPS_MESSAGE,
-  generateFeedback,
 } from '../feedback/feedbackEngine'
+import { deriveCoaching } from '../findings/engine'
 import { computeComponentScores } from '../scoring/scoringEngine'
 import type { RepMetrics } from '../cv/types'
 import { getActiveProtocol } from '../protocols/registry'
@@ -85,6 +85,7 @@ export function buildSessionResult(
       protocolId,
       metrics,
       metricResults,
+      findings: [],
       scoring: null,
       feedback: [],
       sessionConfidence,
@@ -100,18 +101,27 @@ export function buildSessionResult(
   const scoring = computeComponentScores(metrics)
   const insufficientData = sessionConfidence === 'Low'
   // Coaching only renders for a valid set: questionable = observations
-  // only, invalid = full abstain (verdict-or-abstain, ontology P2).
-  const feedback =
+  // only, invalid = full abstain (verdict-or-abstain, ontology P2). Findings
+  // and cues are derived together so the copy stays consistent (M7).
+  const coaching =
     insufficientData || quality.verdict !== 'valid'
-      ? []
-      : generateFeedback(scoring, sessionConfidence, metrics)
+      ? { findings: [], cues: [] }
+      : deriveCoaching({
+          protocolId,
+          components: scoring,
+          sessionConfidence,
+          metrics,
+          metricResults,
+          quality,
+        })
 
   return {
     protocolId,
     metrics,
     metricResults,
+    findings: coaching.findings,
     scoring,
-    feedback,
+    feedback: coaching.cues,
     sessionConfidence,
     sessionConfidenceScore,
     insufficientData,

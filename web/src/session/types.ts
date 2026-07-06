@@ -1,6 +1,7 @@
 import type { RepMetrics } from '../cv/types'
 import type { PostureSetSummary } from '../analysis/posture/postureCollector'
 import type { MetricResult } from '../core/metric'
+import type { Finding } from '../core/finding'
 import type { ProtocolId } from '../core/protocol'
 import type { SetQualityAssessment } from './setQualityGate'
 
@@ -66,6 +67,12 @@ export interface SessionResult {
    * report reads these directly in M8). Empty when no reps.
    */
   metricResults: MetricResult[]
+  /**
+   * Rule-based findings (M7): observation-language statements with evidence
+   * chains + confidence. Coaching cues are derived from these. Empty on
+   * abstain (invalid set or low confidence).
+   */
+  findings: Finding[]
   /**
    * Per-component evidence inputs (depth, trunk, knee tracking, consistency,
    * symmetry). These survive as evidence for future verdicts — there is no
