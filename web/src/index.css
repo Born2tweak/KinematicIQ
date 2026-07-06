@@ -1077,6 +1077,97 @@ img {
   z-index: 10;
 }
 
+/* Results progressive-disclosure tabs (M8). */
+.results-tabs {
+  display: flex;
+  gap: var(--space-xs);
+  border-bottom: 1px solid rgba(148, 163, 184, 0.25);
+}
+.results-tab {
+  appearance: none;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  padding: var(--space-sm) var(--space-md);
+  color: var(--text-muted, #94a3b8);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+.results-tab--active {
+  color: var(--text-strong, #f8fafc);
+  border-bottom-color: var(--accent, #22c55e);
+}
+
+/* Finding cards (M8). */
+.finding-card {
+  padding: var(--space-md);
+  border-radius: 12px;
+  background: rgba(30, 41, 59, 0.5);
+  border-left: 3px solid rgba(148, 163, 184, 0.5);
+}
+.finding-card--primary {
+  border-left-color: var(--accent, #22c55e);
+}
+.finding-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-sm);
+}
+.finding-card__statement {
+  margin: 0;
+  font-weight: 600;
+}
+.finding-card__evidence {
+  margin: var(--space-sm) 0 0;
+  padding-left: 1.1rem;
+  color: var(--text-muted, #94a3b8);
+  font-size: 0.85rem;
+}
+.finding-card__try-next {
+  margin: var(--space-sm) 0 0;
+  font-size: 0.9rem;
+}
+.finding-card__try-next-label {
+  font-weight: 600;
+  color: var(--accent, #22c55e);
+}
+
+/* Metric result rows (M8 Evidence tab). */
+.metric-results__list {
+  margin: var(--space-sm) 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: var(--space-xs);
+}
+.metric-result-row {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--space-sm);
+  border-radius: 8px;
+  background: rgba(30, 41, 59, 0.4);
+}
+.metric-result-row__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-sm);
+}
+.metric-result-row__label {
+  font-weight: 600;
+}
+.metric-result-row__value {
+  color: var(--text-muted, #94a3b8);
+  font-variant-numeric: tabular-nums;
+}
+.metric-result-row__tier {
+  text-transform: capitalize;
+  opacity: 0.7;
+}
+
 /* Pre-capture readiness checklist (M4). */
 .capture-readiness {
   margin-top: var(--space-sm);

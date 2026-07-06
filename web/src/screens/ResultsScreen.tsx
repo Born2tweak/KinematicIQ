@@ -15,9 +15,16 @@ import {
 } from '../feedback/feedbackEngine'
 import { downloadTape } from '../eval/downloadTape'
 import { getSessionTape } from '../eval/tapeStore'
-import { useAnalystMode } from '../hooks/useAnalystMode'
 import { buildResultsSummary } from '../session/buildSessionResult'
 import { buildComponentScoreExplanations } from '../scoring/scoringExplanations'
+import { FindingCard } from '../components/report/FindingCard'
+import { ResultsTabs } from '../components/report/ResultsTabs'
+import {
+  DEFAULT_RESULTS_TAB,
+  evidenceMetricResults,
+  summaryFindings,
+  type ResultsTabId,
+} from '../components/report/resultsTabsModel'
 import { realRejections } from './repRejectionUi'
 import type { SessionResult } from '../session/types'
 
@@ -30,7 +37,9 @@ const SessionReplay = lazy(() =>
 export function ResultsScreen() {
   const location = useLocation()
   const result = (location.state as { result?: SessionResult } | null)?.result
-  const [isAnalyst, toggleAnalyst] = useAnalystMode()
+  const [activeTab, setActiveTab] = useState<ResultsTabId>(DEFAULT_RESULTS_TAB)
+  // Expert tab reveals the analyst layer (folds in the former analyst toggle).
+  const isAnalyst = activeTab === 'expert'
   const sessionTape = getSessionTape()
 
   // Linked views: the replay timeline reports which rep it is inside so the
@@ -94,6 +103,12 @@ export function ResultsScreen() {
     ? null
     : confidenceResultsMessage(sessionConfidence)
 
+  const showSummary = activeTab === 'summary'
+  const showEvidence = activeTab === 'evidence'
+  const showExpert = activeTab === 'expert'
+  const topFindings = summaryFindings(result)
+  const metricResults = evidenceMetricResults(result)
+
   return (
     <div className="results-page stack-lg">
       <header className="results-page__header report-header">
@@ -101,23 +116,30 @@ export function ResultsScreen() {
           <p className="landing-eyebrow">Movement report</p>
           <h1 className="page-title">Your set</h1>
         </div>
-        <button
-          type="button"
-          className={`hud-tool${isAnalyst ? ' hud-tool--on' : ''}`}
-          onClick={toggleAnalyst}
-          aria-pressed={isAnalyst}
-          title="Analyst mode reveals joint angles and per-rep detail"
-        >
-          {isAnalyst ? 'Analyst · on' : 'Analyst'}
-        </button>
       </header>
       <DisclaimerBanner />
+
+      <ResultsTabs active={activeTab} onChange={setActiveTab} />
 
       <section className="results-lead-card" aria-label="Set summary">
         <p className="results-lead">{summary}</p>
       </section>
 
-      {isInvalidSet && (
+      {showSummary && topFindings.length > 0 && (
+        <section className="results-coaching" aria-label="Key findings">
+          <h2 className="results-section-title">What stood out</h2>
+          <p className="results-coaching__intro">
+            The clearest observations from this set — evidence and a cue, not a grade.
+          </p>
+          <div className="results-coaching__list stack">
+            {topFindings.map((finding) => (
+              <FindingCard key={finding.id} finding={finding} />
+            ))}
+          </div>
+        </section>
+      )}
+
+      {showSummary && isInvalidSet && (
         <section
           className="results-panel results-abstain"
           aria-label="Why there is no movement report"
@@ -155,7 +177,7 @@ export function ResultsScreen() {
         </section>
       )}
 
-      {isQuestionableSet && (
+      {showSummary && isQuestionableSet && (
         <section
           className="results-panel results-abstain"
           aria-label="Capture-quality warning"
@@ -175,7 +197,7 @@ export function ResultsScreen() {
         </section>
       )}
 
-      {postureConcepts.length > 0 && (
+      {showEvidence && postureConcepts.length > 0 && (
         <section className="report-hero" aria-label="Posture profile">
           <div className="report-hero__concepts report-section">
             <h2 className="report-section__title">Posture profile</h2>
@@ -204,19 +226,22 @@ export function ResultsScreen() {
         </section>
       )}
 
-      {result.noRepsDetected && (
+      {showSummary && result.noRepsDetected && (
         <p className="results-alert" role="alert">
           {NO_REPS_MESSAGE}
         </p>
       )}
 
-      {result.insufficientData && !result.noRepsDetected && !isInvalidSet && (
+      {showSummary &&
+        result.insufficientData &&
+        !result.noRepsDetected &&
+        !isInvalidSet && (
         <p className="results-alert results-alert--warning" role="alert">
           {INSUFFICIENT_DATA_MESSAGE}
         </p>
       )}
 
-      {confidenceMessage && (
+      {showSummary && confidenceMessage && (
         <p
           className={
             sessionConfidence === 'Low'
@@ -229,7 +254,33 @@ export function ResultsScreen() {
         </p>
       )}
 
-      {scoring && componentExplanations.length > 0 && (
+      {showEvidence && metricResults.length > 0 && (
+        <section className="results-panel" aria-label="Measured metrics">
+          <h2 className="results-panel__heading">Measured metrics</h2>
+          <p className="results-panel__intro">
+            Keyed reads from this set, each with its camera confidence and
+            validation tier — observations, not a grade.
+          </p>
+          <ul className="metric-results__list">
+            {metricResults.map((metric) => (
+              <li key={metric.metricId} className="metric-result-row">
+                <div className="metric-result-row__head">
+                  <span className="metric-result-row__label">{metric.label}</span>
+                  <ConfidenceBadge level={metric.confidence.level} />
+                </div>
+                <span className="metric-result-row__value">
+                  {metric.value === null
+                    ? 'not readable'
+                    : `${Math.round(metric.value * 100) / 100}${metric.unit === 'deg' ? '°' : metric.unit === 'percent' ? '%' : ` ${metric.unit}`}`}
+                  <span className="metric-result-row__tier"> · {metric.validationTier}</span>
+                </span>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      {(showEvidence || showExpert) && scoring && componentExplanations.length > 0 && (
         <section className="results-panel" aria-label="What the camera measured">
           <div className="component-scores">
             <h2 className="results-panel__heading">What the camera measured</h2>
@@ -258,7 +309,7 @@ export function ResultsScreen() {
         </section>
       )}
 
-      {feedback.length > 0 && (
+      {showEvidence && feedback.length > 0 && (
         <section className="results-coaching" aria-label="Coaching">
           <h2 className="results-section-title">What to try next</h2>
           <p className="results-coaching__intro">
@@ -272,7 +323,7 @@ export function ResultsScreen() {
         </section>
       )}
 
-      {sessionTape !== null && (
+      {showExpert && sessionTape !== null && (
         <Suspense fallback={null}>
           <SessionReplay
             tape={sessionTape}
@@ -281,7 +332,7 @@ export function ResultsScreen() {
         </Suspense>
       )}
 
-      {metrics.reps.length > 0 && (
+      {(showEvidence || showExpert) && metrics.reps.length > 0 && (
         <Card
           className="results-reps-card"
           title="Rep-by-rep"
