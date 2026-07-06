@@ -1295,6 +1295,12 @@ img {
 .capture-readiness__item--ok .capture-readiness__mark {
   color: #22c55e;
 }
+.capture-readiness__item--warn {
+  opacity: 0.9;
+}
+.capture-readiness__item--warn .capture-readiness__mark {
+  color: #fbbf24;
+}
 
 .camera-hud--bottom {
   position: absolute;

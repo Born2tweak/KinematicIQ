@@ -719,7 +719,15 @@ export function CameraScreen() {
                 prev.checklist.every(
                   (item, i) => item.ok === nextReadiness.checklist[i].ok,
                 )
-              return sameState && sameChecklist ? prev : nextReadiness
+              const sameGeometry =
+                prev !== null &&
+                prev.geometryChecks.length === nextReadiness.geometryChecks.length &&
+                prev.geometryChecks.every(
+                  (item, i) => item.status === nextReadiness.geometryChecks[i].status,
+                )
+              return sameState && sameChecklist && sameGeometry
+                ? prev
+                : nextReadiness
             })
           }
 
@@ -762,6 +770,8 @@ export function CameraScreen() {
     missingJoints,
     guidance,
     readinessState: readiness?.state ?? null,
+    geometryFix:
+      readiness?.geometryChecks.find((c) => c.status === 'fail')?.fix ?? null,
   })
 
   const showReadinessChecklist =
@@ -853,6 +863,23 @@ export function CameraScreen() {
                     >
                       <span aria-hidden className="capture-readiness__mark">
                         {item.ok ? '✓' : '○'}
+                      </span>
+                      {item.label}
+                    </li>
+                  ))}
+                  {readiness.geometryChecks.map((item) => (
+                    <li
+                      key={item.id}
+                      className={`capture-readiness__item${
+                        item.status === 'pass'
+                          ? ' capture-readiness__item--ok'
+                          : item.status === 'warn'
+                            ? ' capture-readiness__item--warn'
+                            : ''
+                      }`}
+                    >
+                      <span aria-hidden className="capture-readiness__mark">
+                        {item.status === 'pass' ? '✓' : item.status === 'warn' ? '!' : '○'}
                       </span>
                       {item.label}
                     </li>

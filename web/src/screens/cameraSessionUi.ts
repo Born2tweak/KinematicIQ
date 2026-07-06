@@ -22,6 +22,8 @@ export function getSessionStatusCopy(
     guidance?: CaptureGuidance | null
     /** Scored capture readiness — refines the WAITING subtitle when present. */
     readinessState?: CaptureReadinessState | null
+    /** First hard-failing protocol geometry fix (M25) — capture-scoped copy. */
+    geometryFix?: string | null
   },
 ): SessionStatusCopy {
   switch (phase) {
@@ -29,7 +31,8 @@ export function getSessionStatusCopy(
       if (options.guidance) {
         const subtitle =
           options.readinessState === 'marginal'
-            ? 'Almost there — one small adjustment and you’re set.'
+            ? (options.geometryFix ??
+              'Almost there — one small adjustment and you’re set.')
             : (options.guidance.detail ?? '')
         return {
           title: options.guidance.instruction,
