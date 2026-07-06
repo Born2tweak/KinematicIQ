@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import {
+  coachQuestionSections,
   DEFAULT_RESULTS_TAB,
   RESULTS_TABS,
   evidenceMetricResults,
@@ -112,5 +113,36 @@ describe('components/report/findingCardModel', () => {
     const f = finding('x', 'secondary')
     delete f.tryNext
     expect(buildFindingCardModel(f).tryNext).toBeNull()
+  })
+})
+
+describe('coach-question sections (M24)', () => {
+  it('groups findings under fixed questions and abstains explicitly elsewhere', () => {
+    const result = sessionResult({
+      findings: [
+        finding('squat.depth', 'primary'),
+        finding('squat.symmetry', 'secondary'),
+      ].map((f, i) => ({
+        ...f,
+        question: i === 0 ? 'movement-completion' : 'load-symmetry',
+      })),
+    })
+    const sections = coachQuestionSections(result)
+    expect(sections.map((s) => s.questionId)).toEqual([
+      'movement-completion',
+      'posture-organization',
+      'load-symmetry',
+    ])
+    for (const section of sections) {
+      if (section.findings.length === 0) {
+        expect(section.abstainLine.length).toBeGreaterThan(0)
+      }
+      for (const finding of section.findings) {
+        expect(finding.question).toBe(section.questionId)
+      }
+    }
+    // Every finding lands in exactly one section.
+    const placed = sections.reduce((n, s) => n + s.findings.length, 0)
+    expect(placed).toBe(result.findings.length)
   })
 })

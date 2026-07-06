@@ -22,6 +22,7 @@ import { ResultsTabs } from '../components/report/ResultsTabs'
 import {
   DEFAULT_RESULTS_TAB,
   evidenceMetricResults,
+  coachQuestionSections,
   summaryFindings,
   type ResultsTabId,
 } from '../components/report/resultsTabsModel'
@@ -120,6 +121,7 @@ export function ResultsScreen() {
   const showEvidence = activeTab === 'evidence'
   const showExpert = activeTab === 'expert'
   const topFindings = summaryFindings(result)
+  const coachQuestions = coachQuestionSections(result)
   const metricResults = evidenceMetricResults(result)
 
   return (
@@ -149,6 +151,37 @@ export function ResultsScreen() {
               <FindingCard key={finding.id} finding={finding} />
             ))}
           </div>
+        </section>
+      )}
+
+      {showEvidence &&
+        quality.verdict === 'valid' &&
+        !result.insufficientData && (
+        <section
+          className="results-panel"
+          aria-label="Coach questions"
+        >
+          <h2 className="results-panel__heading">The coach questions</h2>
+          <p className="results-panel__intro">
+            The report organized by what a coach would ask. A quiet section
+            means those reads stayed inside the expected range — silence is
+            deliberate, not missing data.
+          </p>
+          {coachQuestions.map((section) => (
+            <div key={section.questionId} className="coach-question">
+              <h3 className="coach-question__title">{section.title}</h3>
+              <p className="coach-question__asks">{section.asks}</p>
+              {section.findings.length > 0 ? (
+                <div className="coach-question__findings stack">
+                  {section.findings.map((finding) => (
+                    <FindingCard key={finding.id} finding={finding} />
+                  ))}
+                </div>
+              ) : (
+                <p className="coach-question__abstain">{section.abstainLine}</p>
+              )}
+            </div>
+          ))}
         </section>
       )}
 
