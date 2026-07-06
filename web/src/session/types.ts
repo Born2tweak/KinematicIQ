@@ -1,5 +1,6 @@
 import type { RepMetrics } from '../cv/types'
 import type { PostureSetSummary } from '../analysis/posture/postureCollector'
+import type { MetricResult } from '../core/metric'
 import type { ProtocolId } from '../core/protocol'
 import type { SetQualityAssessment } from './setQualityGate'
 
@@ -59,6 +60,12 @@ export interface SessionResult {
   /** Which protocol produced this result. Squat is protocol #1 (M5). */
   protocolId: ProtocolId
   metrics: SetMetricsSummary
+  /**
+   * Keyed metric results (M6) carrying confidence + provenance + validation
+   * tier. Emitted alongside the legacy `metrics` summary (dual-write until the
+   * report reads these directly in M8). Empty when no reps.
+   */
+  metricResults: MetricResult[]
   /**
    * Per-component evidence inputs (depth, trunk, knee tracking, consistency,
    * symmetry). These survive as evidence for future verdicts — there is no

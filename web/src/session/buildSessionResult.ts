@@ -15,6 +15,9 @@ import { computeComponentScores } from '../scoring/scoringEngine'
 import type { RepMetrics } from '../cv/types'
 import { getActiveProtocol } from '../protocols/registry'
 import type { ProtocolId } from '../core/protocol'
+import { makeProvenance } from '../core/provenance'
+import { buildSquatMetricResults } from '../metrics/squatMetrics'
+import type { MetricResult } from '../core/metric'
 import { assessSetQuality } from './setQualityGate'
 import type { SessionResult } from './types'
 
@@ -66,10 +69,22 @@ export function buildSessionResult(
     excludedRepNumbers,
   )
 
+  // Keyed MetricResult[] (M6): dual-written alongside the legacy summary.
+  // Only squat has metric definitions today; other protocols emit none.
+  const provenance = makeProvenance({
+    captureSource: 'live',
+    protocolId: getActiveProtocol().definition.defaultObservationProtocolId,
+  })
+  const metricResults: MetricResult[] =
+    noRepsDetected || protocolId !== 'squat'
+      ? []
+      : buildSquatMetricResults(metrics, provenance)
+
   if (noRepsDetected) {
     return {
       protocolId,
       metrics,
+      metricResults,
       scoring: null,
       feedback: [],
       sessionConfidence,
@@ -94,6 +109,7 @@ export function buildSessionResult(
   return {
     protocolId,
     metrics,
+    metricResults,
     scoring,
     feedback,
     sessionConfidence,
