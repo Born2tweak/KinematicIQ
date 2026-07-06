@@ -24,6 +24,18 @@ export interface PostureFrameSample {
   trunkAngle: number
   /** Hip-center position in world space (center-of-mass proxy). */
   hipCenter: Vector3Like
+  /**
+   * Forward-head proxy (M21): degrees the head sits ahead of the trunk
+   * line (0 = stacked over the trunk). Null when head landmarks are
+   * unreadable — never fails the sample.
+   */
+  forwardHeadAngle: number | null
+  /**
+   * Shoulder-elevation proxy (M21): head-to-shoulder distance over trunk
+   * length. LOWER = shoulders closer to the ears (elevated/shrugged).
+   * Trend-wise read only. Null when head landmarks are unreadable.
+   */
+  shoulderElevationRatio: number | null
   /** Minimum visibility among the landmarks used, in [0, 1]. */
   confidence: number
 }
@@ -127,12 +139,43 @@ export function extractPostureFrame(
   const cosVertical = Math.max(-1, Math.min(1, -trunk.y / trunkLen))
   const trunkAngle = (Math.acos(cosVertical) * 180) / Math.PI
 
+  const head = headReference(w, minConfidence)
+  let forwardHeadAngle: number | null = null
+  let shoulderElevationRatio: number | null = null
+  if (head !== null) {
+    // Interior angle at the shoulders between head and hips: 180° = head
+    // stacked on the trunk line; forward head = 180 − interior.
+    const interior = angleAt3D(head, shoulderMid, hipMid)
+    forwardHeadAngle = interior === null ? null : 180 - interior
+    shoulderElevationRatio = norm(sub(head, shoulderMid)) / trunkLen
+  }
+
   return {
     timestamp: frame.timestamp,
     hipFlexion,
     kneeFlexion,
     trunkAngle,
     hipCenter: hipMid,
+    forwardHeadAngle,
+    shoulderElevationRatio,
     confidence,
   }
+}
+
+/**
+ * Head reference point for posture proxies (M21): ear midpoint when both
+ * ears are readable, else the nose. Head landmarks are optional — a missing
+ * head never fails the posture sample.
+ */
+function headReference(
+  w: readonly WorldLandmark[],
+  minConfidence: number,
+): Vector3Like | null {
+  const le = w[LANDMARK_INDICES.LEFT_EAR]
+  const re = w[LANDMARK_INDICES.RIGHT_EAR]
+  if (le && re && le.visibility >= minConfidence && re.visibility >= minConfidence) {
+    return mid(le, re)
+  }
+  const nose = w[LANDMARK_INDICES.NOSE]
+  return nose && nose.visibility >= minConfidence ? nose : null
 }

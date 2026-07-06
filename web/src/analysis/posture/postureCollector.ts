@@ -27,6 +27,10 @@ export interface RepPostureMetrics {
   trunkVariability: number | null
   /** Dimensionless normalized jerk of the hip trajectory (lower = smoother). */
   normalizedJerk: number | null
+  /** Mean forward-head proxy angle across the rep (deg; M21). */
+  forwardHeadAngle: number | null
+  /** Mean shoulder-elevation ratio across the rep (M21; lower = shrugged). */
+  shoulderElevationRatio: number | null
   /** Mean 3D sample confidence in [0, 1]; 0 when no usable samples. */
   sampleConfidence: number
 }
@@ -36,6 +40,10 @@ export interface PostureSetSummary {
   avgHingeRatio: number | null
   avgTrunkVariability: number | null
   avgNormalizedJerk: number | null
+  /** Set-average forward-head proxy angle (deg; M21). */
+  avgForwardHeadAngle: number | null
+  /** Set-average shoulder-elevation ratio (M21). */
+  avgShoulderElevationRatio: number | null
   /**
    * Rep number deviating most from this set's own pattern (depth +
    * duration z-scores), or null when the set is too small/uniform.
@@ -115,6 +123,8 @@ function analyzeRep(
     hingeRatio: null,
     trunkVariability: null,
     normalizedJerk: null,
+    forwardHeadAngle: null,
+    shoulderElevationRatio: null,
     sampleConfidence: 0,
   }
 
@@ -146,6 +156,12 @@ function analyzeRep(
     hingeRatio,
     trunkVariability,
     normalizedJerk: jerk,
+    forwardHeadAngle: averageOf(
+      inWindow.map((s) => s.forwardHeadAngle ?? null),
+    ),
+    shoulderElevationRatio: averageOf(
+      inWindow.map((s) => s.shoulderElevationRatio ?? null),
+    ),
     sampleConfidence: confidence,
   }
 }
@@ -174,6 +190,10 @@ export function collectPostureMetrics(
     avgHingeRatio: averageOf(usable.map((r) => r.hingeRatio)),
     avgTrunkVariability: averageOf(usable.map((r) => r.trunkVariability)),
     avgNormalizedJerk: averageOf(usable.map((r) => r.normalizedJerk)),
+    avgForwardHeadAngle: averageOf(usable.map((r) => r.forwardHeadAngle)),
+    avgShoulderElevationRatio: averageOf(
+      usable.map((r) => r.shoulderElevationRatio),
+    ),
     mostDeviantRep,
     sampleCoverage: reps.length === 0 ? 0 : usable.length / reps.length,
   }

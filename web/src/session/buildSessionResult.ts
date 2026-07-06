@@ -17,6 +17,7 @@ import { getActiveProtocol } from '../protocols/registry'
 import type { ProtocolId } from '../core/protocol'
 import { makeProvenance } from '../core/provenance'
 import { buildSquatMetricResults } from '../metrics/squatMetrics'
+import { buildPostureMetricResults } from '../metrics/postureMetrics'
 import type { MetricResult } from '../core/metric'
 import { assessSetQuality } from './setQualityGate'
 import type { SessionResult } from './types'
@@ -69,8 +70,15 @@ export function buildSessionResult(
     excludedRepNumbers,
   )
 
+  // 3D posture reads derive from trusted reps only — an impossible
+  // bottom must never drive hinge/trunk/smoothness averages.
+  const posture = noRepsDetected
+    ? null
+    : collectPostureMetrics(trustedReps, postureSamples)
+
   // Keyed MetricResult[] (M6): dual-written alongside the legacy summary.
   // Only squat has metric definitions today; other protocols emit none.
+  // Posture proxies (M21) ride along whenever the 3D stream was usable.
   const provenance = makeProvenance({
     captureSource: 'live',
     protocolId: getActiveProtocol().definition.defaultObservationProtocolId,
@@ -78,7 +86,10 @@ export function buildSessionResult(
   const metricResults: MetricResult[] =
     noRepsDetected || protocolId !== 'squat'
       ? []
-      : buildSquatMetricResults(metrics, provenance)
+      : [
+          ...buildSquatMetricResults(metrics, provenance),
+          ...buildPostureMetricResults(posture, provenance),
+        ]
 
   if (noRepsDetected) {
     return {
@@ -126,9 +137,7 @@ export function buildSessionResult(
     sessionConfidenceScore,
     insufficientData,
     noRepsDetected: false,
-    // 3D posture reads derive from trusted reps only — an impossible
-    // bottom must never drive hinge/trunk/smoothness averages.
-    posture: collectPostureMetrics(trustedReps, postureSamples),
+    posture,
     baseline: null,
     quality,
   }

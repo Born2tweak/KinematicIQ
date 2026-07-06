@@ -47,6 +47,8 @@ function repSamples(
       kneeFlexion: opts.kneeAtBottom * phase,
       trunkAngle: 20 + (opts.trunkDrift ?? 0) * phase,
       hipCenter: { x: 0, y: 0.4 * phase, z: 0 },
+      forwardHeadAngle: 12,
+      shoulderElevationRatio: 0.3,
       confidence: 0.9,
     })
   }
