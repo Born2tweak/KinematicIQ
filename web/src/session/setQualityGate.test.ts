@@ -152,6 +152,43 @@ describe('assessSetQuality', () => {
     expect(quality.verdict).toBe('invalid')
   })
 
+  it('marks a CLEAN short set questionable (small-sample), not invalid', () => {
+    // 2026-07-06 batch eval: 5 of 9 upload tapes were clean 1–2-rep clips
+    // wrongly branded untrustworthy by the full abstain.
+    const quality = assessSetQuality([makeRep(1), makeRep(2)])
+    expect(quality.verdict).toBe('questionable')
+    expect(quality.reasons.map((r) => r.id)).toEqual(['small-sample'])
+    expect(quality.trustedRepCount).toBe(2)
+    expect(quality.captureFixes.join(' ')).toMatch(/at least 3 reps/i)
+  })
+
+  it('extends small-sample to a clean single rep', () => {
+    const quality = assessSetQuality([makeRep(1)])
+    expect(quality.verdict).toBe('questionable')
+    expect(quality.reasons.map((r) => r.id)).toEqual(['small-sample'])
+  })
+
+  it('keeps a short set invalid when it is short because of artifacts', () => {
+    const quality = assessSetQuality([
+      makeRep(1, { minLeftKneeAngle: 176, minRightKneeAngle: 178 }),
+      makeRep(2),
+      makeRep(3, { minLeftKneeAngle: null, minRightKneeAngle: null }),
+    ])
+    expect(quality.trustedRepCount).toBe(1)
+    expect(quality.verdict).toBe('invalid')
+    expect(quality.reasons.map((r) => r.id)).toContain('too-few-trusted-reps')
+  })
+
+  it('keeps a short churn-heavy set invalid', () => {
+    const churn = Array.from(
+      { length: PHANTOM_CHURN_QUESTIONABLE },
+      (_, i) => makePhantomRejection(i),
+    )
+    const quality = assessSetQuality([makeRep(1), makeRep(2)], churn)
+    expect(quality.verdict).toBe('invalid')
+    expect(quality.reasons.map((r) => r.id)).toContain('too-few-trusted-reps')
+  })
+
   it('marks heavy phantom-candidate churn questionable, but tolerates normal jitter', () => {
     const cleanSet = [makeRep(1), makeRep(2), makeRep(3), makeRep(4)]
 
@@ -231,6 +268,18 @@ describe('buildSessionResult with the quality gate', () => {
     const result = buildSessionResult(reps, Array(12).fill(0.9))
     expect(result.quality.verdict).toBe('valid')
     expect(result.feedback.length).toBeGreaterThan(0)
+  })
+
+  it('gives a clean short set observations without coaching or the abstain headline', () => {
+    const result = buildSessionResult([makeRep(1), makeRep(2)], Array(12).fill(0.9))
+    expect(result.quality.verdict).toBe('questionable')
+    // No set-pattern coaching from 2 reps…
+    expect(result.feedback).toHaveLength(0)
+    expect(result.findings).toHaveLength(0)
+    // …but the report renders instead of fully abstaining.
+    const summary = buildResultsSummary(result)
+    expect(summary).not.toBe(UNTRUSTWORTHY_REPORT_MESSAGE)
+    expect(summary).toMatch(/2 reps/)
   })
 
   it('a rep with missing knee data can never carry High confidence anywhere', () => {

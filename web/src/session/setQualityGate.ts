@@ -37,6 +37,7 @@ export type SetQualityReasonId =
   | 'impossible-flexion-reps'
   | 'knee-less-reps'
   | 'too-few-trusted-reps'
+  | 'small-sample'
   | 'artifact-heavy-set'
   | 'phantom-candidate-churn'
 
@@ -211,11 +212,26 @@ export function assessSetQuality(
   let verdict: SetQualityVerdict = reasons.length > 0 ? 'questionable' : 'valid'
 
   if (trustedRepCount < MIN_TRUSTED_REPS) {
-    reasons.push({
-      id: 'too-few-trusted-reps',
-      detail: `Only ${trustedRepCount} rep${trustedRepCount === 1 ? '' : 's'} carried readings the camera can trust — too few to describe a movement pattern.`,
-    })
-    verdict = 'invalid'
+    // A short set is only untrustworthy when it is short BECAUSE the
+    // recording produced artifacts. A clean 1–2-rep clip (2026-07-06 batch
+    // eval: 5 of 9 upload tapes) earns per-rep observations — the gate
+    // abstains from SET-PATTERN claims, not from the reps themselves.
+    if (trustedRepCount > 0 && reasons.length === 0) {
+      reasons.push({
+        id: 'small-sample',
+        detail: `Only ${trustedRepCount} rep${trustedRepCount === 1 ? '' : 's'} in this recording — enough for per-rep reads, too few to describe a set-level pattern.`,
+      })
+      fixes.add(
+        'Record at least 3 reps in one continuous set for a set-level movement report.',
+      )
+      verdict = 'questionable'
+    } else {
+      reasons.push({
+        id: 'too-few-trusted-reps',
+        detail: `Only ${trustedRepCount} rep${trustedRepCount === 1 ? '' : 's'} carried readings the camera can trust — too few to describe a movement pattern.`,
+      })
+      verdict = 'invalid'
+    }
   } else if (untrustedFraction >= UNTRUSTED_FRACTION_INVALID) {
     reasons.push({
       id: 'artifact-heavy-set',
