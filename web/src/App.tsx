@@ -1,6 +1,7 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { AppShell } from './components/AppShell'
 import { CameraScreen } from './screens/CameraScreen'
+import { HistoryScreen } from './screens/HistoryScreen'
 import { LandingScreen } from './screens/LandingScreen'
 import { ResultsScreen } from './screens/ResultsScreen'
 import { UploadScreen } from './screens/UploadScreen'
@@ -14,6 +15,7 @@ export default function App() {
           <Route path="/camera" element={<CameraScreen />} />
           <Route path="/upload" element={<UploadScreen />} />
           <Route path="/results" element={<ResultsScreen />} />
+          <Route path="/history" element={<HistoryScreen />} />
         </Route>
       </Routes>
     </BrowserRouter>

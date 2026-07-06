@@ -38,6 +38,9 @@ export function AppShell() {
             <NavLink to="/results" className={navLinkClass}>
               Results
             </NavLink>
+            <NavLink to="/history" className={navLinkClass}>
+              History
+            </NavLink>
           </nav>
         </div>
       </header>

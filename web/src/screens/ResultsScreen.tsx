@@ -26,6 +26,7 @@ import {
   type ResultsTabId,
 } from '../components/report/resultsTabsModel'
 import { realRejections } from './repRejectionUi'
+import { buildStoredSession, getSessionStore } from '../storage/sessionStore'
 import type { SessionResult } from '../session/types'
 
 const SessionReplay = lazy(() =>
@@ -48,6 +49,18 @@ export function ResultsScreen() {
   const handleActiveRepChange = useCallback((repNumber: number | null) => {
     setReplayRep((current) => (current === repNumber ? current : repNumber))
   }, [])
+
+  // Saving is an explicit user action (M9) — never silent persistence.
+  const [saveState, setSaveState] = useState<'idle' | 'saved' | 'error'>('idle')
+  const handleSaveSession = useCallback(async () => {
+    if (!result) return
+    try {
+      await getSessionStore().save(buildStoredSession(result))
+      setSaveState('saved')
+    } catch {
+      setSaveState('error')
+    }
+  }, [result])
 
   const componentExplanations = useMemo(() => {
     if (!result?.scoring) return []
@@ -428,10 +441,28 @@ export function ResultsScreen() {
         <Button to="/camera" variant="primary">
           Record another set
         </Button>
+        <Button
+          variant="secondary"
+          onClick={() => void handleSaveSession()}
+          disabled={saveState === 'saved'}
+        >
+          {saveState === 'saved' ? 'Saved to history' : 'Save to history'}
+        </Button>
         <Button to="/" variant="secondary">
           Home
         </Button>
       </div>
+      {saveState === 'error' && (
+        <p className="results-alert results-alert--warning" role="alert">
+          Could not save this session on this device.
+        </p>
+      )}
+      {saveState === 'saved' && (
+        <p className="results-alert results-alert--info" role="status">
+          Saved locally in this browser only — see the History page. Nothing is
+          uploaded.
+        </p>
+      )}
     </div>
   )
 }
