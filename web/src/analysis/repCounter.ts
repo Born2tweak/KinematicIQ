@@ -752,6 +752,7 @@ const finalizeRep = (
     endFrameIndex: frame.frameIndex,
     startTimestamp: activeRep.startTimestamp,
     endTimestamp: frame.timestamp,
+    bottomTimestamp: activeRep.bottomTimestamp,
     minLeftKneeAngle: activeRep.minLeftKneeAngle,
     minRightKneeAngle: activeRep.minRightKneeAngle,
     averageTrunkLean,

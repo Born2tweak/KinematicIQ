@@ -107,5 +107,48 @@ export function deriveSquatCoaching(
     })
   })
 
+  appendTempoFinding(findings, sessionConfidence, metrics, metricResults)
+
   return { findings, cues }
+}
+
+/** Rep-duration CV above this reads as erratic tempo worth surfacing. */
+const TEMPO_CV_INFORMATIONAL = 40
+
+/**
+ * Erratic-tempo finding (M18): informational only — it rides the tempo
+ * metrics, never displaces the primary/secondary coaching cues, and needs a
+ * real sample (3+ reps) before saying anything.
+ */
+function appendTempoFinding(
+  findings: Finding[],
+  sessionConfidence: ConfidenceLevel,
+  metrics: SetMetricsSummary,
+  metricResults: readonly MetricResult[],
+): void {
+  const tempoCV = metrics.repDurationCV ?? null
+  if (tempoCV === null || tempoCV <= TEMPO_CV_INFORMATIONAL) return
+  if (metrics.repCount < 3) return
+
+  const repDuration = metricResults.find(
+    (r) => r.metricId === 'squat.tempo.rep-duration',
+  )
+  findings.push({
+    id: 'squat.tempo',
+    question: 'movement-completion',
+    statement: `Rep timing varied by about ${Math.round(tempoCV)}% across this set — some reps took noticeably longer than others.`,
+    evidence: [
+      {
+        metricId: 'squat.tempo.rep-duration',
+        observed:
+          repDuration && repDuration.value !== null
+            ? `Rep duration (avg): ${(Math.round(repDuration.value * 100) / 100).toFixed(2)} s`
+            : 'not readable in this set',
+      },
+    ],
+    confidence: makeConfidence(CONFIDENCE_VALUE[sessionConfidence]),
+    priority: 'informational',
+    tryNext:
+      'Pick a tempo — for example two seconds down, brief pause, drive up — and keep it for every rep.',
+  })
 }

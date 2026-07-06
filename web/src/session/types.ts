@@ -23,6 +23,18 @@ export interface SetMetricsSummary {
   avgKneeAsymmetry: number | null
   avgShoulderAsymmetry: number | null
   overallConfidence: number
+  // ── Tempo & phase timing (M18, MD03 minimum set). Optional: sessions
+  // stored before M18 lack them and the tempo metrics abstain.
+  /** Average full-rep duration across included reps (ms). */
+  avgRepDurationMs?: number | null
+  /** CV (%) of rep duration — tempo repeatability across the set. */
+  repDurationCV?: number | null
+  /** Average descent (start → deepest point) duration (ms). */
+  avgDescentMs?: number | null
+  /** Average ascent (deepest point → completion) duration (ms). */
+  avgAscentMs?: number | null
+  /** Set cadence in reps per minute (first rep start → last rep end). */
+  cadenceRepsPerMin?: number | null
 }
 
 export interface ComponentScores {

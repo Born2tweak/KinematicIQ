@@ -89,6 +89,52 @@ export const SQUAT_METRIC_DEFINITIONS: MetricDefinition[] = [
       'Average shoulder-height difference at the bottom of the rep, self-referenced.',
     included: true,
   },
+  // ── Tempo & phase timing (M18, MD03 minimum set: tempo/cadence/phase
+  // durations). Read from frame timestamps only — production tier.
+  {
+    id: 'squat.tempo.rep-duration',
+    label: 'Rep duration (avg)',
+    unit: 's',
+    evidenceCategory: 'temporal',
+    validationTier: 'production',
+    confidenceBasis: ['temporal-stability', 'sample-coverage'],
+    description:
+      'Average time per rep across trusted reps — read from frame timestamps only.',
+    included: true,
+  },
+  {
+    id: 'squat.tempo.descent',
+    label: 'Descent time (avg)',
+    unit: 's',
+    evidenceCategory: 'temporal',
+    validationTier: 'production',
+    confidenceBasis: ['temporal-stability', 'sample-coverage'],
+    description:
+      'Average time from rep start to the deepest tracked point, in this set.',
+    included: true,
+  },
+  {
+    id: 'squat.tempo.ascent',
+    label: 'Ascent time (avg)',
+    unit: 's',
+    evidenceCategory: 'temporal',
+    validationTier: 'production',
+    confidenceBasis: ['temporal-stability', 'sample-coverage'],
+    description:
+      'Average time from the deepest tracked point back to standing, in this set.',
+    included: true,
+  },
+  {
+    id: 'squat.tempo.cadence',
+    label: 'Cadence (reps/min)',
+    unit: 'ratio',
+    evidenceCategory: 'temporal',
+    validationTier: 'production',
+    confidenceBasis: ['temporal-stability'],
+    description:
+      'Reps per minute from the first rep start to the last rep end (needs 2+ reps).',
+    included: true,
+  },
 ]
 
 /**
@@ -130,7 +176,15 @@ const METRIC_SIDE: Record<string, MetricSide> = {
   'squat.symmetry.hip-shift': 'bilateral',
   'squat.symmetry.knee-asymmetry': 'bilateral',
   'squat.symmetry.shoulder-asymmetry': 'bilateral',
+  'squat.tempo.rep-duration': 'none',
+  'squat.tempo.descent': 'none',
+  'squat.tempo.ascent': 'none',
+  'squat.tempo.cadence': 'none',
 }
+
+/** ms → seconds for display; abstains propagate. */
+const toSeconds = (ms: number | null | undefined): number | null =>
+  ms === null || ms === undefined ? null : ms / 1000
 
 /** Read a metric's value out of the legacy summary. Null ⇒ metric abstains. */
 function valueFor(id: string, summary: SetMetricsSummary): number | null {
@@ -147,6 +201,14 @@ function valueFor(id: string, summary: SetMetricsSummary): number | null {
       return summary.avgKneeAsymmetry
     case 'squat.symmetry.shoulder-asymmetry':
       return summary.avgShoulderAsymmetry
+    case 'squat.tempo.rep-duration':
+      return toSeconds(summary.avgRepDurationMs)
+    case 'squat.tempo.descent':
+      return toSeconds(summary.avgDescentMs)
+    case 'squat.tempo.ascent':
+      return toSeconds(summary.avgAscentMs)
+    case 'squat.tempo.cadence':
+      return summary.cadenceRepsPerMin ?? null
     default:
       return null
   }

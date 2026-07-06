@@ -29,6 +29,40 @@ const metrics: SetMetricsSummary = {
 }
 
 describe('findings/squatRules', () => {
+  it('appends an informational tempo finding when rep timing is erratic (M18)', () => {
+    const erratic: SetMetricsSummary = {
+      ...metrics,
+      avgRepDurationMs: 2500,
+      repDurationCV: 55,
+    }
+    const metricResults = buildSquatMetricResults(
+      erratic,
+      makeProvenance({ captureSource: 'replay' }),
+    )
+    const out = deriveSquatCoaching(components, 'High', erratic, metricResults, 2)
+    const tempo = out.findings.find((f) => f.id === 'squat.tempo')
+    expect(tempo).toBeDefined()
+    expect(tempo?.priority).toBe('informational')
+    expect(tempo?.statement).toMatch(/55%/)
+    // Informational only: it never displaces coaching cues.
+    expect(out.cues).toHaveLength(2)
+  })
+
+  it('stays silent about tempo when timing is steady or the sample is small', () => {
+    const steady: SetMetricsSummary = { ...metrics, repDurationCV: 10 }
+    expect(
+      deriveSquatCoaching(components, 'High', steady, [], 2).findings.some(
+        (f) => f.id === 'squat.tempo',
+      ),
+    ).toBe(false)
+    const smallSample: SetMetricsSummary = { ...metrics, repCount: 2, repDurationCV: 80 }
+    expect(
+      deriveSquatCoaching(components, 'High', smallSample, [], 2).findings.some(
+        (f) => f.id === 'squat.tempo',
+      ),
+    ).toBe(false)
+  })
+
   it('returns nothing at Low session confidence', () => {
     const out = deriveSquatCoaching(components, 'Low', metrics)
     expect(out.findings).toEqual([])

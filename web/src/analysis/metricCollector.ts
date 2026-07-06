@@ -60,6 +60,27 @@ export function collectSetMetrics(
 
   const asymmetry = summarizeSetAsymmetry(included)
 
+  // ── Tempo & phase timing (M18) — timestamps only, no new observations.
+  const durations = included.map((rep) => rep.durationMs)
+  const descents = included
+    .map((rep) =>
+      rep.bottomTimestamp === undefined
+        ? null
+        : rep.bottomTimestamp - rep.startTimestamp,
+    )
+    .filter((v): v is number => v !== null && v >= 0)
+  const ascents = included
+    .map((rep) =>
+      rep.bottomTimestamp === undefined
+        ? null
+        : rep.endTimestamp - rep.bottomTimestamp,
+    )
+    .filter((v): v is number => v !== null && v >= 0)
+  const spanMs =
+    included.length >= 2
+      ? included[included.length - 1].endTimestamp - included[0].startTimestamp
+      : 0
+
   return {
     repCount: reps.length,
     reps,
@@ -75,5 +96,11 @@ export function collectSetMetrics(
     avgKneeAsymmetry: asymmetry.avgKneeAsymmetry,
     avgShoulderAsymmetry: asymmetry.avgShoulderAsymmetry,
     overallConfidence: sessionConfidenceScore,
+    avgRepDurationMs: average(durations),
+    repDurationCV: depthCoefficientOfVariation(durations),
+    avgDescentMs: average(descents),
+    avgAscentMs: average(ascents),
+    cadenceRepsPerMin:
+      spanMs > 0 ? (included.length / spanMs) * 60_000 : null,
   }
 }

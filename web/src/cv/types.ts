@@ -49,6 +49,11 @@ export interface RepMetrics {
   endFrameIndex: number
   startTimestamp: number
   endTimestamp: number
+  /**
+   * Timestamp of the deepest tracked point (M18 tempo metrics). Optional:
+   * sessions stored before M18 lack it, and tempo metrics abstain then.
+   */
+  bottomTimestamp?: number
   minLeftKneeAngle: number | null
   minRightKneeAngle: number | null
   averageTrunkLean: number | null
