@@ -7,12 +7,18 @@
  * Planned protocols (M10) register with `status: 'planned'` and no profile.
  */
 import type { MovementProfile } from '../analysis/movement/types'
-import type { ProtocolId } from '../core/protocol'
+import { NotImplementedError, type ProtocolId } from '../core/protocol'
+import { HIP_HINGE_PROTOCOL } from './hipHinge'
+import { JUMP_PROTOCOL } from './jump'
+import { SPRINT_PROTOCOL } from './sprint'
 import { SQUAT_PROTOCOL } from './squat'
 import type { Protocol } from './types'
 
 const PROTOCOLS: Partial<Record<ProtocolId, Protocol>> = {
   squat: SQUAT_PROTOCOL,
+  hipHinge: HIP_HINGE_PROTOCOL,
+  jump: JUMP_PROTOCOL,
+  sprint: SPRINT_PROTOCOL,
 }
 
 /** The movement the app analyzes by default until selection UI ships (M10). */
@@ -47,15 +53,21 @@ export function getActiveProtocol(): Protocol {
 }
 
 /**
- * The active protocol's runtime analysis config. Throws if the active protocol
- * has no profile (never happens for squat; guards future misconfiguration).
+ * Analyze entry point: the runtime analysis config for a protocol. Planned
+ * stubs (M10) have no profile — this throws `NotImplementedError` so nothing
+ * upstream can accidentally run an unvalidated analysis.
  */
-export function getActiveProtocolProfile(): MovementProfile {
-  const { profile, definition } = getActiveProtocol()
+export function getProtocolProfile(id: ProtocolId): MovementProfile {
+  const { profile, definition } = getProtocol(id)
   if (!profile) {
-    throw new Error(`Active protocol "${definition.id}" has no analysis profile.`)
+    throw new NotImplementedError(definition.id)
   }
   return profile
+}
+
+/** The active protocol's runtime analysis config (squat today). */
+export function getActiveProtocolProfile(): MovementProfile {
+  return getProtocolProfile(getActiveProtocol().definition.id)
 }
 
 /** Test/M10 seam: register or replace a protocol at runtime. */

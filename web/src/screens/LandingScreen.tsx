@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Button } from '../components/Button'
 import { LiveSquatDemo } from '../components/landing/LiveSquatDemo'
+import { ProtocolPicker } from '../components/ProtocolPicker'
 import { SessionDemoPlayer } from '../components/landing/SessionDemoPlayer'
 
 const PIPELINE_STEPS = [
@@ -207,11 +208,18 @@ export function LandingScreen() {
             </div>
           ))}
         </div>
-        <p className="landing-section__note">
+      </section>
+
+      {/* Protocols */}
+      <section className="landing-section" id="protocols">
+        <p className="landing-eyebrow">Movements</p>
+        <h2 className="landing-section__title">One engine, movement by movement</h2>
+        <p className="landing-section__lead">
           Starting with the bodyweight squat — the reference movement behind
-          nearly every strength and rehab program. Hip hinge, jump, and sprint
-          are next, each with its own movement-specific reads.
+          nearly every strength and rehab program. Each new movement ships only
+          once its analysis is validated.
         </p>
+        <ProtocolPicker />
       </section>
 
       {/* Final CTA */}
