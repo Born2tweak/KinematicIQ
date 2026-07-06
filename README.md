@@ -1,64 +1,77 @@
 # KinematicIQ
 
-**Athlete Movement Intelligence System**
+**Protocol-driven movement intelligence, in your browser**
 
-KinematicIQ is a software-first platform for analyzing athlete movement quality — focused on **recovery**, **readiness**, **asymmetry detection**, and **biomechanics interpretation**.
+KinematicIQ turns any camera into a movement-analysis layer: on-device pose
+estimation, per-metric evidence with honest confidence, rule-based findings in
+observation language, and a replayable audit trail — no hardware, no uploads,
+no backend.
 
-> This is not a hardware product. KinematicIQ interprets movement data to surface actionable insights that coaches, trainers, and athletes can use to make better decisions.
+> Not a medical device. KinematicIQ reports observations for training and
+> education; it never diagnoses, predicts injury, or emits a composite
+> "movement quality" score. See `docs/doctrine/claims-policy.md`.
 
 ---
 
-## Vision
+## How it's built
 
-Most movement analysis tools are built around sensors and wearables. KinematicIQ flips that — starting with intelligent software that can ingest data from multiple sources and produce meaningful biomechanical assessments.
+The platform is organized as a **protocol engine**: each movement (squat
+today; hip hinge, jump, and sprint are defined-but-planned stubs) is a
+`ProtocolDefinition` binding phases, required landmarks, metric definitions,
+and finding rules to a runtime analysis profile.
 
-**Core domains:**
-
-| Domain | What it answers |
+| Layer | What it does |
 |---|---|
-| **Recovery** | Is the athlete physically ready to train again? |
-| **Readiness** | How prepared is the athlete for high-intensity work today? |
-| **Asymmetry** | Are there left/right or bilateral imbalances that signal injury risk? |
-| **Biomechanics** | What does the movement pattern reveal about quality, efficiency, and risk? |
+| **Capture** (`cv/`) | MediaPipe pose estimation, landmark filtering, capture-readiness checks |
+| **Analysis** (`analysis/`) | Pure math: angles, phase FSM, rep counting + validation gates, asymmetry |
+| **Protocols** (`protocols/`) | Registry of movements: squat available; hipHinge/jump/sprint planned (analyze throws) |
+| **Metrics** (`metrics/`) | Per-protocol `MetricResult[]` — value, confidence, provenance, validation tier |
+| **Findings** (`findings/`) | Rules that turn metrics into observation-language findings + coaching cues |
+| **Session** (`session/`) | Set quality gate (full abstain on untrustworthy recordings), result assembly |
+| **Storage** (`storage/`) | Opt-in local history (IndexedDB) with delete-all; nothing leaves the device |
+| **Eval** (`eval/`) | Pose tapes: deterministic replay, live/replay parity, tape regression tests |
 
 ---
 
-## Project Structure
+## Repository layout
 
 ```
 KinematicIQ/
-├── src/
-│   ├── api/          # API layer — endpoints, request/response handling
-│   ├── core/         # Core domain logic — recovery, readiness, asymmetry algorithms
-│   ├── models/       # Data models and schemas
-│   ├── services/     # Business logic and orchestration
-│   └── utils/        # Shared helpers and utilities
-├── docs/             # Documentation, architecture decisions, specs
-├── tests/
-│   ├── unit/         # Unit tests for isolated logic
-│   └── integration/  # Integration tests for cross-module behavior
-├── config/           # Environment configs, feature flags, constants
-├── scripts/          # Dev scripts — setup, seeding, migrations
-├── .gitignore
-└── README.md
+├── web/                  # The entire application (Vite + React + TypeScript)
+│   ├── src/
+│   │   ├── core/         # Movement-agnostic schemas: Confidence, Provenance, Metric, Protocol, Finding
+│   │   ├── cv/           # MediaPipe pose engine, filtering, capture readiness
+│   │   ├── analysis/     # Pure biomechanics: angles, phases, reps, asymmetry, posture
+│   │   ├── protocols/    # Protocol registry (squat + planned stubs)
+│   │   ├── metrics/      # Metric definitions + MetricResult builders
+│   │   ├── findings/     # Finding engine + per-protocol rules
+│   │   ├── scoring/      # Per-component evidence (no composite total)
+│   │   ├── feedback/     # Confidence-gated coaching cues
+│   │   ├── session/      # Quality gate + SessionResult assembly
+│   │   ├── storage/      # Local-only session history (IndexedDB)
+│   │   ├── eval/         # Pose-tape record/replay harness
+│   │   ├── screens/      # Landing, Camera, Upload, Results, History
+│   │   └── components/   # UI building blocks (report cards, tabs, picker…)
+│   └── vite.config.ts    # COOP/COEP headers (load-bearing for MediaPipe WASM)
+├── docs/
+│   ├── research/         # 11 immutable source specs (see docs/research/README.md)
+│   ├── doctrine/         # Movement ontology, claims policy, deferred scope
+│   └── implementation/   # Implementation plan + per-milestone progress notes
+├── eval-tapes/           # Recorded pose tapes for regression (gitignored payloads)
+└── src/, tests/          # Empty legacy scaffolds — do not use; code lives in web/
 ```
 
 ---
 
-## Folder Guide
+## Develop, build, test
 
-| Folder | Purpose |
-|---|---|
-| `src/api/` | HTTP endpoints and route definitions. The interface layer between clients and business logic. |
-| `src/core/` | The heart of the system. Domain algorithms for scoring recovery, calculating readiness, detecting asymmetry, and interpreting biomechanics. |
-| `src/models/` | Data structures, schemas, and type definitions that represent athletes, sessions, movements, and assessments. |
-| `src/services/` | Service-layer orchestration. Coordinates between core logic, data access, and external integrations. |
-| `src/utils/` | Shared utilities — math helpers, date formatting, data transformers, validation functions. |
-| `docs/` | Architecture decision records (ADRs), design specs, API docs, and onboarding guides. |
-| `tests/unit/` | Fast, isolated tests for individual functions and modules. |
-| `tests/integration/` | Tests that verify multiple modules working together correctly. |
-| `config/` | Environment-specific configuration, constants, and feature flags. |
-| `scripts/` | Developer tooling — setup scripts, database seeding, CI helpers. |
+```bash
+cd web
+npm install
+npm run dev      # http://localhost:5173/
+npm run build    # tsc + vite build
+npm test         # vitest run (+ coverage thresholds)
+```
 
 ---
 
@@ -83,19 +96,13 @@ git clone https://github.com/Born2tweak/KinematicIQ.git && cd KinematicIQ
 cd web && npm run dev
 ```
 
-## Web app (Layer 1 MVP)
-
-```bash
-cd web && npm install && npm run dev
-```
-
-Open http://localhost:5173/
-
----
-
 ## Status
 
-🟢 **Layer 1 in progress** — `web/` MVP (camera + MediaPipe overlay). See `docs/09_build_plan.md`.
+🟢 **Protocol platform v1** — squat analysis end-to-end (live + upload +
+replay), core schemas, protocol/metric/finding engines, progressive-disclosure
+report, local history, and planned-protocol stubs. See
+`docs/implementation/progress/` for the milestone-by-milestone record and
+`docs/doctrine/deferred-scope.md` for what is deliberately not built.
 
 ---
 

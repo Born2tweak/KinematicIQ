@@ -1,10 +1,32 @@
 # KinematicIQ — Architecture Document
 
-> **Revised 2026-07-02.** Updated to match the shipped codebase: **TypeScript**, **React Router** (`/`, `/camera`, `/upload`, `/results`), pose code in **`cv/`** (not `pose/`), plus `session/`, `eval/`, and `test/` modules and a Vitest suite. For the always-current generated snapshot, see `docs/00_context_pack.md`.
+> **Revised 2026-07-05 (protocol platform, M0–M11).** Updated for the
+> protocol-engine architecture: new `core/`, `protocols/`, `metrics/`,
+> `findings/`, and `storage/` modules, routes `/`, `/camera`, `/upload`,
+> `/results`, `/history`, and a progressive-disclosure report. Doctrine lives
+> in `docs/doctrine/`; source specs in `docs/research/`; the build record in
+> `docs/implementation/progress/`.
 
 ## 1. Architecture Overview
 
-Layer 1 is a **fully client-side** web application. There is no backend, no database, no API, and no network requests after the initial page load. All pose estimation, biomechanics analysis, scoring, and feedback run in the browser.
+KinematicIQ is a **fully client-side** web application. There is no backend, no API, and no network requests after the initial page load. All pose estimation, biomechanics analysis, metric derivation, finding rules, and feedback run in the browser. The only persistence is the opt-in, local-only session history (IndexedDB, M9) — explicitly user-initiated, with a delete-all control.
+
+The platform is organized around a **protocol engine**:
+
+```
+core/        movement-agnostic schemas (Confidence, Provenance, Metric, Protocol, Finding)
+   ▲
+protocols/   registry: ProtocolDefinition + runtime MovementProfile per movement
+   ▲                    (squat available; hipHinge/jump/sprint planned stubs — analyze throws)
+metrics/     per-protocol MetricDefinitions → MetricResult[] (value+confidence+provenance+tier)
+   ▲
+findings/    rules: MetricResult[] → Finding[] (observation language) → coaching cues
+   ▲
+session/     set quality gate (full abstain) + SessionResult assembly
+   ▲
+screens/     progressive disclosure: Summary (findings) / Evidence (metrics) / Expert (diagnostics)
+storage/     opt-in local history (IndexedDB), versioned records
+```
 
 ```
 ┌─────────────────────────────────────────────────┐
@@ -33,10 +55,11 @@ Layer 1 is a **fully client-side** web application. There is no backend, no data
 
 ### Key principles
 - **No backend** — everything runs client-side
-- **No data persistence** — all data is in-memory only, discarded on page close
-- **Modular** — each concern (camera, pose, analysis, scoring, feedback, UI) is a separate module
-- **Swappable pose engine** — MediaPipe first, but the interface allows replacing it
+- **Opt-in local persistence only** — sessions are saved to IndexedDB only when the user explicitly taps "Save to history"; everything else is in-memory and discarded on page close
+- **Modular** — each concern (camera, pose, analysis, protocols, metrics, findings, feedback, UI, storage) is a separate module
+- **Swappable pose engine** — MediaPipe first, but the interface allows replacing it (a swap requires a benchmark; see doctrine)
 - **Rule-based analysis** — no ML training, no black boxes in the analysis layer
+- **Verdict-or-abstain** — untrustworthy recordings produce a full abstain, not a hedged report; no composite quality score exists anywhere
 
 ---
 
@@ -90,9 +113,30 @@ web/
 │   │   ├── feedbackEngine.ts / feedbackReasoning.ts
 │   │   ├── feedbackTemplates.ts      # Coaching cue library
 │   │   └── confidenceCalculator.ts   # Observation confidence
+│   ├── core/                         # Movement-agnostic schemas (M3)
+│   │   ├── confidence.ts             # Confidence value/level/basis
+│   │   ├── provenance.ts             # Capture source, model, filter variant
+│   │   ├── metric.ts                 # MetricDefinition / MetricResult (+ exclusions)
+│   │   ├── protocol.ts               # ProtocolDefinition, status, NotImplementedError
+│   │   └── finding.ts                # Finding (observation-language insight)
+│   ├── protocols/                    # Protocol engine (M5, M10)
+│   │   ├── registry.ts               # getProtocol / listProtocols / analyze entry point
+│   │   ├── squat/                    # Protocol #1 — available
+│   │   ├── hipHinge/  jump/  sprint/ # Planned stubs — metadata only, analyze throws
+│   │   └── types.ts                  # Protocol = definition + MovementProfile
+│   ├── metrics/                      # Metric registry (M6)
+│   │   ├── registry.ts               # Definitions by protocol (incl. excluded metrics)
+│   │   └── squatMetrics.ts           # SetMetricsSummary → MetricResult[]
+│   ├── findings/                     # Finding engine (M7)
+│   │   ├── engine.ts                 # Abstain-aware dispatch by protocol
+│   │   └── squatRules.ts             # Squat rules → Finding[] + coaching cues
 │   ├── session/
 │   │   ├── types.ts                  # SessionResult shape
+│   │   ├── setQualityGate.ts         # valid/questionable/invalid + full abstain
 │   │   └── buildSessionResult.ts     # Assemble results payload
+│   ├── storage/                      # Local history (M9)
+│   │   ├── sessionStore.ts           # Versioned records; IndexedDB or memory adapter
+│   │   └── historyView.ts            # History rows + hedged observation line
 │   ├── eval/                         # Replay/eval harness (pose tapes)
 │   └── test/                         # Fixtures, simulations, helpers
 ├── package.json
@@ -139,13 +183,22 @@ Rep Counter
 Metric Collector (after set completion)
   │ Output: per-rep depths, averages, consistency, asymmetry values
   ▼
+Set Quality Gate
+  │ Output: valid / questionable / invalid — invalid ⇒ FULL ABSTAIN downstream
+  ▼
+Metric Registry (M6)
+  │ Output: MetricResult[] — value (or null = abstain) + confidence + provenance + tier
+  ▼
+Finding Engine (M7)
+  │ Output: Finding[] (observation language) + derived coaching cues
+  ▼
 Scoring Engine
-  │ Output: component scores + total score + score bands
+  │ Output: per-component evidence (no composite total or bands)
   ▼
-Feedback Engine
-  │ Output: top 1–2 coaching cues + confidence levels
+Results Screen (M8: Summary / Evidence / Expert tabs)
+  │ Optional, explicit user action:
   ▼
-Results Screen (UI)
+Session Store (M9: IndexedDB, local-only, delete-all control)
 ```
 
 ---
@@ -161,7 +214,7 @@ Results Screen (UI)
 | ResultsScreen | Display score, feedback, asymmetry, confidence, disclaimer | Computed results object |
 
 ### Screen routing
-React Router with four routes: `/` (Landing), `/camera`, `/upload`, `/results`. `AppShell.tsx` wraps all routes with the navbar and layout container.
+React Router with five routes: `/` (Landing, incl. protocol picker), `/camera`, `/upload`, `/results` (tabbed report), `/history` (local saved sessions). `AppShell.tsx` wraps all routes with the navbar and layout container.
 
 ### Components
 
@@ -290,20 +343,25 @@ Use React `useState` and `useRef` hooks. No external state management library ne
 | ResultsScreen | `results` | object: { score, components, feedback, confidence } |
 
 ### Data lifetime
-All data exists only in React state. Nothing is written to localStorage, IndexedDB, cookies, or any external store. When the user closes the tab, everything is gone.
+Session data lives in React state and is gone when the tab closes — unless the
+user explicitly taps "Save to history", which writes one versioned record to
+local IndexedDB (see §10). Nothing is ever written silently, and nothing is
+sent anywhere.
 
 ---
 
 ## 10. Storage Assumptions
 
-**Layer 1 has no storage.** No localStorage, no IndexedDB, no cookies, no session storage, no server. All computation is ephemeral.
+**Local, opt-in only (M9).** Saving a session is an explicit user action on the
+results screen; records go to IndexedDB (`storage/sessionStore.ts`) as
+versioned `{schemaVersion, protocolId, timestamp, SessionResult, provenance}`
+documents. The History screen lists saved sessions and provides a delete-all
+control. There are no cookies, no server, no sync — nothing leaves the device.
 
-Future layers may add:
-- localStorage for session history
-- IndexedDB for landmark data
-- Server-side storage for longitudinal tracking
-
-These are explicitly out of scope.
+Still explicitly out of scope (see `docs/doctrine/deferred-scope.md`):
+- Server-side storage or accounts of any kind
+- Cross-device sync
+- Automatic/silent persistence of any session data
 
 ---
 

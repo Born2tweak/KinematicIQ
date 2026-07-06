@@ -41,4 +41,4 @@ the M6 `MetricResult[]` list is rendered on the Evidence tab.
 
 ## Tests
 
-- Before: 37 files / 206 tests. After: 42 files / 231 tests. Build + tests green.
+- Before: 41 files / 225 tests. After: 42 files / 231 tests. Build + tests green.
