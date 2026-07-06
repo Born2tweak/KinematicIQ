@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { deriveSquatCoaching } from './squatRules'
-import { buildBiomechanicalCue, lowestComponents } from '../feedback/feedbackReasoning'
+import { buildBiomechanicalCue } from '../feedback/feedbackReasoning'
+import { rankIssuesByEvidence } from './evidenceStrength'
 import { buildSquatMetricResults } from '../metrics/squatMetrics'
 import { makeProvenance } from '../core/provenance'
 import type { ComponentScores, SetMetricsSummary } from '../session/types'
@@ -71,7 +72,7 @@ describe('findings/squatRules', () => {
 
   it('derives cues byte-identical to the direct cue builder', () => {
     const out = deriveSquatCoaching(components, 'High', metrics, [], 2)
-    const keys = lowestComponents(components, 2)
+    const keys = rankIssuesByEvidence(metrics, 2)
     const expected = keys.map((key) => {
       const cue = buildBiomechanicalCue(key, metrics, 'High')
       return {

@@ -13,7 +13,8 @@
  * claims-policy (observation language, confidence gating, abstain).
  */
 import type { CoachingCue, ComponentScores, ConfidenceLevel, SetMetricsSummary } from '../session/types'
-import { buildBiomechanicalCue, lowestComponents } from '../feedback/feedbackReasoning'
+import { buildBiomechanicalCue } from '../feedback/feedbackReasoning'
+import { rankIssuesByEvidence } from './evidenceStrength'
 import type { FeedbackIssueKey } from '../feedback/feedbackTemplates'
 import { makeConfidence } from '../core/confidence'
 import type { MetricResult } from '../core/metric'
@@ -70,7 +71,7 @@ export interface SquatCoaching {
  * the higher-level quality-gate abstain is enforced by the caller.
  */
 export function deriveSquatCoaching(
-  components: ComponentScores,
+  _components: ComponentScores,
   sessionConfidence: ConfidenceLevel,
   metrics: SetMetricsSummary,
   metricResults: readonly MetricResult[] = [],
@@ -80,7 +81,9 @@ export function deriveSquatCoaching(
     return { findings: [], cues: [] }
   }
 
-  const keys = lowestComponents(components, maxCues)
+  // M23: findings ranked by evidence strength (threshold exceedance), not
+  // by internal component scores — design-review "delete score entirely".
+  const keys = rankIssuesByEvidence(metrics, maxCues)
   const findings: Finding[] = []
   const cues: CoachingCue[] = []
 
