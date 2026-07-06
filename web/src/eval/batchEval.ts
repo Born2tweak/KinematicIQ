@@ -12,6 +12,10 @@ import { deserializeTape, type PoseTape } from './poseTape'
 import { replayTape } from './replayHarness'
 import { bottomFrames, meanAbsError } from './metrics'
 import { buildSessionResult } from '../session/buildSessionResult'
+import {
+  summarizeLandmarkQuality,
+  type LandmarkQualitySummary,
+} from '../cv/landmarkQuality'
 
 /** Ground-truth comparison for a single tape, when `meta.truth` is present. */
 export interface TruthComparison {
@@ -41,6 +45,8 @@ export interface TapeEvalRow {
   avgDepth: number | null
   findingIds: string[]
   truth: TruthComparison | null
+  /** Aggregate per-frame landmark quality over the replayed frames (M26). */
+  landmarkQuality: LandmarkQualitySummary
 }
 
 export interface TapeEvalError {
@@ -99,6 +105,7 @@ export function evaluateTape(tape: PoseTape, file: string): TapeEvalRow {
     avgDepth: result.metrics.avgDepth,
     findingIds: result.findings.map((f) => f.id),
     truth: compareTruth(tape, bottoms, replay.reps.length),
+    landmarkQuality: summarizeLandmarkQuality(replay.landmarkQuality),
   }
 }
 
@@ -131,8 +138,15 @@ export function formatBatchReport(outcomes: readonly TapeEvalOutcome[]): string 
             ? ` bottomMAE=${o.truth.bottomFrameMAE.toFixed(1)}`
             : '')
         : ''
+    const quality =
+      o.landmarkQuality.meanCriticalCoverage === null
+        ? ''
+        : ` critCov=${Math.round(o.landmarkQuality.meanCriticalCoverage * 100)}%` +
+          (o.landmarkQuality.implausibleJumpFrames > 0
+            ? ` jumps=${o.landmarkQuality.implausibleJumpFrames}`
+            : '')
     lines.push(
-      `${o.file}: reps=${o.repCount} verdict=${o.verdict}${reasons} conf=${o.sessionConfidence}(${o.sessionConfidenceScore})${truth}`,
+      `${o.file}: reps=${o.repCount} verdict=${o.verdict}${reasons} conf=${o.sessionConfidence}(${o.sessionConfidenceScore})${truth}${quality}`,
     )
   }
   const errors = outcomes.filter(isEvalError).length

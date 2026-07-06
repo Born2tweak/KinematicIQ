@@ -272,7 +272,7 @@ Initial vision coverage map:
 | Local session history | Implemented | `storage/sessionStore.ts`, `HistoryScreen.tsx` |
 | Personal baseline | Implemented | `session/baseline.ts` |
 | Camera geometry readiness | Implemented | M25 — `cv/captureReadiness.ts` geometry checks + `docs/implementation/progress/M25-capture-readiness-v2.md` |
-| Per-frame landmark quality | Planned | M26 |
+| Per-frame landmark quality | Implemented | M26 — `cv/landmarkQuality.ts` + `docs/implementation/progress/M26-landmark-quality.md` |
 | Benchmark-gated filtering | Planned | M27 |
 | Sit-to-stand / hip hinge / jump protocols | Planned | M28-M30 |
 | MDC-aware trend language | Planned | M32 |
@@ -933,6 +933,8 @@ Do not change phase detection, rep counting, or MediaPipe. Do not claim calibrat
 Require the implementing agent to write `docs/implementation/progress/M25-capture-readiness-v2.md`.
 
 ### M26 — Per-frame landmark quality scoring
+
+**Status: Complete (2026-07-06).** See `docs/implementation/progress/M26-landmark-quality.md`.
 
 **Purpose**
 

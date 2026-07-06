@@ -12,7 +12,7 @@ import { getJointAngles } from '../analysis/angles'
 import { safeLandmark } from '../analysis/geometry'
 import { activateAnalysisPipeline } from '../analysis/setActivation'
 import type { RepRejection } from '../analysis/repCounter'
-import type { RepMetrics } from '../cv/types'
+import type { LandmarkQualityFrame, RepMetrics } from '../cv/types'
 import type { FrameTraceSample } from '../analysis/frameTrace'
 import { LANDMARK_INDICES, type PoseFrame } from '../cv/types'
 import type { PoseTape, PoseTapeEntryState } from './poseTape'
@@ -89,6 +89,8 @@ export interface ReplayTapeResult {
   repRejections: RepRejection[]
   frameTrace: FrameTraceSample[]
   poseConfidenceSamples: number[]
+  /** Per-frame landmark quality over the frames the FSM consumed (M26). */
+  landmarkQuality: LandmarkQualityFrame[]
   /** Frames the FSM actually consumed (post-filtering). */
   analyzedFrames: PoseFrame[]
   /** How the replay was configured — for reports and debugging. */

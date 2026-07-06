@@ -12,12 +12,43 @@ export interface WorldLandmark {
   visibility: number
 }
 
+/**
+ * Per-frame landmark quality (M26) — evidence for confidence lineage: how much
+ * of the body the tracker could vouch for on this frame, and whether motion
+ * since the previous frame was physically plausible. Derived from landmarks
+ * only; never gates or alters the analysis pipeline.
+ */
+export interface LandmarkQualityFrame {
+  frameIndex: number
+  timestamp: number
+  /** Fraction of all landmarks at/above the visibility threshold. */
+  visibilityCoverage: number
+  /** Fraction of the critical landmarks at/above the visibility threshold. */
+  criticalCoverage: number
+  /** Human-readable names of critical landmarks below the threshold. */
+  missingCritical: string[]
+  /**
+   * Fastest critical-landmark motion since the previous comparable frame,
+   * normalized units/s. Null on the first frame or across long gaps —
+   * quality never judges across a gap it cannot see.
+   */
+  maxCriticalSpeed: number | null
+  /** True when motion exceeded plausibility — likely a tracking glitch. */
+  implausibleJump: boolean
+}
+
 export interface PoseFrame {
   timestamp: number
   frameIndex: number
   landmarks: NormalizedLandmark[]
   worldLandmarks: WorldLandmark[]
   poseConfidence: number
+  /**
+   * Optional per-frame quality (M26). Additive: raw capture and old pose
+   * tapes lack it; the analysis pipeline attaches it to the frames it
+   * consumes. Absence never weakens or blocks any result.
+   */
+  quality?: LandmarkQualityFrame
 }
 
 export interface JointAngles {

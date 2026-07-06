@@ -115,4 +115,17 @@ describe('batch tape eval (M12)', () => {
     expect(report).toContain('bad.posetape.json: ERROR')
     expect(report).toContain('2 tapes, 1 error')
   })
+
+  it('carries a serializable landmark-quality summary on every row (M26)', () => {
+    const row = evaluateTape(buildTape(3), 'clean.posetape.json')
+    expect(row.landmarkQuality.frameCount).toBeGreaterThan(0)
+    expect(row.landmarkQuality.meanCriticalCoverage).not.toBeNull()
+    expect(row.landmarkQuality.implausibleJumpFrames).toBe(0)
+    // The row must survive JSON serialization for eval reports.
+    const roundTripped = JSON.parse(JSON.stringify(row)) as typeof row
+    expect(roundTripped.landmarkQuality).toEqual(row.landmarkQuality)
+    // The formatted report surfaces coverage without changing existing fields.
+    const report = formatBatchReport([row])
+    expect(report).toContain('critCov=')
+  })
 })

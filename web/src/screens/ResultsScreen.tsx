@@ -26,6 +26,7 @@ import {
   summaryFindings,
   type ResultsTabId,
 } from '../components/report/resultsTabsModel'
+import { CaptureQualityPanel } from '../components/report/CaptureQualityPanel'
 import { realRejections } from './repRejectionUi'
 import { buildStoredSession, getSessionStore } from '../storage/sessionStore'
 import { computeBaseline } from '../session/baseline'
@@ -499,6 +500,8 @@ export function ResultsScreen() {
           <Button variant="secondary" onClick={() => downloadTape(sessionTape)}>
             Save pose tape (JSON)
           </Button>
+
+          <CaptureQualityPanel frames={sessionTape.frames} />
 
           {(sessionTape.diagnostics?.rejections.length ?? 0) > 0 &&
             (() => {

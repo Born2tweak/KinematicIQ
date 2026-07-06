@@ -22,7 +22,14 @@ import {
   type RepCounterState,
 } from './repCounter'
 import { filterFrameSequence } from '../cv/landmarkFilter'
-import { LANDMARK_INDICES, type JointAngles, type PoseFrame, type RepMetrics } from '../cv/types'
+import { assessLandmarkQuality } from '../cv/landmarkQuality'
+import {
+  LANDMARK_INDICES,
+  type JointAngles,
+  type LandmarkQualityFrame,
+  type PoseFrame,
+  type RepMetrics,
+} from '../cv/types'
 import {
   extractPostureFrame,
   type PostureFrameSample,
@@ -83,6 +90,8 @@ export interface VideoAnalysisResult {
   rawFrames: PoseFrame[]
   /** Rejected rep candidates with gate diagnostics (see analysis/repCounter). */
   repRejections: RepRejection[]
+  /** Per-frame landmark quality over the analyzed sequence (M26). */
+  landmarkQuality: LandmarkQualityFrame[]
 }
 
 /** Smallest knee angle (deepest side) used to drive phase detection. */
@@ -125,14 +134,27 @@ export function runPipelineOnFrames(
   postureSamples: PostureFrameSample[]
   frameTrace: FrameTraceSample[]
   repRejections: RepRejection[]
+  /** Per-frame landmark quality (M26) — observational, one entry per frame. */
+  landmarkQuality: LandmarkQualityFrame[]
 } {
   let phaseDetector = initial.phaseDetector ?? createPhaseDetectorState()
   let repCounter = initial.repCounter ?? createRepCounterState()
   const poseConfidenceSamples: number[] = []
   const postureSamples: PostureFrameSample[] = []
   const frameTrace = createFrameTraceCollector()
+  const landmarkQuality: LandmarkQualityFrame[] = []
+  let prevFrame: PoseFrame | null = null
 
-  for (const frame of frames) {
+  for (const inputFrame of frames) {
+    // Per-frame quality (M26): derived alongside the loop, attached to a COPY
+    // of the frame (inputs are never mutated), and never consulted by the FSM.
+    const quality = assessLandmarkQuality(inputFrame, prevFrame)
+    landmarkQuality.push(quality)
+    prevFrame = inputFrame
+    const frame: PoseFrame = inputFrame.quality
+      ? inputFrame
+      : { ...inputFrame, quality }
+
     poseConfidenceSamples.push(frame.poseConfidence)
 
     // 3D posture stream is additive — never gates the 2D pipeline.
@@ -172,6 +194,7 @@ export function runPipelineOnFrames(
     postureSamples,
     frameTrace: frameTrace.build(),
     repRejections: repCounter.rejections,
+    landmarkQuality,
   }
 }
 
@@ -231,8 +254,14 @@ export async function runVideoAnalysis(
     : detectedFrames
 
   // ── Pass 2: analyze ──────────────────────────────────────────────
-  const { reps, poseConfidenceSamples, postureSamples, frameTrace, repRejections } =
-    runPipelineOnFrames(analyzedFrames)
+  const {
+    reps,
+    poseConfidenceSamples,
+    postureSamples,
+    frameTrace,
+    repRejections,
+    landmarkQuality,
+  } = runPipelineOnFrames(analyzedFrames)
 
   return {
     reps,
@@ -243,5 +272,6 @@ export async function runVideoAnalysis(
     framesWithPose: detectedFrames.length,
     rawFrames: detectedFrames,
     repRejections,
+    landmarkQuality,
   }
 }

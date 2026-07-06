@@ -159,6 +159,41 @@ describe('runVideoAnalysis', () => {
     expect(result.poseConfidenceSamples.length).toBe(frames.length)
   })
 
+  it('emits per-frame landmark quality without altering rep results (M26)', async () => {
+    const frames = expandScript(SQUAT_SCRIPT)
+    const fps = DEFAULT_ANALYSIS_FPS
+    const run = () =>
+      runVideoAnalysis({
+        durationSeconds: (frames.length - 1) / fps,
+        fps,
+        seek: async () => {},
+        detect: (timestampMs, frameIndex) => {
+          const spec = frames[Math.min(frameIndex, frames.length - 1)]
+          return squatFrame(spec.knee, spec.hipY, frameIndex, timestampMs)
+        },
+        filterLandmarks: false,
+      })
+    const result = await run()
+
+    // One quality entry per analyzed frame, aligned with the pipeline.
+    expect(result.landmarkQuality).toHaveLength(result.framesWithPose)
+    expect(result.landmarkQuality[0].maxCriticalSpeed).toBeNull()
+    // Fully-visible synthetic frames: all critical landmarks tracked, and a
+    // clean squat script never trips the plausibility flag.
+    expect(
+      result.landmarkQuality.every((q) => q.criticalCoverage === 1),
+    ).toBe(true)
+    expect(
+      result.landmarkQuality.every((q) => !q.implausibleJump),
+    ).toBe(true)
+    // Inputs are never mutated: the raw substrate stays quality-free.
+    expect(result.rawFrames.every((f) => f.quality === undefined)).toBe(true)
+    // Rep results are identical to a pipeline run before quality existed.
+    expect(result.reps.length).toBeGreaterThanOrEqual(1)
+    const rerun = await run()
+    expect(rerun.reps).toEqual(result.reps)
+  })
+
   it('emits a frame trace aligned with rep frame indices', async () => {
     const frames = expandScript(SQUAT_SCRIPT)
     const fps = DEFAULT_ANALYSIS_FPS
