@@ -48,24 +48,29 @@ describe('tape regression — session-c pipeline snapshot', () => {
     })
 
     // Rep count is the primary regression anchor.
-    expect(replay.reps.length).toBe(12)
+    //
+    // Snapshot DELIBERATELY updated in M16 (labeled-tape gate fixes,
+    // docs/implementation/progress/M16 note): standing "reps" (findings #5)
+    // are now REJECTED at the counter instead of counted-then-distrusted,
+    // and descent evidence completes reps the FSM missed. The session-c
+    // ledger moves from 12 counted / verdict invalid (4 untrusted, 26
+    // phantoms) to 14 counted / verdict questionable — matching the session
+    // log's own accounting (25 raw − 7 standing − 4 flexion artifacts).
+    expect(replay.reps.length).toBe(14)
 
-    // Report-level quality gate: the recording is honestly rejected as invalid
-    // (findings #5/#6/#8 survive replay), with the same reasons and exclusions.
-    expect(quality.verdict).toBe('invalid')
-    expect(quality.trustedRepCount).toBe(8)
-    expect(quality.untrustedRepNumbers).toEqual([1, 2, 3, 8])
+    expect(quality.verdict).toBe('questionable')
+    expect(quality.trustedRepCount).toBe(12)
+    expect(quality.untrustedRepNumbers).toEqual([1, 6])
     expect(quality.reasons.map((r) => r.id)).toEqual([
-      'standing-reps-counted',
       'impossible-flexion-reps',
       'knee-less-reps',
-      'artifact-heavy-set',
     ])
-    expect(quality.phantomCandidateCount).toBe(26)
+    expect(quality.phantomCandidateCount).toBe(22)
 
     // Per-rep bottom frame indices — segmentation timing must not drift.
     expect(bottomFrames(replay.reps)).toEqual([
-      1098, 1161, 1249, 1417, 1517, 1551, 1581, 1730, 1911, 1953, 2047, 2402,
+      1249, 1417, 1517, 1551, 1581, 1730, 1911, 1928, 1953, 1971, 2047, 2068,
+      2402, 2478,
     ])
   })
 

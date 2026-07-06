@@ -107,6 +107,43 @@ describe('repCounter', () => {
     expect(standing.repCount).toBe(0)
   })
 
+  // M16 (labeled tapes): phase-jitter "bottoms" while standing were counted
+  // as reps at 175–178° — no knee bend at all must reject the candidate.
+  it('rejects a candidate whose knees never bent (no-knee-bend gate)', () => {
+    let state = beginSetDuringDescent(
+      createRepCounterState(),
+      makeFrame(0, 0),
+      makeAngles(176),
+      0.4,
+      'DESCENDING',
+    )
+    // Phase FSM claims BOTTOM while the knees stay ~straight and hips drop
+    // enough to clear the phantom bar.
+    state = updateRepCounter(state, {
+      phase: 'BOTTOM',
+      transitioned: true,
+      frame: makeFrame(20, 1000),
+      angles: makeAngles(175),
+      hipY: 0.46,
+      smoothedKneeAngle: 175,
+      standingKneeBaseline: 168,
+      standingHipY: 0.4,
+    }).state
+    const result = updateRepCounter(state, {
+      phase: 'STANDING',
+      transitioned: true,
+      frame: makeFrame(40, 2000),
+      angles: makeAngles(177),
+      hipY: 0.4,
+      smoothedKneeAngle: 177,
+      standingKneeBaseline: 168,
+      standingHipY: 0.4,
+    })
+    expect(result.repCount).toBe(0)
+    expect(result.state.rejections).toHaveLength(1)
+    expect(result.state.rejections[0].gate).toBe('no-knee-bend')
+  })
+
   it('marks a zero-descent candidate rejection as phantom', () => {
     // Phase jitter while standing: DESCENDING fires but the hips never drop.
     let state = beginSetDuringDescent(
@@ -131,7 +168,10 @@ describe('repCounter', () => {
     expect(result.state.rejections[0].phantom).toBe(true)
   })
 
-  it('keeps a real shallow attempt (hips descended) as a non-phantom rejection', () => {
+  // M16 (labeled tapes): a bilateral knee bend past the depth threshold with
+  // real hip descent IS a bottom, even when the phase FSM never reported
+  // BOTTOM — 4 true reps were rejected as "bottom not held" without this.
+  it('counts a real shallow attempt (hips descended, knees bent) via descent evidence', () => {
     let state = beginSetDuringDescent(
       createRepCounterState(),
       makeFrame(0, 0),
@@ -160,9 +200,8 @@ describe('repCounter', () => {
       standingKneeBaseline: 168,
       standingHipY: 0.4,
     })
-    expect(result.repCount).toBe(0)
-    expect(result.state.rejections).toHaveLength(1)
-    expect(result.state.rejections[0].phantom).toBe(false)
+    expect(result.repCount).toBe(1)
+    expect(result.state.rejections).toHaveLength(0)
   })
 
   it('exposes blocking gate while rep is in progress', () => {

@@ -107,19 +107,22 @@ describe('replayTape on the real session-c tape', () => {
   })
 
   it.skipIf(!available)(
-    'reproduces the false-positive families the live session showed (findings #5/#6/#8)',
+    'rejects finding #5 upstream; findings #6/#8 still surface (M16)',
     () => {
       const tape = deserializeTape(readFileSync(SESSION_C_TAPE, 'utf8'))
-      const { reps } = replayTape(tape)
+      const { reps, repRejections } = replayTape(tape)
       const bottoms = reps.map((rep) =>
         rep.minLeftKneeAngle === null && rep.minRightKneeAngle === null
           ? null
           : Math.min(rep.minLeftKneeAngle ?? 999, rep.minRightKneeAngle ?? 999),
       )
-      // Standing bottoms (finding #5), knee-less rep (finding #8), and
-      // extreme-flexion artifacts (finding #6) all survive replay — the
-      // tape is a usable regression fixture for the open findings.
-      expect(bottoms.some((b) => b !== null && b >= 170)).toBe(true)
+      // Finding #5 (standing bottoms): since the M16 labeled-tape gate fix,
+      // no-knee-bend candidates are REJECTED at the counter — they must
+      // appear in the rejection ledger, never as counted reps.
+      expect(bottoms.some((b) => b !== null && b >= 170)).toBe(false)
+      expect(repRejections.some((r) => r.gate === 'no-knee-bend')).toBe(true)
+      // Findings #8 (knee-less) and #6 (extreme flexion) still survive as
+      // counted reps for the report-level quality gate to disclose.
       expect(bottoms.some((b) => b === null)).toBe(true)
       expect(bottoms.some((b) => b !== null && b <= 30)).toBe(true)
     },

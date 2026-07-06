@@ -52,6 +52,19 @@ export interface RepGateConfig {
   minRepAvgConfidence: number
   /** Knee angle fallback when phase never reports BOTTOM. */
   bottomKneeAngleThreshold: number
+  /**
+   * Bottom knee angle (min of sides) at or above this = no knee bend at
+   * all; the candidate is rejected instead of counted (M16, labeled tapes:
+   * phase-jitter "bottoms" while standing were counted at 175–178°).
+   */
+  standingBottomKneeMin: number
+  /**
+   * Hip descent that, TOGETHER with a bilateral knee bend past
+   * `avgKneeDepthThreshold`, counts as bottom evidence at completion (M16).
+   * Deliberately below `minHipDescent`: close/front-on framing reads a real
+   * shallow squat as ~0.01–0.02 normalized hip drop on the labeled tapes.
+   */
+  minHipDescentEvidence: number
 }
 
 /** Bodyweight-squat gate tuning (deliberately relaxed). */
@@ -78,6 +91,8 @@ export const SQUAT_REP_GATES: RepGateConfig = {
   minCompletionPoseConfidence: 0.42,
   minRepAvgConfidence: 0.38,
   bottomKneeAngleThreshold: 105,
+  standingBottomKneeMin: 170,
+  minHipDescentEvidence: 0.01,
 }
 
 // ── Types ──────────────────────────────────────────────────────────
@@ -99,6 +114,7 @@ export interface RepValidation {
 /** Machine-readable id of the gate that rejected a rep candidate. */
 export type RepGateId =
   | 'bottom'
+  | 'no-knee-bend'
   | 'duration'
   | 'confidence'
   | 'knee-lift'
@@ -143,6 +159,7 @@ const MAX_REJECTIONS = 50
 
 function gateForReason(reason: string): RepGateId {
   if (reason.startsWith('Bottom not held')) return 'bottom'
+  if (reason.startsWith('No knee bend')) return 'no-knee-bend'
   if (reason.startsWith('Too fast') || reason.startsWith('Too slow')) {
     return 'duration'
   }
@@ -210,6 +227,13 @@ interface ActiveRep {
   seatedMovementDetected: boolean
   bottomHoldStartTimestamp: number | null
   bottomHoldMs: number
+  /**
+   * True once the knee re-straightened past the lockout threshold AFTER the
+   * bottom. Until then, STANDING/DESCENDING phase transitions are treated as
+   * mid-ascent jitter, not rep boundaries (M16: one slow ascent from a deep
+   * hold was split into two counted reps).
+   */
+  kneeRecoveredSinceBottom: boolean
 }
 
 export interface RepCounterState {
@@ -432,33 +456,6 @@ function computeBlockingGate(
   return null
 }
 
-function missedRepReason(
-  activeRep: ActiveRep,
-  standingCompletionFrames: number,
-  reachedBottom: boolean,
-  input: RepCounterInput,
-  cfg: RepGateConfig,
-): string {
-  if (activeRep.seatedMovementDetected) {
-    return 'Movement looked seated'
-  }
-  if (input.frame.poseConfidence < cfg.minCompletionPoseConfidence) {
-    return 'Pose confidence dropped'
-  }
-  if (!reachedBottom) {
-    return 'Bottom not held long enough'
-  }
-  if (standingCompletionFrames > 0) {
-    return 'Tracking lost during ascent'
-  }
-  const knee = input.smoothedKneeAngle ?? averageKneeAngle(input.angles)
-  const threshold = lockoutKneeThreshold(input.standingKneeBaseline, cfg)
-  if (knee !== null && knee < threshold) {
-    return 'Knee angle never passed standing threshold'
-  }
-  return 'Did not return to standing'
-}
-
 function bothAnklesVisible(frame: PoseFrame): boolean {
   const left = safeLandmark(frame, LANDMARK_INDICES.LEFT_ANKLE)
   const right = safeLandmark(frame, LANDMARK_INDICES.RIGHT_ANKLE)
@@ -495,6 +492,7 @@ const createActiveRep = (
   seatedMovementDetected: false,
   bottomHoldStartTimestamp: null,
   bottomHoldMs: 0,
+  kneeRecoveredSinceBottom: false,
 })
 
 function hipLandmarksLowConfidence(
@@ -658,11 +656,31 @@ function validateRep(
   const maxHipDrop = activeRep.maxHipDrop
   const bottomHoldMs = activeRep.bottomHoldMs
 
+  // Descent-evidence fallback (M16, labeled tapes): quick shallow reps can
+  // finish without the phase FSM ever reporting BOTTOM. Real hip descent
+  // plus bilateral knee bend IS a bottom — 4 true reps were rejected as
+  // "bottom not held" on the labeled suite without this.
+  const descentEvidence =
+    activeRep.maxHipDrop >= cfg.minHipDescentEvidence &&
+    avgMin !== null &&
+    avgMin <= cfg.avgKneeDepthThreshold
+  const reachedBottomEffective = reachedBottom || descentEvidence
+
+  // Bottom knee angle exactly as the report gate reads it (min of sides).
+  const bottomKnee =
+    minLeft !== null && minRight !== null
+      ? Math.min(minLeft, minRight)
+      : minLeft ?? minRight
+
   // ── Rejection logic ─────────────────────────────────────────────
   let rejectionReason: string | null = null
 
-  if (!reachedBottom) {
+  if (!reachedBottomEffective) {
     rejectionReason = 'Bottom not held long enough'
+  } else if (bottomKnee !== null && bottomKnee >= cfg.standingBottomKneeMin) {
+    // No knee bend at all: a phase-jitter "bottom" while standing (M16) —
+    // reject instead of counting a rep the report gate would only distrust.
+    rejectionReason = 'No knee bend detected'
   } else if (!validDuration) {
     rejectionReason =
       durationMs < cfg.minRepDurationMs ? 'Too fast (<500ms)' : 'Too slow (>8s)'
@@ -675,7 +693,7 @@ function validateRep(
   }
 
   return {
-    reachedBottom,
+    reachedBottom: reachedBottomEffective,
     bilateralBend,
     hipDescended,
     feetStable,
@@ -802,26 +820,35 @@ export function updateRepCounter(
 
   const prevPhase = state.previousPhase
 
-  // Abandon incomplete rep when a new descent starts (double-dip without lockout)
+  // A new descent while a rep is active is a rep BOUNDARY. Exception (M16):
+  // after the bottom, a DESCENDING transition BEFORE the knee ever
+  // re-straightened is mid-ascent phase jitter — the same rep continues;
+  // splitting here double-counted slow deep-hold reps on the labeled suite.
   if (
     activeRep !== null &&
     input.transitioned &&
     input.phase === 'DESCENDING' &&
-    prevPhase !== 'DESCENDING'
+    prevPhase !== 'DESCENDING' &&
+    !(reachedBottom && !activeRep.kneeRecoveredSinceBottom)
   ) {
-    const reason = missedRepReason(
-      activeRep,
-      standingCompletionFrames,
-      reachedBottom,
-      input,
-      cfg,
-    )
-    lastMissedRepReason = reason
-    rejections = [
-      ...rejections,
-      buildRejection(activeRep, reason, input.frame, reachedBottom, cfg),
-    ].slice(-MAX_REJECTIONS)
-    console.log(`[RepCounter] MISSED REP: ${reason}`)
+    // Give the outgoing candidate its validation shot instead of discarding
+    // it blind (M16): quick shallow reps often reach the next descent
+    // without a STANDING transition, and descent evidence can accept them.
+    const outcome = tryFinishRep(activeRep, reachedBottom, input.frame, repCount, cfg)
+    repCount = outcome.repCount
+    lastValidation = outcome.lastValidation
+    if (outcome.completedRep) {
+      completedRep = outcome.completedRep
+      reps = [...reps, completedRep]
+    } else {
+      const reason = outcome.lastValidation.rejectionReason ?? 'Rep rejected'
+      lastMissedRepReason = reason
+      rejections = [
+        ...rejections,
+        buildRejection(activeRep, reason, input.frame, reachedBottom, cfg),
+      ].slice(-MAX_REJECTIONS)
+      console.log(`[RepCounter] MISSED REP: ${reason}`)
+    }
     activeRep = null
     reachedBottom = false
     standingCompletionFrames = 0
@@ -865,6 +892,20 @@ export function updateRepCounter(
         )
         reachedBottom = true
       }
+    }
+  }
+
+  // Track knee recovery after the bottom: only a knee back past the lockout
+  // threshold makes a later STANDING/DESCENDING transition a real boundary.
+  if (activeRep !== null && reachedBottom && !activeRep.kneeRecoveredSinceBottom) {
+    // Raw knee, not the EMA: recovery must not lag a fast stand-up, or the
+    // STANDING transition gets skipped and a clip-end rep is lost.
+    const recoveryKnee = averageKneeAngle(input.angles) ?? input.smoothedKneeAngle
+    if (
+      recoveryKnee !== null &&
+      recoveryKnee >= lockoutKneeThreshold(input.standingKneeBaseline, cfg)
+    ) {
+      activeRep = { ...activeRep, kneeRecoveredSinceBottom: true }
     }
   }
 
@@ -926,11 +967,14 @@ export function updateRepCounter(
     finishRep()
   }
 
-  // Rep completion: phase detector confirmed STANDING
+  // Rep completion: phase detector confirmed STANDING. After a bottom, the
+  // knee must have actually re-straightened (M16) — a STANDING label fired
+  // mid-ascent (knee ~80°) must not finish the rep.
   if (
     activeRep !== null &&
     input.transitioned &&
-    input.phase === 'STANDING'
+    input.phase === 'STANDING' &&
+    (!reachedBottom || activeRep.kneeRecoveredSinceBottom)
   ) {
     console.log(
       `[RepCounter] STANDING RETURN | prevPhase=${prevPhase} reachedBottom=${reachedBottom}`,
