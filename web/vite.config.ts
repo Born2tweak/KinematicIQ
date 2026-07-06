@@ -16,8 +16,13 @@ export default defineConfig({
     coverage: {
       provider: 'v8',
       reporter: ['text', 'lcov'],
-      include: ['src/cv/**'],
-      thresholds: { lines: 80, functions: 80, branches: 80 },
+      // M2: widened from src/cv/** to make the core analysis/session/eval
+      // pipeline the official regression net. Thresholds sit below the
+      // measured aggregate (lines/stmts ~83.7%, branches ~84.4%, funcs ~92.1%)
+      // with margin, so the real-tape suites skipping in a tape-less
+      // environment cannot flip the gate red.
+      include: ['src/cv/**', 'src/analysis/**', 'src/session/**', 'src/eval/**'],
+      thresholds: { lines: 75, functions: 80, branches: 75, statements: 75 },
     },
   },
 })
