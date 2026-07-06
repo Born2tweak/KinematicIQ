@@ -1,5 +1,6 @@
 import type { RepMetrics } from '../cv/types'
 import type { PostureSetSummary } from '../analysis/posture/postureCollector'
+import type { ProtocolId } from '../core/protocol'
 import type { SetQualityAssessment } from './setQualityGate'
 
 export interface SetMetricsSummary {
@@ -55,6 +56,8 @@ export interface SessionBaseline {
 }
 
 export interface SessionResult {
+  /** Which protocol produced this result. Squat is protocol #1 (M5). */
+  protocolId: ProtocolId
   metrics: SetMetricsSummary
   /**
    * Per-component evidence inputs (depth, trunk, knee tracking, consistency,

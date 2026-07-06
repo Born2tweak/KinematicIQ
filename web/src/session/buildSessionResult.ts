@@ -13,6 +13,8 @@ import {
 } from '../feedback/feedbackEngine'
 import { computeComponentScores } from '../scoring/scoringEngine'
 import type { RepMetrics } from '../cv/types'
+import { getActiveProtocol } from '../protocols/registry'
+import type { ProtocolId } from '../core/protocol'
 import { assessSetQuality } from './setQualityGate'
 import type { SessionResult } from './types'
 
@@ -35,6 +37,7 @@ export function buildSessionResult(
   poseConfidenceSamples: number[] = [],
   postureSamples: PostureFrameSample[] = [],
   repRejections: RepRejection[] = [],
+  protocolId: ProtocolId = getActiveProtocol().definition.id,
 ): SessionResult {
   const noRepsDetected = reps.length === 0
   const { score: sessionConfidenceScore, level: sessionConfidence } =
@@ -65,6 +68,7 @@ export function buildSessionResult(
 
   if (noRepsDetected) {
     return {
+      protocolId,
       metrics,
       scoring: null,
       feedback: [],
@@ -88,6 +92,7 @@ export function buildSessionResult(
       : generateFeedback(scoring, sessionConfidence, metrics)
 
   return {
+    protocolId,
     metrics,
     scoring,
     feedback,
