@@ -1,5 +1,6 @@
 import type { AutoStartPhase } from '../analysis/autoStart'
 import type { CaptureGuidance } from '../cv/captureGuidance'
+import type { CaptureReadinessState } from '../cv/captureReadiness'
 
 export type CameraSessionPhase =
   | AutoStartPhase
@@ -19,14 +20,20 @@ export function getSessionStatusCopy(
     missingJoints: string[]
     /** Live positioning guidance — drives the WAITING copy dynamically. */
     guidance?: CaptureGuidance | null
+    /** Scored capture readiness — refines the WAITING subtitle when present. */
+    readinessState?: CaptureReadinessState | null
   },
 ): SessionStatusCopy {
   switch (phase) {
     case 'WAITING': {
       if (options.guidance) {
+        const subtitle =
+          options.readinessState === 'marginal'
+            ? 'Almost there — one small adjustment and you’re set.'
+            : (options.guidance.detail ?? '')
         return {
           title: options.guidance.instruction,
-          subtitle: options.guidance.detail ?? '',
+          subtitle,
         }
       }
       return {

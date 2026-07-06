@@ -48,10 +48,13 @@ import {
 } from '../cv/types'
 import { checkCalibration } from '../cv/drawCalibration'
 import {
-  deriveCaptureGuidance,
   drawCaptureStateBorder,
   type CaptureGuidance,
 } from '../cv/captureGuidance'
+import {
+  assessCaptureReadiness,
+  type CaptureReadinessAssessment,
+} from '../cv/captureReadiness'
 import { drawDebugOverlay, type DebugOverlayData } from '../cv/drawDebugOverlay'
 import { DepthSparkline } from '../components/DepthSparkline'
 import { useAnalystMode } from '../hooks/useAnalystMode'
@@ -137,6 +140,9 @@ export function CameraScreen() {
   const [show3D, setShow3D] = useState(false)
   const [expand3D, setExpand3D] = useState(false)
   const [guidance, setGuidance] = useState<CaptureGuidance | null>(null)
+  const [readiness, setReadiness] = useState<CaptureReadinessAssessment | null>(
+    null,
+  )
   const [isAnalyst, toggleAnalyst] = useAnalystMode()
   const isAnalystRef = useRef(isAnalyst)
   isAnalystRef.current = isAnalyst
@@ -688,7 +694,8 @@ export function CameraScreen() {
           }
 
           if (setupPhase) {
-            const nextGuidance = deriveCaptureGuidance(poseFrame)
+            const nextReadiness = assessCaptureReadiness(poseFrame)
+            const nextGuidance = nextReadiness.guidance
             drawCaptureStateBorder(
               ctx,
               nextGuidance.ok,
@@ -701,6 +708,16 @@ export function CameraScreen() {
                 ? prev
                 : nextGuidance,
             )
+            setReadiness((prev) => {
+              const sameState = prev?.state === nextReadiness.state
+              const sameChecklist =
+                prev !== null &&
+                prev.checklist.length === nextReadiness.checklist.length &&
+                prev.checklist.every(
+                  (item, i) => item.ok === nextReadiness.checklist[i].ok,
+                )
+              return sameState && sameChecklist ? prev : nextReadiness
+            })
           }
 
           setMissingJoints((prev) => {
@@ -741,7 +758,11 @@ export function CameraScreen() {
     finishCountdown,
     missingJoints,
     guidance,
+    readinessState: readiness?.state ?? null,
   })
+
+  const showReadinessChecklist =
+    displayPhase === 'WAITING' && readiness !== null
 
   const stageLayoutClass = [
     'camera-stage',
@@ -809,6 +830,33 @@ export function CameraScreen() {
               missingJoints={missingJoints}
               repFeedback={repFeedback}
             />
+            {showReadinessChecklist && readiness && (
+              <div
+                className={`capture-readiness capture-readiness--${readiness.state}`}
+                aria-live="polite"
+              >
+                <p className="capture-readiness__heading">
+                  {readiness.state === 'ready'
+                    ? 'Ready to record'
+                    : readiness.state === 'marginal'
+                      ? 'Almost ready'
+                      : 'Get set up'}
+                </p>
+                <ul className="capture-readiness__list">
+                  {readiness.checklist.map((item) => (
+                    <li
+                      key={item.id}
+                      className={`capture-readiness__item${item.ok ? ' capture-readiness__item--ok' : ''}`}
+                    >
+                      <span aria-hidden className="capture-readiness__mark">
+                        {item.ok ? '✓' : '○'}
+                      </span>
+                      {item.label}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
 
           <RepCounter
