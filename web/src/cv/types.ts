@@ -56,6 +56,16 @@ export interface RepMetrics {
   bottomTimestamp?: number
   minLeftKneeAngle: number | null
   minRightKneeAngle: number | null
+  /**
+   * Deepest hip-flexion proxy angle (min of sides, shoulder–hip–knee) seen
+   * during the rep (M19 ROM). Optional: pre-M19 stored sessions abstain.
+   */
+  minHipAngle?: number | null
+  /**
+   * Deepest ankle-dorsiflexion proxy angle (min of sides, knee–ankle–foot)
+   * seen during the rep (M19 ROM). Optional: pre-M19 sessions abstain.
+   */
+  minAnkleAngle?: number | null
   averageTrunkLean: number | null
   maxTrunkLean: number | null
   hipShiftAtBottom: number | null

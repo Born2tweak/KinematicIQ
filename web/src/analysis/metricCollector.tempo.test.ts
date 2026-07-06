@@ -23,10 +23,32 @@ function rep(
     hipShiftAtBottom: 0.02,
     shoulderAsymmetryAtBottom: 0.01,
     kneeAsymmetry: 2,
+    minHipAngle: 80,
+    minAnkleAngle: 100,
     confidence: 0.9,
     durationMs: endMs - startMs,
   }
 }
+
+describe('ROM proxy aggregates (M19)', () => {
+  it('averages per-rep deepest hip and ankle proxy angles', () => {
+    const m = collectSetMetrics(
+      [rep(1, 0, 1_000, 2_000), rep(2, 3_000, 4_000, 5_000)],
+      90,
+    )
+    expect(m.avgMinHipAngle).toBe(80)
+    expect(m.avgMinAnkleAngle).toBe(100)
+  })
+
+  it('abstains when hip/ankle reads are missing (pre-M19 reps)', () => {
+    const legacy = { ...rep(1, 0, 1_000, 2_000) }
+    delete legacy.minHipAngle
+    delete legacy.minAnkleAngle
+    const m = collectSetMetrics([legacy], 90)
+    expect(m.avgMinHipAngle).toBeNull()
+    expect(m.avgMinAnkleAngle).toBeNull()
+  })
+})
 
 describe('tempo & phase-timing aggregates (M18)', () => {
   it('computes rep duration, descent/ascent splits, and cadence', () => {

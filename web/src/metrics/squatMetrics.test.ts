@@ -31,6 +31,8 @@ const summary: SetMetricsSummary = {
   avgDescentMs: 1100,
   avgAscentMs: 900,
   cadenceRepsPerMin: 20,
+  avgMinHipAngle: 78,
+  avgMinAnkleAngle: 102,
 }
 
 describe('metrics/squatMetrics', () => {
@@ -56,6 +58,9 @@ describe('metrics/squatMetrics', () => {
     expect(byId.get('squat.tempo.descent')).toBe(1.1)
     expect(byId.get('squat.tempo.ascent')).toBe(0.9)
     expect(byId.get('squat.tempo.cadence')).toBe(20)
+    // ROM proxies (M19).
+    expect(byId.get('squat.rom.hip-flexion')).toBe(78)
+    expect(byId.get('squat.rom.ankle-dorsiflexion')).toBe(102)
   })
 
   it('tempo metrics abstain on pre-M18 summaries (fields absent)', () => {

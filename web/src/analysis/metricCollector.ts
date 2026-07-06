@@ -76,6 +76,14 @@ export function collectSetMetrics(
         : rep.endTimestamp - rep.bottomTimestamp,
     )
     .filter((v): v is number => v !== null && v >= 0)
+  // ── ROM proxies beyond the knee (M19) — abstain when unreadable.
+  const hipMins = included
+    .map((rep) => rep.minHipAngle)
+    .filter((v): v is number => v !== null && v !== undefined)
+  const ankleMins = included
+    .map((rep) => rep.minAnkleAngle)
+    .filter((v): v is number => v !== null && v !== undefined)
+
   const spanMs =
     included.length >= 2
       ? included[included.length - 1].endTimestamp - included[0].startTimestamp
@@ -102,5 +110,7 @@ export function collectSetMetrics(
     avgAscentMs: average(ascents),
     cadenceRepsPerMin:
       spanMs > 0 ? (included.length / spanMs) * 60_000 : null,
+    avgMinHipAngle: average(hipMins),
+    avgMinAnkleAngle: average(ankleMins),
   }
 }

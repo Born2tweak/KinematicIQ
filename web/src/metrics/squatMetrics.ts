@@ -124,6 +124,30 @@ export const SQUAT_METRIC_DEFINITIONS: MetricDefinition[] = [
       'Average time from the deepest tracked point back to standing, in this set.',
     included: true,
   },
+  // ── ROM proxies beyond the knee (M19, MD03 minimum set). Experimental:
+  // 2D projected angles, view-dependent — observation language only.
+  {
+    id: 'squat.rom.hip-flexion',
+    label: 'Hip flexion (avg deepest)',
+    unit: 'deg',
+    evidenceCategory: 'kinematic-geometry',
+    validationTier: 'experimental',
+    confidenceBasis: ['landmark-visibility', 'sample-coverage'],
+    description:
+      'Average deepest shoulder–hip–knee angle across trusted reps. A 2D proxy for hip flexion range — view-dependent.',
+    included: true,
+  },
+  {
+    id: 'squat.rom.ankle-dorsiflexion',
+    label: 'Ankle dorsiflexion proxy (avg deepest)',
+    unit: 'deg',
+    evidenceCategory: 'kinematic-geometry',
+    validationTier: 'experimental',
+    confidenceBasis: ['landmark-visibility', 'sample-coverage'],
+    description:
+      'Average deepest knee–ankle–foot angle across trusted reps. A 2D proxy for ankle dorsiflexion — foot landmarks are often noisy.',
+    included: true,
+  },
   {
     id: 'squat.tempo.cadence',
     label: 'Cadence (reps/min)',
@@ -180,6 +204,8 @@ const METRIC_SIDE: Record<string, MetricSide> = {
   'squat.tempo.descent': 'none',
   'squat.tempo.ascent': 'none',
   'squat.tempo.cadence': 'none',
+  'squat.rom.hip-flexion': 'bilateral',
+  'squat.rom.ankle-dorsiflexion': 'bilateral',
 }
 
 /** ms → seconds for display; abstains propagate. */
@@ -209,6 +235,10 @@ function valueFor(id: string, summary: SetMetricsSummary): number | null {
       return toSeconds(summary.avgAscentMs)
     case 'squat.tempo.cadence':
       return summary.cadenceRepsPerMin ?? null
+    case 'squat.rom.hip-flexion':
+      return summary.avgMinHipAngle ?? null
+    case 'squat.rom.ankle-dorsiflexion':
+      return summary.avgMinAnkleAngle ?? null
     default:
       return null
   }

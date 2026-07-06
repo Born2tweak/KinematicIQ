@@ -35,6 +35,12 @@ export interface SetMetricsSummary {
   avgAscentMs?: number | null
   /** Set cadence in reps per minute (first rep start → last rep end). */
   cadenceRepsPerMin?: number | null
+  // ── ROM proxies beyond the knee (M19, MD03 minimum set). Optional:
+  // sessions stored before M19 lack them and the metrics abstain.
+  /** Average deepest hip-flexion proxy angle across included reps (deg). */
+  avgMinHipAngle?: number | null
+  /** Average deepest ankle-dorsiflexion proxy angle across included reps (deg). */
+  avgMinAnkleAngle?: number | null
 }
 
 export interface ComponentScores {

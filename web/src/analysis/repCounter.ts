@@ -212,6 +212,11 @@ interface ActiveRep {
   startTimestamp: number
   minLeftKneeAngle: number | null
   minRightKneeAngle: number | null
+  // ROM proxies (M19): deepest hip flexion / ankle dorsiflexion seen.
+  minLeftHipAngle: number | null
+  minRightHipAngle: number | null
+  minLeftAnkleAngle: number | null
+  minRightAnkleAngle: number | null
   trunkLeanSum: number
   trunkLeanSamples: number
   maxTrunkLean: number | null
@@ -479,6 +484,10 @@ const createActiveRep = (
   startTimestamp: frame.timestamp,
   minLeftKneeAngle: angles.leftKnee,
   minRightKneeAngle: angles.rightKnee,
+  minLeftHipAngle: angles.leftHip,
+  minRightHipAngle: angles.rightHip,
+  minLeftAnkleAngle: angles.leftAnkle,
+  minRightAnkleAngle: angles.rightAnkle,
   trunkLeanSum: angles.trunkLean ?? 0,
   trunkLeanSamples: angles.trunkLean === null ? 0 : 1,
   maxTrunkLean: angles.trunkLean,
@@ -575,6 +584,10 @@ const updateActiveRep = (
     ...activeRep,
     minLeftKneeAngle: minOrValue(activeRep.minLeftKneeAngle, angles.leftKnee),
     minRightKneeAngle: minOrValue(activeRep.minRightKneeAngle, angles.rightKnee),
+    minLeftHipAngle: minOrValue(activeRep.minLeftHipAngle, angles.leftHip),
+    minRightHipAngle: minOrValue(activeRep.minRightHipAngle, angles.rightHip),
+    minLeftAnkleAngle: minOrValue(activeRep.minLeftAnkleAngle, angles.leftAnkle),
+    minRightAnkleAngle: minOrValue(activeRep.minRightAnkleAngle, angles.rightAnkle),
     trunkLeanSum:
       activeRep.trunkLeanSum + (angles.trunkLean === null ? 0 : angles.trunkLean),
     trunkLeanSamples:
@@ -735,6 +748,10 @@ function detectKneeLift(
 
 // ── Finalize ────────────────────────────────────────────────────────
 
+/** Deepest of the two sides; null only when neither side was readable. */
+const minOfSides = (a: number | null, b: number | null): number | null =>
+  a === null ? b : b === null ? a : Math.min(a, b)
+
 const finalizeRep = (
   activeRep: ActiveRep,
   repNumber: number,
@@ -755,6 +772,8 @@ const finalizeRep = (
     bottomTimestamp: activeRep.bottomTimestamp,
     minLeftKneeAngle: activeRep.minLeftKneeAngle,
     minRightKneeAngle: activeRep.minRightKneeAngle,
+    minHipAngle: minOfSides(activeRep.minLeftHipAngle, activeRep.minRightHipAngle),
+    minAnkleAngle: minOfSides(activeRep.minLeftAnkleAngle, activeRep.minRightAnkleAngle),
     averageTrunkLean,
     maxTrunkLean: activeRep.maxTrunkLean,
     hipShiftAtBottom: activeRep.hipShiftAtBottom,
