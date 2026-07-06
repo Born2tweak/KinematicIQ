@@ -1,0 +1,71 @@
+/**
+ * Core protocol vocabulary (M3).
+ *
+ * `ProtocolDefinition` is the movement-agnostic superset of the existing
+ * `MovementProfile` (analysis/movement/types.ts): it describes a movement as
+ * configuration — its kind, phases, required landmarks, the metrics it emits,
+ * and the finding rules that interpret them — plus a lifecycle `status` so the
+ * registry (M5) can list validated vs planned protocols (M10) without forking
+ * the pipeline.
+ *
+ * Design sources: docs/research/08...Architecture...Specification.md §3
+ * (protocol engine / plugin contract), docs/research/01 §6.3 (movement-agnostic
+ * vs -specific split), docs/doctrine/movement-ontology.md.
+ *
+ * Types-only: this defines the contract M5's registry conforms to. It does not
+ * import or alter the existing `MovementProfile` — M5 designs the adapter so
+ * squat keeps working unchanged.
+ */
+import type { MetricDefinition } from './metric'
+
+/** Movement identifiers the platform knows about. Matches analysis MovementId. */
+export type ProtocolId = 'squat' | 'hipHinge' | 'jump' | 'sprint'
+
+/**
+ * Segmentation engine kind (matches analysis/movement/types.ts `MovementKind`):
+ * cyclic (reps with a bottom), ballistic (flight + landing), gait (strides).
+ */
+export type ProtocolKind = 'cyclic' | 'ballistic' | 'gait'
+
+/**
+ * Lifecycle status. `available` = validated enough to analyze; `planned` =
+ * defined but its analyze entry point throws (M10 stubs) and the UI shows
+ * honest "in development — not yet validated" copy.
+ */
+export type ProtocolStatus = 'available' | 'planned'
+
+export interface ProtocolDefinition {
+  id: ProtocolId
+  /** User-facing movement name. */
+  label: string
+  kind: ProtocolKind
+  status: ProtocolStatus
+  /** Phase vocabulary for this movement's segmentation kind, in order. */
+  phases: string[]
+  /**
+   * MediaPipe landmark indices the analysis needs present to run. Feeds the
+   * capture-readiness model (M4) and abstention reasons.
+   */
+  requiredLandmarks: number[]
+  /** Metric definitions this protocol emits (M6 populates the registry). */
+  metrics: MetricDefinition[]
+  /** IDs of the finding rules that interpret this protocol's metrics (M7). */
+  findingRuleIds: string[]
+  /** Observation protocol this definition is validated for, if any (P5). */
+  defaultObservationProtocolId?: string
+}
+
+/** True when a protocol is validated enough to analyze. Narrows nothing structurally. */
+export function isAvailable(protocol: ProtocolDefinition): boolean {
+  return protocol.status === 'available'
+}
+
+/** Raised when a `planned` protocol's analyze entry point is invoked (M10). */
+export class NotImplementedError extends Error {
+  readonly protocolId: ProtocolId
+  constructor(protocolId: ProtocolId) {
+    super(`Protocol "${protocolId}" is defined but not yet implemented (planned).`)
+    this.name = 'NotImplementedError'
+    this.protocolId = protocolId
+  }
+}
