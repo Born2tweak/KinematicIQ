@@ -1302,6 +1302,25 @@ img {
   color: #fbbf24;
 }
 
+/* Baseline change classification chips (M32) — hedged language only. */
+.baseline-row__change {
+  margin-left: 0.5rem;
+  padding: 0.05rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.78em;
+  white-space: nowrap;
+  background: rgba(148, 163, 184, 0.16);
+  color: rgba(148, 163, 184, 0.95);
+}
+.baseline-row__change--possible-change {
+  background: rgba(251, 191, 36, 0.14);
+  color: #fbbf24;
+}
+.baseline-row__change--within-noise {
+  background: rgba(34, 197, 94, 0.12);
+  color: rgba(134, 239, 172, 0.95);
+}
+
 .camera-hud--bottom {
   position: absolute;
   left: 50%;

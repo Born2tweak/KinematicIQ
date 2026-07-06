@@ -53,6 +53,21 @@ describe('personal baseline (M31)', () => {
     // History averages ~91/96/101 bottoms (min of sides); delta positive.
     expect(depth!.baselineValue).toBeCloseTo(95, 0)
     expect(depth!.delta).toBeGreaterThan(10)
+    // M32: a delta beyond the heuristic threshold reads as possible change,
+    // never as certainty.
+    expect(depth!.change?.classification).toBe('possible-change')
+    expect(depth!.change?.basis).toBe('heuristic')
+  })
+
+  it('marks small deltas as within noise (M32)', () => {
+    const history = [session(95), session(96), session(97)]
+    const current = session(97).result
+    const baseline = computeBaseline(history, current)
+    const depth = baseline?.deltas.find(
+      (d) => d.metricId === 'squat.depth.min-knee-angle',
+    )
+    expect(depth?.change?.classification).toBe('within-noise')
+    expect(depth?.change?.copy).toContain('measurement noise')
   })
 
   it('excludes invalid sessions from the baseline', () => {

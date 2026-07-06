@@ -4,13 +4,14 @@
  *
  * Local-only: reads the sessions the athlete explicitly saved (M9 store).
  * Honest small-N handling: no baseline at all under MIN_BASELINE_SESSIONS,
- * and invalid sets never feed it. Deltas are raw differences — the copy
- * around them must present small changes as measurement noise until
- * MDC-aware trend reporting (M32) lands.
+ * and invalid sets never feed it. Deltas carry both the raw difference
+ * (always inspectable) and an MDC-aware classification (M32) against
+ * heuristic noise thresholds — see session/changeDetection.ts.
  */
 import type { StoredSession } from '../storage/sessionStore'
 import { isReadableRecord } from '../storage/sessionStore'
 import type { ProtocolId } from '../core/protocol'
+import { classifyMetricChange } from './changeDetection'
 import type {
   BaselineMetricDelta,
   SessionBaseline,
@@ -67,13 +68,19 @@ export function computeBaseline(
     // a one-off historical read is not a baseline.
     if (!acc || acc.n < Math.ceil(usable.length / 2)) continue
     const baselineValue = acc.sum / acc.n
+    const delta = metric.value - baselineValue
     deltas.push({
       metricId: metric.metricId,
       label: metric.label,
       unit: metric.unit,
       baselineValue,
       currentValue: metric.value,
-      delta: metric.value - baselineValue,
+      delta,
+      // MDC-aware interpretation (M32) — conservative change language only.
+      change: classifyMetricChange(metric.metricId, delta, {
+        sessionCount: usable.length,
+        currentConfidence: current.sessionConfidence,
+      }),
     })
   }
 

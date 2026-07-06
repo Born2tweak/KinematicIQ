@@ -275,7 +275,7 @@ Initial vision coverage map:
 | Per-frame landmark quality | Implemented | M26 — `cv/landmarkQuality.ts` + `docs/implementation/progress/M26-landmark-quality.md` |
 | Benchmark-gated filtering | Planned | M27 |
 | Sit-to-stand / hip hinge / jump protocols | Planned | M28-M30 |
-| MDC-aware trend language | Planned | M32 |
+| MDC-aware trend language | Implemented | M32 — `session/changeDetection.ts` + `docs/implementation/progress/M32-mdc-trends.md` |
 | Local report export | Planned | M33 |
 | Research index and traceability | Planned | M35-M36 |
 | ADR system | Planned | M37 |
@@ -1320,6 +1320,8 @@ Do not estimate ground reaction force, watts, torque, or injury risk.
 Require the implementing agent to write `docs/implementation/progress/M30-jump-cmj.md`.
 
 ### M32 — Trend reporting with MDC-aware change detection
+
+**Status: Complete (2026-07-06).** See `docs/implementation/progress/M32-mdc-trends.md`.
 
 **Purpose**
 

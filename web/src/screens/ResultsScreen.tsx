@@ -211,8 +211,10 @@ export function ResultsScreen() {
           <h2 className="results-panel__heading">Compared to your baseline</h2>
           <p className="results-panel__intro">
             Your own saved sessions ({baseline.sessionCount} of this movement),
-            not anyone else&apos;s numbers. Small differences are usually
-            measurement noise, not real change.
+            not anyone else&apos;s numbers. Each difference is compared against
+            a provisional noise threshold — heuristic, not validated
+            reliability data — so &ldquo;possible change&rdquo; is the
+            strongest language offered.
           </p>
           <ul className="baseline__list">
             {baseline.deltas.map((d) => (
@@ -227,6 +229,18 @@ export function ResultsScreen() {
                     {' '}({d.delta >= 0 ? '+' : ''}
                     {Math.round(d.delta * 100) / 100})
                   </span>
+                  {d.change && (
+                    <span
+                      className={`baseline-row__change baseline-row__change--${d.change.classification}`}
+                      title={d.change.copy}
+                    >
+                      {d.change.classification === 'within-noise'
+                        ? 'within noise'
+                        : d.change.classification === 'possible-change'
+                          ? 'possible change'
+                          : 'not judged'}
+                    </span>
+                  )}
                 </span>
               </li>
             ))}

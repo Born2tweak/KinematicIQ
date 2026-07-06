@@ -161,4 +161,20 @@ describe('storage/historyView', () => {
     expect(text).toContain('not a trend claim')
     expect(text).not.toMatch(/injury|risk|diagnos/i)
   })
+
+  it('historyObservation reads sub-threshold depth deltas as within noise (M32)', () => {
+    const older = stored(
+      { id: 'older', timestamp: 100 },
+      makeResult({ metrics: { ...makeResult().metrics, avgDepth: 95 } }),
+    )
+    const newer = stored(
+      { id: 'newer', timestamp: 200 },
+      makeResult({ metrics: { ...makeResult().metrics, avgDepth: 92 } }),
+    )
+    const text = historyObservation([older, newer])
+    expect(text).toContain('similar bottom depth')
+    expect(text).toContain('within measurement noise')
+    expect(text).toContain('heuristic')
+    expect(text).not.toMatch(/deeper|shallower/)
+  })
 })

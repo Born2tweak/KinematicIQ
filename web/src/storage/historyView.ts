@@ -6,6 +6,7 @@
  * (docs/doctrine/claims-policy.md; docs/research/11 §history/trends).
  */
 
+import { changeThreshold } from '../session/changeDetection'
 import type { StoredSession } from './sessionStore'
 
 export interface HistoryRow {
@@ -62,17 +63,26 @@ export function historyObservation(sessions: StoredSession[]): string | null {
     )
   }
 
+  // MDC-aware phrasing (M32): differences under the heuristic noise
+  // threshold read as "within measurement noise", never as change.
+  const noiseThreshold = changeThreshold('squat.depth.min-knee-angle') ?? 8
   const delta = latestDepth - previousDepth
+  if (Math.abs(delta) < noiseThreshold) {
+    return (
+      `Compared with your previous ${latest.protocolId} session, the camera ` +
+      `read similar bottom depth (${Math.round(previousDepth)}° → ` +
+      `${Math.round(latestDepth)}° knee angle) — within measurement noise, ` +
+      `not a change. Thresholds are heuristic until validation data exists.`
+    )
+  }
   const direction =
-    Math.abs(delta) < 3
-      ? 'similar bottom depth'
-      : delta < 0
-        ? 'a deeper average bottom position'
-        : 'a shallower average bottom position'
+    delta < 0
+      ? 'a deeper average bottom position'
+      : 'a shallower average bottom position'
   return (
     `Compared with your previous ${latest.protocolId} session, the camera ` +
     `read ${direction} in this one (${Math.round(previousDepth)}° → ` +
-    `${Math.round(latestDepth)}° knee angle). Camera-based observation from ` +
+    `${Math.round(latestDepth)}° knee angle). A possible difference from ` +
     `two sessions — not a trend claim or a progress grade.`
   )
 }

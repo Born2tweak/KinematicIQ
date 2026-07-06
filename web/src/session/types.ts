@@ -5,6 +5,7 @@ import type { Finding } from '../core/finding'
 import type { ProtocolId } from '../core/protocol'
 import type { SetQualityAssessment } from './setQualityGate'
 import type { RootCauseCard } from '../findings/rootCauses'
+import type { ChangeAssessment } from './changeDetection'
 
 export interface SetMetricsSummary {
   repCount: number
@@ -87,6 +88,12 @@ export interface BaselineMetricDelta {
   currentValue: number
   /** current − baseline. */
   delta: number
+  /**
+   * MDC-aware interpretation of the delta (M32): within-noise /
+   * possible-change / insufficient-history against heuristic thresholds.
+   * Optional: absent on pre-M32 data. Raw deltas above stay inspectable.
+   */
+  change?: ChangeAssessment
 }
 
 export interface SessionBaseline {
