@@ -77,8 +77,23 @@ export interface CoachingCue {
  * history. Always null today — within-set deviation lives in
  * `posture.mostDeviantRep`. No backend, no persistence.
  */
+/** One metric compared against the athlete's own saved history (M31). */
+export interface BaselineMetricDelta {
+  metricId: string
+  label: string
+  unit: MetricResult['unit']
+  /** Mean of this metric across the baseline sessions. */
+  baselineValue: number
+  currentValue: number
+  /** current − baseline. */
+  delta: number
+}
+
 export interface SessionBaseline {
   scope: 'longitudinal'
+  /** Saved same-protocol sessions the baseline is built from. */
+  sessionCount: number
+  deltas: BaselineMetricDelta[]
 }
 
 export interface SessionResult {

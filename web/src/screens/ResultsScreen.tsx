@@ -1,4 +1,4 @@
-import { Suspense, lazy, useCallback, useMemo, useState } from 'react'
+import { Suspense, lazy, useCallback, useEffect, useMemo, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { buildPostureConcepts } from '../analysis/posture/postureConcepts'
 import { Button } from '../components/Button'
@@ -28,7 +28,8 @@ import {
 } from '../components/report/resultsTabsModel'
 import { realRejections } from './repRejectionUi'
 import { buildStoredSession, getSessionStore } from '../storage/sessionStore'
-import type { SessionResult } from '../session/types'
+import { computeBaseline } from '../session/baseline'
+import type { SessionBaseline, SessionResult } from '../session/types'
 
 const SessionReplay = lazy(() =>
   import('../components/replay/SessionReplay').then((m) => ({
@@ -50,6 +51,25 @@ export function ResultsScreen() {
   const handleActiveRepChange = useCallback((repNumber: number | null) => {
     setReplayRep((current) => (current === repNumber ? current : repNumber))
   }, [])
+
+  // Personal baseline (M31): compared against the athlete's own saved
+  // history, computed locally; null until enough sessions exist.
+  const [baseline, setBaseline] = useState<SessionBaseline | null>(null)
+  useEffect(() => {
+    if (!result) return
+    let cancelled = false
+    getSessionStore()
+      .list()
+      .then((history) => {
+        if (!cancelled) setBaseline(computeBaseline(history, result))
+      })
+      .catch(() => {
+        /* no history available — baseline stays null */
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [result])
 
   // Saving is an explicit user action (M9) — never silent persistence.
   const [saveState, setSaveState] = useState<'idle' | 'saved' | 'error'>('idle')
@@ -182,6 +202,34 @@ export function ResultsScreen() {
               )}
             </div>
           ))}
+        </section>
+      )}
+
+      {showEvidence && quality.verdict === 'valid' && baseline !== null && (
+        <section className="results-panel" aria-label="Compared to your baseline">
+          <h2 className="results-panel__heading">Compared to your baseline</h2>
+          <p className="results-panel__intro">
+            Your own saved sessions ({baseline.sessionCount} of this movement),
+            not anyone else&apos;s numbers. Small differences are usually
+            measurement noise, not real change.
+          </p>
+          <ul className="baseline__list">
+            {baseline.deltas.map((d) => (
+              <li key={d.metricId} className="baseline-row">
+                <span className="baseline-row__label">{d.label}</span>
+                <span className="baseline-row__values">
+                  {Math.round(d.baselineValue * 100) / 100}
+                  {' → '}
+                  {Math.round(d.currentValue * 100) / 100}
+                  {d.unit === 'deg' ? '°' : d.unit === 'percent' ? '%' : ''}
+                  <span className="baseline-row__delta">
+                    {' '}({d.delta >= 0 ? '+' : ''}
+                    {Math.round(d.delta * 100) / 100})
+                  </span>
+                </span>
+              </li>
+            ))}
+          </ul>
         </section>
       )}
 
