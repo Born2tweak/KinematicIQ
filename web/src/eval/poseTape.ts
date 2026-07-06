@@ -59,6 +59,14 @@ export interface PoseTapeMeta {
     repCount?: number
     /** Frame index of the deepest point of each rep. */
     bottomFrameIndices?: number[]
+    /** Who produced the label (person or tool identifier). */
+    labeledBy?: string
+    /** ISO-8601 time the label was written. */
+    labeledAt?: string
+    /** How the label was derived (e.g. 'video-contact-sheet-review'). */
+    method?: string
+    /** Edge cases: clip-start bottoms, cut-off descents, second people. */
+    notes?: string
   }
 }
 

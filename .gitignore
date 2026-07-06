@@ -30,7 +30,9 @@ build/
 
 # Pose tapes are athlete motion data (validation dataset) — store them with
 # the recordings, never in git (docs/validation/session-log.md).
-eval-tapes/
+# The README (labeling protocol + suite index) IS versioned.
+eval-tapes/*
+!eval-tapes/README.md
 
 # AutoClaw KDream data
 .autoclaw/
