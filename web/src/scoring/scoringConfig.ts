@@ -45,6 +45,15 @@ export const KNEE_ASYMMETRY_THRESHOLDS = {
 } as const
 
 /**
+ * Average L/R bottom-knee difference at or above this is treated as a
+ * camera-view artifact, not a movement read: from an angled view the far
+ * knee is read through the near leg, which exaggerates the gap. Driven by
+ * the 2026-07-06 batch eval, where a 61° "asymmetry" on an angled stock
+ * clip was reported as High-confidence coaching.
+ */
+export const KNEE_ASYMMETRY_IMPLAUSIBLE = 45
+
+/**
  * Consistency — coefficient of variation of per-rep depth (%).
  * std dev of bottom knee angles ÷ mean × 100. Lower = more repeatable depth.
  *

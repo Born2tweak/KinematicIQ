@@ -59,6 +59,29 @@ describe('feedbackReasoning', () => {
     expect(cue.confidenceNote).toMatch(/moderate|directional/i)
   })
 
+  it('reframes an implausible knee asymmetry as a camera-setup check at Low confidence', () => {
+    // 2026-07-06 batch eval: a 61° avg L/R difference on an angled stock clip
+    // was coached at High confidence — a viewing-angle artifact, not movement.
+    const cue = buildBiomechanicalCue(
+      'kneeTracking',
+      metrics({
+        avgKneeAsymmetry: 61,
+        reps: [
+          sampleRep({ minLeftKneeAngle: 150, minRightKneeAngle: 89 }),
+          sampleRep({ minLeftKneeAngle: 152, minRightKneeAngle: 91 }),
+          sampleRep({ minLeftKneeAngle: 148, minRightKneeAngle: 87 }),
+        ],
+      }),
+      'High',
+    )
+    expect(cue.confidence).toBe('Low')
+    expect(cue.observed).toMatch(/camera angle/i)
+    expect(cue.confidenceNote).toMatch(/camera-setup check/i)
+    expect(cue.tryNext).toMatch(/re-record|facing the camera/i)
+    // No confident movement coaching from an artifact read.
+    expect(cue.tryNext).not.toMatch(/spread the floor/i)
+  })
+
   it('caps every cue at Low confidence when its primary read is missing, even at High session confidence', () => {
     const sparse = metrics({
       repCount: 1,

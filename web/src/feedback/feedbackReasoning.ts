@@ -7,6 +7,7 @@ import {
   CONSISTENCY_CV_THRESHOLDS,
   DEPTH_THRESHOLDS,
   HIP_SHIFT_THRESHOLDS,
+  KNEE_ASYMMETRY_IMPLAUSIBLE,
   KNEE_ASYMMETRY_THRESHOLDS,
   TRUNK_THRESHOLDS,
 } from '../scoring/scoringConfig'
@@ -202,6 +203,24 @@ function buildKneeTrackingCue(
 ): BiomechanicalCue {
   const asym = metrics.avgKneeAsymmetry
   const side = deeperKneeSide(metrics)
+
+  // Plausibility guard: a sustained gap this large is a camera-view read
+  // (far knee foreshortened through the near leg), not a movement claim
+  // the app can vouch for. Reframe as a capture observation at Low
+  // confidence instead of confident coaching.
+  if (asym !== null && asym >= KNEE_ASYMMETRY_IMPLAUSIBLE) {
+    return {
+      issue: 'Knee tracking',
+      observed: `Left and right knee bend differed by about ${formatDegrees(asym)} on average — a gap this large usually means the camera angle hid or foreshortened one leg, not that your legs moved that differently.`,
+      whyItMatters:
+        'From an angled or side-on view, the far knee is read through the near leg, which exaggerates left–right differences. The app reports only what the camera can vouch for, and this read looks like a viewing-angle artifact.',
+      tryNext:
+        'Re-record facing the camera straight on with both knees clearly visible, then check knee tracking again.',
+      confidence: 'Low',
+      confidenceNote:
+        'This left–right difference is beyond what a squat plausibly produces — treat it as a camera-setup check, not a movement read.',
+    }
+  }
 
   if (asym !== null && asym > KNEE_ASYMMETRY_THRESHOLDS.excellentMax) {
     const sideNote =
