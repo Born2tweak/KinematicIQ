@@ -20,7 +20,7 @@ function minimalDebugData(
     candidateRepActive: false,
     reachedBottom: false,
     awaitingStandingCompletion: false,
-    standingFrames: 0,
+    standingHoldMs: 0,
     standingKneeBaseline: 168,
     lockoutKneeThreshold: 155,
     blockingGate: null,

@@ -28,16 +28,19 @@ export interface RepGateConfig {
   kneeLiftHipDropMax: number
   /** Hip drop beyond which the movement looks like sitting. */
   seatedHipDropThreshold: number
-  /** Consecutive frames of seated signal before flagging. */
-  seatedMinFrames: number
+  /**
+   * Seated signal must persist this long (ms) before flagging. Time-based,
+   * not frame-based (M17): capture rate varies between devices and paths.
+   */
+  seatedMinMs: number
   /** Bottom hold (ms) that triggers seated flag when hipDrop stays high. */
   seatedBottomHoldMs: number
   /** Hip drop considered "high" for bottom-hold detection. */
   seatedBottomHoldHipDrop: number
   /** Minimum hip confidence to count as "visible" near bottom. */
   hipConfidenceMin: number
-  /** Consecutive near-standing frames to count a rep without perfect lockout. */
-  standingCompletionFrames: number
+  /** Near-standing hold (ms) that completes a rep without perfect lockout. */
+  standingCompletionMs: number
   /** Degrees below calibrated upright knee that still counts as lockout. */
   standingKneeTolerance: number
   /** Fallback lockout knee when no calibration exists. */
@@ -79,11 +82,13 @@ export const SQUAT_REP_GATES: RepGateConfig = {
   kneeLiftOtherKneeMin: 155,
   kneeLiftHipDropMax: 0.025,
   seatedHipDropThreshold: 0.3,
-  seatedMinFrames: 3,
+  // 130ms ≈ the old 3-consecutive-frames streak at the 15fps analysis rate.
+  seatedMinMs: 130,
   seatedBottomHoldMs: 1200,
   seatedBottomHoldHipDrop: 0.2,
   hipConfidenceMin: 0.4,
-  standingCompletionFrames: 4,
+  // 200ms ≈ the old 4-frame streak at the 15fps analysis rate.
+  standingCompletionMs: 200,
   standingKneeTolerance: 14,
   standingKneeFallback: 152,
   hipReturnTolerance: 0.08,
@@ -223,7 +228,8 @@ interface ActiveRep {
   ankleVisibleFrames: number
   // Chair / seated detection
   maxHipDrop: number
-  seatedConsecutiveFrames: number
+  /** Timestamp the current seated-signal streak began; null when clear. */
+  seatedStreakStartTs: number | null
   seatedMovementDetected: boolean
   bottomHoldStartTimestamp: number | null
   bottomHoldMs: number
@@ -244,8 +250,8 @@ export interface RepCounterState {
   reachedBottom: boolean
   /** Persists until next rep attempt so the debug overlay can show it. */
   lastValidation: RepValidation | null
-  /** Frames with near-standing lockout after bottom (grace completion). */
-  standingCompletionFrames: number
+  /** Timestamp the near-standing streak after bottom began (grace completion). */
+  standingStreakStartTs: number | null
   /** Live gate blocking rep completion (debug HUD). */
   blockingGate: string | null
   /** Last failed attempt after bottom was reached (debug HUD). */
@@ -284,7 +290,7 @@ export function createRepCounterState(
     previousPhase: 'STANDING',
     reachedBottom: false,
     lastValidation: null,
-    standingCompletionFrames: 0,
+    standingStreakStartTs: null,
     blockingGate: null,
     lastMissedRepReason: null,
     rejections: [],
@@ -323,7 +329,7 @@ export function beginSetDuringDescent(
     previousPhase: initialPhase,
     reachedBottom,
     lastValidation: null,
-    standingCompletionFrames: 0,
+    standingStreakStartTs: null,
     blockingGate: reachedBottom
       ? 'Awaiting standing completion'
       : 'Awaiting bottom',
@@ -417,7 +423,7 @@ function isNearStandingLockout(
 function computeBlockingGate(
   activeRep: ActiveRep | null,
   reachedBottom: boolean,
-  standingCompletionFrames: number,
+  standingStreakMs: number,
   input: RepCounterInput,
   cfg: RepGateConfig,
 ): string | null {
@@ -449,8 +455,8 @@ function computeBlockingGate(
     return 'Did not return to standing'
   }
 
-  if (standingCompletionFrames < cfg.standingCompletionFrames) {
-    return `Awaiting standing completion (${standingCompletionFrames}/${cfg.standingCompletionFrames})`
+  if (standingStreakMs < cfg.standingCompletionMs) {
+    return `Awaiting standing completion (${Math.round(standingStreakMs)}ms/${cfg.standingCompletionMs}ms)`
   }
 
   return null
@@ -488,7 +494,7 @@ const createActiveRep = (
   totalFrames: 1,
   ankleVisibleFrames: bothAnklesVisible(frame) ? 1 : 0,
   maxHipDrop: 0,
-  seatedConsecutiveFrames: 0,
+  seatedStreakStartTs: null,
   seatedMovementDetected: false,
   bottomHoldStartTimestamp: null,
   bottomHoldMs: 0,
@@ -537,12 +543,13 @@ const updateActiveRep = (
   const hipOccluded = hipLandmarksLowConfidence(frame, cfg)
   const seatedSignalThisFrame = excessiveHipDrop || hipOccluded
 
-  const nextSeatedConsecutive = seatedSignalThisFrame
-    ? activeRep.seatedConsecutiveFrames + 1
-    : 0
+  const nextSeatedStreakStart = seatedSignalThisFrame
+    ? activeRep.seatedStreakStartTs ?? frame.timestamp
+    : null
+  const seatedStreakMs =
+    nextSeatedStreakStart === null ? 0 : frame.timestamp - nextSeatedStreakStart
   const nextSeatedDetected =
-    activeRep.seatedMovementDetected ||
-    nextSeatedConsecutive >= cfg.seatedMinFrames
+    activeRep.seatedMovementDetected || seatedStreakMs >= cfg.seatedMinMs
 
   // Bottom hold tracking: time spent with high hip drop
   const inHighDrop = currentHipDrop >= cfg.seatedBottomHoldHipDrop
@@ -595,7 +602,7 @@ const updateActiveRep = (
     ankleVisibleFrames:
       activeRep.ankleVisibleFrames + (bothAnklesVisible(frame) ? 1 : 0),
     maxHipDrop: nextMaxHipDrop,
-    seatedConsecutiveFrames: nextSeatedConsecutive,
+    seatedStreakStartTs: nextSeatedStreakStart,
     seatedMovementDetected: nextSeatedDetected || seatedFromHold,
     bottomHoldStartTimestamp: nextBottomHoldStart,
     bottomHoldMs: nextBottomHoldMs,
@@ -813,7 +820,7 @@ export function updateRepCounter(
   let completedRep: RepMetrics | null = null
   let reachedBottom = state.reachedBottom
   let lastValidation = state.lastValidation
-  let standingCompletionFrames = state.standingCompletionFrames
+  let standingStreakStartTs = state.standingStreakStartTs
   let blockingGate = state.blockingGate
   let lastMissedRepReason = state.lastMissedRepReason
   let rejections = state.rejections
@@ -851,14 +858,14 @@ export function updateRepCounter(
     }
     activeRep = null
     reachedBottom = false
-    standingCompletionFrames = 0
+    standingStreakStartTs = null
   }
 
   // Start tracking a new rep on descent
   if (activeRep === null && input.transitioned && input.phase === 'DESCENDING') {
     activeRep = createActiveRep(input.frame, input.angles, input.hipY)
     reachedBottom = false
-    standingCompletionFrames = 0
+    standingStreakStartTs = null
     lastValidation = null
     console.log(
       `[RepCounter] REP ATTEMPT STARTED | frame=${input.frame.frameIndex} hipY=${input.hipY?.toFixed(4)}`,
@@ -909,21 +916,27 @@ export function updateRepCounter(
     }
   }
 
-  // Grace standing completion (does not require phase FSM lockout)
+  // Grace standing completion (does not require phase FSM lockout).
+  // Time-based (M17): the near-standing hold is measured in ms so the gate
+  // means the same thing at any capture rate.
   if (activeRep !== null && reachedBottom) {
     if (isNearStandingLockout(input, activeRep, reachedBottom, cfg)) {
-      standingCompletionFrames += 1
+      standingStreakStartTs = standingStreakStartTs ?? input.frame.timestamp
     } else {
-      standingCompletionFrames = 0
+      standingStreakStartTs = null
     }
   } else {
-    standingCompletionFrames = 0
+    standingStreakStartTs = null
   }
+  const standingStreakMs =
+    standingStreakStartTs === null
+      ? 0
+      : input.frame.timestamp - standingStreakStartTs
 
   blockingGate = computeBlockingGate(
     activeRep,
     reachedBottom,
-    standingCompletionFrames,
+    standingStreakMs,
     input,
     cfg,
   )
@@ -952,17 +965,18 @@ export function updateRepCounter(
     }
     activeRep = null
     reachedBottom = false
-    standingCompletionFrames = 0
+    standingStreakStartTs = null
     blockingGate = null
   }
 
   if (
     activeRep !== null &&
     reachedBottom &&
-    standingCompletionFrames === cfg.standingCompletionFrames
+    standingStreakStartTs !== null &&
+    standingStreakMs >= cfg.standingCompletionMs
   ) {
     console.log(
-      `[RepCounter] GRACE COMPLETION | standingFrames=${standingCompletionFrames}`,
+      `[RepCounter] GRACE COMPLETION | standingMs=${Math.round(standingStreakMs)}`,
     )
     finishRep()
   }
@@ -993,7 +1007,7 @@ export function updateRepCounter(
       previousPhase: input.phase,
       reachedBottom,
       lastValidation,
-      standingCompletionFrames,
+      standingStreakStartTs,
       blockingGate,
       lastMissedRepReason,
       rejections,

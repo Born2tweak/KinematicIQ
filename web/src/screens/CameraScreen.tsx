@@ -671,8 +671,11 @@ export function CameraScreen() {
               awaitingStandingCompletion:
                 rcState.activeRep !== null &&
                 rcState.reachedBottom &&
-                rcState.standingCompletionFrames < 4,
-              standingFrames: rcState.standingCompletionFrames,
+                rcState.standingStreakStartTs === null,
+              standingHoldMs:
+                rcState.standingStreakStartTs === null
+                  ? 0
+                  : Math.round(poseFrame.timestamp - rcState.standingStreakStartTs),
               standingKneeBaseline: pdState.standingKneeAngle,
               lockoutKneeThreshold: standingKneeThreshold(pdState),
               blockingGate: rcState.blockingGate,

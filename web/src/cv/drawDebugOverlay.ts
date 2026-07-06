@@ -17,7 +17,7 @@ export interface DebugOverlayData {
   candidateRepActive: boolean
   reachedBottom: boolean
   awaitingStandingCompletion: boolean
-  standingFrames: number
+  standingHoldMs: number
   standingKneeBaseline: number | null
   lockoutKneeThreshold: number | null
   blockingGate: string | null
@@ -163,8 +163,8 @@ export function buildDebugOverlayLines(data: DebugOverlayData): DebugLine[] {
     },
     {
       label: 'STAND FR',
-      value: String(data.standingFrames),
-      color: data.standingFrames >= 4 ? '#22c55e' : '#e5e7eb',
+      value: `${data.standingHoldMs}ms`,
+      color: data.standingHoldMs >= 200 ? '#22c55e' : '#e5e7eb',
     },
     {
       label: 'CAL KNEE',
