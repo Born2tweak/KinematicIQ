@@ -66,6 +66,16 @@ export interface RepMetrics {
    * seen during the rep (M19 ROM). Optional: pre-M19 sessions abstain.
    */
   minAnkleAngle?: number | null
+  /**
+   * Total hip-midpoint travel over the rep, normalized image units (M20).
+   * From the filtered trajectory. Optional: pre-M20 sessions abstain.
+   */
+  hipPathLength?: number | null
+  /**
+   * Peak hip-midpoint speed over the rep, normalized units/s (M20).
+   * From the filtered trajectory. Optional: pre-M20 sessions abstain.
+   */
+  peakHipSpeed?: number | null
   averageTrunkLean: number | null
   maxTrunkLean: number | null
   hipShiftAtBottom: number | null

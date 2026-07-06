@@ -41,6 +41,11 @@ export interface SetMetricsSummary {
   avgMinHipAngle?: number | null
   /** Average deepest ankle-dorsiflexion proxy angle across included reps (deg). */
   avgMinAnkleAngle?: number | null
+  // ── Path & speed proxies (M20). Display tier only. Optional pre-M20.
+  /** Average per-rep hip-path length (normalized image units). */
+  avgHipPathLength?: number | null
+  /** Average per-rep peak hip speed (normalized units/s). */
+  avgPeakHipSpeed?: number | null
 }
 
 export interface ComponentScores {

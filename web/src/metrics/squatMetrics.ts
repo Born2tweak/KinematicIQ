@@ -124,6 +124,31 @@ export const SQUAT_METRIC_DEFINITIONS: MetricDefinition[] = [
       'Average time from the deepest tracked point back to standing, in this set.',
     included: true,
   },
+  // ── Path & speed proxies (M20, MD03 §5). Display tier: expert-review
+  // reads from the FILTERED hip trajectory — never coaching inputs until
+  // validated (MD05 tiers).
+  {
+    id: 'squat.path.hip-path-length',
+    label: 'Hip path length (avg per rep)',
+    unit: 'normalized',
+    evidenceCategory: 'kinematic-geometry',
+    validationTier: 'experimental',
+    confidenceBasis: ['landmark-visibility', 'temporal-stability'],
+    description:
+      'Average hip-midpoint travel per rep, in normalized image units. Expert-review read — not validated for coaching.',
+    included: true,
+  },
+  {
+    id: 'squat.path.peak-hip-speed',
+    label: 'Peak hip speed (avg per rep)',
+    unit: 'ratio',
+    evidenceCategory: 'temporal',
+    validationTier: 'experimental',
+    confidenceBasis: ['temporal-stability'],
+    description:
+      'Average per-rep peak hip-midpoint speed (normalized units/s) from the filtered trajectory. Expert-review read — not validated for coaching.',
+    included: true,
+  },
   // ── ROM proxies beyond the knee (M19, MD03 minimum set). Experimental:
   // 2D projected angles, view-dependent — observation language only.
   {
@@ -206,6 +231,8 @@ const METRIC_SIDE: Record<string, MetricSide> = {
   'squat.tempo.cadence': 'none',
   'squat.rom.hip-flexion': 'bilateral',
   'squat.rom.ankle-dorsiflexion': 'bilateral',
+  'squat.path.hip-path-length': 'none',
+  'squat.path.peak-hip-speed': 'none',
 }
 
 /** ms → seconds for display; abstains propagate. */
@@ -239,6 +266,10 @@ function valueFor(id: string, summary: SetMetricsSummary): number | null {
       return summary.avgMinHipAngle ?? null
     case 'squat.rom.ankle-dorsiflexion':
       return summary.avgMinAnkleAngle ?? null
+    case 'squat.path.hip-path-length':
+      return summary.avgHipPathLength ?? null
+    case 'squat.path.peak-hip-speed':
+      return summary.avgPeakHipSpeed ?? null
     default:
       return null
   }

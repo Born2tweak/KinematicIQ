@@ -33,6 +33,8 @@ const summary: SetMetricsSummary = {
   cadenceRepsPerMin: 20,
   avgMinHipAngle: 78,
   avgMinAnkleAngle: 102,
+  avgHipPathLength: 0.42,
+  avgPeakHipSpeed: 0.55,
 }
 
 describe('metrics/squatMetrics', () => {
@@ -61,6 +63,9 @@ describe('metrics/squatMetrics', () => {
     // ROM proxies (M19).
     expect(byId.get('squat.rom.hip-flexion')).toBe(78)
     expect(byId.get('squat.rom.ankle-dorsiflexion')).toBe(102)
+    // Path & speed proxies (M20).
+    expect(byId.get('squat.path.hip-path-length')).toBe(0.42)
+    expect(byId.get('squat.path.peak-hip-speed')).toBe(0.55)
   })
 
   it('tempo metrics abstain on pre-M18 summaries (fields absent)', () => {

@@ -217,6 +217,13 @@ interface ActiveRep {
   minRightHipAngle: number | null
   minLeftAnkleAngle: number | null
   minRightAnkleAngle: number | null
+  // Path & speed proxies (M20): accumulated from the (already filtered)
+  // hip-midpoint trajectory — MD02 forbids derivatives on raw pose.
+  prevHipX: number | null
+  prevHipY: number | null
+  prevHipTimestamp: number | null
+  hipPathLength: number
+  peakHipSpeed: number
   trunkLeanSum: number
   trunkLeanSamples: number
   maxTrunkLean: number | null
@@ -364,6 +371,13 @@ const averageKneeAngle = (angles: JointAngles): number | null => {
   return knees.reduce((sum, value) => sum + value, 0) / knees.length
 }
 
+/** Hip midpoint in normalized image coords; null when either hip is unreadable. */
+const hipMidpoint = (frame: PoseFrame): { x: number; y: number } | null => {
+  const leftHip = safeLandmark(frame, LANDMARK_INDICES.LEFT_HIP)
+  const rightHip = safeLandmark(frame, LANDMARK_INDICES.RIGHT_HIP)
+  return leftHip && rightHip ? midpoint(leftHip, rightHip) : null
+}
+
 const calculateHipShiftAtBottom = (frame: PoseFrame): number | null => {
   const leftHip = safeLandmark(frame, LANDMARK_INDICES.LEFT_HIP)
   const rightHip = safeLandmark(frame, LANDMARK_INDICES.RIGHT_HIP)
@@ -488,6 +502,11 @@ const createActiveRep = (
   minRightHipAngle: angles.rightHip,
   minLeftAnkleAngle: angles.leftAnkle,
   minRightAnkleAngle: angles.rightAnkle,
+  prevHipX: null,
+  prevHipY: null,
+  prevHipTimestamp: null,
+  hipPathLength: 0,
+  peakHipSpeed: 0,
   trunkLeanSum: angles.trunkLean ?? 0,
   trunkLeanSamples: angles.trunkLean === null ? 0 : 1,
   maxTrunkLean: angles.trunkLean,
@@ -539,6 +558,26 @@ const updateActiveRep = (
       nextBottomAverageKneeAngle < activeRep.bottomAverageKneeAngle)
 
   const nextDeepestHipY = maxOrValue(activeRep.deepestHipY, hipY)
+
+  // ── Hip path & peak speed (M20) ─────────────────────────────────
+  const hipMid = hipMidpoint(frame)
+  let nextPathLength = activeRep.hipPathLength
+  let nextPeakSpeed = activeRep.peakHipSpeed
+  if (
+    hipMid !== null &&
+    activeRep.prevHipX !== null &&
+    activeRep.prevHipY !== null &&
+    activeRep.prevHipTimestamp !== null
+  ) {
+    const dx = hipMid.x - activeRep.prevHipX
+    const dy = hipMid.y - activeRep.prevHipY
+    const dist = Math.hypot(dx, dy)
+    const dtSec = (frame.timestamp - activeRep.prevHipTimestamp) / 1000
+    nextPathLength += dist
+    if (dtSec > 0) {
+      nextPeakSpeed = Math.max(nextPeakSpeed, dist / dtSec)
+    }
+  }
 
   // ── Seated / chair detection per-frame ──────────────────────────
   const currentHipDrop =
@@ -616,6 +655,11 @@ const updateActiveRep = (
       activeRep.ankleVisibleFrames + (bothAnklesVisible(frame) ? 1 : 0),
     maxHipDrop: nextMaxHipDrop,
     seatedStreakStartTs: nextSeatedStreakStart,
+    prevHipX: hipMid === null ? activeRep.prevHipX : hipMid.x,
+    prevHipY: hipMid === null ? activeRep.prevHipY : hipMid.y,
+    prevHipTimestamp: hipMid === null ? activeRep.prevHipTimestamp : frame.timestamp,
+    hipPathLength: nextPathLength,
+    peakHipSpeed: nextPeakSpeed,
     seatedMovementDetected: nextSeatedDetected || seatedFromHold,
     bottomHoldStartTimestamp: nextBottomHoldStart,
     bottomHoldMs: nextBottomHoldMs,
@@ -774,6 +818,8 @@ const finalizeRep = (
     minRightKneeAngle: activeRep.minRightKneeAngle,
     minHipAngle: minOfSides(activeRep.minLeftHipAngle, activeRep.minRightHipAngle),
     minAnkleAngle: minOfSides(activeRep.minLeftAnkleAngle, activeRep.minRightAnkleAngle),
+    hipPathLength: activeRep.hipPathLength > 0 ? activeRep.hipPathLength : null,
+    peakHipSpeed: activeRep.peakHipSpeed > 0 ? activeRep.peakHipSpeed : null,
     averageTrunkLean,
     maxTrunkLean: activeRep.maxTrunkLean,
     hipShiftAtBottom: activeRep.hipShiftAtBottom,

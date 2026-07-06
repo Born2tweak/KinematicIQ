@@ -84,6 +84,14 @@ export function collectSetMetrics(
     .map((rep) => rep.minAnkleAngle)
     .filter((v): v is number => v !== null && v !== undefined)
 
+  // ── Path & speed proxies (M20) — filtered-trajectory reads only.
+  const pathLengths = included
+    .map((rep) => rep.hipPathLength)
+    .filter((v): v is number => v !== null && v !== undefined)
+  const peakSpeeds = included
+    .map((rep) => rep.peakHipSpeed)
+    .filter((v): v is number => v !== null && v !== undefined)
+
   const spanMs =
     included.length >= 2
       ? included[included.length - 1].endTimestamp - included[0].startTimestamp
@@ -112,5 +120,7 @@ export function collectSetMetrics(
       spanMs > 0 ? (included.length / spanMs) * 60_000 : null,
     avgMinHipAngle: average(hipMins),
     avgMinAnkleAngle: average(ankleMins),
+    avgHipPathLength: average(pathLengths),
+    avgPeakHipSpeed: average(peakSpeeds),
   }
 }
