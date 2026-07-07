@@ -29,6 +29,13 @@ import {
 import { CaptureQualityPanel } from '../components/report/CaptureQualityPanel'
 import { realRejections } from './repRejectionUi'
 import { buildStoredSession, getSessionStore } from '../storage/sessionStore'
+import {
+  buildSessionReport,
+  downloadReportFile,
+  reportFilename,
+  serializeReport,
+} from '../export/sessionReport'
+import { renderReportHtml } from '../export/sessionReportHtml'
 import { computeBaseline } from '../session/baseline'
 import type { SessionBaseline, SessionResult } from '../session/types'
 
@@ -83,6 +90,30 @@ export function ResultsScreen() {
       setSaveState('error')
     }
   }, [result])
+
+  // Report export (M33): local-only audit artifact — HTML for reading,
+  // JSON for tooling. Includes the abstain state exactly as rendered; pose
+  // frames stay in the separate pose-tape export.
+  const handleExportReport = useCallback(
+    (format: 'html' | 'json') => {
+      if (!result) return
+      const report = buildSessionReport(result, { baseline })
+      if (format === 'json') {
+        downloadReportFile(
+          serializeReport(report),
+          reportFilename(report, 'json'),
+          'application/json',
+        )
+      } else {
+        downloadReportFile(
+          renderReportHtml(report),
+          reportFilename(report, 'html'),
+          'text/html',
+        )
+      }
+    },
+    [result, baseline],
+  )
 
   const componentExplanations = useMemo(() => {
     if (!result?.scoring) return []
@@ -567,6 +598,12 @@ export function ResultsScreen() {
           disabled={saveState === 'saved'}
         >
           {saveState === 'saved' ? 'Saved to history' : 'Save to history'}
+        </Button>
+        <Button variant="secondary" onClick={() => handleExportReport('html')}>
+          Export report HTML
+        </Button>
+        <Button variant="secondary" onClick={() => handleExportReport('json')}>
+          Export report JSON
         </Button>
         <Button to="/" variant="secondary">
           Home
