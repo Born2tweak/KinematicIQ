@@ -17,3 +17,6 @@ These 11 documents are the **immutable sources of truth** for the movement-intel
 | 11 | `11_Product_Experience_Bible.md` | Capture readiness UX, progressive disclosure (Summary/Evidence/Expert), finding cards, design tokens, anti-patterns. |
 
 Implementation mapping: see `docs/implementation/IMPLEMENTATION_PLAN_AND_FABLE_PROMPT.md`, Section B.
+
+Navigation layer with stable ids (R01–R11), theme map, and the citation
+convention for progress notes: `docs/research/INDEX.md` (M35).
