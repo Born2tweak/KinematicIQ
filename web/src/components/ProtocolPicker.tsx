@@ -29,7 +29,14 @@ export function ProtocolPicker() {
             className={`protocol-card${available ? '' : ' protocol-card--planned'}`}
             disabled={!available}
             aria-disabled={!available}
-            onClick={available ? () => navigate('/camera') : undefined}
+            onClick={
+              available
+                ? () =>
+                    navigate('/camera', {
+                      state: { protocolId: definition.id },
+                    })
+                : undefined
+            }
           >
             <span className="protocol-card__label">{definition.label}</span>
             <span className="protocol-card__kind">

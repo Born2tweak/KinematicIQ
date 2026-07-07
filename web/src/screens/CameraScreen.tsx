@@ -8,6 +8,7 @@ import {
   useState,
 } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
+import type { ProtocolId } from '../core/protocol'
 import { buildSessionResult } from '../session/buildSessionResult'
 import { Button } from '../components/Button'
 import { DisclaimerBanner } from '../components/DisclaimerBanner'
@@ -111,6 +112,13 @@ function syncCanvasToVideo(
 export function CameraScreen() {
   const navigate = useNavigate()
   const location = useLocation()
+  // Selected protocol from the picker's route state (M43). Squat stays the
+  // default; only available protocols can navigate here with an id.
+  const selectedProtocolId: ProtocolId =
+    (location.state as { protocolId?: ProtocolId } | null)?.protocolId ??
+    'squat'
+  const selectedProtocolIdRef = useRef(selectedProtocolId)
+  selectedProtocolIdRef.current = selectedProtocolId
   // Frame provider: real webcam in production; deterministic fixture sources
   // in dev/test via ?source=… (policy lives in cameraSourceSelection).
   const cameraSource = useMemo(
@@ -280,6 +288,7 @@ export function CameraScreen() {
       poseConfidenceSamplesRef.current,
       postureSamplesRef.current,
       repCounterRef.current.rejections,
+      selectedProtocolIdRef.current,
     )
 
     // Preserve the raw session as a replayable pose tape (same substrate as

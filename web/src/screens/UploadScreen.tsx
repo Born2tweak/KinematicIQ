@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
+import type { ProtocolId } from '../core/protocol'
 import { Button } from '../components/Button'
 import { Card } from '../components/Card'
 import { DisclaimerBanner } from '../components/DisclaimerBanner'
@@ -57,6 +58,11 @@ function buildWarnings(loaded: LoadedVideo): string[] {
 
 export function UploadScreen() {
   const navigate = useNavigate()
+  const location = useLocation()
+  // Selected protocol from route state (M43); squat stays the default.
+  const selectedProtocolId: ProtocolId =
+    (location.state as { protocolId?: ProtocolId } | null)?.protocolId ??
+    'squat'
   const fileInputRef = useRef<HTMLInputElement | null>(null)
   const loadedRef = useRef<LoadedVideo | null>(null)
   const abortRef = useRef<AbortController | null>(null)
@@ -234,6 +240,7 @@ export function UploadScreen() {
         result.poseConfidenceSamples,
         result.postureSamples,
         result.repRejections,
+        selectedProtocolId,
       )
       navigate('/results', { state: { result: sessionResult } })
     } catch (err: unknown) {
@@ -253,7 +260,7 @@ export function UploadScreen() {
     } finally {
       abortRef.current = null
     }
-  }, [navigate, fileName])
+  }, [navigate, fileName, selectedProtocolId])
 
   const handleCancelAnalysis = useCallback(() => {
     abortRef.current?.abort()

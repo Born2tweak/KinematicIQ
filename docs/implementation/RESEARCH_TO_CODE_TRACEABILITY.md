@@ -111,7 +111,8 @@ experimental unless stated.
 
 | Research concept | Source | Code | Milestones | Status | Tier |
 |---|---|---|---|---|---|
-| Protocol expansion: sit-to-stand / hip hinge / jump | R01, R07 | `web/src/protocols/hipHinge|jump|sprint/` (stubs, analyze throws) | M10; runtime M28–M30 after M39–M43 | partial (stubs only) | — |
+| Protocol-aware analysis entry point (select → runtime → result) | R08, R11 | `web/src/analysis/analyzeProtocol.ts`, `protocols/runtime.ts`, picker/camera/upload route-state threading | M39–M43 | implemented | — |
+| Protocol expansion: sit-to-stand / hip hinge / jump | R01, R07 | `web/src/protocols/hipHinge|jump|sprint/` (stubs, analyze throws) | M10; M28–M30 unblocked by M39–M43, still need validation evidence | partial (stubs only) | — |
 | Movement embeddings / foundation models | R10 | — | — | **deferred** — research track, not shippable now | — |
 | SMPL / digital humans / wearables / sensor fusion | R10 | — | — | **deferred** (`docs/doctrine/deferred-scope.md`) | — |
 | Backend / accounts / cloud sync / FHIR | R10, R07 | — | — | **rejected for this product scope** (ledger) | — |

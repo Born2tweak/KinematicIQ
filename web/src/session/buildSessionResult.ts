@@ -13,7 +13,7 @@ import {
 import { deriveCoaching } from '../findings/engine'
 import { computeComponentScores } from '../scoring/scoringEngine'
 import type { RepMetrics } from '../cv/types'
-import { getActiveProtocol } from '../protocols/registry'
+import { getActiveProtocol, getProtocol } from '../protocols/registry'
 import type { ProtocolId } from '../core/protocol'
 import { makeProvenance } from '../core/provenance'
 import { buildSquatMetricResults } from '../metrics/squatMetrics'
@@ -80,9 +80,11 @@ export function buildSessionResult(
   // Keyed MetricResult[] (M6): dual-written alongside the legacy summary.
   // Only squat has metric definitions today; other protocols emit none.
   // Posture proxies (M21) ride along whenever the 3D stream was usable.
+  // Provenance follows the SELECTED protocol, not the active default —
+  // an explicit id must never be silently overridden (M43).
   const provenance = makeProvenance({
     captureSource: 'live',
-    protocolId: getActiveProtocol().definition.defaultObservationProtocolId,
+    protocolId: getProtocol(protocolId).definition.defaultObservationProtocolId,
   })
   const metricResults: MetricResult[] =
     noRepsDetected || protocolId !== 'squat'
