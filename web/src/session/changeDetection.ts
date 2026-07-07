@@ -40,8 +40,9 @@ export const MIN_TREND_SESSIONS = 3
  * metric's display unit. Chosen conservatively — roughly 2–4× the plausible
  * session-to-session measurement noise of a front-view single-RGB read — so
  * "possible change" under-triggers rather than over-triggers. These are NOT
- * validated MDC values; replace via the reliability work (M44-M45, M49) and
- * document any change in the metric validation status board (M48).
+ * validated MDC values; replace via `eval/reliability.ts` and
+ * `docs/validation/RELIABILITY_STUDY_TEMPLATE.md`, then document any change in
+ * the metric validation status board (M48).
  */
 export const HEURISTIC_CHANGE_THRESHOLDS: Readonly<Record<string, number>> = {
   'squat.depth.min-knee-angle': 8, // deg
