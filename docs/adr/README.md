@@ -39,3 +39,4 @@ by a future agent who lacks the context.
 | [ADR-002](ADR-002-verdict-or-abstain.md) | Verdict-or-abstain — invalid recordings fully abstain | accepted |
 | [ADR-003](ADR-003-no-composite-score.md) | No composite movement-quality score, ever | accepted (permanent) |
 | [ADR-004](ADR-004-pose-tape-as-audit-artifact.md) | Pose tape is the audit artifact — additive changes only | accepted |
+| [ADR-005](ADR-005-worker-boundaries.md) | Worker boundaries — pure analysis is the seam; instrument before moving | accepted |
