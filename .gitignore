@@ -33,6 +33,8 @@ build/
 # The README (labeling protocol + suite index) IS versioned.
 eval-tapes/*
 !eval-tapes/README.md
+# Redacted example manifest only — a real MANIFEST.json stays local (M44).
+!eval-tapes/MANIFEST.example.json
 
 # AutoClaw KDream data
 .autoclaw/

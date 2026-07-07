@@ -32,7 +32,9 @@ describe('tape regression — session-c pipeline snapshot', () => {
   const available = existsSync(SESSION_C_TAPE)
   if (!available) {
     console.log(
-      `session-c tape not found at ${SESSION_C_TAPE} — skipping tape regression snapshot`,
+      `session-c tape not found at ${SESSION_C_TAPE} — skipping tape regression snapshot. ` +
+        `Expected on a fresh clone (tapes are gitignored athlete data); see ` +
+        `docs/validation/validation-corpus.md + eval-tapes/MANIFEST.example.json to enable.`,
     )
   }
 

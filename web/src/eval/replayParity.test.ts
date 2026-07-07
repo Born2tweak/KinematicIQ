@@ -92,7 +92,11 @@ const SESSION_C_TAPE = resolve(
 describe('replayTape on the real session-c tape', () => {
   const available = existsSync(SESSION_C_TAPE)
   if (!available) {
-    console.log(`session-c tape not found at ${SESSION_C_TAPE} — skipping real-tape parity assertions`)
+    console.log(
+      `session-c tape not found at ${SESSION_C_TAPE} — skipping real-tape parity assertions. ` +
+        `Expected on a fresh clone (tapes are gitignored athlete data); see ` +
+        `docs/validation/validation-corpus.md + eval-tapes/MANIFEST.example.json to enable.`,
+    )
   }
 
   it.skipIf(!available)('replays deterministically under live mode', () => {
