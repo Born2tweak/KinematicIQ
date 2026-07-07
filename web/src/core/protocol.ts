@@ -15,6 +15,10 @@
  * Types-only: this defines the contract M5's registry conforms to. It does not
  * import or alter the existing `MovementProfile` — M5 designs the adapter so
  * squat keeps working unchanged.
+ *
+ * The behavioral counterpart is `protocols/runtime.ts` (M39 `ProtocolRuntime`):
+ * the five-stage pluggable runtime (segment → metrics → findings → quality →
+ * report metadata) a protocol provides. This module stays types-only.
  */
 import type { MetricDefinition } from './metric'
 

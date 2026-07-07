@@ -26,6 +26,12 @@ export interface Protocol {
   /**
    * Runtime analysis configuration. Present for `available` protocols;
    * `null` for `planned` stubs (M10) whose analysis is not implemented.
+   *
+   * Kept for compatibility alongside the M39 `ProtocolRuntime` contract
+   * (`./runtime.ts`) — the pluggable five-stage runtime that will supersede
+   * direct profile consumption once call sites migrate (M43).
    */
   profile: MovementProfile | null
 }
+
+export type { ProtocolRuntime, ReportMetadata } from './runtime'

@@ -5,6 +5,10 @@
  *
  * Squat is the only registered protocol today and the default active one.
  * Planned protocols (M10) register with `status: 'planned'` and no profile.
+ *
+ * Runtime lookup (M39 `ProtocolRuntime` contract) lives in `./runtime.ts` —
+ * kept out of this module so the registry stays free of an import cycle
+ * through session/buildSessionResult.
  */
 import type { MovementProfile } from '../analysis/movement/types'
 import { NotImplementedError, type ProtocolId } from '../core/protocol'
