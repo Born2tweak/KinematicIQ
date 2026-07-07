@@ -9,35 +9,22 @@
  * frame is seeked, detected, and fed through `updatePhaseDetector` /
  * `updateRepCounter` identically to `CameraScreen`'s per-frame loop.
  */
-import { getJointAngles } from './angles'
-import { safeLandmark } from './geometry'
+import type { PhaseDetectorState } from './phaseDetector'
+import { SQUAT_PHASE_CONFIG } from './phaseDetector'
+import type { RepCounterState } from './repCounter'
+import { SQUAT_REP_GATES } from './repCounter'
 import {
-  createPhaseDetectorState,
-  updatePhaseDetector,
-  type PhaseDetectorState,
-} from './phaseDetector'
-import {
-  createRepCounterState,
-  updateRepCounter,
-  type RepCounterState,
-} from './repCounter'
+  runCyclicPipelineOnFrames,
+  type CyclicEngineConfig,
+} from './cyclic/cyclicEngine'
 import { filterFrameSequence } from '../cv/landmarkFilter'
-import { assessLandmarkQuality } from '../cv/landmarkQuality'
-import {
-  LANDMARK_INDICES,
-  type JointAngles,
-  type LandmarkQualityFrame,
-  type PoseFrame,
-  type RepMetrics,
+import type {
+  LandmarkQualityFrame,
+  PoseFrame,
+  RepMetrics,
 } from '../cv/types'
-import {
-  extractPostureFrame,
-  type PostureFrameSample,
-} from './posture/postureFrame'
-import {
-  createFrameTraceCollector,
-  type FrameTraceSample,
-} from './frameTrace'
+import type { PostureFrameSample } from './posture/postureFrame'
+import type { FrameTraceSample } from './frameTrace'
 import type { RepRejection } from './repCounter'
 
 /** Analysis sampling rate — fewer inferences than display FPS, still smooth. */
@@ -94,19 +81,13 @@ export interface VideoAnalysisResult {
   landmarkQuality: LandmarkQualityFrame[]
 }
 
-/** Smallest knee angle (deepest side) used to drive phase detection. */
-function trackingKneeAngle(angles: JointAngles): number | null {
-  const knees = [angles.leftKnee, angles.rightKnee].filter(
-    (value): value is number => value !== null,
-  )
-  return knees.length === 0 ? null : Math.min(...knees)
-}
-
-/** Average hip Y (normalized) — null when either hip is not confidently tracked. */
-function computeHipY(frame: PoseFrame): number | null {
-  const leftHip = safeLandmark(frame, LANDMARK_INDICES.LEFT_HIP)
-  const rightHip = safeLandmark(frame, LANDMARK_INDICES.RIGHT_HIP)
-  return leftHip && rightHip ? (leftHip.y + rightHip.y) / 2 : null
+/**
+ * Squat's cyclic-engine config — the same threshold objects the FSMs used
+ * before the M42 extraction (no retuning; see cyclic/cyclicEngine.ts).
+ */
+export const SQUAT_CYCLIC_CONFIG: CyclicEngineConfig = {
+  phase: SQUAT_PHASE_CONFIG,
+  repGates: SQUAT_REP_GATES,
 }
 
 /**
@@ -124,6 +105,10 @@ export interface PipelineInitialState {
  * pose frames. This is the single source of truth for the analysis loop, shared
  * by {@link runVideoAnalysis} and the offline replay harness so both exercise the
  * exact same logic. Pure: no seeking, no detection, no DOM.
+ *
+ * Since M42 the loop itself lives in the shared cyclic engine
+ * (analysis/cyclic/cyclicEngine.ts); this is the squat-configured entry point
+ * with a stable signature for every existing import.
  */
 export function runPipelineOnFrames(
   frames: readonly PoseFrame[],
@@ -137,65 +122,7 @@ export function runPipelineOnFrames(
   /** Per-frame landmark quality (M26) — observational, one entry per frame. */
   landmarkQuality: LandmarkQualityFrame[]
 } {
-  let phaseDetector = initial.phaseDetector ?? createPhaseDetectorState()
-  let repCounter = initial.repCounter ?? createRepCounterState()
-  const poseConfidenceSamples: number[] = []
-  const postureSamples: PostureFrameSample[] = []
-  const frameTrace = createFrameTraceCollector()
-  const landmarkQuality: LandmarkQualityFrame[] = []
-  let prevFrame: PoseFrame | null = null
-
-  for (const inputFrame of frames) {
-    // Per-frame quality (M26): derived alongside the loop, attached to a COPY
-    // of the frame (inputs are never mutated), and never consulted by the FSM.
-    const quality = assessLandmarkQuality(inputFrame, prevFrame)
-    landmarkQuality.push(quality)
-    prevFrame = inputFrame
-    const frame: PoseFrame = inputFrame.quality
-      ? inputFrame
-      : { ...inputFrame, quality }
-
-    poseConfidenceSamples.push(frame.poseConfidence)
-
-    // 3D posture stream is additive — never gates the 2D pipeline.
-    const postureSample = extractPostureFrame(frame)
-    if (postureSample) {
-      postureSamples.push(postureSample)
-    }
-
-    const angles = getJointAngles(frame)
-    const hipY = computeHipY(frame)
-
-    const phaseResult = updatePhaseDetector(phaseDetector, {
-      kneeAngle: trackingKneeAngle(angles),
-      hipY,
-      timestamp: frame.timestamp,
-    })
-    phaseDetector = phaseResult.state
-
-    const repResult = updateRepCounter(repCounter, {
-      phase: phaseResult.phase,
-      transitioned: phaseResult.transitioned,
-      frame,
-      angles,
-      hipY,
-      smoothedKneeAngle: phaseResult.smoothedKneeAngle,
-      standingKneeBaseline: phaseDetector.standingKneeAngle,
-      standingHipY: phaseDetector.standingHipY,
-    })
-    repCounter = repResult.state
-
-    frameTrace.record(frame, angles, phaseResult.phase)
-  }
-
-  return {
-    reps: repCounter.reps,
-    poseConfidenceSamples,
-    postureSamples,
-    frameTrace: frameTrace.build(),
-    repRejections: repCounter.rejections,
-    landmarkQuality,
-  }
+  return runCyclicPipelineOnFrames(frames, SQUAT_CYCLIC_CONFIG, initial)
 }
 
 /**

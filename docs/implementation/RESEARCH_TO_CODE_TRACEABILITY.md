@@ -49,7 +49,7 @@ experimental unless stated.
 | Timestamp-driven completion/seating gates | R02 | `web/src/analysis/` (M17 changes) | M17 | implemented | experimental |
 | Asymmetry / laterality (2D image-space) | R01, R03 | `web/src/analysis/asymmetryDetector.ts` | orig M12 | implemented | experimental |
 | 3D posture reads (hinge ratio, trunk stability, smoothness) | R01, R02 | `web/src/analysis/posture/` | M21 wave | implemented | experimental |
-| Shared cyclic segmentation engine (movement-agnostic) | R01, R02 | `web/src/analysis/movement/` (seed) | M42 | planned | — |
+| Shared cyclic segmentation engine (movement-agnostic) | R01, R02 | `web/src/analysis/cyclic/cyclicEngine.ts` (+ `analysis/movement/` profiles) | M42 | implemented — squat parity golden-locked | experimental |
 
 ## Metric engine (R03)
 
