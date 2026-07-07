@@ -1,5 +1,13 @@
-import { Suspense, lazy, useCallback, useEffect, useRef, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import {
+  Suspense,
+  lazy,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { buildSessionResult } from '../session/buildSessionResult'
 import { Button } from '../components/Button'
 import { DisclaimerBanner } from '../components/DisclaimerBanner'
@@ -33,6 +41,7 @@ import {
   createFreshAnalysisPipeline,
 } from '../analysis/setActivation'
 import { poseEngine } from '../cv/poseEngine'
+import { createCameraSource } from '../camera/cameraSourceFactory'
 import { createLiveStreamFilter } from '../cv/landmarkFilter'
 import {
   createTape,
@@ -78,6 +87,8 @@ const PoseScene3D = lazy(() => import('../components/PoseScene3D'))
 const FRONT_CAMERA_MIRROR = false
 const HIP_TRAIL_MAX_SAMPLES = 90
 const DEPTH_HISTORY_MAX_SAMPLES = 300
+const FIXTURE_CANVAS_WIDTH = 640
+const FIXTURE_CANVAS_HEIGHT = 360
 
 function syncCanvasToVideo(
   video: HTMLVideoElement,
@@ -98,6 +109,13 @@ function syncCanvasToVideo(
 
 export function CameraScreen() {
   const navigate = useNavigate()
+  const location = useLocation()
+  // Frame provider: real webcam in production; deterministic fixture sources
+  // in dev/test via ?source=… (policy lives in cameraSourceSelection).
+  const cameraSource = useMemo(
+    () => createCameraSource(location.search),
+    [location.search],
+  )
   const videoRef = useRef<HTMLVideoElement | null>(null)
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
   const initialPipelineRef = useRef(createFreshAnalysisPipeline())
@@ -108,7 +126,6 @@ export function CameraScreen() {
   const poseConfidenceSamplesRef = useRef<number[]>([])
   const postureSamplesRef = useRef<PostureFrameSample[]>([])
   const isFinishingRef = useRef(false)
-  const streamRef = useRef<MediaStream | null>(null)
   const liveFilterRef = useRef(createLiveStreamFilter())
   const pose3DRef = useRef(createEmptyPose3DRef())
   const tapeRecorderRef = useRef(createTapeRecorder())
@@ -149,6 +166,13 @@ export function CameraScreen() {
   const repFeedbackMessageRef = useRef<string | null>(null)
 
   useEffect(() => {
+    // Pose-tape fixture sources return recorded frames directly — the
+    // MediaPipe model is neither needed nor downloaded for them.
+    if (!cameraSource.requiresPoseModel) {
+      setIsModelLoading(false)
+      return
+    }
+
     async function initModel() {
       setIsModelLoading(true)
       try {
@@ -163,82 +187,35 @@ export function CameraScreen() {
       }
     }
     initModel()
-  }, [])
+  }, [cameraSource])
 
   useEffect(() => {
-    let activeStream: MediaStream | null = null
     let cancelled = false
-
-    async function attachStreamToVideo(stream: MediaStream): Promise<boolean> {
-      const video = videoRef.current
-      if (!video) return false
-
-      video.srcObject = stream
-      try {
-        await video.play()
-        return true
-      } catch (playErr: unknown) {
-        console.error('Error playing camera preview:', playErr)
-        return false
-      }
-    }
 
     async function startCamera() {
       setIsLoading(true)
       setError(null)
-      streamRef.current = null
 
-      if (!navigator.mediaDevices?.getUserMedia) {
+      const video = videoRef.current
+      if (!video) {
         setError(
-          'Camera access is not available. Open this site over HTTPS and use a supported browser.',
+          'Could not start the camera preview. Allow camera access in your browser, then try again.',
         )
         setIsLoading(false)
         return
       }
 
       try {
-        const mediaStream = await navigator.mediaDevices.getUserMedia({
-          video: {
-            width: { ideal: 1280 },
-            height: { ideal: 720 },
-            facingMode: 'user',
-          },
-          audio: false,
-        })
-
-        if (cancelled) {
-          mediaStream.getTracks().forEach((track) => track.stop())
-          return
-        }
-
-        activeStream = mediaStream
-        streamRef.current = mediaStream
-
-        const attached = await attachStreamToVideo(mediaStream)
-        if (!attached && !cancelled) {
-          setError(
-            'Could not start the camera preview. Allow camera access in your browser, then try again.',
-          )
-        }
+        // The source maps acquisition failures (permission denied, no
+        // device, playback) to the existing user-facing error copy.
+        await cameraSource.attach(video)
       } catch (err: unknown) {
-        console.error('Error accessing camera:', err)
-        const error = err as { name?: string; message?: string }
-        if (
-          error.name === 'NotAllowedError' ||
-          error.name === 'PermissionDeniedError'
-        ) {
+        if (!cancelled) {
           setError(
-            'Camera permission denied. Click the camera icon in the address bar, allow access for this site, then press Try again.',
+            err instanceof Error && err.message
+              ? err.message
+              : 'Unable to access camera: Unknown error',
           )
-        } else if (
-          error.name === 'NotFoundError' ||
-          error.name === 'DevicesNotFoundError'
-        ) {
-          setError(
-            'No camera device found. Please connect a webcam and try again.',
-          )
-        } else {
-          setError(`Unable to access camera: ${error.message || 'Unknown error'}`)
         }
       } finally {
         if (!cancelled) {
@@ -251,32 +228,20 @@ export function CameraScreen() {
 
     return () => {
       cancelled = true
-      if (activeStream) {
-        activeStream.getTracks().forEach((track) => track.stop())
-      }
-      streamRef.current = null
-      if (videoRef.current) {
-        videoRef.current.srcObject = null
-      }
+      cameraSource.stop()
     }
-  }, [cameraAttempt])
+  }, [cameraAttempt, cameraSource])
 
   useEffect(() => {
-    const stream = streamRef.current
-    if (!stream || isLoading || error) return
+    if (isLoading || error) return
+    const video = videoRef.current
+    if (!video) return
 
-    void (async () => {
-      const video = videoRef.current
-      if (!video || video.srcObject === stream) return
-
-      video.srcObject = stream
-      try {
-        await video.play()
-      } catch (playErr: unknown) {
-        console.error('Error resuming camera preview:', playErr)
-      }
-    })()
-  }, [isLoading, isModelLoading, error])
+    // Re-attach after loading/error state flips; attach() is idempotent.
+    void cameraSource.attach(video).catch((playErr: unknown) => {
+      console.error('Error resuming camera preview:', playErr)
+    })
+  }, [isLoading, isModelLoading, error, cameraSource])
 
   useEffect(() => {
     const video = videoRef.current
@@ -423,14 +388,31 @@ export function CameraScreen() {
       const video = videoRef.current
       const canvas = canvasRef.current
 
-      if (video && video.readyState >= 2 && poseEngine.getReadyState() && canvas) {
+      const sourceReady =
+        !cameraSource.requiresPoseModel || poseEngine.getReadyState()
+
+      const videoReady =
+        cameraSource.kind === 'real-camera'
+          ? video !== null && video.readyState >= 2
+          : true
+
+      if (video && videoReady && sourceReady && canvas) {
         if (!syncCanvasToVideo(video, canvas)) {
-          animationFrameId = requestAnimationFrame(runLoop)
-          return
+          // Fixture sources may not drive video metadata/readyState the same
+          // way as getUserMedia; keep deterministic analysis running with a
+          // stable fallback canvas size without altering real camera behavior.
+          if (cameraSource.kind === 'real-camera') {
+            animationFrameId = requestAnimationFrame(runLoop)
+            return
+          }
+          if (canvas.width === 0 || canvas.height === 0) {
+            canvas.width = FIXTURE_CANVAS_WIDTH
+            canvas.height = FIXTURE_CANVAS_HEIGHT
+          }
         }
 
         const timestamp = performance.now()
-        const rawFrame = poseEngine.detect(video, timestamp, frameIndex)
+        const rawFrame = cameraSource.getFrame(timestamp, frameIndex)
         // Smooth landmark jitter in real time (One-Euro) before any analysis.
         const poseFrame = rawFrame ? liveFilterRef.current.filter(rawFrame) : null
         const overlayMirrored = FRONT_CAMERA_MIRROR
@@ -750,7 +732,7 @@ export function CameraScreen() {
     return () => {
       cancelAnimationFrame(animationFrameId)
     }
-  }, [isLoading, isModelLoading, error, showDebug])
+  }, [isLoading, isModelLoading, error, showDebug, cameraSource])
 
   const handleLoadedMetadata = () => {
     if (videoRef.current && canvasRef.current) {
@@ -833,6 +815,14 @@ export function CameraScreen() {
         </div>
       ) : (
         <>
+          {import.meta.env.DEV && cameraSource.kind !== 'real-camera' && (
+            <div
+              className="camera-fixture-label"
+              data-testid="fixture-camera-label"
+            >
+              Fixture camera: {cameraSource.label}
+            </div>
+          )}
           <div className="camera-hud--top-left">
             <SessionStatusCard
               compact

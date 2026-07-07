@@ -1346,6 +1346,23 @@ img {
   align-items: flex-end;
 }
 
+/* Dev/test-only badge shown when a fixture camera source is active. */
+.camera-fixture-label {
+  position: absolute;
+  top: var(--space-md);
+  right: var(--space-md);
+  z-index: 12;
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--radius-full);
+  border: 1px dashed var(--color-border-strong);
+  background: rgba(7, 11, 20, 0.62);
+  color: var(--color-text-muted, #9aa4b2);
+  font-family: monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.02em;
+  pointer-events: none;
+}
+
 /* Floating glass action bar */
 .camera-action-bar {
   display: flex;
