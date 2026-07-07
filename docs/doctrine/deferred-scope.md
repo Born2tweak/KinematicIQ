@@ -15,6 +15,9 @@
 | **Enterprise features / accounts / cloud sync / any backend** | Browser-only, local-persistence-only constraint | Would require a full backend/security scope change |
 | **Movement embeddings / foundation-model work** | MD #10 long-horizon research bet, not a shippable feature now | Dedicated research track with data moat + validation infra |
 | **Composite 0–100 "movement quality" score** | Permanently forbidden — hides context and uncertainty (MD #1 §4.4, MD #10) | **Never.** Not a deferral; a permanent prohibition |
+| **PDF report generation / cloud report sharing** (M33 decision) | Local-only artifact strategy; HTML+JSON cover audit and sharing without a backend or heavyweight dependency | Explicit product decision post-validation; cloud sharing additionally gated on the backend scope change above |
+| **Build-time app-version injection** | `APP_VERSION` in `export/sessionReport.ts` is a manual constant matching `web/package.json` | M46 model/algorithm version registry provides the single source |
+| **Live filtering stack upgrade** (Butterworth or alternate live filter) | Current one-euro live variant is load-bearing for tape parity | M27: a named filter candidate + replay-harness benchmark on the labeled tape suite showing improvement |
 
 ## Explicitly not-refactored in this build (leave working as-is)
 

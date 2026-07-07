@@ -22,14 +22,15 @@ and finding rules to a runtime analysis profile.
 
 | Layer | What it does |
 |---|---|
-| **Capture** (`cv/`) | MediaPipe pose estimation, landmark filtering, capture-readiness checks |
-| **Analysis** (`analysis/`) | Pure math: angles, phase FSM, rep counting + validation gates, asymmetry |
+| **Capture** (`cv/`, `camera/`) | MediaPipe pose estimation, landmark filtering + quality scoring, capture-readiness checks; pluggable camera sources (real webcam or pose-tape fixtures for deterministic testing) |
+| **Analysis** (`analysis/`) | Pure math: angles, phase FSM, rep counting + validation gates, asymmetry, 3D posture reads |
 | **Protocols** (`protocols/`) | Registry of movements: squat available; hipHinge/jump/sprint planned (analyze throws) |
 | **Metrics** (`metrics/`) | Per-protocol `MetricResult[]` — value, confidence, provenance, validation tier |
-| **Findings** (`findings/`) | Rules that turn metrics into observation-language findings + coaching cues |
-| **Session** (`session/`) | Set quality gate (full abstain on untrustworthy recordings), result assembly |
+| **Findings** (`findings/`) | Rules that turn metrics into observation-language findings, root-cause concept cards, coaching cues |
+| **Session** (`session/`) | Set quality gate (full abstain on untrustworthy recordings), result assembly, personal baseline with MDC-aware change language |
 | **Storage** (`storage/`) | Opt-in local history (IndexedDB) with delete-all; nothing leaves the device |
-| **Eval** (`eval/`) | Pose tapes: deterministic replay, live/replay parity, tape regression tests |
+| **Export** (`export/`) | Session report as versioned JSON + self-contained offline HTML |
+| **Eval** (`eval/`) | Pose tapes: deterministic replay, live/replay parity, labeled ground-truth suite |
 
 ---
 
@@ -49,6 +50,8 @@ KinematicIQ/
 │   │   ├── feedback/     # Confidence-gated coaching cues
 │   │   ├── session/      # Quality gate + SessionResult assembly
 │   │   ├── storage/      # Local-only session history (IndexedDB)
+│   │   ├── export/       # Session report export (versioned JSON + offline HTML)
+│   │   ├── camera/       # Pluggable camera sources (webcam / pose-tape fixtures)
 │   │   ├── eval/         # Pose-tape record/replay harness
 │   │   ├── screens/      # Landing, Camera, Upload, Results, History
 │   │   └── components/   # UI building blocks (report cards, tabs, picker…)
@@ -68,9 +71,10 @@ KinematicIQ/
 ```bash
 cd web
 npm install
-npm run dev      # http://localhost:5173/
-npm run build    # tsc + vite build
-npm test         # vitest run (+ coverage thresholds)
+npm run dev              # http://localhost:5173/
+npm run build            # tsc + vite build
+npm test                 # vitest run (+ coverage thresholds)
+npm run test:e2e:camera  # Playwright camera flow via pose-tape fixtures (no webcam)
 ```
 
 ---
@@ -98,11 +102,16 @@ cd web && npm run dev
 
 ## Status
 
-🟢 **Protocol platform v1** — squat analysis end-to-end (live + upload +
-replay), core schemas, protocol/metric/finding engines, progressive-disclosure
-report, local history, and planned-protocol stubs. See
-`docs/implementation/progress/` for the milestone-by-milestone record and
-`docs/doctrine/deferred-scope.md` for what is deliberately not built.
+🟢 **Protocol platform v1+** (through M33 of the master roadmap) — squat
+analysis end-to-end (live + upload + replay), core schemas,
+protocol/metric/finding engines, progressive-disclosure report, capture
+readiness v2, per-frame landmark quality, personal baseline with MDC-aware
+change language, local report export (offline HTML + versioned JSON), and
+deterministic camera testing via pose-tape fixtures.
+
+Program source of truth: `docs/implementation/KINEMATICIQ_MASTER_EXECUTION_ROADMAP.md`
+(M25–M60). Milestone-by-milestone record: `docs/implementation/progress/`.
+What is deliberately not built: `docs/doctrine/deferred-scope.md`.
 
 ---
 

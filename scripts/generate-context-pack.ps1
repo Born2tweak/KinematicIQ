@@ -1,3 +1,10 @@
+# DEPRECATED (M34, 2026-07-06): this generator encodes the pre-protocol-platform
+# milestone model (old M1-M18) and the retired "no persistence / squat only"
+# rules. Running it would overwrite the hand-maintained docs/00_context_pack.md
+# with stale content. Kept for reference only; exits without writing.
+Write-Error "DEPRECATED: docs/00_context_pack.md is hand-maintained since M34. This generator would overwrite it with stale pre-platform content. Aborting."
+exit 1
+
 # Generates docs/00_context_pack.md by introspecting the repo.
 # Run from repo root: powershell -NoProfile -File scripts\generate-context-pack.ps1
 

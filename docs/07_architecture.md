@@ -1,11 +1,14 @@
 # KinematicIQ — Architecture Document
 
-> **Revised 2026-07-05 (protocol platform, M0–M11).** Updated for the
-> protocol-engine architecture: new `core/`, `protocols/`, `metrics/`,
-> `findings/`, and `storage/` modules, routes `/`, `/camera`, `/upload`,
-> `/results`, `/history`, and a progressive-disclosure report. Doctrine lives
-> in `docs/doctrine/`; source specs in `docs/research/`; the build record in
-> `docs/implementation/progress/`.
+> **Revised 2026-07-06 (M34 docs sync — current through M33).** Protocol-engine
+> architecture with `core/`, `protocols/`, `metrics/`, `findings/`, `storage/`,
+> `export/` (M33 report artifact), and `camera/` (pluggable sources for
+> deterministic testing) modules; routes `/`, `/camera`, `/upload`, `/results`,
+> `/history`; progressive-disclosure report with personal baseline (M31) and
+> MDC-aware change language (M32). Doctrine lives in `docs/doctrine/`; source
+> specs in `docs/research/`; the build record in `docs/implementation/progress/`.
+> Sections 5–8 describe module responsibilities; filenames are illustrative of
+> the current TypeScript modules listed in §2.
 
 ## 1. Architecture Overview
 
@@ -137,6 +140,13 @@ web/
 │   ├── storage/                      # Local history (M9)
 │   │   ├── sessionStore.ts           # Versioned records; IndexedDB or memory adapter
 │   │   └── historyView.ts            # History rows + hedged observation line
+│   ├── export/                       # Report artifact (M33)
+│   │   ├── sessionReport.ts          # Versioned ExportedSessionReport JSON + download
+│   │   └── sessionReportHtml.ts      # Self-contained offline HTML rendering
+│   ├── camera/                       # Pluggable camera sources (autonomous testing)
+│   │   ├── cameraSource.ts           # CameraSource interface
+│   │   ├── sources/                  # realCameraSource / poseTapeCameraSource
+│   │   └── fixtures/                 # Deterministic pose-tape fixtures for e2e
 │   ├── eval/                         # Replay/eval harness (pose tapes)
 │   └── test/                         # Fixtures, simulations, helpers
 ├── package.json
@@ -239,23 +249,17 @@ React Router with five routes: `/` (Landing, incl. protocol picker), `/camera`, 
 - Expose `initialize()`, `detect(videoFrame)`, `destroy()` methods
 - Handle loading errors gracefully
 
-### landmarkExtractor.js
-- Take raw MediaPipe results
-- Return structured object with named joints:
-  ```js
-  {
-    leftHip: { x, y, z, confidence },
-    rightHip: { x, y, z, confidence },
-    leftKnee: { x, y, z, confidence },
-    // ... etc
-  }
-  ```
-- Filter out landmarks below minimum confidence threshold
+### landmarkFilter.ts
+- Temporal landmark filtering (one-euro live variant; raw preserved in tapes)
+- The filtering variant applied is recorded in `Provenance.filterVariant`
+- An upgrade of the live filtering stack is gated on a replay-harness
+  benchmark (M27) — do not swap filters without tape evidence
 
-### smoother.js
-- Apply moving average (window size ~5 frames) to each landmark coordinate
-- Maintain internal buffer per landmark
-- Expose `smooth(landmarks)` that returns smoothed positions
+### landmarkQuality.ts / captureReadiness.ts
+- Per-frame landmark quality scoring (M26): visibility/coverage flags that
+  feed metric confidence
+- Capture-readiness v2 (M25): camera geometry checks before a set starts;
+  thresholds are provisional pending real-tape validation (M44–M45)
 
 ---
 
@@ -291,15 +295,17 @@ React Router with five routes: `/` (Landing, incl. protocol picker), `/camera`, 
 
 ## 7. Scoring Engine Module (`scoring/`)
 
-### scoringEngine.js
+### scoringEngine.ts
 - Input: metrics summary from metricCollector
-- Apply weighted scoring rules from scoringConfig
-- Output: `{ totalScore, components: { depth, trunkControl, kneeTracking, consistency, symmetry }, band }`
-- Each component scores 0–100 within its defined range
+- Output: **per-component evidence only** — `ComponentScores` for depth,
+  trunkControl, kneeTracking, consistency, symmetry
+- **There is no composite total and no band.** The composite 0–100 score was
+  deleted by doctrine (claims-policy: permanent prohibition); components
+  survive purely as evidence inputs for findings
 
-### scoringConfig.js
-- Define thresholds, weights, and band labels
-- Single source of truth for all scoring parameters
+### scoringConfig.ts
+- Define per-component thresholds and ranges
+- Single source of truth for scoring parameters
 - Easy to tune without touching scoring logic
 
 ---
@@ -382,10 +388,10 @@ poseEngine → landmarkExtractor → smoother → angleCalculator
 ```
 
 ### Rules
-- **pose/** modules never import from **analysis/**, **scoring/**, or **feedback/**
+- **cv/** modules never import from **analysis/**, **scoring/**, or **feedback/**
 - **analysis/** modules never import from **scoring/** or **feedback/**
 - **scoring/** modules never import from **feedback/**
-- **feedback/** modules never import from **pose/** or **analysis/**
+- **feedback/** modules never import from **cv/** or **analysis/**
 - **components/** never contain business logic — they receive props and render
 - **screens/** orchestrate components and connect to logic modules
 - **utils/** is imported by anyone but imports nothing from the app
@@ -410,21 +416,27 @@ poseEngine → landmarkExtractor → smoother → angleCalculator
 
 | If you need to... | Put it in... |
 |--------------------|-------------|
-| Initialize or run pose estimation | `pose/poseEngine.js` |
-| Extract specific landmarks from raw results | `pose/landmarkExtractor.js` |
-| Smooth noisy landmark data | `pose/smoother.js` |
-| Calculate a joint angle | `analysis/angleCalculator.js` |
-| Detect squat phases | `analysis/phaseDetector.js` |
-| Count reps | `analysis/repCounter.js` |
-| Compare left vs. right sides | `analysis/asymmetryDetector.js` |
-| Aggregate metrics after a set | `analysis/metricCollector.js` |
-| Calculate movement quality score | `scoring/scoringEngine.js` |
-| Change scoring thresholds or weights | `scoring/scoringConfig.js` |
-| Generate coaching feedback | `feedback/feedbackEngine.js` |
-| Edit feedback wording | `feedback/feedbackTemplates.js` |
-| Calculate confidence levels | `feedback/confidenceCalculator.js` |
-| Do vector math or angle math | `utils/mathUtils.js` |
-| Define landmark indices or constants | `utils/constants.js` |
+| Initialize or run pose estimation | `cv/poseEngine.ts` |
+| Filter noisy landmark data | `cv/landmarkFilter.ts` |
+| Score per-frame landmark quality | `cv/landmarkQuality.ts` |
+| Check camera geometry before a set | `cv/captureReadiness.ts` |
+| Calculate a joint angle | `analysis/angles.ts` / `analysis/geometry.ts` |
+| Detect squat phases | `analysis/phaseDetector.ts` (thresholds evidence-gated) |
+| Count reps | `analysis/repCounter.ts` (gates evidence-gated) |
+| Compare left vs. right sides | `analysis/asymmetryDetector.ts` |
+| Aggregate metrics after a set | `analysis/metricCollector.ts` |
+| Add a movement-agnostic schema | `core/` |
+| Register or define a protocol | `protocols/` |
+| Define a metric or build `MetricResult`s | `metrics/` |
+| Write a finding rule | `findings/` |
+| Compute per-component evidence (no composite) | `scoring/scoringEngine.ts` |
+| Generate coaching feedback | `feedback/feedbackEngine.ts` |
+| Classify set quality / abstain | `session/setQualityGate.ts` |
+| Compare against the athlete's own history | `session/baseline.ts` + `session/changeDetection.ts` |
+| Persist or list saved sessions | `storage/sessionStore.ts` |
+| Export a session report artifact | `export/sessionReport.ts` |
+| Add a camera source or test fixture | `camera/` |
+| Record/replay pose tapes | `eval/` |
 | Render full-screen views | `screens/` |
 | Render reusable UI elements | `components/` |
 
@@ -436,7 +448,7 @@ poseEngine → landmarkExtractor → smoother → angleCalculator
 |-----------|-----|
 | Redux, Zustand, or other state libs | useState/useRef is sufficient |
 | Backend server or API routes | Fully client-side |
-| Database or ORM | No persistence needed |
+| Server-side database or ORM | Persistence is local-only IndexedDB (M9), opt-in, on-device |
 | Authentication (Clerk, Auth0, etc.) | No user accounts |
 | Docker or containerization | Vercel deployment only |
 | Storybook | No component library needed yet |

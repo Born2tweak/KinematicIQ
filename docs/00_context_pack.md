@@ -1,182 +1,97 @@
-﻿# KinematicIQ Context Pack
-<!-- AUTO-GENERATED 2026-07-02 22:31 â€” do not hand-edit, run scripts/generate-context-pack.ps1 -->
+# KinematicIQ Context Pack
+
+<!-- Hand-maintained as of M34 (2026-07-06). The former generator
+     (scripts/generate-context-pack.ps1) is DEPRECATED — it encodes the
+     pre-protocol-platform milestone model (old M1–M18) and must not be run;
+     it would overwrite this file with stale content. Update this file by
+     hand as part of each docs-sync milestone. -->
 
 ## Workspace
+
 | Key | Value |
 |-----|-------|
 | Repo | `C:\Users\acetu\KinematicIQ` / https://github.com/Born2tweak/KinematicIQ.git |
 | Branch | `master` |
-| App | `web/` â€” Vite + React + TS â€” `npm run dev` -> http://localhost:5173/ |
+| App | `web/` — Vite + React + TypeScript — `npm run dev` → http://localhost:5173/ |
 | Pose engine | MediaPipe `@mediapipe/tasks-vision` (on-device, no backend) |
-| Session start | Auto-start + auto-finish (calibrate -> squat -> stand still to end; Finish Now backup) |
+| Routes | `/` `/camera` `/upload` `/results` `/history` |
+| Tests | `npm test` (vitest, 56 files / 353 tests green at M33) + `npm run test:e2e:camera` (Playwright fixtures, no webcam) |
 
 ## Product
-Browser-only **bodyweight squat** analyzer. Camera -> MediaPipe Pose -> angles -> phases -> reps -> metrics -> score -> coaching. No backend, no auth, no persistence.
 
-## Milestones (1-17 done, next: 18 - Cleanup)
-| # | Name | Status |
-|---|------|--------|
-| 1 | App shell + routing | **Done** |
-| 2 | Camera + preview | **Done** |
-| 3 | Pose estimation | **Done** |
-| 4 | Skeleton overlay | **Done** |
-| 5 | Joint angle math | **Done** |
-| 6 | Phase detection | **Done** |
-| 7 | Rep counting | **Done** |
-| 8 | Auto-start + debug | **Done** |
-| 9 | Scoring engine | **Done** |
-| 10 | Feedback engine | **Done** |
-| 11 | Results wiring | **Done** |
-| 12 | Session metrics | **Done** |
-| 13 | Polish + responsive | **Done** |
-| 14 | Testing + scoring transparency | **Done** |
-| 15 | UI polish (results/camera) | **Done** |
-| 16 | Planning (video + outreach) | **Done** |
-| 17 | Video upload impl | **Done** |
-| 18 | Cleanup | Not started |
+Browser-only **movement analysis platform** organized as a protocol engine.
+Squat is the available protocol; hip hinge / jump / sprint are registered
+stubs (`analyze` throws). Camera or upload → MediaPipe Pose → angles → phases
+→ reps → keyed `MetricResult[]` → observation-language `Finding[]` → tabbed
+report (Summary / Evidence / Expert). **Verdict-or-abstain:** an
+untrustworthy recording produces a full abstain, not a hedged report. No
+composite score exists anywhere — permanently forbidden.
 
-## Divergences (repo vs docs)
-| Topic | Docs say | Repo has |
-|-------|----------|----------|
-| Language | JS | **TypeScript** |
-| Routing | State in App | **react-router-dom** `/` `/camera` `/upload` `/results` |
-| Pose folder | `pose/` | **`cv/`** |
-| Analysis | not specified | **`analysis/`** |
-| Session start | manual button | **auto-start FSM** |
-| Results | mock in early docs | **live ``buildSessionResult`` via router state** |
+Persistence is **opt-in and local-only**: explicit "Save to history" writes a
+versioned record to IndexedDB with a delete-all control (M9/M31). Nothing is
+uploaded, ever. Session reports export as self-contained HTML/JSON (M33);
+pose tapes export separately as JSON.
 
-## Key contracts
-`poseEngine`: `initialize()` / `getReadyState()` / `detect(video, ts, frame)` -> `PoseFrame | null`
-`PoseFrame`: `{ landmarks, worldLandmarks, poseConfidence, timestamp, frameIndex }`
-`updatePhaseDetector(state, { kneeAngle, hipY, timestamp })` -> `{ phase, transitioned, smoothedKneeAngle, state }` (learns `standingKneeAngle`)
-`updateRepCounter(state, { phase, transitioned, frame, angles, hipY, smoothedKneeAngle, standingKneeBaseline, standingHipY })` -> `{ repCount, reps, completedRep, state }`
-`updateAutoStart(state, ...)` -> `{ phase, transitioned, activatedByDescent, state }`
-`activateAnalysisPipeline(...)` â€” seeds rep 1 when ACTIVE starts mid-descent
-`buildSessionResult(reps, poseConfidenceSamples)` -> `SessionResult` (scoring + feedback + metrics)
-`updateAutoFinish(...)` â€” stand still 5s then 3s countdown -> navigate `/results`
+## Program status (master roadmap M25–M60)
 
-## Architecture
-**Phase FSM**: calibrated lockout knee (upright baseline -12 deg, min 152) | BOTTOM <105 deg | EMA 0.35 | 4-frame lockout debounce
-**Auto-start**: WAITING -> CALIBRATING (60 frames) -> READY -> ACTIVE (`activatedByDescent` preserves first rep)
-**Rep completion**: phase STANDING transition OR 4 near-standing frames after bottom (grace lockout)
-**Auto-finish**: >=1 rep + stable STANDING 5s + countdown 3..1 (squat again cancels)
-**Rejection**: knee-lift, chair/seated, duration 500ms-8s, avg pose confidence, must reach bottom
-**Debug** (toggle in CameraScreen): candidate rep, blocking gate, missed-rep reason, validation gates
+Source of truth: `docs/implementation/KINEMATICIQ_MASTER_EXECUTION_ROADMAP.md`.
+Per-milestone record: `docs/implementation/progress/` (one note per milestone).
 
-## Gaps
-- Expert outreach is doc-only (docs/expert_outreach.md)
+| Range | Status |
+|---|---|
+| M00–M24 | Done — platform schemas, protocol/metric/finding engines, report UX, history, labeled ground truth, metric expansion, coaching intelligence |
+| M25–M26 | Done — capture readiness v2, per-frame landmark quality |
+| M27 | Blocked — needs a filter candidate + real-tape benchmark evidence |
+| M28–M30 | Blocked on the M39–M43 protocol runtime |
+| M31–M33 | Done — personal baseline, MDC-aware trends, local report export |
+| M34 | Done — this docs sync |
+| M35+ | Not started |
 
-## Planning & reference docs
-- `docs/scoring_notes.md`
-- `docs/video_upload_plan.md`
-- `docs/expert_outreach.md`
+## Key contracts (current)
 
-## File tree (77 files in `web/src/`)
-```
-analysis/
-  angles.test.ts
-  angles.ts
-  asymmetryDetector.ts
-  autoFinish.test.ts
-  autoFinish.ts
-  autoStart.test.ts
-  autoStart.ts
-  geometry.test.ts
-  geometry.ts
-  metricCollector.ts
-  phaseDetector.test.ts
-  phaseDetector.ts
-  repCounter.test.ts
-  repCounter.ts
-  setActivation.test.ts
-  setActivation.ts
-  squatRegressions.test.ts
-  stats.ts
-  videoAnalyzer.test.ts
-  videoAnalyzer.ts
-components/
-  landing/
-    LiveSquatDemo.tsx
-    SessionDemoPlayer.tsx
-    SquatFigure.tsx
-    squatPose.ts
-  AppShell.tsx
-  Button.tsx
-  Card.tsx
-  ConfidenceBadge.tsx
-  DepthSparkline.tsx
-  DisclaimerBanner.tsx
-  FeedbackCard.tsx
-  PoseScene3D.tsx
-  RepCounter.tsx
-  ScoreDisplay.tsx
-  SessionStatusCard.tsx
-  SkeletonOverlay.tsx
-cv/
-  drawCalibration.ts
-  drawDebugOverlay.ts
-  drawSkeleton.ts
-  landmarkFilter.test.ts
-  landmarkFilter.ts
-  pose3d.test.ts
-  pose3d.ts
-  poseConnections.ts
-  poseEngine.ts
-  types.ts
-  videoFrameSource.ts
-eval/
-  metrics.ts
-  poseTape.ts
-  replayHarness.test.ts
-  replayHarness.ts
-feedback/
-  confidenceCalculator.ts
-  feedbackEngine.ts
-  feedbackReasoning.test.ts
-  feedbackReasoning.ts
-  feedbackTemplates.ts
-scoring/
-  scoringConfig.ts
-  scoringEngine.test.ts
-  scoringEngine.ts
-  scoringExplanations.test.ts
-  scoringExplanations.ts
-screens/
-  CameraScreen.tsx
-  cameraSessionUi.ts
-  LandingScreen.tsx
-  ResultsScreen.tsx
-  UploadScreen.tsx
-session/
-  buildSessionResult.test.ts
-  buildSessionResult.ts
-  types.ts
-test/
-  fixtures/
-    poseFixtures.ts
-  helpers/
-    squatPipeline.ts
-  squatFixtures.ts
-  squatSimulation.ts
-App.tsx
-index.css
-main.tsx
-vite-env.d.ts
-```
+- `core/` — movement-agnostic schemas: `Confidence`, `Provenance`,
+  `MetricDefinition`/`MetricResult`, `ProtocolDefinition`, `Finding`
+- `protocols/registry.ts` — `getProtocol` / `listProtocols`; squat available,
+  stubs throw `NotImplementedError`
+- `session/setQualityGate.ts` — valid / questionable / invalid; **invalid ⇒
+  full abstain** (no posture, no metrics summary, no coaching)
+- `session/buildSessionResult.ts` — assembles `SessionResult`
+- `session/baseline.ts` + `session/changeDetection.ts` — self-referenced
+  history deltas with MDC-aware "within noise / possible change" language
+- `export/sessionReport.ts` + `sessionReportHtml.ts` — versioned JSON +
+  self-contained offline HTML report artifact
+- `camera/` — pluggable camera sources: real webcam or pose-tape fixtures
+  (deterministic, drives Playwright e2e without hardware)
+- `eval/poseTape.ts` — replayable audit-trail recording; extend additively
+  only, with a version bump
 
-## Rules
-1. Squat only, client-side only, no persistence
-2. Extend TS + `cv/` + `analysis/` + router structure
-3. One milestone at a time
-4. Do not invent backend, auth, storage, or extra movements
-5. Do not refactor unrelated working code
+## Doctrine (locked — read before writing any user-facing copy)
 
-## Agent paste block
-```
-KinematicIQ â€” Repo: C:\Users\acetu\KinematicIQ (master, pull first)
-App: web/ â€” npm run dev -> http://localhost:5173/
-READ: docs/00_context_pack.md (auto-generated ground truth)
-State: M1-17 done. Next: M18 (Cleanup).
-Results: live session via buildSessionResult.
-No backend/auth/storage. Folders: cv/, analysis/, scoring/, feedback/, session/.
-```
+- `docs/doctrine/claims-policy.md` — observation language only; forbidden:
+  diagnosis, injury risk, pathology, kinetics, muscle activation, normative
+  comparison, composite scores. Validation tiers gate language.
+- `docs/doctrine/movement-ontology.md` — reasoning-layer rules.
+- `docs/doctrine/deferred-scope.md` — the do-not-build ledger.
+- `docs/research/` — 11 immutable source specs. Never edit.
+
+## Do not refactor yet
+
+| Item | Why |
+|---|---|
+| Rep-counting gates (`analysis/repCounter.ts`) | Open validation findings #5/#6 pending labeled data |
+| Phase-detector thresholds (`analysis/phaseDetector.ts`) | Same evidence gate |
+| Pose-tape format (`eval/poseTape.ts`) | Audit trail; additive changes + version bump only |
+| MediaPipe engine (`cv/poseEngine.ts`) | Pose-model swap requires a replay-harness benchmark first |
+| Legacy `metrics`/`scoring` dual-write in `SessionResult` | Consumed by report until M40 SessionResult v2 lands |
+| Capture-readiness geometry thresholds (`cv/captureReadiness.ts`) | Provisional pending real-tape validation (M44–M45) |
+
+## Rules for agents
+
+1. One milestone at a time; verify status against `docs/implementation/progress/` first.
+2. Quality gates from `web/`: `npm run build` clean + `npm test` green; camera
+   changes also `npm run test:e2e:camera`.
+3. One commit per milestone + one progress note. Never push without an
+   explicit ask. Never `git add -A`.
+4. Versioned shapes (`schemaVersion`) — bump on change, never silently reshape.
+5. Rep gates / phase thresholds change only with labeled-tape evidence.
+6. No backend, no auth, no cloud, no composite score, no pose-model swap.

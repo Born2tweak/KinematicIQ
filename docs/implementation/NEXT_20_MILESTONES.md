@@ -1,18 +1,22 @@
 # Next 20 milestones — M15–M34 (planned 2026-07-06)
 
-## Execution status (updated 2026-07-06)
+> **SUPERSEDED (M34):** `KINEMATICIQ_MASTER_EXECUTION_ROADMAP.md` (M25–M60)
+> is now the program-level source of truth. This file is kept as the
+> historical plan for M15–M34; do not plan new work from it.
 
-**Done, one green commit each:** M15, M16, M17, M18, M19, M20, M21, M22,
-M23, M24, and M31 (pulled forward — self-contained). Batch-eval-driven
+## Execution status (final reconciliation, 2026-07-06 / M34)
+
+**Done, one green commit each:** M15–M26, M31, M32, M33. Batch-eval-driven
 M12–M14 preceded this roadmap. Labeled 9-tape suite has stayed **9/9 exact**
-since M16; tests 50 files / 281 passing.
+since M16; tests 56 files / 353 passing at M33.
 
-**Remaining:** M25 (capture readiness v2), M26 (per-frame landmark quality),
-M27 (benchmark-gated filter upgrade), M28 (sit-to-stand protocol), M29
-(hip-hinge protocol), M30 (jump/CMJ protocol), M32 (MDC-aware trends), M33
-(local report export), M34 (docs/doctrine sync). Progress notes:
+**Carried into the master roadmap:** M27 (benchmark-gated filter upgrade —
+blocked on a filter candidate + real-tape benchmark evidence), M28–M30
+(sit-to-stand / hip-hinge / jump protocols — blocked on the M39–M43 protocol
+runtime). M34 (docs/doctrine sync) closed this file out. Progress notes live
+in `progress/` (one per milestone from M25 onward; earlier work is grouped in
 `progress/M12-M14-batch-eval-driven.md`, `progress/M15-M16-labeled-ground-truth.md`,
-`progress/M17-M23-metrics-and-coaching.md`.
+`progress/M17-M23-metrics-and-coaching.md`).
 
 Derived from the 11 research MDs (`docs/research/`), the deferred-scope ledger
 (`docs/doctrine/deferred-scope.md`), the M0–M11 final summary, the M12–M14
