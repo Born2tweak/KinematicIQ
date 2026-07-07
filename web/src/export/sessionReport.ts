@@ -13,6 +13,7 @@
  * (claims-policy: full abstain on invalid capture). Raw pose frames are NOT
  * included; the pose tape has its own separate export (eval/downloadTape.ts).
  */
+import { APP_VERSION, CLAIM_POLICY_VERSION } from '../core/versioning'
 import type { MetricResult } from '../core/metric'
 import type { Finding } from '../core/finding'
 import type { ProtocolId } from '../core/protocol'
@@ -34,18 +35,8 @@ export const REPORT_SCHEMA_VERSION = 1
 /** Discriminator so a stray JSON file can be recognized as one of ours. */
 export const REPORT_KIND = 'kinematiciq.session-report' as const
 
-/**
- * Which revision of docs/doctrine/claims-policy.md the exported copy was
- * written against. Bump when the doctrine doc materially changes.
- */
-export const CLAIM_POLICY_VERSION = 'claims-policy-v1'
-
-/**
- * App/build identifier stamped into every report. Matches web/package.json;
- * update together (no build-time injection exists yet — see M46 version
- * registry for the planned single source).
- */
-export const APP_VERSION = 'kinematiq-web@0.1.0'
+/** Single source is the M46 registry; re-exported for existing imports. */
+export { APP_VERSION, CLAIM_POLICY_VERSION }
 
 /** Same copy as components/DisclaimerBanner.tsx — reports carry it verbatim. */
 export const REPORT_DISCLAIMER =

@@ -13,6 +13,7 @@
  * normalized in memory only (roadmap risk: storage migration bugs can hide
  * user history — so we don't migrate storage at all).
  */
+import { ANALYSIS_ALGORITHM_VERSION } from '../core/versioning'
 import type { ProtocolId } from '../core/protocol'
 import type { Provenance } from '../core/provenance'
 import type { MetricResult } from '../core/metric'
@@ -23,12 +24,8 @@ import type { SessionResult, SetMetricsSummary } from './types'
 /** Current artifact schema. v1 = pre-M40 stored sessions (no algo version). */
 export const SESSION_ARTIFACT_SCHEMA_VERSION = 2
 
-/**
- * Identifier of the analysis pipeline that produced current results. Bump
- * when segmentation/gates/metrics change behavior. Interim scheme until the
- * M46 model/algorithm version registry becomes the single source.
- */
-export const ANALYSIS_ALGORITHM_VERSION = 'squat-pipeline-v1.m33'
+/** Single source is the M46 registry; re-exported for existing imports. */
+export { ANALYSIS_ALGORITHM_VERSION }
 
 /** Stamped on artifacts read from records saved before versioning existed. */
 export const LEGACY_ALGORITHM_VERSION = 'unversioned-legacy'

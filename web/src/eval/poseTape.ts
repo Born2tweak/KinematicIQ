@@ -9,6 +9,10 @@
  */
 import type { PoseFrame } from '../cv/types'
 import type { RepRejection } from '../analysis/repCounter'
+import {
+  ANALYSIS_ALGORITHM_VERSION,
+  APP_VERSION,
+} from '../core/versioning'
 
 /**
  * Pipeline entry state at the moment the set activated, captured so replay
@@ -54,6 +58,11 @@ export interface PoseTapeMeta {
   analysisStartFrameIndex?: number
   /** Build identifier for provenance, when available. */
   appVersion?: string
+  /**
+   * Analysis pipeline identifier at recording time (M46 registry). Additive:
+   * old tapes lack it and remain fully readable — readers never require it.
+   */
+  algorithmVersion?: string
   /** Optional hand-labeled ground truth for benchmarking. */
   truth?: {
     repCount?: number
@@ -88,7 +97,16 @@ export function createTape(
   meta: PoseTapeMeta,
   diagnostics?: PoseTapeDiagnostics,
 ): PoseTape {
-  return diagnostics ? { meta, frames, diagnostics } : { meta, frames }
+  // Version stamping (M46): additive defaults from the registry; explicit
+  // caller values win. Old tapes without these fields stay fully readable.
+  const stamped: PoseTapeMeta = {
+    appVersion: APP_VERSION,
+    algorithmVersion: ANALYSIS_ALGORITHM_VERSION,
+    ...meta,
+  }
+  return diagnostics
+    ? { meta: stamped, frames, diagnostics }
+    : { meta: stamped, frames }
 }
 
 /**

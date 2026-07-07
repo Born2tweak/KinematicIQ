@@ -9,6 +9,11 @@
  *
  * Types-only + pure helpers.
  */
+import {
+  ANALYSIS_ALGORITHM_VERSION,
+  APP_VERSION,
+  POSE_MODEL_VERSION,
+} from './versioning'
 
 /** Where the frames came from. Mirrors `PoseTapeMeta.source` values. */
 export type CaptureSource = 'live' | 'upload' | 'replay' | 'synthetic'
@@ -35,19 +40,22 @@ export interface Provenance {
   algorithmVersion?: string
 }
 
-/** The MediaPipe model this build ships (do not swap without a benchmark). */
-export const DEFAULT_MODEL_VERSION = 'mediapipe-tasks-vision-0.10'
+/** Re-exported from the M46 registry — kept for existing imports. */
+export const DEFAULT_MODEL_VERSION = POSE_MODEL_VERSION
 
 /**
- * Build a provenance record with sensible defaults. Callers override only what
- * they know; unknown fields stay absent rather than being faked.
+ * Build a provenance record with sensible defaults from the version
+ * registry (core/versioning.ts, M46). Callers override only what they
+ * know; unknown fields stay absent rather than being faked.
  */
 export function makeProvenance(
   partial: Partial<Provenance> & Pick<Provenance, 'captureSource'>,
 ): Provenance {
   return {
-    modelVersion: DEFAULT_MODEL_VERSION,
+    modelVersion: POSE_MODEL_VERSION,
     filterVariant: 'raw',
+    appVersion: APP_VERSION,
+    algorithmVersion: ANALYSIS_ALGORITHM_VERSION,
     ...partial,
   }
 }
