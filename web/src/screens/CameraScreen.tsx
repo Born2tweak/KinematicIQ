@@ -289,6 +289,9 @@ export function CameraScreen() {
       postureSamplesRef.current,
       repCounterRef.current.rejections,
       selectedProtocolIdRef.current,
+      // Matches the tape meta below: live analysis consumes One-Euro-filtered
+      // landmarks, and exported provenance must say so.
+      { captureSource: 'live', filterVariant: 'one-euro-live' },
     )
 
     // Preserve the raw session as a replayable pose tape (same substrate as

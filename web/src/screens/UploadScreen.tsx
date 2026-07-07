@@ -241,6 +241,9 @@ export function UploadScreen() {
         result.postureSamples,
         result.repRejections,
         selectedProtocolId,
+        // Matches the tape meta above: an upload analyzed offline must never
+        // export provenance claiming a live/raw capture.
+        { captureSource: 'upload', filterVariant: 'butterworth-offline' },
       )
       navigate('/results', { state: { result: sessionResult } })
     } catch (err: unknown) {

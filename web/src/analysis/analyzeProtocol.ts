@@ -15,12 +15,15 @@ import type { SegmentationOutput } from '../protocols/runtime'
 import { buildSessionResult } from '../session/buildSessionResult'
 import type { SessionResult } from '../session/types'
 import type { ProtocolId } from '../core/protocol'
+import type { CaptureContext } from '../core/provenance'
 import type { PoseFrame } from '../cv/types'
 import type { PipelineInitialState } from './videoAnalyzer'
 
 export interface AnalyzeProtocolOptions {
   /** Seeded FSM entry state (mid-descent activation / tape replay parity). */
   initial?: PipelineInitialState
+  /** Real capture source + filtering, so exported provenance is never faked. */
+  capture?: CaptureContext
 }
 
 export interface ProtocolAnalysis {
@@ -49,6 +52,7 @@ export function analyzeFramesForProtocol(
     segmentation.postureSamples,
     segmentation.repRejections,
     protocolId,
+    options.capture,
   )
   return { segmentation, result }
 }

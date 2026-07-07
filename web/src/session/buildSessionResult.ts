@@ -15,7 +15,7 @@ import { computeComponentScores } from '../scoring/scoringEngine'
 import type { RepMetrics } from '../cv/types'
 import { getActiveProtocol, getProtocol } from '../protocols/registry'
 import type { ProtocolId } from '../core/protocol'
-import { makeProvenance } from '../core/provenance'
+import { makeProvenance, type CaptureContext } from '../core/provenance'
 import { buildSquatMetricResults } from '../metrics/squatMetrics'
 import { buildPostureMetricResults } from '../metrics/postureMetrics'
 import { deriveRootCauses } from '../findings/rootCauses'
@@ -43,6 +43,7 @@ export function buildSessionResult(
   postureSamples: PostureFrameSample[] = [],
   repRejections: RepRejection[] = [],
   protocolId: ProtocolId = getActiveProtocol().definition.id,
+  capture: CaptureContext = { captureSource: 'live', filterVariant: 'raw' },
 ): SessionResult {
   const noRepsDetected = reps.length === 0
   const { score: sessionConfidenceScore, level: sessionConfidence } =
@@ -81,9 +82,11 @@ export function buildSessionResult(
   // Only squat has metric definitions today; other protocols emit none.
   // Posture proxies (M21) ride along whenever the 3D stream was usable.
   // Provenance follows the SELECTED protocol, not the active default —
-  // an explicit id must never be silently overridden (M43).
+  // an explicit id must never be silently overridden (M43). Capture source
+  // and filtering come from the capture surface: an upload analyzed with
+  // Butterworth filtering must never export as live/raw.
   const provenance = makeProvenance({
-    captureSource: 'live',
+    ...capture,
     protocolId: getProtocol(protocolId).definition.defaultObservationProtocolId,
   })
   const metricResults: MetricResult[] =

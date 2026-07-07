@@ -100,6 +100,20 @@ describe('metrics/squatMetrics', () => {
     expect(trunk.value).toBeNull()
   })
 
+  it('an abstaining metric never carries the session confidence', () => {
+    // 2026-07-06 live export: knee asymmetry was null (right knee untracked)
+    // yet shipped with a High confidence chip — a false claim.
+    const sparse: SetMetricsSummary = { ...summary, avgKneeAsymmetry: null }
+    const results = buildSquatMetricResults(sparse, makeProvenance({ captureSource: 'replay' }))
+    const asym = results.find((r) => r.metricId === 'squat.symmetry.knee-asymmetry')!
+    expect(asym.value).toBeNull()
+    expect(asym.confidence.value).toBe(0)
+    expect(asym.confidence.level).toBe('Low')
+    // Metrics that DID read still carry the session confidence.
+    const depth = results.find((r) => r.metricId === 'squat.depth.min-knee-angle')!
+    expect(depth.confidence.value).toBeCloseTo(0.82, 5)
+  })
+
   it('keeps excluded metrics with documented single-RGB reasons', () => {
     expect(SQUAT_EXCLUDED_METRICS.length).toBeGreaterThanOrEqual(2)
     for (const def of SQUAT_EXCLUDED_METRICS) {

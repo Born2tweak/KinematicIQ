@@ -205,6 +205,66 @@ describe('assessSetQuality', () => {
     expect(quality.reasons.map((r) => r.id)).toContain('phantom-candidate-churn')
   })
 
+  it('flags a rep with an impossible left/right knee difference', () => {
+    // 2026-07-06 live session rep 1: minLeft 120° vs minRight 59° (61°
+    // difference) alongside a 72° trunk-lean transient — previously passed
+    // as trusted and inflated the set's knee-asymmetry average.
+    const reps = [
+      makeRep(1, { minLeftKneeAngle: 120, minRightKneeAngle: 59, kneeAsymmetry: 61 }),
+      makeRep(2),
+      makeRep(3),
+      makeRep(4),
+    ]
+    const quality = assessSetQuality(reps)
+    expect(quality.untrustedRepNumbers).toEqual([1])
+    expect(quality.untrustedReps[0].reason).toBe('impossible-asymmetry')
+    expect(quality.trustedRepCount).toBe(3)
+    expect(quality.reasons.map((r) => r.id)).toContain('impossible-asymmetry-reps')
+    expect(quality.verdict).toBe('questionable')
+  })
+
+  it('keeps large-but-plausible knee differences trusted (session-c peaks ~35°)', () => {
+    const reps = [
+      makeRep(1, { minLeftKneeAngle: 113, minRightKneeAngle: 78, kneeAsymmetry: 35 }),
+      makeRep(2),
+      makeRep(3),
+      makeRep(4),
+    ]
+    const quality = assessSetQuality(reps)
+    expect(quality.verdict).toBe('valid')
+    expect(quality.untrustedReps).toHaveLength(0)
+  })
+
+  it('marks a set questionable when most trusted reps track only one knee', () => {
+    // 2026-07-06 live session: right knee unreadable on 8 of 9 reps, yet the
+    // set exported as "no quality concerns" while asymmetry silently abstained.
+    const reps = [
+      makeRep(1, { minRightKneeAngle: null, kneeAsymmetry: null }),
+      makeRep(2, { minRightKneeAngle: null, kneeAsymmetry: null }),
+      makeRep(3, { minRightKneeAngle: null, kneeAsymmetry: null }),
+      makeRep(4),
+    ]
+    const quality = assessSetQuality(reps)
+    expect(quality.verdict).toBe('questionable')
+    expect(quality.reasons.map((r) => r.id)).toEqual(['one-sided-knee-view'])
+    expect(quality.captureFixes.join(' ')).toMatch(/both knees/i)
+    // One-sided reps are downgraded set-level, not branded untrusted reps.
+    expect(quality.untrustedReps).toHaveLength(0)
+    expect(quality.trustedRepCount).toBe(4)
+  })
+
+  it('tolerates occasional one-sided reps in an otherwise bilateral set', () => {
+    const reps = [
+      makeRep(1, { minRightKneeAngle: null, kneeAsymmetry: null }),
+      makeRep(2),
+      makeRep(3),
+      makeRep(4),
+    ]
+    const quality = assessSetQuality(reps)
+    expect(quality.verdict).toBe('valid')
+    expect(quality.reasons).toHaveLength(0)
+  })
+
   it('classifies the real session-c set (25 reps, ~11 artifacts) as invalid', () => {
     const quality = assessSetQuality(sessionCReps(), [
       ...Array.from({ length: 46 }, (_, i) => makePhantomRejection(i)),

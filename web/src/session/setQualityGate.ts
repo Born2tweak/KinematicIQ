@@ -22,6 +22,7 @@ export type RepTrustReasonId =
   | 'no-knee-data'
   | 'standing-bottom'
   | 'impossible-flexion'
+  | 'impossible-asymmetry'
 
 /** A counted rep whose primary data cannot support any read. */
 export interface UntrustedRep {
@@ -36,6 +37,8 @@ export type SetQualityReasonId =
   | 'standing-reps-counted'
   | 'impossible-flexion-reps'
   | 'knee-less-reps'
+  | 'impossible-asymmetry-reps'
+  | 'one-sided-knee-view'
   | 'too-few-trusted-reps'
   | 'small-sample'
   | 'artifact-heavy-set'
@@ -72,11 +75,27 @@ export const STANDING_BOTTOM_KNEE_MIN = 170
 /** Bottom knee angle below this = tracking artifact (near-impossible flexion). */
 export const IMPOSSIBLE_FLEXION_KNEE_MAX = 30
 
+/**
+ * Left/right bottom-knee difference above this = one leg read straight while
+ * the other read fully bent — not a squat the camera can vouch for. Sits far
+ * outside real messy data (session-c trusted reps peak ~35°) so it only
+ * catches artifacts like the 2026-07-06 live rep 1 (61° with 72° trunk lean).
+ */
+export const IMPOSSIBLE_KNEE_ASYMMETRY_DEG = 50
+
 /** Fewer trustworthy reps than this and set-level patterns are meaningless. */
 export const MIN_TRUSTED_REPS = 3
 
 /** Untrusted fraction at or above this marks the whole recording untrustworthy. */
 export const UNTRUSTED_FRACTION_INVALID = 0.3
+
+/**
+ * When more than this fraction of trusted reps carry a knee reading from only
+ * one side, left/right comparisons were impossible for most of the set — a
+ * capture concern the report must name (2026-07-06 live session: right knee
+ * unreadable on 8 of 9 reps, yet the set exported as "no quality concerns").
+ */
+export const ONE_SIDED_KNEE_FRACTION_QUESTIONABLE = 0.5
 
 /**
  * Phantom candidates at or above this suggest sustained tracking churn.
@@ -116,16 +135,39 @@ function classifyRep(rep: RepMetrics): UntrustedRep | null {
       detail: `Rep ${rep.repNumber} recorded a ${Math.round(bottom)}° bottom knee angle — deeper than a body can fold; a tracking artifact.`,
     }
   }
+  // Both knees read, but so differently that one leg was straight while the
+  // other was fully bent — not a squat the camera can vouch for (2026-07-06
+  // live rep 1: 61° difference alongside a 72° trunk-lean transient).
+  if (
+    rep.minLeftKneeAngle !== null &&
+    rep.minRightKneeAngle !== null &&
+    Math.abs(rep.minLeftKneeAngle - rep.minRightKneeAngle) >
+      IMPOSSIBLE_KNEE_ASYMMETRY_DEG
+  ) {
+    const diff = Math.abs(rep.minLeftKneeAngle - rep.minRightKneeAngle)
+    return {
+      repNumber: rep.repNumber,
+      reason: 'impossible-asymmetry',
+      detail: `Rep ${rep.repNumber} recorded a ${Math.round(diff)}° left/right knee difference at the bottom — one leg read straight while the other read bent; a tracking artifact.`,
+    }
+  }
   return null
 }
 
-const CAPTURE_FIX_LIBRARY: Record<RepTrustReasonId | 'phantom', string> = {
+const CAPTURE_FIX_LIBRARY: Record<
+  RepTrustReasonId | 'phantom' | 'one-sided',
+  string
+> = {
   'standing-bottom':
     'Stand still between reps and keep each rep a clear down-and-up — extra movement while standing can register as reps.',
   'impossible-flexion':
     'Step back so your whole body, including your feet, stays in frame for the entire set — clipped frames distort the tracked skeleton.',
   'no-knee-data':
     'Keep both knees visible for the whole set — avoid walking toward the camera mid-set.',
+  'impossible-asymmetry':
+    'Keep both legs fully visible and unblocked for the whole set — when one leg is hidden, the tracker can invent a pose for it.',
+  'one-sided':
+    'Face the camera squarely with both knees clearly visible for the whole set — a turned stance hides one side from the camera.',
   phantom:
     'Record in steady, even lighting and keep the camera fixed — flickering tracking creates false movement.',
 }
@@ -199,6 +241,36 @@ export function assessSetQuality(
       detail: `${pluralReps(kneeless)} counted without any knee-angle reading at all.`,
     })
     fixes.add(CAPTURE_FIX_LIBRARY['no-knee-data'])
+  }
+
+  const impossibleAsymmetry = byReason('impossible-asymmetry')
+  if (impossibleAsymmetry.length > 0) {
+    reasons.push({
+      id: 'impossible-asymmetry-reps',
+      detail: `${pluralReps(impossibleAsymmetry)} recorded left/right knee differences above ${IMPOSSIBLE_KNEE_ASYMMETRY_DEG}° — one leg read straight while the other read bent; tracking artifacts.`,
+    })
+    fixes.add(CAPTURE_FIX_LIBRARY['impossible-asymmetry'])
+  }
+
+  // One-sided knee visibility: left/right comparisons need both knees. When
+  // most trusted reps carry only one side, the set cannot claim "no quality
+  // concerns" — asymmetry reads silently abstained.
+  const trustedReps = reps.filter(
+    (rep) => !untrustedRepNumbers.includes(rep.repNumber),
+  )
+  const oneSided = trustedReps.filter(
+    (rep) =>
+      (rep.minLeftKneeAngle === null) !== (rep.minRightKneeAngle === null),
+  )
+  if (
+    trustedReps.length > 0 &&
+    oneSided.length / trustedReps.length > ONE_SIDED_KNEE_FRACTION_QUESTIONABLE
+  ) {
+    reasons.push({
+      id: 'one-sided-knee-view',
+      detail: `${oneSided.length} of ${trustedReps.length} trusted reps carried a knee reading from one side only — left/right comparisons were not possible for most of this set.`,
+    })
+    fixes.add(CAPTURE_FIX_LIBRARY['one-sided'])
   }
 
   if (phantomCandidateCount >= PHANTOM_CHURN_QUESTIONABLE) {

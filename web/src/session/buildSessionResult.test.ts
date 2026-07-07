@@ -93,3 +93,22 @@ describe('buildSessionResult', () => {
     expect(result.metrics.minDepth).toBeLessThan(50)
   })
 })
+
+describe('buildSessionResult — capture provenance', () => {
+  it('threads the real capture source and filtering into every metric result', () => {
+    const reps = [makeRep(1), makeRep(2), makeRep(3)]
+    const result = buildSessionResult(
+      reps,
+      Array(12).fill(0.9),
+      [],
+      [],
+      'squat',
+      { captureSource: 'upload', filterVariant: 'butterworth-offline' },
+    )
+    expect(result.metricResults.length).toBeGreaterThan(0)
+    for (const metric of result.metricResults) {
+      expect(metric.provenance.captureSource).toBe('upload')
+      expect(metric.provenance.filterVariant).toBe('butterworth-offline')
+    }
+  })
+})

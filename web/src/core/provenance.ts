@@ -40,6 +40,16 @@ export interface Provenance {
   algorithmVersion?: string
 }
 
+/**
+ * How a session's frames were captured and filtered, supplied by the capture
+ * surface (camera / upload / replay) so exported provenance reflects what
+ * actually happened — never a hardcoded default contradicting the pose tape.
+ */
+export interface CaptureContext {
+  captureSource: CaptureSource
+  filterVariant: FilterVariant
+}
+
 /** Re-exported from the M46 registry — kept for existing imports. */
 export const DEFAULT_MODEL_VERSION = POSE_MODEL_VERSION
 

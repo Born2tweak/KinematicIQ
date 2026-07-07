@@ -83,6 +83,9 @@ export function evaluateTape(tape: PoseTape, file: string): TapeEvalRow {
     replay.poseConfidenceSamples,
     [],
     replay.repRejections,
+    undefined,
+    // Replays inherit the filtering the original analysis consumed.
+    { captureSource: 'replay', filterVariant: tape.meta.filtering ?? 'raw' },
   )
   const bottoms = bottomFrames(replay.reps)
   return {

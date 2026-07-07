@@ -117,6 +117,12 @@ experimental unless stated.
 | SMPL / digital humans / wearables / sensor fusion | R10 | — | — | **deferred** (`docs/doctrine/deferred-scope.md`) | — |
 | Backend / accounts / cloud sync / FHIR | R10, R07 | — | — | **rejected for this product scope** (ledger) | — |
 
+## Per-metric validation status
+
+Tier-by-tier detail (evidence behind each tier, failure modes, promotion
+criteria) lives in `docs/validation/METRIC_VALIDATION_STATUS.md` (M48) —
+update it in the same commit as any metric change, same rule as this matrix.
+
 ## Where decisions were recorded
 
 Implementation decisions live in `docs/implementation/progress/` (one note

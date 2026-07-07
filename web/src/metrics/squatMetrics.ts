@@ -288,14 +288,18 @@ export function buildSquatMetricResults(
     Math.min(1, Math.max(0, summary.overallConfidence / 100)),
   )
   return SQUAT_METRIC_DEFINITIONS.map((def): MetricResult => {
+    const value = valueFor(def.id, summary)
+    // An abstaining metric has no read to be confident about — its confidence
+    // is zero, never the session's (a null value with a High chip reads as a
+    // trusted measurement that happens to be missing, which is a false claim).
     const confidence: Confidence = makeConfidence(
-      sessionConfidence.value,
+      value === null ? 0 : sessionConfidence.value,
       def.confidenceBasis,
     )
     return {
       metricId: def.id,
       label: def.label,
-      value: valueFor(def.id, summary),
+      value,
       unit: def.unit,
       side: METRIC_SIDE[def.id] ?? 'none',
       confidence,
