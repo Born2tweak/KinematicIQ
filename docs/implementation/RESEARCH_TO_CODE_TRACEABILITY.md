@@ -79,7 +79,8 @@ experimental unless stated.
 | Research concept | Source | Code | Milestones | Status | Tier |
 |---|---|---|---|---|---|
 | Set quality gate — valid/questionable/invalid, full abstain | R05, product thesis | `web/src/session/setQualityGate.ts` | quality-gate wave | implemented | — |
-| SessionResult assembly (dual-write legacy + keyed results) | R08 | `web/src/session/buildSessionResult.ts`, `types.ts` | M8 | implemented — v2 artifact | partial (v2 = M40) |
+| SessionResult assembly (dual-write legacy + keyed results) | R08 | `web/src/session/buildSessionResult.ts`, `types.ts` | M8 | implemented | — |
+| Versioned session artifact + legacy read adapter | R08 versioning, R03 | `web/src/session/sessionArtifact.ts`, `web/src/storage/sessionStore.ts` (schema v2, v1 readable) | M40 | implemented | — |
 | Per-component evidence, **no composite score** | R03 no-composite | `web/src/scoring/` | design review 2026-07-03 | implemented (composite **rejected — never**) | — |
 | Personal baseline (self-referenced history) | R11 history/trends | `web/src/session/baseline.ts` | M31 | implemented | experimental |
 | MDC-aware change classification (heuristic thresholds) | R05 SEM/MDC | `web/src/session/changeDetection.ts` | M32 | implemented — thresholds heuristic until M49 | experimental |

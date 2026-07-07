@@ -106,6 +106,13 @@ export interface SessionBaseline {
 export interface SessionResult {
   /** Which protocol produced this result. Squat is protocol #1 (M5). */
   protocolId: ProtocolId
+  /**
+   * LEGACY squat-shaped summary (M40): kept because the report UI and the
+   * within-set aggregates still read it. The keyed `metricResults` below are
+   * the artifact-grade representation; `session/sessionArtifact.ts` adapts
+   * legacy summaries to keyed results for old records. Removal requires a
+   * storage schema migration + UI tests (not before a dedicated milestone).
+   */
   metrics: SetMetricsSummary
   /**
    * Keyed metric results (M6) carrying confidence + provenance + validation
