@@ -71,6 +71,7 @@ import {
   extractPostureFrame,
   type PostureFrameSample,
 } from '../analysis/posture/postureFrame'
+import { workflowStageForCameraPhase } from '../session/assessmentWorkflow'
 import {
   type CameraSessionPhase,
   getSessionStatusCopy,
@@ -746,6 +747,10 @@ export function CameraScreen() {
       ? 'AUTO_FINISH_PENDING'
       : autoStartPhase
 
+  // Workflow model (M41): display-level mapping only — the detection loop
+  // and auto-start/finish state remain the source of truth for behavior.
+  const workflowStage = workflowStageForCameraPhase(displayPhase)
+
   const statusCopy = getSessionStatusCopy(displayPhase, {
     repCount,
     finishCountdown,
@@ -770,7 +775,7 @@ export function CameraScreen() {
     .join(' ')
 
   return (
-    <div className={stageLayoutClass}>
+    <div className={stageLayoutClass} data-workflow-stage={workflowStage}>
       <video
         ref={videoRef}
         className={`camera-stage__media${FRONT_CAMERA_MIRROR ? ' camera-stage__media--mirror' : ''}`}
