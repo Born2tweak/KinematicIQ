@@ -121,4 +121,6 @@ Implementation decisions live in `docs/implementation/progress/` (one note
 per milestone from M25 on; grouped notes for M12–M23). Doctrine-level
 decisions: `docs/doctrine/claims-policy.md`, `docs/doctrine/deferred-scope.md`,
 and the memory-logged design review of 2026-07-03 (composite score deleted,
-report-first). Architecture decisions get ADRs starting at M37.
+report-first). Architecture decisions are recorded in `docs/adr/` (M37):
+ADR-001 browser-only/local-first, ADR-002 verdict-or-abstain, ADR-003
+no-composite-score (permanent), ADR-004 pose-tape-as-audit-artifact.
