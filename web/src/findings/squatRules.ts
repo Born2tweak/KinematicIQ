@@ -18,7 +18,12 @@ import { rankIssuesByEvidence } from './evidenceStrength'
 import type { FeedbackIssueKey } from '../feedback/feedbackTemplates'
 import { makeConfidence } from '../core/confidence'
 import type { MetricResult } from '../core/metric'
-import type { Finding, FindingEvidenceRef, FindingPriority } from '../core/finding'
+import type {
+  Finding,
+  FindingEvidenceRef,
+  FindingPriority,
+  FindingProvenance,
+} from '../core/finding'
 
 /** Coach question each component maps to (docs/24 §4). */
 const QUESTION_BY_KEY: Record<FeedbackIssueKey, string> = {
@@ -36,6 +41,27 @@ const EVIDENCE_METRIC_IDS_BY_KEY: Record<FeedbackIssueKey, string[]> = {
   kneeTracking: ['squat.symmetry.knee-asymmetry'],
   consistency: ['squat.depth.cv'],
   symmetry: ['squat.symmetry.hip-shift'],
+}
+
+/**
+ * Rule provenance (M50). The component rules ride thresholds that are
+ * unit/fixture tested (squatRules.test.ts, eval fixtures) but have had no
+ * external expert review or validation study — so `internally-tested` is the
+ * strongest status any squat rule may claim today.
+ */
+const SQUAT_RULE_SOURCE_DOCS = [
+  'docs/research/04_Coaching_Intelligence_Engine_Spec.md',
+  'docs/doctrine/claims-policy.md',
+]
+const SQUAT_RULES_LAST_REVIEWED = '2026-07-07'
+
+function squatRuleProvenance(key: FeedbackIssueKey): FindingProvenance {
+  return {
+    ruleId: `rule.squat.${key}`,
+    sourceDocs: SQUAT_RULE_SOURCE_DOCS,
+    reviewStatus: 'internally-tested',
+    lastReviewed: SQUAT_RULES_LAST_REVIEWED,
+  }
 }
 
 /** Numeric confidence for the finding, derived from the cue's chip. */
@@ -107,6 +133,7 @@ export function deriveSquatCoaching(
       confidence: makeConfidence(CONFIDENCE_VALUE[cue.confidence]),
       priority,
       tryNext: cue.tryNext,
+      provenance: squatRuleProvenance(key),
     })
   })
 
@@ -153,5 +180,12 @@ function appendTempoFinding(
     priority: 'informational',
     tryNext:
       'Pick a tempo — for example two seconds down, brief pause, drive up — and keep it for every rep.',
+    // The 40% CV threshold is authored, not tested against labeled sets.
+    provenance: {
+      ruleId: 'rule.squat.tempo',
+      sourceDocs: SQUAT_RULE_SOURCE_DOCS,
+      reviewStatus: 'heuristic',
+      lastReviewed: SQUAT_RULES_LAST_REVIEWED,
+    },
   })
 }

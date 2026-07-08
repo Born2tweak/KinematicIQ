@@ -108,4 +108,27 @@ describe('findings/squatRules', () => {
       true,
     )
   })
+
+  it('gives every finding rule provenance with a review status (M50)', () => {
+    const erratic: SetMetricsSummary = {
+      ...metrics,
+      avgRepDurationMs: 2500,
+      repDurationCV: 55,
+    }
+    const out = deriveSquatCoaching(components, 'High', erratic, [], 2)
+    expect(out.findings.length).toBeGreaterThan(0)
+    for (const finding of out.findings) {
+      expect(finding.provenance).toBeDefined()
+      expect(finding.provenance!.ruleId).toMatch(/^rule\.squat\./)
+      expect(finding.provenance!.sourceDocs.length).toBeGreaterThan(0)
+      expect(finding.provenance!.reviewStatus).toBeTruthy()
+      // Nothing in the app may claim validation yet.
+      expect(finding.provenance!.reviewStatus).not.toBe('validated')
+    }
+    // The authored tempo threshold is heuristic; component rules are tested.
+    const tempo = out.findings.find((f) => f.id === 'squat.tempo')
+    expect(tempo?.provenance?.reviewStatus).toBe('heuristic')
+    const primary = out.findings[0]
+    expect(primary.provenance?.reviewStatus).toBe('internally-tested')
+  })
 })

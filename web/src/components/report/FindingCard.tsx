@@ -4,14 +4,16 @@ import { buildFindingCardModel } from './findingCardModel'
 
 interface FindingCardProps {
   finding: Finding
+  /** Render the rule-provenance line (M50). Evidence/Expert only — never Summary. */
+  showProvenance?: boolean
 }
 
 /**
  * A single finding rendered as a card: observation-language statement, its
  * metric evidence chain, a confidence badge, and the keyed cue (M8).
  */
-export function FindingCard({ finding }: FindingCardProps) {
-  const model = buildFindingCardModel(finding)
+export function FindingCard({ finding, showProvenance = false }: FindingCardProps) {
+  const model = buildFindingCardModel(finding, { showProvenance })
   return (
     <article className={`finding-card finding-card--${finding.priority}`}>
       <div className="finding-card__header">
@@ -32,6 +34,9 @@ export function FindingCard({ finding }: FindingCardProps) {
           <span className="finding-card__try-next-label">Try next:</span>{' '}
           {model.tryNext}
         </p>
+      )}
+      {model.provenance && (
+        <p className="finding-card__provenance">{model.provenance}</p>
       )}
     </article>
   )

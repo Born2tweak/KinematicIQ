@@ -123,4 +123,27 @@ describe('root-cause concept cards (M22)', () => {
       expect(card.framing).toBe(ROOT_CAUSE_FRAMING)
     }
   })
+
+  it('marks every card heuristic and never claims validation (M50)', () => {
+    const cards = deriveRootCauses(
+      [
+        finding('squat.depth'),
+        finding('squat.trunkControl'),
+        finding('squat.symmetry'),
+        finding('squat.tempo'),
+        finding('squat.consistency'),
+      ],
+      metrics,
+      [
+        metric('squat.rom.ankle-dorsiflexion', 130),
+        metric('squat.rom.hip-flexion', 110),
+      ],
+    )
+    expect(cards.length).toBeGreaterThanOrEqual(4)
+    for (const card of cards) {
+      expect(card.provenance.reviewStatus).toBe('heuristic')
+      expect(card.provenance.ruleId).toBe(`rule.${card.id}`)
+      expect(card.provenance.sourceDocs.length).toBeGreaterThan(0)
+    }
+  })
 })

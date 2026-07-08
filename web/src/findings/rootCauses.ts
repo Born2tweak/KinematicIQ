@@ -7,7 +7,7 @@
  * or pathology, and always carry the check-it-yourself framing. Cards
  * render only for a valid set at the expert disclosure tier.
  */
-import type { Finding } from '../core/finding'
+import type { Finding, FindingProvenance } from '../core/finding'
 import type { MetricResult } from '../core/metric'
 import type { SetMetricsSummary } from '../session/types'
 
@@ -22,6 +22,26 @@ export interface RootCauseCard {
   selfCheck: string
   /** Fixed honesty line rendered with every card. */
   framing: string
+  /** Rule provenance (M50) — root-cause cards are heuristic BY DESIGN. */
+  provenance: FindingProvenance
+}
+
+/**
+ * Every root-cause card carries `heuristic` status permanently: the cards
+ * name possible contributors, and no test can promote a plausibility rule
+ * past heuristic without a validation study the doctrine does not yet allow
+ * us to claim.
+ */
+function rootCauseProvenance(cardId: string): FindingProvenance {
+  return {
+    ruleId: `rule.${cardId}`,
+    sourceDocs: [
+      'docs/research/04_Coaching_Intelligence_Engine_Spec.md',
+      'docs/doctrine/claims-policy.md',
+    ],
+    reviewStatus: 'heuristic',
+    lastReviewed: '2026-07-07',
+  }
 }
 
 export const ROOT_CAUSE_FRAMING =
@@ -57,6 +77,7 @@ const RULES: CardRule[] = [
       selfCheck:
         'Try a knee-to-wall test: with your toes ~10 cm from a wall, can each knee touch it with the heel down? A clear side difference or a short reach fits this pattern.',
       framing: ROOT_CAUSE_FRAMING,
+      provenance: rootCauseProvenance('root.ankle-mobility'),
     }
   },
   // Hip mobility / hip strategy: depth-limited with limited hip flexion.
@@ -72,6 +93,7 @@ const RULES: CardRule[] = [
       selfCheck:
         'Try a deep bodyweight squat holding onto a doorframe. If depth comes easily with support, positioning and balance are more likely than mobility.',
       framing: ROOT_CAUSE_FRAMING,
+      provenance: rootCauseProvenance('root.hip-mobility'),
     }
   },
   // Trunk-control: the trunk finding itself.
@@ -86,6 +108,7 @@ const RULES: CardRule[] = [
       selfCheck:
         'Film one set with a deliberate breath-and-brace before each rep. If the lean steadies, bracing habit fits this pattern better than strength.',
       framing: ROOT_CAUSE_FRAMING,
+      provenance: rootCauseProvenance('root.trunk-control'),
     }
   },
   // Balance / coordination: lateral shift or uneven knees.
@@ -103,6 +126,7 @@ const RULES: CardRule[] = [
       selfCheck:
         'Stand on each leg for 30 seconds, eyes forward. A clearly shakier side, or a stance you avoid, fits this pattern.',
       framing: ROOT_CAUSE_FRAMING,
+      provenance: rootCauseProvenance('root.balance-coordination'),
     }
   },
   // Fatigue: erratic tempo alongside inconsistent depth.
@@ -119,6 +143,7 @@ const RULES: CardRule[] = [
       selfCheck:
         'Record a shorter set (or rest longer first) and compare: if timing and depth steady out, fatigue fits this pattern.',
       framing: ROOT_CAUSE_FRAMING,
+      provenance: rootCauseProvenance('root.fatigue'),
     }
   },
 ]

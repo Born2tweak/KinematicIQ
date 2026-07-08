@@ -18,6 +18,7 @@ import { getSessionTape } from '../eval/tapeStore'
 import { buildResultsSummary } from '../session/buildSessionResult'
 import { buildComponentScoreExplanations } from '../scoring/scoringExplanations'
 import { FindingCard } from '../components/report/FindingCard'
+import { REVIEW_STATUS_LABEL } from '../core/finding'
 import { ResultsTabs } from '../components/report/ResultsTabs'
 import {
   DEFAULT_RESULTS_TAB,
@@ -226,7 +227,11 @@ export function ResultsScreen() {
               {section.findings.length > 0 ? (
                 <div className="coach-question__findings stack">
                   {section.findings.map((finding) => (
-                    <FindingCard key={finding.id} finding={finding} />
+                    <FindingCard
+                      key={finding.id}
+                      finding={finding}
+                      showProvenance
+                    />
                   ))}
                 </div>
               ) : (
@@ -479,6 +484,12 @@ export function ResultsScreen() {
                   <strong>Check it yourself:</strong> {card.selfCheck}
                 </p>
                 <p className="root-cause-card__framing">{card.framing}</p>
+                {card.provenance && (
+                  <p className="finding-card__provenance">
+                    {REVIEW_STATUS_LABEL[card.provenance.reviewStatus]} ·{' '}
+                    {card.provenance.ruleId}
+                  </p>
+                )}
               </li>
             ))}
           </ul>
