@@ -14,6 +14,7 @@ The most important current truth: the first architecture wave is already built. 
 - M31 personal baseline v1 is implemented.
 - M25-M30 and M32-M34 remain from `NEXT_20_MILESTONES.md`.
 - The repo has 50 Vitest files, 277 passing tests, 4 skipped tests.
+  **(M60 refresh, 2026-07-08: 72 Vitest files, 472 passing tests; see §2A.)**
 - `npm run build`, `npm test`, and `npm run test:coverage` pass after `npm install`.
 - The real `eval-tapes/live-session-2026-07-05.posetape.json` is intentionally absent from git, so real-tape parity/regression tests skip in a fresh clone.
 
@@ -25,6 +26,37 @@ The next product leap is not a rewrite. The execution path is:
 4. Build a defensible validation dataset and benchmark workflow before model swaps, new protocols, or stronger claims.
 5. Expand product UX around protocol workflows, local audit artifacts, trend interpretation, and accessibility.
 6. Defer or reject unsafe concepts: backend/auth/cloud in the near term, medical diagnosis, injury prediction, force/torque claims, composite scores, unbenchmarked model swaps, and avatar-first work.
+
+## 2A. Execution Status — M60 refresh (2026-07-08)
+
+This wave (M25-M60) has executed. Status is grounded in
+`docs/implementation/progress/` (one note per milestone) and one commit per
+milestone on `master`.
+
+**Verified gate at refresh:** `npm run build` clean (tsc + vite); `npm test`
+green — **72 Vitest files, 472 passing tests** (real-tape parity tests still
+skip in a fresh clone by design, §1). Store schema is now **v3** (M55).
+
+### Completed
+
+| Phase | Milestones | Notes |
+|---|---|---|
+| A–D (prior waves) | M00-M26, M31-M49 | Foundations, protocol runtime (M39-M43), validation/benchmark infra (M44-M49) |
+| E — Product/UX | **M50-M56** | Finding provenance, quality-review/retake, constraints coaching, CSV export, accessibility audit, domain context (schema v3), design-system v1 |
+| F — Governance | **M57-M59** | Domain module backlog, functional-assessment boundaries, future R&D ledger |
+| F — Refresh | **M60** | This section + `NEXT_EXECUTION_PACKAGE.md` |
+
+### Open / blocked (carry forward)
+
+| Item | State | Gate to close |
+|---|---|---|
+| M27 live-filter upgrade | Open | A named filter candidate + replay-harness benchmark on the labeled tape suite showing improvement |
+| M28-M30 new protocols (sit-to-stand, hinge, etc.) | Runtime-unblocked, not built | Per-protocol labeled ground truth + reliability study; must pass M58 functional boundaries |
+| Squat reliability study (M48/M49 templates) | Templates exist, study not run | Real repeated-measures capture to replace provisional heuristics |
+| Dependency hygiene | Deferred | Planned maintenance milestone (npm audit findings) |
+
+The next actionable work is packaged in
+`docs/implementation/NEXT_EXECUTION_PACKAGE.md`.
 
 ## 2. Current Repo Audit
 

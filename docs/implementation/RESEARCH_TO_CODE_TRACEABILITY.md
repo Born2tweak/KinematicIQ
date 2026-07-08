@@ -71,7 +71,8 @@ experimental unless stated.
 | Evidence-strength ranking (threshold exceedance) | R04 §9 | `web/src/findings/evidenceStrength.ts` | M23 | implemented | experimental |
 | Root-cause concept cards (plausibility only) | R04, R07 guardrails | `web/src/findings/rootCauses.ts` | M22 | implemented | experimental |
 | Coach-question report organization | R04, R11 | `web/src/components/report/resultsTabsModel.ts` | M24 | implemented | — |
-| Constraint-based coaching library | R04 | — | M52 | planned | — |
+| Finding rule provenance (rule id + review status) | R04 evidence strength, R05 | `web/src/core/finding.ts` (`RuleReviewStatus`), `findings/squatRules.ts`, `rootCauses.ts` | M50 | implemented — Evidence/Expert only | experimental |
+| Constraint-based coaching library | R01 constraints-led, R04 | `web/src/coaching/constraintsLibrary.ts` | M52 | implemented — one "next set" cue/finding, Evidence only | experimental |
 | Diagnosis / pathology / injury-risk conclusions | R07 guardrails | — | — | **rejected** — permanently forbidden (claims-policy) | never |
 
 ## Session, quality, and history (R05, R11)
@@ -86,6 +87,8 @@ experimental unless stated.
 | MDC-aware change classification (heuristic thresholds) | R05 SEM/MDC | `web/src/session/changeDetection.ts` | M32 | implemented — thresholds heuristic until M49 | experimental |
 | Local opt-in session store (versioned records) | R08 §9 local-first | `web/src/storage/sessionStore.ts`, `historyView.ts` | M9 | implemented | — |
 | Session report export artifact (JSON + offline HTML) | R08 artifact strategy, R11 export | `web/src/export/sessionReport.ts`, `sessionReportHtml.ts` | M33 | implemented | — |
+| Evidence metric CSV export (provenance columns, local-only) | R08 export formats, R03 | `web/src/export/metricCsv.ts` | M53 | implemented — Expert tab | — |
+| Domain context model (optional, non-medical, display/provenance only) | R01 context precedes interpretation, R07 | `web/src/domain/context.ts`, `storage/sessionStore.ts` (schema v3) | M55 | implemented — no analysis effect in v1 | — |
 | Assessment workflow state model | R08, R11 | — | M41 | planned | — |
 
 ## Validation & benchmarking (R05)
@@ -104,8 +107,9 @@ experimental unless stated.
 | Progressive disclosure (Summary/Evidence/Expert tabs) | R11 | `web/src/components/report/ResultsTabs.tsx`, `resultsTabsModel.ts` | M8, M24 | implemented | — |
 | Finding cards with confidence chips | R11, R04 | `web/src/components/report/FindingCard.tsx` | M8 | implemented | — |
 | Disclaimer + tier-gated language in UI | R05, claims-policy | `web/src/components/DisclaimerBanner.tsx` + copy throughout | ongoing | implemented — mechanized audit lands in M38 | — |
-| Quality review / retake screen model | R11 | — | M51 | planned | — |
-| Accessibility & interaction audit | R11 | — | M54 | planned | — |
+| Quality review / retake screen model | R11 | `web/src/session/qualityReview.ts` (+ Summary retake CTA) | M51 | implemented — invalid full abstain unchanged | — |
+| Accessibility & interaction audit | R11, WCAG | `docs/ux/ACCESSIBILITY_AUDIT.md`, `index.css` focus rings | M54 | implemented — audit + focus-visible; manual browser checks listed | — |
+| Design system v1 (tokens + primitives) | R11 design system | `docs/ux/DESIGN_SYSTEM.md`, `web/src/components/ui/confidenceState.ts` | M56 | implemented — confidence tokens extracted, no visual change | — |
 
 ## Strategy & long-horizon (R09, R10)
 
@@ -113,9 +117,10 @@ experimental unless stated.
 |---|---|---|---|---|---|
 | Protocol-aware analysis entry point (select → runtime → result) | R08, R11 | `web/src/analysis/analyzeProtocol.ts`, `protocols/runtime.ts`, picker/camera/upload route-state threading | M39–M43 | implemented | — |
 | Protocol expansion: sit-to-stand / hip hinge / jump | R01, R07 | `web/src/protocols/hipHinge|jump|sprint/` (stubs, analyze throws) | M10; M28–M30 unblocked by M39–M43, still need validation evidence | partial (stubs only) | — |
-| Movement embeddings / foundation models | R10 | — | — | **deferred** — research track, not shippable now | — |
-| SMPL / digital humans / wearables / sensor fusion | R10 | — | — | **deferred** (`docs/doctrine/deferred-scope.md`) | — |
+| Movement embeddings / foundation models | R10 | — | — | **deferred** — gated in `docs/research/FUTURE_R_AND_D_BACKLOG.md` (M59) | — |
+| SMPL / digital humans / wearables / sensor fusion | R10 | — | — | **deferred** — R&D ledger (M59) + `docs/doctrine/deferred-scope.md` | — |
 | Backend / accounts / cloud sync / FHIR | R10, R07 | — | — | **rejected for this product scope** (ledger) | — |
+| Domain module governance (sports/functional/clinical) | R07, R10 | `docs/domain/DOMAIN_MODULE_BACKLOG.md`, `FUNCTIONAL_ASSESSMENT_BOUNDARIES.md` | M57, M58 | implemented (governance docs) — no modules built | — |
 
 ## Per-metric validation status
 
@@ -131,4 +136,9 @@ decisions: `docs/doctrine/claims-policy.md`, `docs/doctrine/deferred-scope.md`,
 and the memory-logged design review of 2026-07-03 (composite score deleted,
 report-first). Architecture decisions are recorded in `docs/adr/` (M37):
 ADR-001 browser-only/local-first, ADR-002 verdict-or-abstain, ADR-003
-no-composite-score (permanent), ADR-004 pose-tape-as-audit-artifact.
+no-composite-score (permanent), ADR-004 pose-tape-as-audit-artifact. Governance
+backlogs (M57–M59): `docs/domain/DOMAIN_MODULE_BACKLOG.md`,
+`docs/domain/FUNCTIONAL_ASSESSMENT_BOUNDARIES.md`,
+`docs/research/FUTURE_R_AND_D_BACKLOG.md`. Program status + next work:
+`KINEMATICIQ_MASTER_EXECUTION_ROADMAP.md` §2A and
+`docs/implementation/NEXT_EXECUTION_PACKAGE.md` (M60).
