@@ -37,6 +37,7 @@ import {
   serializeReport,
 } from '../export/sessionReport'
 import { renderReportHtml } from '../export/sessionReportHtml'
+import { buildMetricCsv, metricCsvFilename } from '../export/metricCsv'
 import { computeBaseline } from '../session/baseline'
 import { reviewSetQuality } from '../session/qualityReview'
 import type { SessionBaseline, SessionResult } from '../session/types'
@@ -116,6 +117,23 @@ export function ResultsScreen() {
     },
     [result, baseline],
   )
+
+  // Evidence CSV export (M53): Expert-only, local download of the metric
+  // table with provenance. Uses ALL metric results so abstained (null) reads
+  // export with a not_readable flag rather than being dropped.
+  const handleExportCsv = useCallback(() => {
+    if (!result) return
+    const csv = buildMetricCsv(result.metricResults)
+    const protocolId = result.metricResults[0]?.provenance.protocolId
+    const isoDate = result.metricResults[0]?.provenance.recordedAt
+      ? result.metricResults[0].provenance.recordedAt!
+      : new Date().toISOString()
+    downloadReportFile(
+      csv,
+      metricCsvFilename(protocolId, isoDate),
+      'text/csv',
+    )
+  }, [result])
 
   const componentExplanations = useMemo(() => {
     if (!result?.scoring) return []
@@ -649,6 +667,11 @@ export function ResultsScreen() {
         <Button variant="secondary" onClick={() => handleExportReport('json')}>
           Export report JSON
         </Button>
+        {showExpert && result.metricResults.length > 0 && (
+          <Button variant="secondary" onClick={handleExportCsv}>
+            Export metrics CSV
+          </Button>
+        )}
         <Button to="/" variant="secondary">
           Home
         </Button>
