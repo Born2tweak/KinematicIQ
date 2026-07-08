@@ -9,6 +9,7 @@ import {
 import { buildHistoryRows, historyObservation } from './historyView'
 import { makeConfidence } from '../core/confidence'
 import { makeProvenance } from '../core/provenance'
+import { makeAssessmentContext } from '../domain/context'
 import type { SessionResult, SetMetricsSummary } from '../session/types'
 
 function makeResult(overrides: Partial<SessionResult> = {}): SessionResult {
@@ -69,6 +70,35 @@ describe('storage/sessionStore', () => {
     expect(record.protocolId).toBe('squat')
     expect(record.timestamp).toBe(1000)
     expect(record.provenance.captureSource).toBe('live')
+  })
+
+  it('attaches optional context (M55) without altering the result', () => {
+    const result = makeResult({
+      findings: [
+        {
+          id: 'squat.depth',
+          statement: 's',
+          evidence: [],
+          confidence: makeConfidence(0.8),
+          priority: 'primary',
+        },
+      ],
+    })
+    const context = makeAssessmentContext({
+      goal: 'practice depth',
+      discomfortNote: 'left knee felt tight',
+    })
+    const withContext = buildStoredSession(result, { context })
+    const without = buildStoredSession(result, {})
+    expect(withContext.context).toEqual(context)
+    // v1: context is display/provenance only — it never folds into findings.
+    expect(withContext.result.findings).toEqual(without.result.findings)
+    expect(withContext.result).toBe(result)
+  })
+
+  it('omits context entirely when none is supplied', () => {
+    const record = buildStoredSession(makeResult(), {})
+    expect('context' in record).toBe(false)
   })
 
   it('buildStoredSession inherits provenance from metric results when present', () => {

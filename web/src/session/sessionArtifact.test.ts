@@ -104,22 +104,25 @@ describe('buildSessionArtifact', () => {
 })
 
 describe('stored record versioning', () => {
-  it('new records are saved at schema v2 with the algorithm version', () => {
+  it('new records are saved at the current schema (v3) with the algorithm version', () => {
     const record = buildStoredSession(makeResult(), { now: NOW.getTime() })
     expect(record.schemaVersion).toBe(SESSION_STORE_SCHEMA_VERSION)
-    expect(record.schemaVersion).toBe(2)
+    expect(record.schemaVersion).toBe(3)
     expect(record.algorithmVersion).toBe(ANALYSIS_ALGORITHM_VERSION)
   })
 
-  it('keeps v1 AND v2 records readable; unknown versions are skipped', () => {
+  it('keeps v1/v2/v3 records readable; unknown versions are skipped', () => {
     expect(isReadableRecord(legacyV1Record())).toBe(true)
     expect(isReadableRecord(buildStoredSession(makeResult()))).toBe(true)
     expect(
-      isReadableRecord({ ...legacyV1Record(), schemaVersion: 3 }),
+      isReadableRecord({ ...legacyV1Record(), schemaVersion: 2 }),
+    ).toBe(true)
+    expect(
+      isReadableRecord({ ...legacyV1Record(), schemaVersion: 99 }),
     ).toBe(false)
   })
 
-  it('lists mixed v1 + v2 records together, newest first', async () => {
+  it('lists mixed v1 + current records together, newest first', async () => {
     const store = createMemorySessionStore()
     const v1 = legacyV1Record()
     const v2 = buildStoredSession(makeResult(), { now: NOW.getTime() })
@@ -141,10 +144,10 @@ describe('toSessionArtifact (read adapter, no on-disk migration)', () => {
     expect(record.algorithmVersion).toBeUndefined()
   })
 
-  it('carries a v2 record through unchanged', () => {
+  it('carries a current-schema record through unchanged', () => {
     const record = buildStoredSession(makeResult(), { now: NOW.getTime() })
     const artifact = toSessionArtifact(record)
-    expect(artifact.schemaVersion).toBe(2)
+    expect(artifact.schemaVersion).toBe(3)
     expect(artifact.algorithmVersion).toBe(ANALYSIS_ALGORITHM_VERSION)
   })
 })

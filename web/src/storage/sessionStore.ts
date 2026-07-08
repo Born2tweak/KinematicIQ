@@ -13,21 +13,23 @@
 
 import type { ProtocolId } from '../core/protocol'
 import { makeProvenance, type Provenance } from '../core/provenance'
+import type { AssessmentContext } from '../domain/context'
 // Value import is cycle-safe: sessionArtifact imports only TYPES from here.
 import { ANALYSIS_ALGORITHM_VERSION } from '../session/sessionArtifact'
 import type { SessionResult } from '../session/types'
 
 /** Bump when the stored shape changes; readers must check before trusting. */
-export const SESSION_STORE_SCHEMA_VERSION = 2
+export const SESSION_STORE_SCHEMA_VERSION = 3
 
 /**
  * Versions this reader understands. v1 (pre-M40) lacks `algorithmVersion`;
- * v2 adds it. v1 records are kept readable forever-until-migrated — they are
+ * v2 adds it; v3 (M55) adds optional `context`. Older records simply lack the
+ * newer optional fields — they stay readable forever-until-migrated,
  * normalized in memory by `session/sessionArtifact.ts`, never rewritten on
- * disk (M40: no on-disk migration; a real storage migration would be its own
- * milestone with UI tests before any legacy field is dropped).
+ * disk (a real storage migration would be its own milestone with UI tests
+ * before any legacy field is dropped).
  */
-export const READABLE_SCHEMA_VERSIONS: ReadonlySet<number> = new Set([1, 2])
+export const READABLE_SCHEMA_VERSIONS: ReadonlySet<number> = new Set([1, 2, 3])
 
 export interface StoredSession {
   /** Unique record id (UUID). */
@@ -44,6 +46,12 @@ export interface StoredSession {
    * guessing (see session/sessionArtifact.ts).
    */
   algorithmVersion?: string
+  /**
+   * Optional, non-medical assessment context the user attached (M55, schema
+   * v3). Display/provenance only — it never influenced `result`. Absent on
+   * v1/v2 records and whenever the user supplied nothing.
+   */
+  context?: AssessmentContext
 }
 
 export interface SessionStore {
@@ -73,13 +81,14 @@ export function buildStoredSession(
     id?: string
     provenance?: Provenance
     algorithmVersion?: string
+    context?: AssessmentContext
   } = {},
 ): StoredSession {
   const provenance =
     options.provenance ??
     result.metricResults[0]?.provenance ??
     makeProvenance({ captureSource: 'live' })
-  return {
+  const record: StoredSession = {
     id: options.id ?? generateId(),
     schemaVersion: SESSION_STORE_SCHEMA_VERSION,
     protocolId: result.protocolId,
@@ -88,6 +97,10 @@ export function buildStoredSession(
     provenance,
     algorithmVersion: options.algorithmVersion ?? ANALYSIS_ALGORITHM_VERSION,
   }
+  // Only attach context when the user actually supplied some — absent stays
+  // absent rather than an empty object.
+  if (options.context) record.context = options.context
+  return record
 }
 
 /** Records this reader understands; unknown versions are skipped, not guessed at. */

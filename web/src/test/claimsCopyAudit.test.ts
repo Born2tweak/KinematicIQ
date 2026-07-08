@@ -29,6 +29,7 @@ const COPY_DIRECTORIES = [
   'feedback',
   'findings',
   'coaching',
+  'domain',
   'screens',
   'components',
   'session',
