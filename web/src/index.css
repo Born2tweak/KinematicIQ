@@ -2041,6 +2041,22 @@ img {
   color: var(--color-text-muted);
 }
 
+/* Quality review / retake step (M51) — reuses the abstain list styling so the
+   recovery panel reads consistently with the invalid/questionable states. */
+.quality-review__guidance {
+  margin: var(--space-sm) 0 var(--space-md);
+  padding-left: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.quality-review__fix {
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--color-text-muted);
+}
+
 .score-formula-note {
   margin: var(--space-sm) 0 0;
   font-size: 0.8125rem;

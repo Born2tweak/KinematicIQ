@@ -38,6 +38,7 @@ import {
 } from '../export/sessionReport'
 import { renderReportHtml } from '../export/sessionReportHtml'
 import { computeBaseline } from '../session/baseline'
+import { reviewSetQuality } from '../session/qualityReview'
 import type { SessionBaseline, SessionResult } from '../session/types'
 
 const SessionReplay = lazy(() =>
@@ -173,6 +174,9 @@ export function ResultsScreen() {
   const showSummary = activeTab === 'summary'
   const showEvidence = activeTab === 'evidence'
   const showExpert = activeTab === 'expert'
+  // Quality review step (M51): explicit accept/retake recovery path derived
+  // from the quality gate — never weakens the invalid full abstain below.
+  const qualityReview = reviewSetQuality(quality)
   const topFindings = summaryFindings(result)
   const coachQuestions = coachQuestionSections(result)
   const metricResults = evidenceMetricResults(result)
@@ -192,6 +196,34 @@ export function ResultsScreen() {
       <section className="results-lead-card" aria-label="Set summary">
         <p className="results-lead">{summary}</p>
       </section>
+
+      {showSummary && qualityReview.retakeRecommended && (
+        <section
+          className="results-panel quality-review"
+          aria-label="Capture quality review"
+        >
+          <p className="results-alert results-alert--warning" role="status">
+            {qualityReview.headline}
+          </p>
+          {/* Fixes for a full-invalid set are already itemized in the
+              "Why there is no movement report" block below — don't duplicate
+              them here; the panel's job in that case is the retake CTA. */}
+          {qualityReview.retakeGuidance.length > 0 && !isInvalidSet && (
+            <ul className="quality-review__guidance">
+              {qualityReview.retakeGuidance.map((fix) => (
+                <li key={fix} className="quality-review__fix">
+                  {fix}
+                </li>
+              ))}
+            </ul>
+          )}
+          <div className="results-actions">
+            <Button to="/camera" variant="primary">
+              Record again
+            </Button>
+          </div>
+        </section>
+      )}
 
       {showSummary && topFindings.length > 0 && (
         <section className="results-coaching" aria-label="Key findings">
