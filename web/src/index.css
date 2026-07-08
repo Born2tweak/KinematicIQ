@@ -3682,3 +3682,20 @@ img {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* Accessibility (M54): a visible keyboard focus ring on every interactive
+   element, not just .btn. Dark surfaces make the browser default outline easy
+   to miss, so match the .btn treatment across tabs, HUD tools, links, and form
+   controls. :focus-visible keeps the ring keyboard-only (no mouse-click ring). */
+.results-tab:focus-visible,
+.hud-tool:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[role='tab']:focus-visible,
+[role='button']:focus-visible {
+  outline: 2px solid var(--color-accent, #22c55e);
+  outline-offset: 2px;
+  border-radius: 4px;
+}

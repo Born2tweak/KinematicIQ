@@ -71,6 +71,14 @@ describe('components/report/resultsTabs', () => {
     expect(DEFAULT_RESULTS_TAB).toBe('summary')
   })
 
+  it('every tab carries a non-empty accessible label (M54 a11y)', () => {
+    // The tab bar renders one <button role="tab"> per entry; an empty label
+    // would produce an unlabeled control for screen-reader users.
+    for (const tab of RESULTS_TABS) {
+      expect(tab.label.trim().length, `tab ${tab.id} needs a label`).toBeGreaterThan(0)
+    }
+  })
+
   it('summaryFindings sorts primary-first and caps count', () => {
     const result = sessionResult({
       findings: [
