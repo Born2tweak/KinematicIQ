@@ -33,6 +33,18 @@
 
 - **Findings #5/#6** — rep gates can count standing / impossible-flexion reps. The protocol/metric/finding refactor must not hide these; they stay surfaced by the quality gate. Revisit only with labeled ground-truth data.
 
+## Governed backlogs (visibility without commitment)
+
+Future scope is enumerated — with per-item evidence gates — in dedicated
+backlogs so it stays visible without becoming current scope:
+
+- **Domain modules** (sports, functional, clinical-adjacent): `docs/domain/DOMAIN_MODULE_BACKLOG.md` (M57).
+- **Functional-assessment safety boundaries:** `docs/domain/FUNCTIONAL_ASSESSMENT_BOUNDARIES.md` (M58).
+- **Future R&D bets** (embeddings, sensor fusion, digital humans, prediction, foundation models): `docs/research/FUTURE_R_AND_D_BACKLOG.md` (M59).
+
+An item appearing in a backlog is **not** permission to build it; each carries
+its own gate, and the hard-deferred/rejected rows above still bind.
+
 ## What MD #10 says to invest in (context, not this build's scope)
 
 Validation partnerships; a proprietary ontology + metric versioning system (partially advanced by M3/M6); confidence scoring & explainability (advanced by M3/M7/M8); longitudinal personalization (seeded by M9, local-only); browser AI / WebGPU / on-device privacy; data governance as a product feature. These frame *why* the deferred items are deferred, not permission to start them here.
