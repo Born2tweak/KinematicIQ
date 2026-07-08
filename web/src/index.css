@@ -1133,6 +1133,15 @@ img {
   font-weight: 600;
   color: var(--accent, #22c55e);
 }
+/* Constraints-led "Next set" cue (M52) — Evidence/Expert tiers only. */
+.finding-card__constraint {
+  margin: var(--space-sm) 0 0;
+  font-size: 0.9rem;
+}
+.finding-card__constraint-label {
+  font-weight: 600;
+  color: var(--accent, #22c55e);
+}
 /* Rule provenance line (M50) — Evidence/Expert tiers only. */
 .finding-card__provenance {
   margin: var(--space-sm) 0 0;

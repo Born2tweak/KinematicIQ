@@ -34,3 +34,21 @@ describe('findingCardModel provenance (M50)', () => {
     expect(buildFindingCardModel(bare, { showProvenance: true }).provenance).toBeNull()
   })
 })
+
+describe('findingCardModel constraint cue (M52)', () => {
+  it('omits the constraint cue by default — Summary stays uncluttered', () => {
+    expect(buildFindingCardModel(finding).constraint).toBeNull()
+  })
+
+  it('renders the keyed constraint cue when the caller opts in (Evidence)', () => {
+    const model = buildFindingCardModel(finding, { showConstraint: true })
+    expect(model.constraint).toMatch(/next set/i)
+  })
+
+  it('stays null for a finding id with no authored constraint', () => {
+    const bare: Finding = { ...finding, id: 'squat.unknown' }
+    expect(
+      buildFindingCardModel(bare, { showConstraint: true }).constraint,
+    ).toBeNull()
+  })
+})

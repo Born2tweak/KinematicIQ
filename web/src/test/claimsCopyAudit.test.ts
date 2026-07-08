@@ -28,6 +28,7 @@ import {
 const COPY_DIRECTORIES = [
   'feedback',
   'findings',
+  'coaching',
   'screens',
   'components',
   'session',

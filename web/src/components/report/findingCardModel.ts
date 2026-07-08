@@ -5,6 +5,7 @@
 import type { ConfidenceLevel } from '../../core/confidence'
 import type { Finding } from '../../core/finding'
 import { REVIEW_STATUS_LABEL } from '../../core/finding'
+import { constraintCueForFinding } from '../../coaching/constraintsLibrary'
 
 export interface FindingCardModel {
   statement: string
@@ -17,21 +18,30 @@ export interface FindingCardModel {
    * Null when the finding has no provenance or the caller keeps Summary clean.
    */
   provenance: string | null
+  /**
+   * One constraints-led "try next set" cue (M52), or null. Evidence tier only —
+   * the caller opts in; Summary never shows it.
+   */
+  constraint: string | null
 }
 
 export function buildFindingCardModel(
   finding: Finding,
-  options: { showProvenance?: boolean } = {},
+  options: { showProvenance?: boolean; showConstraint?: boolean } = {},
 ): FindingCardModel {
   const provenance =
     options.showProvenance && finding.provenance
       ? `${REVIEW_STATUS_LABEL[finding.provenance.reviewStatus]} · ${finding.provenance.ruleId}`
       : null
+  const constraintCue = options.showConstraint
+    ? constraintCueForFinding(finding.id)
+    : null
   return {
     statement: finding.statement,
     confidenceLevel: finding.confidence.level,
     evidence: finding.evidence.map((e) => e.observed),
     tryNext: finding.tryNext ?? null,
     provenance,
+    constraint: constraintCue?.cue ?? null,
   }
 }

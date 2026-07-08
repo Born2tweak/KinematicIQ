@@ -263,6 +263,7 @@ export function ResultsScreen() {
                       key={finding.id}
                       finding={finding}
                       showProvenance
+                      showConstraint
                     />
                   ))}
                 </div>
