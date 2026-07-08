@@ -12,6 +12,15 @@
   --color-text-muted: #9aa8c0;
   --color-success: #34d399;
 
+  /* Confidence-state tokens (M56): the canonical chip colors, shared by every
+     confidence surface. Values match the pre-M56 inline badge styles exactly. */
+  --confidence-high: #22c55e;
+  --confidence-high-bg: rgba(34, 197, 94, 0.15);
+  --confidence-medium: #facc15;
+  --confidence-medium-bg: rgba(250, 204, 21, 0.15);
+  --confidence-low: #ef4444;
+  --confidence-low-bg: rgba(239, 68, 68, 0.15);
+
   --gradient-accent: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%);
   --gradient-button: linear-gradient(135deg, #2f7df0 0%, #7c5cf0 100%);
   --glass-blur: blur(22px) saturate(160%);
@@ -1923,6 +1932,19 @@ img {
   border-radius: var(--radius-full);
   font-size: 0.75rem;
   font-weight: 600;
+}
+/* Confidence chip state colors (M56) — token-driven, replaces inline styles. */
+.confidence-badge--high {
+  background: var(--confidence-high-bg);
+  color: var(--confidence-high);
+}
+.confidence-badge--medium {
+  background: var(--confidence-medium-bg);
+  color: var(--confidence-medium);
+}
+.confidence-badge--low {
+  background: var(--confidence-low-bg);
+  color: var(--confidence-low);
 }
 
 .feedback-card {
