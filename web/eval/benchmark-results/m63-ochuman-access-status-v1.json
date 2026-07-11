@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "dataset": {
+    "id": "ochuman",
+    "version": "ochuman-api",
+    "apiCommit": "958aa2046ba4f5760fcc94cb458da8fe72cedf4f",
+    "approvalStatus": "approved",
+    "acquisitionStatus": "blocked"
+  },
+  "officialDownload": "https://cg.cs.tsinghua.edu.cn/dataset/form.html?dataset=ochuman",
+  "blocker": "The official 667 MB image and annotation download requires identity fields (name, email, institute). No identity was invented and no corpus bytes were acquired.",
+  "implementedEvidence": {
+    "apiSchemaAdapter": "src/eval/datasets/ochumanAdapter.ts",
+    "ciFixture": "hand-authored schema fixture only",
+    "realCorpusRun": false
+  },
+  "claimBoundary": "The API fixture verifies parsing only. It is not evidence of MediaPipe occlusion performance or biomechanical accuracy."
+}
+

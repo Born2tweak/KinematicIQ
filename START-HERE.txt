@@ -1,0 +1,26 @@
+KinematicIQ — Windows quick start
+================================
+
+ONE CLICK (do this now):
+  Double-click:  INSTALL-NOW.cmd
+  (in this folder)
+
+That will:
+  - git pull latest from GitHub
+  - npm install in web/
+  - open a dev server window → http://localhost:5173/
+
+Optional — keep repo synced every 2 min:
+  scripts\Start-AutoSync.bat
+
+Full setup (clone + install if repo was missing):
+  scripts\Setup-KinematicIQ.bat
+
+Log file after install:
+  %USERPROFILE%\kinematic-setup-transcript.txt
+
+Open this project in Cursor:
+  File → Open Folder → C:\Users\acetu\KinematicIQ
+
+Prompt context for Claude / Cursor / Antigravity / Codex / ChatGPT:
+  Read PROMPT-CONTEXT.txt → paste docs/00_context_pack.md into your prompt-writer chat

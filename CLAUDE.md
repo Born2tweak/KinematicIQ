@@ -3,9 +3,9 @@
 ## Operating system: Aurelian Constitution
 
 This project runs under the Aurelian OS (https://github.com/Born2tweak/Aurelian,
-local checkout: `C:\Users\acetu\Documents\Codex\2026-07-06\run\outputs\aurelian`).
-Load `core/01_CONSTITUTION.md` from that checkout when deeper guidance is
-needed. The twelve immutable laws, abbreviated:
+global install: `C:\Users\acetu\.aurelian`). Load
+`AURELIAN_GLOBAL_LOADER.md` and the standard kernel from that install when
+deeper guidance is needed. The twelve immutable laws, abbreviated:
 
 1. **Serve the user's objective, the system, and the future maintainer.**
 2. **Read before you edit** — never modify what you haven't inspected this session.

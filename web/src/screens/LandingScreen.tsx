@@ -18,7 +18,7 @@ const PIPELINE_STEPS = [
   {
     title: 'Measure',
     short: 'Joint angles',
-    text: 'Knee and hip angles, trunk lean, and left/right symmetry are computed from real geometry on every frame — the same math a motion lab uses, minus the lab.',
+    text: 'Knee and hip angles, trunk lean, and left/right differences are estimated from pose landmarks on every frame. These camera-based observations are not laboratory measurements.',
   },
   {
     title: 'Detect',
@@ -40,13 +40,13 @@ const PIPELINE_STEPS = [
 const AUDIENCES = [
   {
     icon: '🩺',
-    title: 'Physical therapists',
-    text: 'Objective movement baselines and visible progress you can show patients — no motion lab, no extra appointment time.',
+    title: 'Strength coaches',
+    text: 'Review repeatable, set-scoped movement observations with the measurements and camera confidence kept visible.',
   },
   {
     icon: '🦵',
-    title: 'Rehab & recovery',
-    text: 'Patients watch their own mechanics improve session to session, which keeps home exercise programs honest and motivating.',
+    title: 'Movement educators',
+    text: 'Use transparent camera observations to discuss what was visible in a recording without turning them into a diagnosis.',
   },
   {
     icon: '📋',
@@ -67,7 +67,7 @@ const BENEFITS = [
   },
   {
     title: 'Zero hardware',
-    text: 'No wearables, force plates, or reflective markers. If you have a camera, you have a movement lab.',
+    text: 'No wearables, force plates, or reflective markers. A camera is enough for the app’s limited, camera-based observations.',
   },
   {
     title: 'Transparent analysis',
@@ -139,7 +139,7 @@ export function LandingScreen() {
         <p className="landing-eyebrow">Product demo</p>
         <h2 className="landing-section__title">Watch a full session, start to report</h2>
         <p className="landing-section__lead">
-          Calibration, tracking, validated reps, auto-finish, and a transparent
+          Calibration, tracking, qualified reps, auto-finish, and a transparent
           movement report — all in under a minute, all on your own device.
         </p>
         <SessionDemoPlayer />
@@ -179,7 +179,7 @@ export function LandingScreen() {
       <section className="landing-section" id="who-its-for">
         <p className="landing-eyebrow">Who it&apos;s for</p>
         <h2 className="landing-section__title">
-          Built for the people who build people back up
+          Built for movement practice and review
         </h2>
         <div className="landing-grid landing-grid--audiences">
           {AUDIENCES.map((a) => (
@@ -198,7 +198,7 @@ export function LandingScreen() {
       <section className="landing-section" id="why">
         <p className="landing-eyebrow">Why KinematicIQ</p>
         <h2 className="landing-section__title">
-          Movement insight without the lab
+          Camera-based movement observations
         </h2>
         <div className="landing-grid landing-grid--benefits">
           {BENEFITS.map((b) => (
@@ -216,8 +216,8 @@ export function LandingScreen() {
         <h2 className="landing-section__title">One engine, movement by movement</h2>
         <p className="landing-section__lead">
           Starting with the bodyweight squat — the reference movement behind
-          nearly every strength and rehab program. Each new movement ships only
-          once its analysis is validated.
+          many strength programs. Each new movement remains unavailable until
+          its protocol-specific evidence gates are met.
         </p>
         <ProtocolPicker />
       </section>
@@ -241,8 +241,8 @@ export function LandingScreen() {
 
       <footer className="landing-footer">
         <p>
-          KinematicIQ provides movement insights for training and education. It
-          is not a medical device and does not replace clinical judgment.
+          KinematicIQ provides camera-based observations for training and
+          education. It is not a medical device and does not provide medical advice.
         </p>
       </footer>
     </div>

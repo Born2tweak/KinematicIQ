@@ -20,3 +20,16 @@ Implementation mapping: see `docs/implementation/IMPLEMENTATION_PLAN_AND_FABLE_P
 
 Navigation layer with stable ids (R01–R11), theme map, and the citation
 convention for progress notes: `docs/research/INDEX.md` (M35).
+
+## Supplemental research inputs
+
+`NEXT_PROTOCOL_PORTFOLIO.md` and `INLINE_LUNGE_PROTOCOL_RESEARCH.md` record the
+M73 ordering decision and selected research-only package. They do not authorize
+data acquisition or protocol implementation.
+
+`PUBLIC_MOVEMENT_DATASET_RESEARCH.md` is a dated, source-linked research input
+added after the immutable R01–R11 specification set. It does not silently
+change doctrine. Its accepted engineering consequences are tracked in
+`docs/implementation/PUBLIC_DATASET_RESEARCH_TO_EXECUTION_MAP.md`, ADR-006
+through ADR-010, and the post-M60 master-roadmap wave. Recheck dataset access
+terms at the time of use.

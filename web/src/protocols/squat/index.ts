@@ -29,6 +29,16 @@ export const SQUAT_PROTOCOL_DEFINITION: ProtocolDefinition = {
     LANDMARK_INDICES.LEFT_ANKLE,
     LANDMARK_INDICES.RIGHT_ANKLE,
   ],
+  capture: {
+    inputModes: ['live', 'upload', 'replay'],
+    cameraView: 'front',
+    viewInstruction: 'Face the camera square-on with your whole body in frame.',
+    setupInstructions: [
+      'Place the camera near hip height, about 3–4 m away.',
+      'Keep your head, hands, hips, knees, ankles, and feet visible.',
+      'Use even lighting and keep the camera still for the full set.',
+    ],
+  },
   metrics: [],
   findingRuleIds: [],
   defaultObservationProtocolId: 'front-view-squat-v1',

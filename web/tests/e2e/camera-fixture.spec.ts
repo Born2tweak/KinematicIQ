@@ -9,6 +9,37 @@ async function repCount(page: Page): Promise<number> {
 }
 
 test.describe('camera fixtures', () => {
+  test('mobile setup keeps navigation, instruction, and actions in bounds', async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 390, height: 844 })
+    await page.goto('/camera?source=pose-tape&fixture=missing-feet')
+
+    await expect(page.getByText(/feet are out of frame|tilt the camera down/i)).toBeVisible()
+    await expect(page.getByRole('button', { name: 'Cancel' })).toBeVisible()
+    await expect(page.getByRole('navigation', { name: 'Main navigation' })).toBeVisible()
+    const overflow = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth)
+    expect(overflow).toBe(false)
+  })
+
+  test('tablet camera actions do not cover the primary setup instruction', async ({ page }) => {
+    await page.setViewportSize({ width: 768, height: 1024 })
+    await page.goto('/camera?source=pose-tape&fixture=missing-feet')
+    const instruction = page.getByText(/feet are out of frame|tilt the camera down/i).first()
+    const cancel = page.getByRole('button', { name: 'Cancel' })
+    await expect(instruction).toBeVisible()
+    await expect(cancel).toBeVisible()
+    const [instructionBox, cancelBox] = await Promise.all([
+      instruction.boundingBox(),
+      cancel.boundingBox(),
+    ])
+    expect(instructionBox).not.toBeNull()
+    expect(cancelBox).not.toBeNull()
+    if (instructionBox && cancelBox) {
+      expect(instructionBox.y + instructionBox.height).toBeLessThan(cancelBox.y)
+    }
+  })
+
   test('clean-squat exits setup, counts reps, and reaches results', async ({
     page,
   }) => {

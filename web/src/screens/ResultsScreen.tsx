@@ -8,14 +8,12 @@ import { DisclaimerBanner } from '../components/DisclaimerBanner'
 import { FeedbackCard } from '../components/FeedbackCard'
 import { PostureProfile } from '../components/PostureProfile'
 import { RepTimeline } from '../components/RepTimeline'
-import { confidenceResultsMessage } from '../feedback/confidenceCalculator'
 import {
   INSUFFICIENT_DATA_MESSAGE,
   NO_REPS_MESSAGE,
 } from '../feedback/feedbackEngine'
 import { downloadTape } from '../eval/downloadTape'
 import { getSessionTape } from '../eval/tapeStore'
-import { buildResultsSummary } from '../session/buildSessionResult'
 import { buildComponentScoreExplanations } from '../scoring/scoringExplanations'
 import { FindingCard } from '../components/report/FindingCard'
 import { REVIEW_STATUS_LABEL } from '../core/finding'
@@ -41,6 +39,7 @@ import { buildMetricCsv, metricCsvFilename } from '../export/metricCsv'
 import { computeBaseline } from '../session/baseline'
 import { reviewSetQuality } from '../session/qualityReview'
 import type { SessionBaseline, SessionResult } from '../session/types'
+import { buildResultsNarrative } from '../components/report/resultsNarrative'
 
 const SessionReplay = lazy(() =>
   import('../components/replay/SessionReplay').then((m) => ({
@@ -59,6 +58,7 @@ export function ResultsScreen() {
   // Linked views: the replay timeline reports which rep it is inside so the
   // rep chart can highlight it. Presentation state only.
   const [replayRep, setReplayRep] = useState<number | null>(null)
+  const [requestedReplayRep, setRequestedReplayRep] = useState<number | null>(null)
   const handleActiveRepChange = useCallback((repNumber: number | null) => {
     setReplayRep((current) => (current === repNumber ? current : repNumber))
   }, [])
@@ -179,15 +179,12 @@ export function ResultsScreen() {
     )
   }
 
-  const summary = buildResultsSummary(result)
+  const narrative = buildResultsNarrative(result)
   const { metrics, scoring, feedback, sessionConfidence, sessionConfidenceScore } =
     result
   const quality = result.quality
   const isInvalidSet = quality.verdict === 'invalid' && !result.noRepsDetected
   const isQuestionableSet = quality.verdict === 'questionable'
-  const confidenceMessage = isInvalidSet
-    ? null
-    : confidenceResultsMessage(sessionConfidence)
 
   const showSummary = activeTab === 'summary'
   const showEvidence = activeTab === 'evidence'
@@ -212,7 +209,14 @@ export function ResultsScreen() {
       <ResultsTabs active={activeTab} onChange={setActiveTab} />
 
       <section className="results-lead-card" aria-label="Set summary">
-        <p className="results-lead">{summary}</p>
+        <h2 className="results-lead-card__headline">{narrative.headline}</h2>
+        <p className="results-lead">{narrative.observed}</p>
+        <dl className="results-narrative">
+          <div><dt>Why</dt><dd>{narrative.why}</dd></div>
+          <div><dt>Next</dt><dd>{narrative.next}</dd></div>
+          <div><dt>Camera confidence</dt><dd>{narrative.cameraConfidence.replace(/^Camera confidence: /, '')}</dd></div>
+          <div><dt>Validation</dt><dd>{narrative.validation.replace(/^Scientific validation: /, '')}</dd></div>
+        </dl>
       </section>
 
       {showSummary && qualityReview.retakeRecommended && (
@@ -437,19 +441,6 @@ export function ResultsScreen() {
         </p>
       )}
 
-      {showSummary && confidenceMessage && (
-        <p
-          className={
-            sessionConfidence === 'Low'
-              ? 'results-alert results-alert--warning'
-              : 'results-alert results-alert--info'
-          }
-          role="status"
-        >
-          {confidenceMessage}
-        </p>
-      )}
-
       {showEvidence && metricResults.length > 0 && (
         <section className="results-panel" aria-label="Measured metrics">
           <h2 className="results-panel__heading">Measured metrics</h2>
@@ -552,6 +543,7 @@ export function ResultsScreen() {
           <SessionReplay
             tape={sessionTape}
             onActiveRepChange={handleActiveRepChange}
+            requestedRepNumber={requestedReplayRep}
           />
         </Suspense>
       )}
@@ -571,6 +563,7 @@ export function ResultsScreen() {
             showAngles={isAnalyst}
             deviantRep={result.posture?.mostDeviantRep ?? null}
             activeRep={replayRep}
+            onSelectRep={sessionTape === null ? undefined : setRequestedReplayRep}
           />
           {isAnalyst && (
             <div className="detail-rows">

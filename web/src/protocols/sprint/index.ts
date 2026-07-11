@@ -22,6 +22,12 @@ export const SPRINT_PROTOCOL_DEFINITION: ProtocolDefinition = {
     LANDMARK_INDICES.LEFT_ANKLE,
     LANDMARK_INDICES.RIGHT_ANKLE,
   ],
+  capture: {
+    inputModes: [],
+    cameraView: 'side',
+    viewInstruction: 'Capture view is not yet validated for sprint.',
+    setupInstructions: ['This protocol remains in research and cannot be started.'],
+  },
   metrics: [],
   findingRuleIds: [],
 }

@@ -89,7 +89,7 @@ experimental unless stated.
 | Session report export artifact (JSON + offline HTML) | R08 artifact strategy, R11 export | `web/src/export/sessionReport.ts`, `sessionReportHtml.ts` | M33 | implemented | — |
 | Evidence metric CSV export (provenance columns, local-only) | R08 export formats, R03 | `web/src/export/metricCsv.ts` | M53 | implemented — Expert tab | — |
 | Domain context model (optional, non-medical, display/provenance only) | R01 context precedes interpretation, R07 | `web/src/domain/context.ts`, `storage/sessionStore.ts` (schema v3) | M55 | implemented — no analysis effect in v1 | — |
-| Assessment workflow state model | R08, R11 | — | M41 | planned | — |
+| Assessment workflow state model | R08, R11 | `web/src/session/assessmentWorkflow.ts`, display mapping in `web/src/screens/CameraScreen.tsx` | M41 | implemented as a pure/display model; orchestration still embedded in CameraScreen (post-dataset audit) | — |
 
 ## Validation & benchmarking (R05)
 
@@ -97,8 +97,11 @@ experimental unless stated.
 |---|---|---|---|---|---|
 | Pose-tape record/replay harness (live/replay parity) | R05 benchmark harness | `web/src/eval/` | M2, M12–M14 | implemented | — |
 | Labeled ground-truth suite + labeling CLI | R05 dataset QA | `web/scripts/labelTape.ts`, `eval-tapes/` | M15–M16 | implemented (9/9 exact since M16) | — |
-| Validation corpus manifest / benchmark report generator | R05 | — | M44–M45 | planned | — |
-| Reliability study (real SEM/MDC) | R05 | — | M49 | planned | — |
+| Validation corpus manifest / benchmark report generator | R05 | `web/src/eval/corpusManifest.ts`, `benchmarkReport.ts`, `eval-tapes/MANIFEST.example.json`, `docs/validation/validation-corpus.md` | M44–M45 | implemented; current local run has no saved comparison baseline and no bottom-frame labels | — |
+| Reliability calculator and study template | R05 | `web/src/eval/reliability.ts`, `docs/validation/RELIABILITY_STUDY_TEMPLATE.md` | M49 | implemented infrastructure; real repeated-measures study not run | — |
+| Public movement-dataset research and execution mapping | R05, R06, R07, R08, R11 | `docs/research/PUBLIC_MOVEMENT_DATASET_RESEARCH.md`, `docs/implementation/PUBLIC_DATASET_RESEARCH_TO_EXECUTION_MAP.md`, post-M60 roadmap | M61–M74 | planned execution; research/audit artifacts active | — |
+| Metadata-first dataset registry + validator (provenance/license/access/intended-use, local-only path boundary) | R05 governance, R06, R07 claims-policy | `web/src/eval/datasetRegistry.ts`, `web/eval/datasets/registry.json`, `docs/validation/DATASET_OPERATOR_RUNBOOK.md`, `.gitignore` (raw-data boundary) | M61 | implemented — 4 metadata-only pilots registered, nothing acquired (ADR-006, ADR-010) | — |
+| Neutral benchmark-sequence schema + source-to-canonical skeleton maps, adapter contract, and conservative replay bridge | R05, R06, R08 | `web/src/eval/benchmark/` (`canonicalSkeleton.ts`, `benchmarkSequence.ts`, `skeletonMap.ts`, `adapter.ts`, `benchmarkBridge.ts`, `exampleMaps.ts`) | M62 | implemented — new schema id `benchmark-sequence-v1`, separate from `PoseTape`/`RepMetrics`; explicit missingness; deterministic serialization; bridge abstains on non-squat trials (ADR-007). Synthetic fixtures only, no corpus. | — |
 
 ## Experience layer (R11)
 
@@ -122,6 +125,24 @@ experimental unless stated.
 | Backend / accounts / cloud sync / FHIR | R10, R07 | — | — | **rejected for this product scope** (ledger) | — |
 | Domain module governance (sports/functional/clinical) | R07, R10 | `docs/domain/DOMAIN_MODULE_BACKLOG.md`, `FUNCTIONAL_ASSESSMENT_BOUNDARIES.md` | M57, M58 | implemented (governance docs) — no modules built | — |
 
+## M63-M72 execution update (2026-07-11)
+
+| Research concept | Evidence/code | Outcome |
+|---|---|---|
+| Approved UI-PRMD/OCHuman pilots | dataset registry, adapters, immutable M63 reports | UI-PRMD reduced squat baseline saved; OCHuman corpus remains access-blocked |
+| Protocol-owned capture and execution | protocol capture metadata, `protocols/runtime.ts`, camera/upload/replay | implemented for squat with parity gates |
+| Results narrative and evidence navigation | `resultsNarrative.ts`, `RepTimeline.tsx`, `SessionReplay.tsx` | deterministic narrative and rep-to-bottom-frame replay; no waveform claim |
+| Sit-to-stand transition trials | `SIT_TO_STAND_PROTOCOL_SPEC.md`, planned protocol stub | specified; activation correctly blocked on seed data and labels |
+
+## M73-M75 continuation update (2026-07-11)
+
+| Research concept | Evidence/code | Outcome |
+|---|---|---|
+| Next protocol portfolio | UI-PRMD, LLM-FMS, 2D/3D lunge validity study; `NEXT_PROTOCOL_PORTFOLIO.md` | inline lunge selected for research only |
+| Inline-lunge evidence package | `INLINE_LUNGE_PROTOCOL_RESEARCH.md` | capture/runtime hypothesis and hard gates; no code or availability |
+| Release readiness | `M74_RELEASE_READINESS_SCORECARD.md`, release-readiness e2e | not release-ready; local gates recorded and landing overclaims corrected |
+| Dev-toolchain remediation | npm advisories, official Vite/Vitest migration guides, isolated M75 spike | zero-audit candidate verified; repository migration approval-blocked |
+
 ## Per-metric validation status
 
 Tier-by-tier detail (evidence behind each tier, failure modes, promotion
@@ -139,6 +160,8 @@ ADR-001 browser-only/local-first, ADR-002 verdict-or-abstain, ADR-003
 no-composite-score (permanent), ADR-004 pose-tape-as-audit-artifact. Governance
 backlogs (M57–M59): `docs/domain/DOMAIN_MODULE_BACKLOG.md`,
 `docs/domain/FUNCTIONAL_ASSESSMENT_BOUNDARIES.md`,
-`docs/research/FUTURE_R_AND_D_BACKLOG.md`. Program status + next work:
+`docs/research/FUTURE_R_AND_D_BACKLOG.md`. Post-dataset decisions are ADR-006
+through ADR-010; audit evidence is in
+`reports/audits/KINEMATICIQ_POST_DATASET_RESEARCH_AUDIT.md`. Program status + next work:
 `KINEMATICIQ_MASTER_EXECUTION_ROADMAP.md` §2A and
 `docs/implementation/NEXT_EXECUTION_PACKAGE.md` (M60).

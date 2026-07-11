@@ -23,13 +23,13 @@
 import type { MetricDefinition } from './metric'
 
 /** Movement identifiers the platform knows about. Matches analysis MovementId. */
-export type ProtocolId = 'squat' | 'hipHinge' | 'jump' | 'sprint'
+export type ProtocolId = 'squat' | 'sitToStand' | 'hipHinge' | 'jump' | 'sprint'
 
 /**
  * Segmentation engine kind (matches analysis/movement/types.ts `MovementKind`):
  * cyclic (reps with a bottom), ballistic (flight + landing), gait (strides).
  */
-export type ProtocolKind = 'cyclic' | 'ballistic' | 'gait'
+export type ProtocolKind = 'cyclic' | 'transition' | 'ballistic' | 'gait'
 
 /**
  * Lifecycle status. `available` = validated enough to analyze; `planned` =
@@ -37,6 +37,17 @@ export type ProtocolKind = 'cyclic' | 'ballistic' | 'gait'
  * honest "in development — not yet validated" copy.
  */
 export type ProtocolStatus = 'available' | 'planned'
+
+export type ProtocolInputMode = 'live' | 'upload' | 'replay'
+export type ProtocolCameraView = 'front' | 'side' | 'either' | 'multi-view'
+
+/** Capture/setup contract consumed by every input surface. */
+export interface ProtocolCaptureConfig {
+  inputModes: ProtocolInputMode[]
+  cameraView: ProtocolCameraView
+  viewInstruction: string
+  setupInstructions: string[]
+}
 
 export interface ProtocolDefinition {
   id: ProtocolId
@@ -51,6 +62,8 @@ export interface ProtocolDefinition {
    * capture-readiness model (M4) and abstention reasons.
    */
   requiredLandmarks: number[]
+  /** One canonical source for camera/upload setup and view wording. */
+  capture: ProtocolCaptureConfig
   /** Metric definitions this protocol emits (M6 populates the registry). */
   metrics: MetricDefinition[]
   /** IDs of the finding rules that interpret this protocol's metrics (M7). */

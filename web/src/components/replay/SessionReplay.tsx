@@ -41,6 +41,8 @@ interface SessionReplayProps {
   tape: PoseTape
   /** Notifies the parent so linked views (rep chart) can highlight. */
   onActiveRepChange?: (repNumber: number | null) => void
+  /** External evidence link: requested rep to open at its bottom frame. */
+  requestedRepNumber?: number | null
 }
 
 const EVENT_GLYPH: Record<ReplayEvent['kind'], string> = {
@@ -58,7 +60,7 @@ function formatSeconds(seconds: number): string {
   return `${mins}:${secs.padStart(4, '0')}`
 }
 
-export function SessionReplay({ tape, onActiveRepChange }: SessionReplayProps) {
+export function SessionReplay({ tape, onActiveRepChange, requestedRepNumber = null }: SessionReplayProps) {
   // Deterministic replay of the session's own tape (Stream 2 parity work).
   const replay = useMemo(() => replayTape(tape), [tape])
   const events = useMemo(
@@ -71,6 +73,19 @@ export function SessionReplay({ tape, onActiveRepChange }: SessionReplayProps) {
   const [speed, setSpeed] = useState<PlaybackSpeed>(1)
   const [demoMode, setDemoMode] = useState(false)
   const [show3D, setShow3D] = useState(false)
+
+  useEffect(() => {
+    if (requestedRepNumber === null) return
+    const rep = replay.reps.find((candidate) => candidate.repNumber === requestedRepNumber)
+    if (!rep) return
+    const exact = replay.analyzedFrames.findIndex(
+      (frame) => frame.frameIndex === rep.bottomFrameIndex,
+    )
+    if (exact >= 0) {
+      setPlaying(false)
+      setSampleIndex(exact)
+    }
+  }, [requestedRepNumber, replay])
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
   const pose3DRef = useRef(createEmptyPose3DRef())

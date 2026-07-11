@@ -32,6 +32,7 @@ only** (movement-ontology, claims-policy). These are not repeated per row.
 |---|---|---|---|---|---|
 | Back/front squat | `now` | Single-RGB side/front; existing tape suite | Shipped with quality gate + provisional heuristics; M27 filter + reliability study still open | Squat report (M8) | Injury risk, diagnosis, kinetics, composite score |
 | Hip hinge / deadlift pattern | `next` | Side-view RGB; labeled hinge tapes | Labeled ground-truth for hinge angle + a reliability study before any threshold copy | Hinge report reusing cyclic engine (M42) | Load/spine-safety claims, "correct/incorrect", injury risk |
+| Inline lunge | `research` | Side-view RGB; original timed UI-PRMD/independent labels | Subject-held-out count/event benchmark and lead-knee metric-specific validity | Separate left/right lunge observation report | FMS score, injury risk, diagnosis, “correct/incorrect” |
 | Countermovement jump | `next` | Sagittal RGB; jump-height proxy validation | Jump-height proxy validated vs. a reference; trend-only until then (R07 §Evidence) | Jump metrics as trends, within-athlete | Absolute performance grades, readiness-to-play, ACL risk |
 | Single-leg squat / step-down | `research` | Frontal + sagittal RGB; labeled valgus proxy | Frontal-plane reliability; valgus proxy is screening-grade only | Movement observation vector | Knee valgus → injury-risk diagnosis |
 

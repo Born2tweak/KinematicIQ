@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "dataset": {
+    "id": "ui-prmd",
+    "version": "reduced-deep-squat-838d3a46",
+    "sourceCommit": "838d3a46b04467610fa07f07827bccc8f2e6cec1",
+    "acquiredArtifacts": {
+      "Data_Correct.csv": "f13929e78bedc9a13c9aecf60970f82f83255d55871ee637683b6761eb3d8840",
+      "Data_Incorrect.csv": "a2e11f291f861b4cc5f03ffa4684c2ba87996343a74d11ba7aa8cce1ed551891",
+      "Labels_Correct.csv": "548326ec3e8127d8ea416d73aadcd98e064c7d36aa507ec0f3d5ded61238ee56",
+      "Labels_Incorrect.csv": "cb7fc799f6441c3addb8448ff6a917df2ca8d74e2f0941896a711a2b57792efb",
+      "Prepare_Data_for_NN.m": "6336a463b5ec0de54a037f65851a2aed7325febe067dc510a7893660627d58aa"
+    }
+  },
+  "cohort": {
+    "trialsPerClass": 90,
+    "dimensions": 117,
+    "normalizedSamples": 240,
+    "demonstratedLabel": {
+      "count": 90,
+      "min": 0.90288,
+      "max": 0.96092,
+      "mean": 0.9443830000000001,
+      "standardDeviation": 0.011675129280134986
+    },
+    "nonOptimalLabel": {
+      "count": 90,
+      "min": 0.53019,
+      "max": 0.94531,
+      "mean": 0.8607077777777778,
+      "standardDeviation": 0.06772052359775842
+    }
+  },
+  "waveform": {
+    "pairedSampleCount": 2527200,
+    "demonstratedJitterRmsMean": 0.002606668715050984,
+    "nonOptimalJitterRmsMean": 0.002935135517453966,
+    "pairedClassError": {
+      "sampleCount": 2527200,
+      "mae": 0.05667886541877163,
+      "rmse": 0.09291693089231179,
+      "bias": -2.049589691339252e-9
+    }
+  },
+  "limitations": [
+    "The repository matrices are centered, scaled, and linearly aligned to 240 samples.",
+    "Absolute joint angles, source timestamps, and event timing cannot be recovered.",
+    "The reduced matrix omits subject and repetition identity; no subject-independent split is possible.",
+    "Correct/non-optimal labels are dataset-provided categories, not KinematicIQ clinical or coaching validity."
+  ]
+}

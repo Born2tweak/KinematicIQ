@@ -20,7 +20,7 @@ describe('getProtocolRuntime', () => {
     expect(runtime).toBe(SQUAT_RUNTIME)
   })
 
-  it.each(['hipHinge', 'jump', 'sprint'] as const)(
+  it.each(['sitToStand', 'hipHinge', 'jump', 'sprint'] as const)(
     'throws NotImplementedError for planned protocol %s',
     (id) => {
       expect(() => getProtocolRuntime(id)).toThrow(NotImplementedError)

@@ -25,6 +25,12 @@ export const HIP_HINGE_PROTOCOL_DEFINITION: ProtocolDefinition = {
     LANDMARK_INDICES.LEFT_ANKLE,
     LANDMARK_INDICES.RIGHT_ANKLE,
   ],
+  capture: {
+    inputModes: [],
+    cameraView: 'side',
+    viewInstruction: 'Capture view is not yet validated for hip hinge.',
+    setupInstructions: ['This protocol remains in research and cannot be started.'],
+  },
   metrics: [],
   findingRuleIds: [],
 }

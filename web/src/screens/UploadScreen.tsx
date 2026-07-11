@@ -15,7 +15,8 @@ import {
   seekVideo,
   type LoadedVideo,
 } from '../cv/videoFrameSource'
-import { buildSessionResult } from '../session/buildSessionResult'
+import { getProtocol } from '../protocols/registry'
+import { getProtocolRuntime } from '../protocols/runtime'
 
 // ── Advisory limits (warn, never silently block) ───────────────────
 const MAX_RECOMMENDED_DURATION_S = 90
@@ -57,6 +58,7 @@ function buildWarnings(loaded: LoadedVideo): string[] {
 }
 
 export function UploadScreen() {
+  const capture = getProtocol('squat').definition.capture
   const navigate = useNavigate()
   const location = useLocation()
   // Selected protocol from route state (M43); squat stays the default.
@@ -210,7 +212,7 @@ export function UploadScreen() {
 
       if (result.framesWithPose === 0) {
         setError(
-          'No person detected in this video. Make sure your whole body is in frame from the side, with good lighting.',
+          `No person detected in this video. ${capture.viewInstruction} Use good lighting.`,
         )
         setStatus('error')
         return
@@ -235,16 +237,13 @@ export function UploadScreen() {
         ),
       )
 
-      const sessionResult = buildSessionResult(
-        result.reps,
-        result.poseConfidenceSamples,
-        result.postureSamples,
-        result.repRejections,
-        selectedProtocolId,
-        // Matches the tape meta above: an upload analyzed offline must never
-        // export provenance claiming a live/raw capture.
-        { captureSource: 'upload', filterVariant: 'butterworth-offline' },
-      )
+      const sessionResult = getProtocolRuntime(selectedProtocolId).buildSessionResult({
+        reps: result.reps,
+        poseConfidenceSamples: result.poseConfidenceSamples,
+        postureSamples: result.postureSamples,
+        repRejections: result.repRejections,
+        capture: { captureSource: 'upload', filterVariant: 'butterworth-offline' },
+      })
       navigate('/results', { state: { result: sessionResult } })
     } catch (err: unknown) {
       if (err instanceof DOMException && err.name === 'AbortError') {
@@ -343,7 +342,7 @@ export function UploadScreen() {
             or tap to choose an MP4, MOV, or WebM
           </span>
           <span className="upload-drop__meta">
-            One set, filmed from the side, full body in frame.
+            One continuous set. {capture.viewInstruction}
             Everything stays on this device — nothing is uploaded.
           </span>
         </button>
@@ -454,7 +453,7 @@ export function UploadScreen() {
                 </Button>
               </div>
               <p className="camera-actions__hint">
-                A side-on view with your whole body in frame gives the most reliable read.
+                {capture.viewInstruction} {capture.setupInstructions[2]}
               </p>
             </div>
           )}

@@ -22,6 +22,12 @@ export const JUMP_PROTOCOL_DEFINITION: ProtocolDefinition = {
     LANDMARK_INDICES.LEFT_ANKLE,
     LANDMARK_INDICES.RIGHT_ANKLE,
   ],
+  capture: {
+    inputModes: [],
+    cameraView: 'front',
+    viewInstruction: 'Capture view is not yet validated for vertical jump.',
+    setupInstructions: ['This protocol remains in research and cannot be started.'],
+  },
   metrics: [],
   findingRuleIds: [],
 }

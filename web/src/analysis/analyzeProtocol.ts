@@ -12,7 +12,6 @@
  */
 import { getProtocolRuntime } from '../protocols/runtime'
 import type { SegmentationOutput } from '../protocols/runtime'
-import { buildSessionResult } from '../session/buildSessionResult'
 import type { SessionResult } from '../session/types'
 import type { ProtocolId } from '../core/protocol'
 import type { CaptureContext } from '../core/provenance'
@@ -46,13 +45,12 @@ export function analyzeFramesForProtocol(
 ): ProtocolAnalysis {
   const runtime = getProtocolRuntime(protocolId)
   const segmentation = runtime.segmentFrames(frames, options.initial)
-  const result = buildSessionResult(
-    segmentation.reps,
-    segmentation.poseConfidenceSamples,
-    segmentation.postureSamples,
-    segmentation.repRejections,
-    protocolId,
-    options.capture,
-  )
+  const result = runtime.buildSessionResult({
+    reps: segmentation.reps,
+    poseConfidenceSamples: segmentation.poseConfidenceSamples,
+    postureSamples: segmentation.postureSamples,
+    repRejections: segmentation.repRejections,
+    capture: options.capture,
+  })
   return { segmentation, result }
 }

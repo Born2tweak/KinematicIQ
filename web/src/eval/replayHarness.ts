@@ -7,7 +7,8 @@
  * SAME filters the app uses (`cv/landmarkFilter`). No duplicated logic.
  */
 import { createLiveStreamFilter, filterFrameSequence } from '../cv/landmarkFilter'
-import { runPipelineOnFrames } from '../analysis/videoAnalyzer'
+import type { PipelineInitialState } from '../analysis/videoAnalyzer'
+import { getProtocolRuntime } from '../protocols/runtime'
 import { getJointAngles } from '../analysis/angles'
 import { safeLandmark } from '../analysis/geometry'
 import { activateAnalysisPipeline } from '../analysis/setActivation'
@@ -30,6 +31,10 @@ export interface VariantResult {
   frames: PoseFrame[]
 }
 
+function segmentSquat(frames: readonly PoseFrame[], initial?: PipelineInitialState) {
+  return getProtocolRuntime('squat').segmentFrames(frames, initial)
+}
+
 function applyVariant(tape: PoseTape, variant: Variant): PoseFrame[] {
   switch (variant) {
     case 'raw':
@@ -45,7 +50,7 @@ function applyVariant(tape: PoseTape, variant: Variant): PoseFrame[] {
 
 export function runVariant(tape: PoseTape, variant: Variant): VariantResult {
   const frames = applyVariant(tape, variant)
-  const { reps } = runPipelineOnFrames(frames)
+  const { reps } = segmentSquat(frames)
   return {
     variant,
     repCount: reps.length,
@@ -178,7 +183,7 @@ export function replayTape(
 
   if (mode === 'cold' || tape.frames.length === 0) {
     const analysisFrames = tape.frames.slice(startIndex)
-    const result = runPipelineOnFrames(analysisFrames)
+    const result = segmentSquat(analysisFrames)
     return {
       ...result,
       analyzedFrames: analysisFrames,
@@ -200,7 +205,7 @@ export function replayTape(
   if (frames.length === 0 || !entryState || !entryState.activatedByDescent) {
     // Upload-path tapes (and live sets that started from standing) ran a
     // cold pipeline; replay does the same.
-    const result = runPipelineOnFrames(frames)
+    const result = segmentSquat(frames)
     return {
       ...result,
       analyzedFrames: frames,
@@ -218,7 +223,7 @@ export function replayTape(
     standingKneeAngle: entryState.standingKneeAngle,
   })
 
-  const result = runPipelineOnFrames(frames, {
+  const result = segmentSquat(frames, {
     phaseDetector: activated.phaseDetector,
     repCounter: activated.repCounter,
   })

@@ -102,7 +102,7 @@ cd web && npm run dev
 
 ## Status
 
-🟢 **Protocol platform v1+** (through M33 of the master roadmap) — squat
+🟢 **Protocol platform v1+** (completed foundation through M60; M61-M74 planned) — squat
 analysis end-to-end (live + upload + replay), core schemas,
 protocol/metric/finding engines, progressive-disclosure report, capture
 readiness v2, per-frame landmark quality, personal baseline with MDC-aware

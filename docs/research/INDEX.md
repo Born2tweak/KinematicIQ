@@ -79,3 +79,32 @@ cites its research basis per milestone. Standing anchors: R05 drives the
 validation wave (M44–M49), R08 drives the architecture wave (M39–M43,
 M46–M47), R11 drives the experience wave (M51–M54), R07 drives the domain
 wave (M55, M57–M58).
+
+## Supplemental research: public movement datasets (2026-07-10)
+
+`PUBLIC_MOVEMENT_DATASET_RESEARCH.md` inventories public pose, biomechanics,
+exercise, sport, MoCap, clinical, synthetic, and open-source resources. It is
+supplemental input rather than R12: R01–R11 remain the immutable specification
+set. The repository audit and accepted translation live in:
+
+- `reports/audits/KINEMATICIQ_POST_DATASET_RESEARCH_AUDIT.md`
+- `docs/implementation/PUBLIC_DATASET_RESEARCH_TO_EXECUTION_MAP.md`
+- `docs/implementation/KINEMATICIQ_RISK_REGISTER.md`
+- ADR-006 through ADR-010
+- the M61–M74 post-M60 roadmap wave
+
+**Executed so far (metadata-first, no corpus downloaded):**
+
+Supplemental M73 research: `NEXT_PROTOCOL_PORTFOLIO.md` ranks the next movement
+portfolio, and `INLINE_LUNGE_PROTOCOL_RESEARCH.md` is the sole selected
+research-only package. Neither authorizes data acquisition or implementation.
+
+- M61 — dataset governance: metadata registry + validator + operator runbook
+  + raw-data ignore boundary (`web/src/eval/datasetRegistry.ts`,
+  `web/eval/datasets/registry.json`,
+  `docs/validation/DATASET_OPERATOR_RUNBOOK.md`,
+  `docs/implementation/progress/M61-dataset-governance.md`).
+- M62 — neutral benchmark contracts: source-agnostic sequence schema,
+  canonical skeleton + coordinate conventions, versioned skeleton maps,
+  adapter, and a conservative replay bridge (`web/src/eval/benchmark/`,
+  `docs/implementation/progress/M62-benchmark-contracts.md`).

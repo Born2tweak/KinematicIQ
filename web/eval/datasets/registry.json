@@ -1,0 +1,186 @@
+{
+  "registryVersion": 1,
+  "storageNote": "Tracked metadata only. Raw data lives under each entry's localPathConvention on an operator's machine (gitignored) and never in this repo. Approval and acquisition are distinct: checksums prove acquired artifacts; an approved row without checksums may still be access-blocked. Acquisition requires the human-approval steps in docs/validation/DATASET_OPERATOR_RUNBOOK.md. Recheck every license/access field at download time (ADR-006, ADR-010).",
+  "entries": [
+    {
+      "id": "ui-prmd",
+      "version": "reduced-deep-squat-838d3a46",
+      "role": "evaluation-only",
+      "approvalStatus": "approved",
+      "source": {
+        "officialUrl": "https://github.com/avakanski/A-Deep-Learning-Framework-for-Assessing-Physical-Rehabilitation-Exercises",
+        "citation": "Vakanski et al., UI-PRMD: A Data Set of Human Rehabilitation Movements; reduced deep-squat subset published with Liao et al., A Deep Learning Framework for Assessing Physical Rehabilitation Exercises."
+      },
+      "content": {
+        "approxSize": "~47 MB selected raw matrices; ~1.5 MB derived autoencoder matrices",
+        "modalities": ["time-normalized-centered-vicon-angle-waveforms", "derived-quality-labels"],
+        "skeleton": "ui-prmd-vicon-angle-vector-117",
+        "views": ["laboratory-motion-capture"],
+        "subjects": "10 healthy adults; subject identities are not retained in the reduced matrix",
+        "splits": "90 retained correct deep-squat trials and 90 paired non-optimal trials; 240 normalized samples x 117 dimensions",
+        "movementLabels": [
+          "deep-squat"
+        ]
+      },
+      "license": {
+        "name": "ODC-PDDL-1.0-data+MIT-repository",
+        "url": "https://www.mdpi.com/2306-5729/3/1/2",
+        "commercialUse": "permitted",
+        "redistribution": "permitted",
+        "accessRequirement": "none"
+      },
+      "use": {
+        "allowedUses": [
+          "external-waveform-pipeline-validation",
+          "correct-vs-non-optimal-cohort-stratification",
+          "time-normalization-sensitivity-research"
+        ],
+        "prohibitedClaimUses": [
+          "absolute-joint-angle-accuracy-claim",
+          "event-timing-accuracy-claim",
+          "clinical-validity-claim",
+          "normative-population-claim"
+        ]
+      },
+      "localPathConvention": "datasets/local/ui-prmd/",
+      "checksums": [
+        { "algorithm": "sha256", "value": "f13929e78bedc9a13c9aecf60970f82f83255d55871ee637683b6761eb3d8840", "covers": "Data_Correct.csv" },
+        { "algorithm": "sha256", "value": "a2e11f291f861b4cc5f03ffa4684c2ba87996343a74d11ba7aa8cce1ed551891", "covers": "Data_Incorrect.csv" },
+        { "algorithm": "sha256", "value": "548326ec3e8127d8ea416d73aadcd98e064c7d36aa507ec0f3d5ded61238ee56", "covers": "Labels_Correct.csv" },
+        { "algorithm": "sha256", "value": "cb7fc799f6441c3addb8448ff6a917df2ca8d74e2f0941896a711a2b57792efb", "covers": "Labels_Incorrect.csv" },
+        { "algorithm": "sha256", "value": "6336a463b5ec0de54a037f65851a2aed7325febe067dc510a7893660627d58aa", "covers": "Prepare_Data_for_NN.m" }
+      ],
+      "notes": "User approved this pilot on 2026-07-10. Acquired from repository commit 838d3a46b04467610fa07f07827bccc8f2e6cec1. The matrices are centered, scaled, and linearly aligned to 240 samples; they do not preserve absolute degrees, source timing, subject/repetition identity, or a canonical joint mapping. Use only for dataset-scoped waveform and pipeline checks."
+    },
+    {
+      "id": "opencap-validation",
+      "version": "simtk-validation-cohort",
+      "role": "evaluation-only",
+      "approvalStatus": "metadata-only",
+      "source": {
+        "officialUrl": "https://simtk.org/projects/opencap",
+        "citation": "Uhlrich et al., OpenCap: Human movement dynamics from smartphone videos.",
+        "paperDoi": "10.1371/journal.pcbi.1011462"
+      },
+      "content": {
+        "approxSize": "moderate",
+        "modalities": [
+          "rgb-video",
+          "markers",
+          "ground-reaction-force",
+          "emg",
+          "opensim"
+        ],
+        "skeleton": "opensim-markers",
+        "views": ["multi-view", "sagittal", "frontal"],
+        "subjects": "10 validation participants",
+        "splits": "synchronized smartphone + laboratory trials",
+        "movementLabels": [
+          "gait",
+          "squat",
+          "sit-to-stand",
+          "drop-jump",
+          "running"
+        ]
+      },
+      "license": {
+        "name": "simtk-research-terms",
+        "url": "https://simtk.org/projects/opencap",
+        "commercialUse": "unclear",
+        "redistribution": "unclear",
+        "accessRequirement": "registration"
+      },
+      "use": {
+        "allowedUses": [
+          "joint-angle-validation-sagittal",
+          "event-timing-validation",
+          "video-to-biomechanics-reference"
+        ],
+        "prohibitedClaimUses": [
+          "treat-opencap-estimates-as-independent-ground-truth",
+          "clinical-validity-claim",
+          "commercial-marketing-claim-without-counsel"
+        ]
+      },
+      "localPathConvention": "datasets/local/opencap-validation/",
+      "notes": "Closest available video-to-biomechanics chain. Compare against its lab reference channels, not its own estimates."
+    },
+    {
+      "id": "ochuman",
+      "version": "ochuman-api",
+      "role": "evaluation-only",
+      "approvalStatus": "approved",
+      "source": {
+        "officialUrl": "https://github.com/liruilong940607/OCHumanApi",
+        "citation": "Zhang et al., OCHuman: Occluded Human benchmark (keypoints + masks)."
+      },
+      "content": {
+        "approxSize": "small (~4.7k images)",
+        "modalities": ["rgb-image", "keypoints", "instance-masks"],
+        "skeleton": "coco-17",
+        "views": ["in-the-wild"],
+        "subjects": "8110 people across 4731 images",
+        "movementLabels": ["general-occluded-human"]
+      },
+      "license": {
+        "name": "research-use-mixed-image-rights",
+        "url": "https://github.com/liruilong940607/OCHumanApi",
+        "commercialUse": "per-source",
+        "redistribution": "unclear",
+        "accessRequirement": "none"
+      },
+      "use": {
+        "allowedUses": [
+          "severe-occlusion-regression",
+          "landmark-visibility-stress-test"
+        ],
+        "prohibitedClaimUses": [
+          "biomechanical-accuracy-claim",
+          "joint-angle-validity-claim"
+        ]
+      },
+      "localPathConvention": "datasets/local/ochuman/",
+      "notes": "User approved this pilot on 2026-07-10. The API source at commit 958aa2046ba4f5760fcc94cb458da8fe72cedf4f is available under MIT, but the 667 MB image/annotation corpus remains unavailable locally because the official download requires an identity form. Approval does not imply acquisition; no corpus checksum is recorded. No biomechanical ground truth; underlying image rights are mixed."
+    },
+    {
+      "id": "sportspose",
+      "version": "project-release",
+      "role": "research-only",
+      "approvalStatus": "metadata-only",
+      "source": {
+        "officialUrl": "https://sportsposes.github.io/",
+        "citation": "Ingwersen et al., SportsPose: A Dynamic 3D Sports Pose Dataset.",
+        "paperDoi": "10.48550/arXiv.2304.01865"
+      },
+      "content": {
+        "approxSize": "moderate-large",
+        "modalities": ["multi-camera-markerless", "vicon-subset"],
+        "skeleton": "3d-joints",
+        "views": ["multi-view"],
+        "subjects": "24",
+        "splits": ">176k 3D poses",
+        "movementLabels": ["golf", "tennis", "football", "badminton", "volleyball"]
+      },
+      "license": {
+        "name": "custom-research-agreement",
+        "url": "https://sportsposes.github.io/",
+        "commercialUse": "unclear",
+        "redistribution": "prohibited",
+        "accessRequirement": "agreement"
+      },
+      "use": {
+        "allowedUses": [
+          "dynamic-sports-pose-robustness",
+          "camera-view-robustness"
+        ],
+        "prohibitedClaimUses": [
+          "clinical-validity-claim",
+          "exercise-form-scoring-claim",
+          "commercial-marketing-claim-without-counsel"
+        ]
+      },
+      "localPathConvention": "datasets/local/sportspose/",
+      "notes": "Dynamic sports 3D poses with a Vicon precision subset. Research agreement required; not exercise-form validation."
+    }
+  ]
+}

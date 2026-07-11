@@ -120,7 +120,7 @@ const STATUS_TEXT: Record<Stage, { title: string; subtitle: string }> = {
     subtitle: 'Hold still — learning your standing baseline.',
   },
   ready: { title: 'Ready', subtitle: 'Begin your first rep whenever you like.' },
-  active: { title: 'Tracking', subtitle: 'Reps are counted and validated automatically.' },
+  active: { title: 'Tracking', subtitle: 'Rep candidates count when the current movement gates pass.' },
   finishing: { title: 'Stand still to finish', subtitle: 'Auto-finish countdown…' },
   results: {
     title: 'Session complete',

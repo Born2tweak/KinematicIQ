@@ -28,6 +28,7 @@ describe('protocols/registry', () => {
     const all = listProtocols()
     expect(all.map((p) => p.definition.id)).toEqual([
       'squat',
+      'sitToStand',
       'hipHinge',
       'jump',
       'sprint',
@@ -36,6 +37,7 @@ describe('protocols/registry', () => {
       'squat',
     ])
     expect(listProtocolsByStatus('planned').map((p) => p.definition.id)).toEqual([
+      'sitToStand',
       'hipHinge',
       'jump',
       'sprint',
@@ -46,7 +48,8 @@ describe('protocols/registry', () => {
     expect(getProtocol('hipHinge').definition.kind).toBe('cyclic')
     expect(getProtocol('jump').definition.kind).toBe('ballistic')
     expect(getProtocol('sprint').definition.kind).toBe('gait')
-    for (const id of ['hipHinge', 'jump', 'sprint'] as const) {
+    expect(getProtocol('sitToStand').definition.kind).toBe('transition')
+    for (const id of ['hipHinge', 'jump', 'sprint', 'sitToStand'] as const) {
       expect(getProtocol(id).profile).toBeNull()
       expect(getProtocol(id).definition.phases.length).toBeGreaterThan(0)
       expect(getProtocol(id).definition.requiredLandmarks.length).toBeGreaterThan(0)

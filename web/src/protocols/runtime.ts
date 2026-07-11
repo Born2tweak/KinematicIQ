@@ -34,10 +34,49 @@ import type {
 import type { SetQualityAssessment } from '../session/setQualityGate'
 import type { MetricResult } from '../core/metric'
 import type { PoseFrame, RepMetrics } from '../cv/types'
+import type { PostureFrameSample } from '../analysis/posture/postureFrame'
+import type { CaptureContext } from '../core/provenance'
+import { buildSessionResult } from '../session/buildSessionResult'
 import { getProtocol } from './registry'
+import { createAutoFinishState, updateAutoFinish } from '../analysis/autoFinish'
+import { STABLE_FRAMES_REQUIRED, createAutoStartState, updateAutoStart } from '../analysis/autoStart'
+import { standingKneeThreshold, updatePhaseDetector } from '../analysis/phaseDetector'
+import { updateRepCounter } from '../analysis/repCounter'
+import { activateAnalysisPipeline, createFreshAnalysisPipeline } from '../analysis/setActivation'
 
 /** Everything segmentation produces — shape-identical to `runPipelineOnFrames`. */
 export type SegmentationOutput = ReturnType<typeof runPipelineOnFrames>
+
+export interface ProtocolTrialOutcome {
+  id: string
+  kind: 'repetition' | 'transition' | 'ballistic-event' | 'stride'
+  startFrameIndex: number
+  endFrameIndex: number
+  completed: boolean
+  rejectionReason?: string
+}
+
+export interface BuildProtocolSessionInput {
+  reps: RepMetrics[]
+  poseConfidenceSamples?: number[]
+  postureSamples?: PostureFrameSample[]
+  repRejections?: RepRejection[]
+  capture?: CaptureContext
+}
+
+/** Compatibility seam for today's cyclic live engine; owned by the squat adapter. */
+export interface LiveCyclicRuntime {
+  stableFramesRequired: number
+  createAutoStart: typeof createAutoStartState
+  updateAutoStart: typeof updateAutoStart
+  createAutoFinish: typeof createAutoFinishState
+  updateAutoFinish: typeof updateAutoFinish
+  createPipeline: typeof createFreshAnalysisPipeline
+  activatePipeline: typeof activateAnalysisPipeline
+  updatePhase: typeof updatePhaseDetector
+  updateRep: typeof updateRepCounter
+  standingKneeThreshold: typeof standingKneeThreshold
+}
 
 export interface CollectMetricsInput {
   reps: RepMetrics[]
@@ -71,6 +110,8 @@ export interface ReportMetadata {
  */
 export interface ProtocolRuntime {
   protocolId: ProtocolId
+  outcomeKinds: ProtocolTrialOutcome['kind'][]
+  liveCyclic?: LiveCyclicRuntime
   /** Frames → reps + per-frame streams (FSM segmentation). */
   segmentFrames(
     frames: readonly PoseFrame[],
@@ -87,6 +128,7 @@ export interface ProtocolRuntime {
   ): SetQualityAssessment
   /** Protocol copy for the report layer (label, verdict-aware headline). */
   buildReportMetadata(result: SessionResult): ReportMetadata
+  buildSessionResult(input: BuildProtocolSessionInput): SessionResult
 }
 
 /**
@@ -96,6 +138,19 @@ export interface ProtocolRuntime {
  */
 export const SQUAT_RUNTIME: ProtocolRuntime = {
   protocolId: 'squat',
+  outcomeKinds: ['repetition'],
+  liveCyclic: {
+    stableFramesRequired: STABLE_FRAMES_REQUIRED,
+    createAutoStart: createAutoStartState,
+    updateAutoStart,
+    createAutoFinish: createAutoFinishState,
+    updateAutoFinish,
+    createPipeline: createFreshAnalysisPipeline,
+    activatePipeline: activateAnalysisPipeline,
+    updatePhase: updatePhaseDetector,
+    updateRep: updateRepCounter,
+    standingKneeThreshold,
+  },
   segmentFrames: (frames, initial) => runPipelineOnFrames(frames, initial),
   collectMetrics: ({ reps, sessionConfidenceScore, excludedRepNumbers }) =>
     collectSetMetrics(reps, sessionConfidenceScore, excludedRepNumbers),
@@ -106,6 +161,15 @@ export const SQUAT_RUNTIME: ProtocolRuntime = {
     protocolLabel: getProtocol('squat').definition.label,
     headline: buildResultsSummary(result),
   }),
+  buildSessionResult: (input) =>
+    buildSessionResult(
+      input.reps,
+      input.poseConfidenceSamples ?? [],
+      input.postureSamples ?? [],
+      input.repRejections ?? [],
+      'squat',
+      input.capture,
+    ),
 }
 
 const RUNTIMES: Partial<Record<ProtocolId, ProtocolRuntime>> = {

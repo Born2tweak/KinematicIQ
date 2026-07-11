@@ -34,6 +34,14 @@ reports rep-count error and bottom-frame MAE.
 
 ## Current suite (labels of 2026-07-06)
 
+The table below is a historical snapshot from labeling time, not the current
+acceptance baseline. On 2026-07-10, `npm run eval:tapes` executed 11 tapes with
+0 replay errors; all 9 labeled tapes matched exact rep count (9/9). Bottom-frame
+MAE remained unavailable because the current labels do not provide enough bottom
+indices, and no saved comparison baseline was present, so change acceptance was
+undecided. Save a versioned benchmark report before using later results to justify
+a filter, gate, threshold, or pose-model change.
+
 | Tape | Truth reps | Pipeline (at labeling) | Notes |
 |---|---|---|---|
 | 15079385_1080_1920_30fps | 2 | 2 ✓ | back view, barbell |

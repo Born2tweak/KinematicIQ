@@ -15,11 +15,13 @@ import { NotImplementedError, type ProtocolId } from '../core/protocol'
 import { HIP_HINGE_PROTOCOL } from './hipHinge'
 import { JUMP_PROTOCOL } from './jump'
 import { SPRINT_PROTOCOL } from './sprint'
+import { SIT_TO_STAND_PROTOCOL } from './sitToStand'
 import { SQUAT_PROTOCOL } from './squat'
 import type { Protocol } from './types'
 
 const PROTOCOLS: Partial<Record<ProtocolId, Protocol>> = {
   squat: SQUAT_PROTOCOL,
+  sitToStand: SIT_TO_STAND_PROTOCOL,
   hipHinge: HIP_HINGE_PROTOCOL,
   jump: JUMP_PROTOCOL,
   sprint: SPRINT_PROTOCOL,

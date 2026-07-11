@@ -8,6 +8,8 @@ interface RepTimelineProps {
   deviantRep?: number | null
   /** Rep the replay timeline is currently inside, if the replay is open. */
   activeRep?: number | null
+  /** Evidence link: jump the replay to this rep's deepest tracked moment. */
+  onSelectRep?: (repNumber: number) => void
 }
 
 /** Bar heights map knee angle to visual depth: smaller angle = deeper = taller. */
@@ -32,6 +34,7 @@ export function RepTimeline({
   showAngles = false,
   deviantRep = null,
   activeRep = null,
+  onSelectRep,
 }: RepTimelineProps) {
   if (reps.length === 0) return null
 
@@ -49,9 +52,13 @@ export function RepTimeline({
               {showAngles && (
                 <span className="rep-timeline__angle">{Math.round(depth)}°</span>
               )}
-              <div
+              <button
+                type="button"
                 className={`rep-timeline__bar${isDeviant ? ' rep-timeline__bar--deviant' : ''}${isActive ? ' rep-timeline__bar--active' : ''}`}
                 style={{ height: `${heightPercent}%` }}
+                onClick={() => onSelectRep?.(rep.repNumber)}
+                disabled={!onSelectRep}
+                aria-label={`Open rep ${rep.repNumber} at its deepest tracked moment${isDeviant ? '; differs most from this set pattern' : ''}`}
                 title={
                   showAngles
                     ? `Rep ${rep.repNumber}: ${Math.round(depth)}° bottom knee angle`
@@ -68,6 +75,17 @@ export function RepTimeline({
         {deviantRep !== null &&
           ` Rep ${deviantRep} appears to differ most from your own pattern.`}
       </p>
+      <details className="rep-timeline__text-alternative">
+        <summary>Rep values as text</summary>
+        <ul>
+          {reps.map((rep) => (
+            <li key={rep.repNumber}>
+              Rep {rep.repNumber}: {Math.round(repDepth(rep))}° bottom knee-angle estimate
+              {rep.repNumber === deviantRep ? '; differs most from this set pattern' : ''}
+            </li>
+          ))}
+        </ul>
+      </details>
     </div>
   )
 }

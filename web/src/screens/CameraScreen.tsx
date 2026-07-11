@@ -1,6 +1,4 @@
 import {
-  Suspense,
-  lazy,
   useCallback,
   useEffect,
   useMemo,
@@ -9,38 +7,15 @@ import {
 } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import type { ProtocolId } from '../core/protocol'
-import { buildSessionResult } from '../session/buildSessionResult'
 import { Button } from '../components/Button'
-import { DisclaimerBanner } from '../components/DisclaimerBanner'
 import { RepCounter } from '../components/RepCounter'
-import { SessionStatusCard } from '../components/SessionStatusCard'
 import {
   SkeletonOverlay,
   clearSkeleton,
   drawSkeleton,
 } from '../components/SkeletonOverlay'
 import { getJointAngles } from '../analysis/angles'
-import {
-  createAutoFinishState,
-  updateAutoFinish,
-} from '../analysis/autoFinish'
 import { safeLandmark } from '../analysis/geometry'
-import {
-  standingKneeThreshold,
-  updatePhaseDetector,
-} from '../analysis/phaseDetector'
-import {
-  updateRepCounter,
-} from '../analysis/repCounter'
-import {
-  STABLE_FRAMES_REQUIRED,
-  createAutoStartState,
-  updateAutoStart,
-} from '../analysis/autoStart'
-import {
-  activateAnalysisPipeline,
-  createFreshAnalysisPipeline,
-} from '../analysis/setActivation'
 import { poseEngine } from '../cv/poseEngine'
 import { createCameraSource } from '../camera/cameraSourceFactory'
 import { createLiveStreamFilter } from '../cv/landmarkFilter'
@@ -66,25 +41,27 @@ import {
   type CaptureReadinessAssessment,
 } from '../cv/captureReadiness'
 import { drawDebugOverlay, type DebugOverlayData } from '../cv/drawDebugOverlay'
-import { DepthSparkline } from '../components/DepthSparkline'
 import { useAnalystMode } from '../hooks/useAnalystMode'
 import {
   extractPostureFrame,
   type PostureFrameSample,
 } from '../analysis/posture/postureFrame'
-import { workflowStageForCameraPhase } from '../session/assessmentWorkflow'
 import {
   type CameraSessionPhase,
-  getSessionStatusCopy,
 } from './cameraSessionUi'
+import { buildCameraSessionViewModel } from './cameraSessionController'
+import { getProtocol } from '../protocols/registry'
+import { getProtocolRuntime } from '../protocols/runtime'
+import {
+  CameraActionBar,
+  CameraAnalystTools,
+  CameraReadinessPanel,
+} from './CameraSessionHud'
 import {
   lastRealRejectionReason,
   nextRepFeedbackHud,
   realRejections,
 } from './repRejectionUi'
-
-// Lazy: keeps three.js/@react-three/fiber out of the main bundle until toggled on.
-const PoseScene3D = lazy(() => import('../components/PoseScene3D'))
 
 const FRONT_CAMERA_MIRROR = false
 const HIP_TRAIL_MAX_SAMPLES = 90
@@ -117,8 +94,14 @@ export function CameraScreen() {
   const selectedProtocolId: ProtocolId =
     (location.state as { protocolId?: ProtocolId } | null)?.protocolId ??
     'squat'
-  const selectedProtocolIdRef = useRef(selectedProtocolId)
-  selectedProtocolIdRef.current = selectedProtocolId
+  const selectedProtocol = getProtocol(selectedProtocolId).definition
+  const selectedRuntime = getProtocolRuntime(selectedProtocolId)
+  const liveCyclic = selectedRuntime.liveCyclic as NonNullable<
+    typeof selectedRuntime.liveCyclic
+  >
+  if (!liveCyclic) {
+    throw new Error(`Protocol ${selectedProtocolId} has no live cyclic runtime`)
+  }
   // Frame provider: real webcam in production; deterministic fixture sources
   // in dev/test via ?source=… (policy lives in cameraSourceSelection).
   const cameraSource = useMemo(
@@ -127,11 +110,11 @@ export function CameraScreen() {
   )
   const videoRef = useRef<HTMLVideoElement | null>(null)
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
-  const initialPipelineRef = useRef(createFreshAnalysisPipeline())
+  const initialPipelineRef = useRef(liveCyclic.createPipeline())
   const phaseDetectorRef = useRef(initialPipelineRef.current.phaseDetector)
   const repCounterRef = useRef(initialPipelineRef.current.repCounter)
-  const autoStartRef = useRef(createAutoStartState())
-  const autoFinishRef = useRef(createAutoFinishState())
+  const autoStartRef = useRef(liveCyclic.createAutoStart())
+  const autoFinishRef = useRef(liveCyclic.createAutoFinish())
   const poseConfidenceSamplesRef = useRef<number[]>([])
   const postureSamplesRef = useRef<PostureFrameSample[]>([])
   const isFinishingRef = useRef(false)
@@ -283,16 +266,13 @@ export function CameraScreen() {
     setIsFinishing(true)
 
     const reps = repCounterRef.current.reps
-    const result = buildSessionResult(
+    const result = selectedRuntime.buildSessionResult({
       reps,
-      poseConfidenceSamplesRef.current,
-      postureSamplesRef.current,
-      repCounterRef.current.rejections,
-      selectedProtocolIdRef.current,
-      // Matches the tape meta below: live analysis consumes One-Euro-filtered
-      // landmarks, and exported provenance must say so.
-      { captureSource: 'live', filterVariant: 'one-euro-live' },
-    )
+      poseConfidenceSamples: poseConfidenceSamplesRef.current,
+      postureSamples: postureSamplesRef.current,
+      repRejections: repCounterRef.current.rejections,
+      capture: { captureSource: 'live', filterVariant: 'one-euro-live' },
+    })
 
     // Preserve the raw session as a replayable pose tape (same substrate as
     // the upload path) so live sets feed the validation dataset directly.
@@ -322,10 +302,10 @@ export function CameraScreen() {
     tapeEntryStateRef.current = null
     tapeAnalysisStartRef.current = null
 
-    autoStartRef.current = createAutoStartState()
-    autoFinishRef.current = createAutoFinishState()
-    phaseDetectorRef.current = createFreshAnalysisPipeline().phaseDetector
-    repCounterRef.current = createFreshAnalysisPipeline().repCounter
+    autoStartRef.current = liveCyclic.createAutoStart()
+    autoFinishRef.current = liveCyclic.createAutoFinish()
+    phaseDetectorRef.current = liveCyclic.createPipeline().phaseDetector
+    repCounterRef.current = liveCyclic.createPipeline().repCounter
     liveFilterRef.current.reset()
     poseConfidenceSamplesRef.current = []
     postureSamplesRef.current = []
@@ -340,7 +320,7 @@ export function CameraScreen() {
     setFinishCountdown(null)
 
     navigate('/results', { state: { result } })
-  }, [navigate])
+  }, [liveCyclic, navigate, selectedRuntime])
 
   const finishSetRef = useRef(finishSet)
   finishSetRef.current = finishSet
@@ -369,13 +349,13 @@ export function CameraScreen() {
           ? null
           : Math.min(...kneeAngles)
 
-      const phaseResult = updatePhaseDetector(
+      const phaseResult = liveCyclic.updatePhase(
         phaseDetectorRef.current,
         { kneeAngle: trackingKneeAngle, hipY, timestamp: poseFrame.timestamp },
       )
       phaseDetectorRef.current = phaseResult.state
 
-      const repResult = updateRepCounter(repCounterRef.current, {
+      const repResult = liveCyclic.updateRep(repCounterRef.current, {
         phase: phaseResult.phase,
         transitioned: phaseResult.transitioned,
         frame: poseFrame,
@@ -468,7 +448,7 @@ export function CameraScreen() {
             }
 
             // Drive the auto-start state machine every frame
-            const autoResult = updateAutoStart(autoStartRef.current, {
+            const autoResult = liveCyclic.updateAutoStart(autoStartRef.current, {
               calibration: calResult,
               angles,
               hipY,
@@ -477,7 +457,7 @@ export function CameraScreen() {
             autoStartRef.current = autoResult.state
 
             if (autoResult.transitioned && autoResult.phase === 'READY') {
-              const fresh = createFreshAnalysisPipeline()
+              const fresh = liveCyclic.createPipeline()
               liveFilterRef.current.reset()
               // Tape from READY onward: the preroll before activation warms
               // the One-Euro filter exactly as live replay needs (finding #7).
@@ -487,7 +467,7 @@ export function CameraScreen() {
               pose3DRef.current.depthHistory = []
               phaseDetectorRef.current = fresh.phaseDetector
               repCounterRef.current = fresh.repCounter
-              autoFinishRef.current = createAutoFinishState()
+              autoFinishRef.current = liveCyclic.createAutoFinish()
               setAutoFinishPending(false)
               setFinishCountdown(null)
               setRepCount(0)
@@ -508,7 +488,7 @@ export function CameraScreen() {
                 standingKneeAngle: phaseDetectorRef.current.standingKneeAngle,
                 activatedByDescent: autoResult.activatedByDescent,
               }
-              autoFinishRef.current = createAutoFinishState()
+              autoFinishRef.current = liveCyclic.createAutoFinish()
               setAutoFinishPending(false)
               setFinishCountdown(null)
               poseConfidenceSamplesRef.current = []
@@ -526,7 +506,7 @@ export function CameraScreen() {
                   : Math.min(...kneeAngles)
 
               if (autoResult.activatedByDescent) {
-                const activated = activateAnalysisPipeline({
+                const activated = liveCyclic.activatePipeline({
                   frame: poseFrame,
                   angles,
                   hipY,
@@ -538,7 +518,7 @@ export function CameraScreen() {
                 phaseDetectorRef.current = activated.phaseDetector
                 repCounterRef.current = activated.repCounter
               } else {
-                const fresh = createFreshAnalysisPipeline()
+                const fresh = liveCyclic.createPipeline()
                 phaseDetectorRef.current = fresh.phaseDetector
                 repCounterRef.current = fresh.repCounter
               }
@@ -581,7 +561,7 @@ export function CameraScreen() {
             // Update calibration progress during CALIBRATING phase
             if (autoResult.phase === 'CALIBRATING') {
               const progress = Math.round(
-                (autoResult.state.stableFrameCount / STABLE_FRAMES_REQUIRED) *
+                (autoResult.state.stableFrameCount / liveCyclic.stableFramesRequired) *
                   100,
               )
               setCalibrationProgress((prev) =>
@@ -601,7 +581,7 @@ export function CameraScreen() {
               smoothedKnee = analysisResult.smoothedKnee
               completedRepThisFrame = analysisResult.completedRep
 
-              const finishResult = updateAutoFinish(autoFinishRef.current, {
+              const finishResult = liveCyclic.updateAutoFinish(autoFinishRef.current, {
                 timestamp: poseFrame.timestamp,
                 squatPhase: phaseDetectorRef.current.phase,
                 kneeAngle: smoothedKnee,
@@ -672,7 +652,7 @@ export function CameraScreen() {
                   ? 0
                   : Math.round(poseFrame.timestamp - rcState.standingStreakStartTs),
               standingKneeBaseline: pdState.standingKneeAngle,
-              lockoutKneeThreshold: standingKneeThreshold(pdState),
+              lockoutKneeThreshold: liveCyclic.standingKneeThreshold(pdState),
               blockingGate: rcState.blockingGate,
               lastMissedRepReason: rcState.lastMissedRepReason,
               completedRepThisFrame,
@@ -761,20 +741,16 @@ export function CameraScreen() {
 
   // Workflow model (M41): display-level mapping only — the detection loop
   // and auto-start/finish state remain the source of truth for behavior.
-  const workflowStage = workflowStageForCameraPhase(displayPhase)
-
-  const statusCopy = getSessionStatusCopy(displayPhase, {
+  const sessionView = buildCameraSessionViewModel({
+    protocol: selectedProtocol,
+    phase: displayPhase,
     repCount,
     finishCountdown,
     missingJoints,
     guidance,
-    readinessState: readiness?.state ?? null,
-    geometryFix:
-      readiness?.geometryChecks.find((c) => c.status === 'fail')?.fix ?? null,
+    readiness,
   })
-
-  const showReadinessChecklist =
-    displayPhase === 'WAITING' && readiness !== null
+  const { workflowStage, status: statusCopy, showReadinessChecklist } = sessionView
 
   const stageLayoutClass = [
     'camera-stage',
@@ -840,61 +816,15 @@ export function CameraScreen() {
               Fixture camera: {cameraSource.label}
             </div>
           )}
-          <div className="camera-hud--top-left">
-            <SessionStatusCard
-              compact
-              phase={displayPhase}
-              title={statusCopy.title}
-              subtitle={statusCopy.subtitle}
-              calibrationProgress={calibrationProgress}
-              missingJoints={missingJoints}
-              repFeedback={repFeedback}
-            />
-            {showReadinessChecklist && readiness && (
-              <div
-                className={`capture-readiness capture-readiness--${readiness.state}`}
-                aria-live="polite"
-              >
-                <p className="capture-readiness__heading">
-                  {readiness.state === 'ready'
-                    ? 'Ready to record'
-                    : readiness.state === 'marginal'
-                      ? 'Almost ready'
-                      : 'Get set up'}
-                </p>
-                <ul className="capture-readiness__list">
-                  {readiness.checklist.map((item) => (
-                    <li
-                      key={item.id}
-                      className={`capture-readiness__item${item.ok ? ' capture-readiness__item--ok' : ''}`}
-                    >
-                      <span aria-hidden className="capture-readiness__mark">
-                        {item.ok ? '✓' : '○'}
-                      </span>
-                      {item.label}
-                    </li>
-                  ))}
-                  {readiness.geometryChecks.map((item) => (
-                    <li
-                      key={item.id}
-                      className={`capture-readiness__item${
-                        item.status === 'pass'
-                          ? ' capture-readiness__item--ok'
-                          : item.status === 'warn'
-                            ? ' capture-readiness__item--warn'
-                            : ''
-                      }`}
-                    >
-                      <span aria-hidden className="capture-readiness__mark">
-                        {item.status === 'pass' ? '✓' : item.status === 'warn' ? '!' : '○'}
-                      </span>
-                      {item.label}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-          </div>
+          <CameraReadinessPanel
+            phase={displayPhase}
+            status={statusCopy}
+            calibrationProgress={calibrationProgress}
+            missingJoints={missingJoints}
+            repFeedback={repFeedback}
+            showChecklist={showReadinessChecklist}
+            readiness={readiness}
+          />
 
           <RepCounter
             repCount={repCount}
@@ -909,85 +839,25 @@ export function CameraScreen() {
             </div>
           )}
 
-          <div className="camera-hud--tools">
-            <button
-              type="button"
-              className={`hud-tool${isAnalyst ? ' hud-tool--on' : ''}`}
-              onClick={toggleAnalyst}
-              aria-pressed={isAnalyst}
-              title="Analyst mode reveals the 3D pose view and debug tools"
-            >
-              Analyst
-            </button>
-            {isAnalyst && (
-              <button
-                type="button"
-                className={`hud-tool${show3D ? ' hud-tool--on' : ''}`}
-                onClick={() => setShow3D((prev) => !prev)}
-                aria-pressed={show3D}
-                aria-label={show3D ? 'Hide live 3D pose view' : 'Show live 3D pose view'}
-                title="Live 3D pose view"
-              >
-                3D
-              </button>
-            )}
-            {isAnalyst && (
-              <button
-                type="button"
-                className={`hud-tool${showDebug ? ' hud-tool--on' : ''}`}
-                onClick={() => setShowDebug((prev) => !prev)}
-                aria-pressed={showDebug}
-                aria-label={
-                  showDebug
-                    ? 'Hide developer debug overlay'
-                    : 'Show developer debug overlay'
-                }
-                title="Developer debug overlay"
-              >
-                DBG
-              </button>
-            )}
-          </div>
+          <CameraAnalystTools
+            isAnalyst={isAnalyst}
+            toggleAnalyst={toggleAnalyst}
+            show3D={show3D}
+            toggle3D={() => setShow3D((prev) => !prev)}
+            showDebug={showDebug}
+            toggleDebug={() => setShowDebug((prev) => !prev)}
+            expand3D={expand3D}
+            toggleExpand3D={() => setExpand3D((prev) => !prev)}
+            pose3DRef={pose3DRef}
+            mirror={FRONT_CAMERA_MIRROR}
+          />
 
-          {isAnalyst && show3D && (
-            <div
-              className={`camera-3d-panel${expand3D ? ' camera-3d-panel--expanded' : ''}`}
-            >
-              <button
-                type="button"
-                className="camera-3d-expand"
-                onClick={() => setExpand3D((prev) => !prev)}
-                aria-pressed={expand3D}
-                title={
-                  expand3D
-                    ? 'Collapse the 3D inspection view'
-                    : 'Expand the 3D view for inspection'
-                }
-              >
-                {expand3D ? 'Collapse' : 'Expand'}
-              </button>
-              <Suspense fallback={null}>
-                <PoseScene3D poseRef={pose3DRef} mirror={FRONT_CAMERA_MIRROR} />
-              </Suspense>
-              <DepthSparkline dataRef={pose3DRef} />
-            </div>
-          )}
-
-          <div className="camera-hud--bottom">
-            <div className="camera-action-bar">
-              <Button
-                variant="secondary"
-                onClick={finishSet}
-                disabled={autoStartPhase !== 'ACTIVE' || isFinishing}
-              >
-                Finish Now
-              </Button>
-              <Button variant="ghost" onClick={handleCancel}>
-                Cancel
-              </Button>
-            </div>
-            {displayPhase !== 'ACTIVE' && <DisclaimerBanner />}
-          </div>
+          <CameraActionBar
+            phase={displayPhase}
+            isFinishing={isFinishing}
+            onFinish={finishSet}
+            onCancel={handleCancel}
+          />
         </>
       )}
     </div>

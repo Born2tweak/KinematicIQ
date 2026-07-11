@@ -1,6 +1,6 @@
 # KinematicIQ — AI Rules
 
-> **Revised 2026-07-02.** This doc originally described the Layer 1 JavaScript MVP. The shipped app now uses **TypeScript, React Router, Vitest, and a `cv/` module layout** — those are the current standards, not violations. Video upload (`/upload`) is shipped. Movement expansion beyond squat (hip hinge, jump, sprint) is planned via the MovementProfile architecture in `docs/strategy/movement-expansion.md`. The safety/claims rules (Section 6) remain fully in force and are expanded in `docs/strategy/safety-claims.md`.
+> **Revised 2026-07-10.** This doc originally described the Layer 1 JavaScript MVP. The shipped app now uses **TypeScript, React Router, Vitest, and a `cv/` module layout** — those are the current standards, not violations. Video upload (`/upload`) and opt-in local session history are shipped. Movement expansion is governed by the canonical master roadmap and protocol runtime, not by copying the squat pipeline. The safety/claims rules (Section 6) remain fully in force and are expanded in `docs/strategy/safety-claims.md`.
 
 These rules govern all coding agent behavior when building KinematicIQ. Every agent session must follow these rules without exception. If a rule conflicts with a coding suggestion, the rule wins.
 
@@ -11,9 +11,9 @@ These rules govern all coding agent behavior when building KinematicIQ. Every ag
 1. **Work on one milestone at a time.** Complete it, verify acceptance criteria, then move to the next.
 2. **Do not skip milestones.** Each milestone builds on the previous one. Follow the build plan order.
 3. **Do not add features not listed in the current milestone.** If something sounds useful but isn't in scope, leave it.
-4. **Bodyweight squat is the reference movement.** New movements (hip hinge, jump, sprint) are added only as MovementProfiles per the roadmap — never as forked pipelines, and never ahead of their phase.
+4. **Bodyweight squat is the reference movement.** New movements are added only through the governed protocol definition/runtime and evidence gates in the canonical roadmap — never as forked squat pipelines and never ahead of their phase.
 5. **The app is fully client-side.** No backend, no API, no server, no database, no network requests after page load.
-6. **No data persistence beyond lightweight UI preferences.** No session/landmark/video data in localStorage, IndexedDB, or cookies. A small UI preference (e.g. Analyst mode toggle) may persist in localStorage; movement data lives in memory only.
+6. **No remote persistence.** Opt-in session summaries may use the shipped local IndexedDB store and lightweight UI preferences may use localStorage. Raw video and full landmark streams are not persisted; nothing is transmitted.
 7. **Use MediaPipe Pose as the pose engine.** Do not substitute another model without explicit approval.
 
 ---
@@ -41,11 +41,11 @@ These rules govern all coding agent behavior when building KinematicIQ. Every ag
 - Dashboards or admin panels
 - Hardware or wearable integration
 - Multi-camera support
-- Session history or longitudinal tracking
+- New persistence or longitudinal behavior beyond the shipped opt-in local history unless the milestone explicitly governs it
 - Movement types beyond the current roadmap phase (see `docs/strategy/execution-roadmap.md`)
 - Custom ML model training or fine-tuning
 - Backend server, API routes, or serverless functions
-- Database (SQL, NoSQL, or any persistence layer)
+- Server/database persistence (SQL, NoSQL, hosted storage, or remote sync)
 - Analytics, telemetry, or tracking scripts
 - CI/CD pipelines or deployment infrastructure beyond the existing Vercel setup
 - Docker or containerization
@@ -101,7 +101,7 @@ These rules govern all coding agent behavior when building KinematicIQ. Every ag
 
 1. **No video frames leave the device.** All processing is in-browser.
 2. **No landmark data is transmitted** to any server.
-3. **No data is persisted** after the browser tab closes.
+3. **Only explicitly opted-in local session summaries persist** in IndexedDB; users can delete local history. Raw video and full landmark streams do not persist.
 4. **No third-party analytics or tracking scripts** may be added.
 5. **No cookies** may be set.
 6. **The app must function entirely offline** after the initial page load (excluding MediaPipe model download).
@@ -139,7 +139,7 @@ The following actions are explicitly prohibited:
 | Training or importing custom ML models | Use MediaPipe pretrained only |
 | Creating user accounts | No auth in Layer 1 |
 | Adding payments or subscriptions | No monetization in Layer 1 |
-| Creating a database schema | No persistence in Layer 1 |
+| Creating a server database schema | No backend or remote persistence in Layer 1 |
 | Building a dashboard | No dashboards in Layer 1 |
 | Adding hardware integration | No sensors/wearables in Layer 1 |
 | Claiming medical diagnosis | Safety boundary violation |

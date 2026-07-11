@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "createdAt": "2026-07-11",
+  "inputs": {
+    "uiPrmdBaseline": "m63-ui-prmd-reduced-baseline-v1.json",
+    "ochumanStatus": "m63-ochuman-access-status-v1.json",
+    "localPoseTapes": 11,
+    "labeledPoseTapes": 9
+  },
+  "observations": {
+    "exactRepCount": "9/9",
+    "replayErrors": 0,
+    "verdicts": { "valid": 3, "questionable": 5, "invalid": 3 },
+    "highCameraConfidenceOnInvalidSets": true,
+    "poseTapesWithReportedJumps": 3,
+    "bottomFrameMae": null,
+    "uiPrmdReducedJitterRatioNonOptimalToDemonstrated": 1.1260134565,
+    "ochumanRealCorpusRun": false
+  },
+  "rankedFindings": [
+    { "rank": 1, "cause": "reference-evidence coverage", "confidence": "high", "evidence": "No source currently pairs consumer RGB/MediaPipe output with independent timestamps and absolute reference angles." },
+    { "rank": 2, "cause": "confidence semantics", "confidence": "high", "evidence": "Invalid sets still report High camera confidence; visibility confidence does not predict set validity or scientific validation." },
+    { "rank": 3, "cause": "camera-view contract contradiction", "confidence": "high", "evidence": "The protocol/readiness flow specifies front view while upload/coaching copy requests side view. No paired-view evidence resolves metric equivalence." },
+    { "rank": 4, "cause": "quality and small-sample gates", "confidence": "high", "evidence": "Eight of eleven tapes abstain or qualify; reasons are small sample, impossible asymmetry/flexion, one-sided view, knee-less reps, or no reps." },
+    { "rank": 5, "cause": "temporal landmark jumps", "confidence": "medium", "evidence": "Three tapes report jumps, but there is no independent event/angle reference showing that a different filter improves outcomes without lag." }
+  ],
+  "decisions": {
+    "filter": "do-not-change",
+    "poseModel": "research",
+    "repGates": "do-not-change",
+    "confidenceAlgorithm": "do-not-change; clarify semantics in results",
+    "cameraCopy": "change to one protocol-owned front-view source; label sagittal-sensitive metrics experimental until paired-view evidence exists"
+  }
+}
+

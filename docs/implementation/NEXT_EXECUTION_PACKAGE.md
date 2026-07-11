@@ -1,76 +1,59 @@
-# Next Execution Package (post-M60, 2026-07-08)
+# Next Execution Package — M75-M78
 
-The M25-M60 roadmap wave is complete (see
-`KINEMATICIQ_MASTER_EXECUTION_ROADMAP.md` §2A). This package is the actionable
-remaining work for the next agent, ordered by leverage. It carries forward the
-open/blocked items rather than inventing new scope.
+**Issued:** 2026-07-11
 
-## Invariants (unchanged, non-negotiable)
+**Authority:** M73 portfolio and M74 release-readiness scorecard
 
-- Browser-only, local-first: no backend, no accounts, no uploads.
-- Verdict-or-abstain; **no composite 0–100 score** (ADR-003, permanent).
-- Full abstain on invalid capture; observation language only.
-- Stored/exported shapes are `schemaVersion`-stamped; bump on change.
-- Every milestone: `cd web && npm run build && npm test` green; one progress
-  note in `docs/implementation/progress/`; update traceability in the same
-  commit.
+**State:** planning/approval package; no deployment, dataset acquisition, or
+breaking dependency migration is authorized by this document
 
-## Priority 1 — Turn provisional thresholds into validated ones
+## Current evidence
 
-The single highest-leverage gap: squat thresholds and baseline noise bands are
-still **heuristic/provisional**. M48/M49 shipped the metric-validation status
-board and the reliability-study calculator templates, but no study has been
-run.
+- M63-M72 completed with sit-to-stand correctly remaining planned.
+- M73 selects inline lunge for the next research track, not implementation.
+- M74 is not release-ready: production dependencies audit clean and local gates
+  pass, but the dev toolchain has six advisories, manual assistive-technology and
+  target-device checks are absent, and production headers are unverified.
+- An isolated copy proved the proposed Vite/Vitest migration can build, run all
+  529 tests, meet coverage, and reproduce dataset/tape evaluations. This lowers
+  technical uncertainty but does not replace owner approval for the breaking slice.
 
-- **Task:** capture a real repeated-measures dataset (same athlete, multiple
-  sessions/days) and run the M49 reliability calculator to produce SEM/MDC for
-  the squat metrics.
-- **Unlocks:** replacing "provisional / heuristic, not validated" copy with
-  real reliability language; promoting metrics from `experimental` toward
-  `production` validation tier.
-- **Guard:** until then, do not strengthen any claim (claims-policy).
+## M75 — Approved dev-toolchain security migration
 
-## Priority 2 — M27 live-filter benchmark
+**Requires explicit owner approval before repository mutation.** Upgrade Vite
+5→8, Vitest/coverage 2→4, `@vitejs/plugin-react` 4→6, and add the separately
+versioned `vite-node` 6 CLI used by evaluation scripts. Preserve Node >=20,
+COOP/COEP, coverage include/thresholds, and every existing script.
 
-- **Task:** name a filter candidate (e.g. a Butterworth offline vs. the current
-  one-euro live variant) and benchmark it on the replay harness against the
-  labeled tape suite.
-- **Gate:** only swap if it shows improvement on the tape suite (deferred-scope
-  live-filter row). No swap without benchmark evidence.
+Acceptance: clean `npm audit`, production build, 529+ unit tests, coverage gates,
+11-tape baseline, UI-PRMD baseline, camera/release Playwright suites, lockfile
+diff review, and rollback by reverting only `package.json`/lockfile.
 
-## Priority 3 — First new protocol (governed by M57/M58)
+## M76 — Named browser/device and assistive-technology validation
 
-- **Candidate:** sit-to-stand — classified `next` in
-  `docs/domain/DOMAIN_MODULE_BACKLOG.md`.
-- **Path:** reuse the cyclic engine (M42) + protocol runtime (M39); do NOT
-  hand-code a new FSM.
-- **Hard gate:** must pass the `FUNCTIONAL_ASSESSMENT_BOUNDARIES.md` checklist —
-  completion/timing/consistency only; **no** fall-risk, frailty, impairment, or
-  clinical-score language; every threshold validated or labeled provisional.
-- **Data first:** needs labeled sit-to-stand tapes + a reliability estimate
-  before any threshold copy ships.
+**Requires owner support-matrix choice and human/device access.** Minimum
+recommended initial target: current Chromium desktop plus one real iOS Safari or
+Android Chrome device. Run camera permission/model load, upload, results,
+keyboard/high zoom, rendered contrast, and NVDA or VoiceOver flow. Record exact
+versions and limitations; do not claim unsupported targets.
 
-## Priority 4 — Maintenance
+## M77 — Target-device performance and bundle decision
 
-- Dependency hygiene: address `npm audit` findings as an isolated maintenance
-  milestone (no product behavior change).
-- Optional design-system follow-up: reconcile the confidence progress-bar
-  gradient (`.confidence__fill--*`) to the `--confidence-*` tokens (M56 noted
-  this as deferred to avoid a visual change).
+Run only after M76 names targets. Capture model readiness, frame-loop p50/p95,
+long tasks, memory/thermal behavior, route loads, and lazy 3D cost. Adopt worker,
+chunking, or 3D changes only against predeclared budgets and replay/e2e parity.
+The current local navigation sample is not a device budget.
 
-## Explicitly NOT next (still deferred/rejected)
+## M78 — Inline-lunge data and label gate
 
-Per `docs/doctrine/deferred-scope.md` and the M57/M59 backlogs: pose-model
-swap without benchmark, kinetics/force/torque from single RGB, injury/fall-risk
-prediction, composite scores, clinical diagnosis, backend/auth/cloud, digital
-humans beyond inspection, sensor fusion, embeddings/foundation-model builds.
-Each is gated; listing is not permission.
+**Requires separate dataset approval.** Acquire only approved original timed
+UI-PRMD m03 and/or approved LLM-FMS metadata/media. Capture checksums and terms,
+create independent event labels and subject splits, then predeclare benchmark
+criteria. If any gate fails, keep inline lunge research-only; do not enable the
+existing hip-hinge stub as a substitute.
 
-## How to start
+## Approval boundaries
 
-1. Read `KINEMATICIQ_MASTER_EXECUTION_ROADMAP.md` §2A (status) + the relevant
-   progress notes.
-2. Pick the highest-priority item whose gate you can actually meet with
-   available data.
-3. If a gate needs data you don't have (e.g. reliability capture), say so and
-   pick the next item — do not fabricate validation.
+The next autonomous code change is M75 only after approval. M76 needs a support
+choice and real assistive/device access. M78 needs data/license approval. M77 is
+not meaningful before M76. No other feature milestone should bypass these gates.

@@ -36,6 +36,25 @@ eval-tapes/*
 # Redacted example manifest only — a real MANIFEST.json stays local (M44).
 !eval-tapes/MANIFEST.example.json
 
+# Public-dataset raw bytes are LOCAL-ONLY (M61, ADR-006/ADR-010). Git tracks
+# the metadata registry (web/eval/datasets/registry.json) and never the data:
+# raw archives, extracted frames, video, participant-linked landmarks, or any
+# credentials. The local cache lives here and stays out of git.
+web/eval/datasets/local/
+# Belt-and-suspenders: refuse common raw movement/media artifacts anywhere.
+*.mp4
+*.mov
+*.avi
+*.mkv
+*.c3d
+*.trc
+*.bvh
+*.mot
+*.sto
+# The registry itself is the ONLY tracked file under web/eval/datasets/.
+web/eval/datasets/*
+!web/eval/datasets/registry.json
+
 # AutoClaw KDream data
 .autoclaw/
 

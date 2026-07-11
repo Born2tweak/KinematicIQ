@@ -12,6 +12,12 @@ const squatLike: ProtocolDefinition = {
   status: 'available',
   phases: ['standing', 'descending', 'bottom', 'ascending'],
   requiredLandmarks: [23, 24, 25, 26, 27, 28],
+  capture: {
+    inputModes: ['live', 'upload', 'replay'],
+    cameraView: 'front',
+    viewInstruction: 'Face the camera.',
+    setupInstructions: ['Whole body visible.'],
+  },
   metrics: [],
   findingRuleIds: [],
   defaultObservationProtocolId: 'front-view-squat-v1',
@@ -24,6 +30,12 @@ const jumpStub: ProtocolDefinition = {
   status: 'planned',
   phases: ['countermovement', 'takeoff', 'flight', 'landing'],
   requiredLandmarks: [23, 24, 27, 28],
+  capture: {
+    inputModes: [],
+    cameraView: 'front',
+    viewInstruction: 'Not validated.',
+    setupInstructions: ['Unavailable.'],
+  },
   metrics: [],
   findingRuleIds: [],
 }
@@ -35,10 +47,11 @@ describe('core/protocol', () => {
   })
 
   it('supports all three segmentation kinds in the type', () => {
-    const kinds = [squatLike.kind, jumpStub.kind, 'gait'] as const
+    const kinds = [squatLike.kind, jumpStub.kind, 'transition', 'gait'] as const
     expect(kinds).toContain('cyclic')
     expect(kinds).toContain('ballistic')
     expect(kinds).toContain('gait')
+    expect(kinds).toContain('transition')
   })
 
   it('NotImplementedError names the offending protocol', () => {

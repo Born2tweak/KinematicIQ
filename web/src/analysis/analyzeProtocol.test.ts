@@ -41,7 +41,7 @@ describe('analyzeFramesForProtocol — squat path unchanged', () => {
 })
 
 describe('analyzeFramesForProtocol — unavailable protocols block cleanly', () => {
-  it.each(['hipHinge', 'jump', 'sprint'] as const)(
+  it.each(['sitToStand', 'hipHinge', 'jump', 'sprint'] as const)(
     'throws NotImplementedError for planned protocol %s before touching frames',
     (id) => {
       expect(() => analyzeFramesForProtocol(id, frames)).toThrow(

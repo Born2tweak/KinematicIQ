@@ -1,6 +1,6 @@
 # KinematicIQ Master Execution Roadmap
 
-Generated 2026-07-06 from a live clone of `https://github.com/Born2tweak/KinematicIQ.git`, branch `master`, at commit `898d7c4`.
+Generated 2026-07-06 from a live clone of `https://github.com/Born2tweak/KinematicIQ.git`, branch `master`, at commit `898d7c4`. **Post-dataset-research refresh:** 2026-07-10 at commit `d0532036216f78c2194723b55a10159880909993`; M00–M60 history is preserved and the dependency-aware M61–M74 wave is added below.
 
 This roadmap is an execution plan, not an implementation. It starts from the codebase as it exists now, preserves the completed M00-M24 and M31 work, and defines the next milestones required to turn KinematicIQ into the research-grounded movement-intelligence product described in `docs/research/`.
 
@@ -57,6 +57,41 @@ skip in a fresh clone by design, §1). Store schema is now **v3** (M55).
 
 The next actionable work is packaged in
 `docs/implementation/NEXT_EXECUTION_PACKAGE.md`.
+
+## 2B. Post-Dataset-Research Direction (2026-07-10)
+
+The public movement-dataset research and live repository/browser audit change the next sequence without invalidating M00–M60.
+
+### What KinematicIQ should do next
+
+1. Establish dataset governance, legal/access roles, skeleton mappings, benchmark schemas, and an immutable local baseline.
+2. Diagnose tracking failure modes before changing MediaPipe, filters, gates, or confidence thresholds.
+3. In parallel, fix the product-visible camera-view contradiction and incrementally separate the 995-line camera workflow so responsive UX and protocol-specific setup are safe to change.
+4. Compact the results information architecture before adding waveforms or additional charts.
+5. Complete protocol execution ownership across live/upload/replay/session/report paths, then produce a sit-to-stand evidence package and only activate it if gates close.
+
+### What it should not do yet
+
+- No model swap, threshold retuning, new tracking stack, bulk dataset download, training, backend, clinical/normative claims, or second available protocol.
+- No chart dashboard or avatar-first redesign before a named question and validated signal justify it.
+- No acceptance of dataset terms or use of research-only data as commercial evidence without an approval checkpoint.
+
+### Current evidence baseline
+
+- Build passed; Vite reports chunks over 500 kB.
+- 72 Vitest files / 472 tests passed.
+- Coverage passed at 88.56% lines/statements, 86.34% branches, and 94.4% functions.
+- Camera e2e passed 3/3.
+- Local eval ran 11 tapes with 0 execution errors and 9/9 exact labeled rep counts; bottom-frame MAE is unavailable and no saved comparison baseline was provided.
+- Browser review at 390×844 found wrapped/clipped navigation, a crowded camera setup overlay, and a 6,500+ px Evidence report with repeated content.
+
+### Durable decisions and inputs
+
+- Audit: `reports/audits/KINEMATICIQ_POST_DATASET_RESEARCH_AUDIT.md`
+- Research map: `docs/implementation/PUBLIC_DATASET_RESEARCH_TO_EXECUTION_MAP.md`
+- Risk register: `docs/implementation/KINEMATICIQ_RISK_REGISTER.md`
+- Research gaps: `docs/implementation/POST_DATASET_RESEARCH_GAPS.md`
+- ADR-006 through ADR-010: dataset governance, protocol gates, visualization policy, Aurelian compatibility, and public/proprietary data roles.
 
 ## 2. Current Repo Audit
 
@@ -3416,6 +3451,491 @@ Do not rewrite history or remove completed progress notes.
 
 Require the implementing agent to write `docs/implementation/progress/M60-roadmap-refresh.md`.
 
+## 6B. Post-Dataset-Research Milestones (M61–M74)
+
+M61–M74 supersede the old “Priority 1–4” ordering in the 2026-07-08 next package. They do not erase M27-M30; M27 is absorbed into the broader evidence-gated M65 experiment, while M28-M30 remain historical proposals replaced by the evidence-first M71-M73 sequence.
+
+### M61 — Dataset governance and local data boundary
+
+**Problem/value/why now:** Public data can improve testing but creates license, privacy, size, provenance, and reproducibility risk. This foundation exists now because every later external benchmark depends on it; delaying it would make ad hoc downloads the de facto architecture.
+
+**Why not later:** M63 cannot safely ingest even one pilot dataset without a registry and access roles. **Prerequisites:** ADR-006/010, public dataset report, current `.gitignore` and corpus manifest patterns.
+
+**In scope:** define dataset role/access/license/privacy/version/checksum schemas; tracked metadata paths; ignored local raw/derived roots; manual approval states; dataset inventory seeded with OpenCap, UI-PRMD, OCHuman, PoseTrack, BML-MoVi, KIMORE, SportsPose, and deferred/future groups; instructions that never bypass access controls. **Out of scope:** downloads, accepting terms, legal conclusions, preprocessing, benchmark computation, ML training.
+
+**Likely files/modules:** `.gitignore`; new tracked dataset metadata/manifests and parser under `web/src/eval/` or a repo-level metadata directory selected to match conventions; `docs/validation/`; risk register; integration map. No raw-data directory is committed.
+
+**Contracts affected:** corpus identity/version, access classification, artifact provenance; no runtime contract.
+
+**Dataset/research inputs:** all report licensing/access rows; ADR-006/010.
+
+**Implementation approach:** reuse M44 manifest discipline; reject paths/credentials/participant identifiers in tracked manifests; encode `metadata-only | evaluation-only | research-only | commercial-reviewed | future-ml | excluded`, `manualApprovalRequired`, source/release/access date, checksum, storage estimate, consent/privacy notes, and allowed outputs.
+
+**Testing/benchmark:** parser/schema unit tests; committed example manifests; `git check-ignore` demonstrations for raw/derived files; scan staged diff for common media/data extensions and absolute participant paths. No dataset benchmark yet.
+
+**UX acceptance:** N/A. **Claims constraints:** registry status is not legal approval; `commercial-reviewed` requires named evidence/owner.
+
+**Risks/reversibility:** process overhead and false confidence. Reversible metadata-only change; delete/rename before real data exists. Never copy license text when redistribution is barred—store reference/hash/date.
+
+**Evidence gate/completion:** every priority dataset has a role and approval state; local raw/derived paths are ignored; fresh clone instructions are actionable without data; tests/build pass; progress note, risk register, traceability, `.aurelian` evidence/state updated.
+
+**Unlocks:** M62, M63, proprietary-corpus planning in M74.
+
+### M62 — Benchmark contracts, skeleton mappings, and CI-safe fixture policy
+
+**Problem/value/why now:** KinematicIQ cannot compare MediaPipe-33 with COCO/UI-PRMD/OpenCap or distinguish 2D, temporal, 3D, and biomechanical evidence. This contract must precede adapters so each pilot does not invent units and meanings.
+
+**Why not later:** Adapter output without joint semantics is misleading and non-reproducible. **Prerequisites:** M61 metadata identities; existing `eval/poseTape`, `benchmarkReport`, version registry.
+
+**In scope:** common benchmark trial/view/frame/reference shapes; explicit missing-frame representation; MediaPipe-33 mapping registry; initial COCO-17, UI-PRMD, and OpenCap/OpenSim semantic maps where official definitions support them; coordinate/unit/time-alignment docs; metric interfaces for jitter, dropout runs/recovery, bone-length stability, event lag, cross-view variance, 2D/3D/reference angles; CI-safe fixture eligibility policy.
+
+**Out of scope:** real external files, scoring thresholds, filter/model changes, UI charts, automatic anatomical equivalence.
+
+**Likely files/modules:** new `web/src/eval/datasets/` or `eval/adapters/` types/mappings/tests; `benchmarkReport.ts` additive schema; `core/versioning.ts`; `docs/validation/`.
+
+**Contracts affected:** benchmark report schema/version, skeleton/coordinate mapping IDs, missing-data semantics. Pose tape remains additive/backward compatible.
+
+**Dataset/research inputs:** official skeleton definitions for MediaPipe, COCO, UI-PRMD, OpenCap/OpenSim; R02/R05/R06.
+
+**Implementation approach:** separate source landmark from anatomical quantity; allow unmapped joints and refuse unsupported comparisons; preserve timestamps even when detection is absent; keep suite metrics distinct instead of a composite.
+
+**Testing/benchmark:** synthetic mapping fixtures, left/right/order/units tests, missing/unmapped behavior, known waveform jitter/lag/dropout calculations, version serialization. CI uses generated or explicitly redistributable redacted data only.
+
+**UX acceptance:** N/A. **Claims constraints:** MPJPE/PCK/jitter does not imply biomechanical or coaching validity.
+
+**Risks/reversibility:** wrong semantic mapping becomes durable. Mapping versions are immutable; corrections create a new version. Report additions are additive.
+
+**Evidence gate/completion:** three initial mappings and all metric primitives tested; unsupported comparisons fail explicitly; report identifies suite type; build/test/coverage pass; docs/progress/traceability updated.
+
+**Unlocks:** M63, M64; permits M66 characterization to reference protocol view contracts.
+
+### M63 — Pilot dataset adapters and immutable benchmark baseline
+
+**Problem/value/why now:** Existing local tapes prove deterministic behavior but not external robustness or biomechanics. A small pilot retires adapter feasibility risk before expensive corpus expansion.
+
+**Why not later:** M64 diagnosis and M65 changes need real baseline evidence. **Prerequisites:** M61-M62; manual access approval for each selected dataset.
+
+**In scope:** implement the smallest approved pilots: OpenCap validation or UI-PRMD for angle/event reference, OCHuman for occlusion images, PoseTrack validation clips for temporal tracking; optionally SportsPose if access is straightforward. Add source-specific adapters/preprocessing, local-only instructions, checksums, selected subset manifests, and a saved aggregate/redacted baseline. Extend local tape labels with source-video bottom/event truth when available.
+
+**Out of scope:** full BML-MoVi/Human3.6M downloads, bulk conversion, model training, redistributing participant media, acceptance of licenses by automation, adoption decisions.
+
+**Likely files/modules:** dataset adapter modules/scripts, `web/src/eval/`, local ignored data roots, `benchmark-results/` aggregate baselines, `eval-tapes` labeling docs.
+
+**Contracts affected:** adapter versions and benchmark baseline format; no product runtime behavior.
+
+**Dataset/research inputs:** approved OpenCap/UI-PRMD, OCHuman, PoseTrack; local 11-tape corpus.
+
+**Implementation approach:** one trial/clip end to end before batch processing; deterministic preprocessing with hashes; record exclusions and synchronization assumptions; never compress absent frames out of the temporal reference.
+
+**Testing/benchmark:** adapter fixtures; one reproducible pilot report per suite; rerun yields identical aggregate output; baseline includes per-trial failures, not only averages; existing `eval:tapes` remains 0 errors.
+
+**UX acceptance:** N/A. **Claims constraints:** pilot estimates are exploratory and dataset-scoped.
+
+**Risks/reversibility:** access unavailable, file formats differ, aggregate outputs leak data. If access is blocked, deliver adapter contract/fixture and mark dataset unavailable; raw/derived data is deletable and untracked.
+
+**Evidence gate/completion:** at least one biomechanics/reference pilot and one occlusion/temporal pilot run, or blocker documented without fabricated results; saved baseline named and versioned; no restricted data staged; build/test/coverage/eval pass; progress/evidence/license records updated.
+
+**Unlocks:** M64 and any M65 candidate evaluation.
+
+### M64 — Tracking, camera, and metric failure-mode diagnosis
+
+**Problem/value/why now:** The next tracking change is unknown. The product needs a diagnosis that separates landmark detection, temporal noise, camera sensitivity, event segmentation, angle error, confidence calibration, and performance.
+
+**Why not later:** Changing filters/models first would optimize an unmeasured target. **Prerequisites:** M63 baseline; M62 metrics; current local tapes.
+
+**In scope:** run current MediaPipe/filter/algorithm across available suites; stratify by view, visibility, movement, body region, FPS, and source; measure jitter, dropout/recovery, bone-length variation, cross-view variance, event lag/count errors, reference angle waveform error where valid, and runtime timings; evaluate whether camera confidence predicts error; resolve or explicitly scope front-vs-side squat metric eligibility.
+
+**Out of scope:** changing production behavior, threshold promotion, model swap, universal pass/fail score.
+
+**Likely files/modules:** eval runner/reports, performance instrumentation helpers, `METRIC_VALIDATION_STATUS.md`, camera protocol docs, risk/gaps.
+
+**Contracts affected:** benchmark acceptance targets and metric eligibility/view matrix; product code remains unchanged.
+
+**Dataset/research inputs:** M63 pilots, local tapes, later selected BML-MoVi/MoVi if approved and necessary.
+
+**Implementation approach:** predeclare questions/metrics/tolerances; report median/variance/worst case and sample size; separate direct observation from inference; use Bland-Altman/lag/waveform measures only with valid references.
+
+**Testing/benchmark:** report-generation tests plus actual current baseline runs; compare repeat run determinism; document instrumentation overhead.
+
+**UX acceptance:** produce a camera-view/metric eligibility decision consumable by M66-M68. **Claims constraints:** no tier/claim promotion from a pilot alone.
+
+**Risks/reversibility:** overfitting to small pilots or treating correlation as agreement. Docs/report only; acceptance targets can be revised with recorded rationale before M65.
+
+**Evidence gate/completion:** ranked root causes with per-dataset evidence and confidence; explicit “change / do not change / research” recommendation for filter, model, rep gates, confidence, and camera copy; saved report; docs/risks/gaps/metric board updated.
+
+**Unlocks:** M65 and evidence-backed M67/M68 copy/eligibility.
+
+### M65 — Evidence-gated tracking experiments and optional adoption
+
+**Problem/value/why now:** Only M64 can show whether a candidate filter, confidence rule, dropout policy, MediaPipe option, or gate change is worth product risk.
+
+**Why not later:** Run now only for a diagnosed high-value failure; otherwise mark “no change” and move on. **Prerequisites:** M64 names candidate and acceptance criteria; saved baseline.
+
+**In scope:** implement one candidate behind a named version/variant; run targeted unit tests, full local/external benchmark comparison, camera e2e, build/coverage, and performance profile; adopt only if all hard gates pass and meaningful target improvement occurs.
+
+**Out of scope:** simultaneous model+filter+gate changes, new ML training, visual preference tuning, hidden threshold changes.
+
+**Likely files/modules:** only the diagnosed module (`landmarkFilter`, confidence/quality, `poseEngine` options, phase/rep gate variant), version registry, replay/eval, relevant docs.
+
+**Contracts affected:** filter/model/algorithm version and possibly pose-tape provenance; stored readers remain backward compatible.
+
+**Dataset/research inputs:** M64 report and baseline suites.
+
+**Implementation approach:** one variable at a time; old default remains available; candidate reports per-trial regressions; adoption is a separate minimal switch after evidence.
+
+**Testing/benchmark:** exact reproduction; module tests; 472+ suite; coverage; 3 camera e2e; `eval:tapes --baseline`; external pilot baseline; performance budget.
+
+**UX acceptance:** no new visible instability/lag; camera guidance and rep feedback timing remain understandable. **Claims constraints:** behavior improvement does not promote validation tiers automatically.
+
+**Risks/reversibility:** dataset overfit and phase delay. Rollback is version/default switch; never delete old variant or tape reader in same milestone.
+
+**Evidence gate/completion:** candidate meets every predeclared hard gate; adoption decision and residual regressions documented. “Rejected/no change” is a valid complete outcome. Update versions, ADR/risk/metric status only to evidence level.
+
+**Unlocks:** stronger tracking baseline; not a prerequisite for M66-M70 unless the diagnosed issue blocks them.
+
+### M66 — Camera workflow contract and behavior-preserving decomposition
+
+**Problem/value/why now:** `CameraScreen.tsx` is 995 lines and owns acquisition, tracking, squat FSMs, tape recording, protocol ID, workflow copy, 3D/debug, and rendering. This blocks safe responsive UX and protocol-specific setup.
+
+**Why not later:** M67 and M70 would otherwise modify the same god component. **Prerequisites:** current 3 camera e2e tests; M62 protocol/view vocabulary; M64 view decision is a soft dependency for final copy, not for structural extraction.
+
+**In scope:** characterization tests; define protocol session-controller boundary; extract frame-loop handoff/controller hooks and presentational HUD/readiness/action components one seam at a time; make setup/camera-view copy derive from protocol metadata; resolve front/side contradictions when M64 evidence is available.
+
+**Out of scope:** visual redesign, new protocol, threshold/filter changes, worker migration, changing auto-start/finish behavior.
+
+**Likely files/modules:** `CameraScreen.tsx`, `cameraSessionUi.ts`, `assessmentWorkflow.ts`, new camera session controller/hooks/components, `UploadScreen.tsx` view copy, protocol setup metadata, camera e2e.
+
+**Contracts affected:** UI/controller boundary and protocol capture configuration; frame/analysis behavior pinned.
+
+**Dataset/research inputs:** M64 view matrix; R11 experience; ADR-007.
+
+**Implementation approach:** refactor then verify, never mix behavior; keep existing refs behind one controller; extract pure models/presentation before the frame loop; protocol metadata includes view/setup/required landmarks/input modes.
+
+**Testing/benchmark:** characterize normal, missing-feet, permission error, cancel, finish, auto-finish, retry, planned protocol block; build/test/coverage; camera e2e; local tape parity; diff review after each seam.
+
+**UX acceptance:** behavior and visible wording remain stable except a deliberate unified camera-view correction; no debug leakage increase. **Claims constraints:** setup checks are heuristic, not calibrated camera pose.
+
+**Risks/reversibility:** lifecycle/ref bugs and duplicate state. Each extraction is independently revertible; old component behavior remains until the new seam is proven.
+
+**Evidence gate/completion:** CameraScreen falls below the roadmap warning threshold or has a documented reason; controller is testable without DOM; no live/replay output drift; copy has one canonical view source; progress note lists removed duplication.
+
+**Unlocks:** M67 and M70.
+
+### M67 — Camera and session responsive experience
+
+**Problem/value/why now:** Mobile navigation wraps/clips and setup overlays compete with the body and actions. The user needs one next correction, not a dashboard during setup.
+
+**Why not later:** This is the highest immediate product-value change and can proceed independently of full external benchmark work after M66. **Prerequisites:** M66 stable seams; camera-view contract; design tokens/a11y audit.
+
+**In scope:** responsive app-shell/nav; setup hierarchy with one primary instruction and expandable checklist; protocol/mode/view confirmation; permission/loading/error/retry; calibration/readiness; active rep/status feedback; cancel/Finish Now/auto-finish; retake transition; mobile/desktop safe areas; analyst/debug exposure decision; copy consistency.
+
+**Out of scope:** analysis changes, second protocol, new 3D features, broad landing redesign, telemetry.
+
+**Likely files/modules:** AppShell/nav, camera presentation components, CameraScreen shell, CSS, camera view-model tests, Playwright viewport projects/screenshots.
+
+**Contracts affected:** user-visible workflow and responsive layout; controller behavior unchanged.
+
+**Dataset/research inputs:** browser audit, R11, M64 camera/view findings.
+
+**Implementation approach:** wireframe states first; prioritize current action; keep body visible; collapse secondary diagnostics; respect safe-area and actual wrapped nav height; preserve keyboard/text alternatives.
+
+**Testing/benchmark:** unit/view-model; camera e2e desktop plus at least 390×844 and tablet; screenshot baselines for waiting/missing body/ready/active/finish/error; keyboard focus, contrast measurement, reduced motion, NVDA/VoiceOver manual checklist; console error check.
+
+**UX acceptance:** no horizontal overflow; nav never clips; primary instruction/action visible without scrolling; controls do not cover essential body regions; touch targets and focus visible; setup can be completed without analyst data.
+
+**Claims constraints:** no lab-equivalence or medical/clinical framing; camera limitations visible.
+
+**Risks/reversibility:** screenshot brittleness and hidden detail. CSS/component changes revert independently; retain full checklist in accessible expandable content.
+
+**Evidence gate/completion:** rendered evidence for all named states/viewports; 3+ camera e2e and responsive cases pass; manual a11y checklist recorded; build/tests pass; UX/audit/risk docs updated.
+
+**Unlocks:** product-quality improvement and protocol-specific capture UI for M72-M73.
+
+### M68 — Results information architecture and deterministic narrative
+
+**Problem/value/why now:** Results Evidence repeats the same conclusion across multiple sections, while confidence quality and validation tier are easy to conflate. Compact interpretation creates more value than adding charts.
+
+**Why not later:** M69 visualizations need a canonical evidence model; protocol two needs protocol-configured reports. **Prerequisites:** M64 metric/view eligibility; existing Results tabs/findings/metrics.
+
+**In scope:** inventory every Results claim; define one canonical session narrative and finding→metric→rep/moment trace; compact Summary; deduplicate Evidence; move complete tables/provenance to Expert; clearly distinguish camera confidence, set quality, and scientific validation; clarify joint-angle language; protocol report configuration; preserve export parity.
+
+**Out of scope:** new metrics, new charts, threshold changes, clinical interpretation, redesign of unrelated landing/history.
+
+**Likely files/modules:** `ResultsScreen.tsx`, report models/components, `buildResultsSummary` replacement/adapter, findings/metric presentation, export HTML/JSON/CSV, CSS.
+
+**Contracts affected:** deterministic report/narrative configuration and metric-to-finding trace; exported schema changes require version/additive compatibility.
+
+**Dataset/research inputs:** M64 eligibility/limitations; R04/R11; ADR-008.
+
+**Implementation approach:** content model before JSX; each fact has one canonical home with links/references elsewhere; invalid/questionable behavior stays unchanged; narrative is deterministic and auditable, never generated by an LLM.
+
+**Testing/benchmark:** narrative fixtures for valid/questionable/invalid/no-reps; claims-copy audit; export snapshots; desktop/mobile browser screenshots; screen-reader heading order; performance check with long sessions.
+
+**UX acceptance:** Summary answers what/why/next/confidence without scrolling excessively; Evidence avoids duplicate cards; Expert retains full audit detail; validation status explanation is accessible.
+
+**Claims constraints:** replace normative “looks good/expected” where evidence is provisional; no new claim strength.
+
+**Risks/reversibility:** hiding expert detail or breaking exports. Add new report model and adapt screens first; old artifact readers remain.
+
+**Evidence gate/completion:** content inventory accounted for; repeated conclusion paths reduced; all result states rendered at desktop/mobile; exports/version tests pass; docs/metric board/traceability updated.
+
+**Unlocks:** M69 and protocol-configured Results in M70/M72.
+
+### M69 — Evidence-linked rep, phase, and waveform visualizations
+
+**Problem/value/why now:** Users cannot jump from a finding to the rep/moment that supports it. Phase timing and rep consistency can be easier to understand visually after M68 removes duplication.
+
+**Why not later:** Build only the smallest visual that answers a validated question; defer if M64 cannot support alignment. **Prerequisites:** M68 canonical evidence model; event/frame trace; validated metric/event eligibility.
+
+**In scope:** likely first slice: representative/best/deviant rep selection with traceable rule, linked replay moment, compact rep comparison, and phase timeline. Add an angle waveform only for a metric/view with valid event alignment. Text/table alternative, decimation, missing/low-confidence gaps, and protocol configuration are mandatory.
+
+**Out of scope:** chart dashboard, 3D avatar report, unvalidated symmetry/force visuals, decorative animation.
+
+**Likely files/modules:** report/replay components, frame trace, result evidence references, CSS/canvas/SVG choice with no dependency unless ADR justified, export representation.
+
+**Contracts affected:** finding evidence may add rep/frame/event references additively; report/export versioning.
+
+**Dataset/research inputs:** M63-M64 event/reference results; ADR-008.
+
+**Implementation approach:** write the question and acceptance statement first; prefer SVG/HTML for accessibility; cap samples and preserve extrema/events; never draw through missing intervals.
+
+**Testing/benchmark:** selection/decimation/missing-data unit tests; link-to-replay integration; screenshot regression at mobile/desktop; keyboard/screen-reader description; reduced motion; rendering budget.
+
+**UX acceptance:** visualization answers the named question faster than text alone, does not imply precision beyond source, and remains understandable without color or animation.
+
+**Claims constraints:** experimental waveforms are Expert-only and labeled; no kinetics or causal inference.
+
+**Risks/reversibility:** false precision and performance. Feature/config flag or isolated component permits removal; text evidence remains canonical.
+
+**Evidence gate/completion:** each shipped visual has question/source/tier/limitations/a11y/perf documentation; rendered states verified; report/export parity passes.
+
+**Unlocks:** richer sit-to-stand event presentation and future protocol visuals.
+
+### M70 — Complete protocol execution ownership and squat parity migration
+
+**Problem/value/why now:** Protocol route IDs exist, but live/upload execution and `SessionResult` remain squat-shaped. A second protocol would risk running squat logic under another label.
+
+**Why not later:** Hard prerequisite for protocol two. **Prerequisites:** M66 controller seam; M68 report configuration; ADR-007; existing runtime/cyclic/parity suites.
+
+**In scope:** protocol contract v3 owns input modes, view/setup, required landmarks, calibration/activation, event/trial/rep segmentation kind, completion/rejection, quality, metrics, findings/coaching, confidence eligibility, report config, validation status/evidence. Route live/upload/replay through selected runtime. Introduce generic trial/event outcome contract without deleting legacy squat fields. Migrate squat through it with bit/semantic parity and versioned artifacts.
+
+**Out of scope:** changing squat thresholds, activating a new protocol, removing old stored fields, worker migration, universal abstraction beyond observed needs.
+
+**Likely files/modules:** `core/protocol.ts`, `protocols/types/runtime/registry`, camera controller, upload analyzer, replay harness, session artifact/builder/types, metrics/findings/report configs, versioning/storage adapters.
+
+**Contracts affected:** broad public internal protocol/session contracts; use expand→migrate→contract and keep readers backward compatible.
+
+**Dataset/research inputs:** R01/R08, post-dataset audit, M64 view/eligibility, sit-to-stand pressure test from M71 as a design input only.
+
+**Implementation approach:** design 2-3 candidate contracts; choose the smallest delaying commitment; add generic outcome alongside `RepMetrics`; migrate offline/replay then live; prove squat parity; leave compatibility adapters until future data proves deletion safe.
+
+**Testing/benchmark:** type/contract tests for cyclic/transition/ballistic/gait mock protocols; planned protocol block; live/upload/replay selected-ID behavior; full 472+ suite, coverage, camera e2e, local tape baseline, report/export/storage compatibility.
+
+**UX acceptance:** selected movement/view/setup/report label is consistent on every route; unavailable protocols never start.
+
+**Claims constraints:** validation status gates availability and copy; protocol contract cannot promote claims.
+
+**Risks/reversibility:** largest architecture risk; import cycles and artifact breakage. Execute as separate refactor-only slices; old squat adapters remain until parity and stored-reader evidence pass; rollback per slice.
+
+**Evidence gate/completion:** no live/upload/replay path directly chooses squat logic outside squat adapter; squat outputs/baseline remain acceptable; generic contract represents non-repetition trials; schema migration/rollback documented; progress/ADR/traceability updated.
+
+**Unlocks:** M71-M73.
+
+### M71 — Sit-to-stand evidence and protocol specification package
+
+**Problem/value/why now:** Sit-to-stand is the best-evidenced second movement, but datasets alone do not define a safe consumer protocol or reliable thresholds.
+
+**Why not later:** Its concrete requirements validate M70 and prevent implementation by analogy. **Prerequisites:** M61 access roles; M62 mappings; M70 execution contract sufficiently stable for specification; M58 boundaries.
+
+**In scope:** choose product task name and scope; compare UI-PRMD, KIMORE, OpenCap, Penn/NTU where relevant; inspect approved files; define camera view/chair/setup/contact assumptions, required landmarks, seated/standing calibration, events/phases/trial boundaries, completion/rejection, count/timing/consistency metrics, abstention, report configuration, claims limits, local label protocol, expert rubric, and validation plan. Decide cyclic vs transition-trial model from evidence.
+
+**Out of scope:** available protocol, normative 5xSTS/30s scoring, fall-risk/frailty/impairment, clinician equivalence, coaching without labels.
+
+**Likely files/modules:** new protocol research/spec under docs, dataset manifests/adapters, local ignored tapes/labels, research gaps, domain backlog/boundaries.
+
+**Contracts affected:** proposed sit-to-stand configuration; no production runtime yet.
+
+**Dataset/research inputs:** UI-PRMD, KIMORE, OpenCap first; public report.
+
+**Implementation approach:** source-video/lab labels independent of pipeline; at least two expert raters for quality/fault labels if coaching is proposed; predeclare reliability/reference metrics and small-N limitations.
+
+**Testing/benchmark:** adapter/label validation; exploratory protocol runner may exist only behind research/test code and cannot register `available`; negative cases (squat, chair bounce, partial rise, assistance, occlusion).
+
+**UX acceptance:** setup instructions are comprehensible and non-clinical in a prototype/wireframe; failure/retake states specified.
+
+**Claims constraints:** allowed: completion, timing, consistency, camera observation. Forbidden: clinical score, impairment, fall risk, frailty, diagnosis, norms.
+
+**Risks/reversibility:** clinical drift, dataset mismatch, chair variability. Complete may conclude “not ready”; no production code to rollback.
+
+**Evidence gate/completion:** signed-off protocol spec; labeled corpus plan and available seed data; runtime-kind decision; claims checklist; benchmark acceptance criteria; unresolved gaps explicitly block M72.
+
+**Unlocks:** M72 if and only if gates close.
+
+### M72 — Sit-to-stand implementation, validation, and guarded activation
+
+**Problem/value/why now:** Prove KinematicIQ is truly protocol-capable and deliver high-value functional movement observations using M71 evidence.
+
+**Why not later:** Execute only after M71; otherwise keep planned. **Prerequisites:** M67 capture UI, M68 report IA, M70 runtime, all M71 hard gates and approved data.
+
+**In scope:** protocol definition/version/runtime; setup/readiness; transition/events/trials; count/timing/consistency metrics at evidence-supported tiers; quality/abstention; findings limited to reviewed labels; report/export/storage; picker activation last. Feature remains planned/experimental until final gate.
+
+**Out of scope:** clinical/normative outputs, age comparisons, diagnosis/fall prediction, unrelated squat retuning, broad protocol framework expansion.
+
+**Likely files/modules:** `protocols/sitToStand`, transition/cyclic analysis module chosen by M71, metrics/findings/report config, camera/upload/replay, session/storage/export, tests/docs.
+
+**Contracts affected:** new ProtocolId/version and artifact schema additions; backward-compatible readers.
+
+**Dataset/research inputs:** M71 labeled set, approved UI-PRMD/OpenCap/KIMORE-derived evidence, proprietary fixtures when available.
+
+**Implementation approach:** research-only registration → offline/replay → live fixture → UI/report → activation; thresholds named/provenanced/provisional; coaching omitted unless expert gate passes.
+
+**Testing/benchmark:** unit events/quality/metrics; negative movements; live/upload/replay parity; labeled exact/event accuracy; reliability/reference report; desktop/mobile camera/results; full regression for squat; storage/export compatibility.
+
+**UX acceptance:** user explicitly selects movement and view; chair/setup guidance is clear; count/finish/retry states work; report says what was observed and limitations.
+
+**Claims constraints:** M58 automated copy guard; no clinical names/scores; experimental metrics cannot be strong cues.
+
+**Risks/reversibility:** false transitions and overclaiming. Availability is a single final registry change; rollback to planned retains research code/fixtures.
+
+**Evidence gate/completion:** predeclared accuracy/reliability gates pass; no squat regression; all copy/UX/accessibility checks pass; metric board/ADR/traceability/progress updated. If evidence fails, remain planned and document outcome.
+
+**Unlocks:** M73 and proof of platform extensibility.
+
+### M73 — Subsequent protocol portfolio: research queue, not batch implementation
+
+**Problem/value/why now:** After protocol two, expansion must stay evidence-led instead of following the old stub order or “seven patterns” ontology.
+
+**Why not later:** Rank now so research/data work can begin without implying commitment. **Prerequisites:** M72 outcome and lessons.
+
+**In scope:** re-rank hip hinge, lunge, push-up, jump/landing, gait/running, overhead, rotation, pull, sprint using evidence, user value, camera needs, contract pressure, claims risk, and proprietary-data need. Create only the next protocol’s M71-style research package. Current provisional order: hip hinge vs lunge decision after sit-to-stand; jump/gait later; rotation/pull/sprint deferred.
+
+**Out of scope:** multiple simultaneous implementations, shared thresholds, generic exercise ontology, enabling existing jump/sprint/hinge stubs without evidence.
+
+**Likely files/modules:** domain backlog, research gaps, dataset registry, next protocol spec; no production code unless a new roadmap milestone is approved.
+
+**Contracts affected:** none initially; lessons may propose a runtime ADR revision.
+
+**Dataset/research inputs:** UI-PRMD/LLM-FMS for lunge; BML-MoVi/CMU/selected exercise data for hinge; SportsPose/OpenCap/AddBiomechanics for later sports/landing/gait.
+
+**Implementation approach:** one research package at a time; delete or rename misleading stubs if their implied commitment conflicts with evidence, through a separate compatibility-reviewed change.
+
+**Testing/benchmark:** N/A for ranking; every future implementation inherits M72 gates.
+
+**UX acceptance:** backlog language distinguishes available/planned/research/deferred. **Claims constraints:** per-protocol boundaries before code.
+
+**Risks/reversibility:** roadmap bloat. Ranking is revisable; no production code.
+
+**Evidence gate/completion:** scored matrix updated with current evidence and next research package chosen; owner approval checkpoint recorded; roadmap updated rather than silently starting code.
+
+**Unlocks:** future M75+ protocol-specific milestones.
+
+### M74 — Accessibility, performance, dependency, and release-readiness gate
+
+**Problem/value/why now:** Browser-only trust depends on device performance, accessibility, supply-chain health, documentation truth, and reproducible benchmarks—not just features.
+
+**Why not later:** Run before declaring the post-research wave release-ready and after major UI/runtime changes. **Prerequisites:** applicable M61-M72 work.
+
+**In scope:** target browser/device matrix; p50/p95 timing instrumentation; bundle/chunk analysis; responsive/visual regression; screen-reader/high-zoom/contrast/touch/reduced-motion checks; dependency vulnerability path/remediation review; COOP/COEP production verification when authorized; docs/traceability/risk/license scans; proprietary-corpus consent/retention plan before collection.
+
+**Out of scope:** automatic `npm audit fix --force`, worker/model migration without measured need, deployment, production mutation, collecting users/data.
+
+**Likely files/modules:** Playwright config/tests, performance instrumentation, package/lock only if isolated remediation approved, architecture/UX/validation docs, CI scripts if already in scope.
+
+**Contracts affected:** support/performance budgets and release checklist; dependency updates treated as separate reversible slices.
+
+**Dataset/research inputs:** aggregate benchmarks only; no raw data in CI.
+
+**Implementation approach:** measure first; fix only observed blockers; record unsupported browsers/devices; dependency remediation one package group at a time with changelog/build/test/e2e evidence.
+
+**Testing/benchmark:** full gate: install/build/test/coverage/eval baseline/camera and responsive e2e/visual/a11y/performance; external benchmark availability declared; staged diff scan.
+
+**UX acceptance:** critical flow works at supported viewports with keyboard and named screen readers; performance budgets met or limitations documented.
+
+**Claims constraints:** release documentation states exact validation scope and residual uncertainty.
+
+**Risks/reversibility:** dependency breaks and flaky visuals. Baselines reviewed manually; dependency changes isolated; rollback documented.
+
+**Evidence gate/completion:** release scorecard with pass/fail/N/A evidence; vulnerabilities triaged; no critical unexplained risk; docs and next roadmap refreshed; no deploy/push implied.
+
+**Unlocks:** release decision and next roadmap wave.
+
+## 6B.1 Post-M74 gated continuation (M75-M78)
+
+M73-M74 closed the autonomous post-research wave. The next work is intentionally
+split at approval/evidence boundaries:
+
+### M75 — Dev-toolchain security migration
+
+Owner-approved Vite 8/Vitest 4/plugin-react 6/vite-node 6 migration. The M75
+isolated spike proved build, 529 tests, coverage, dataset pilot, tape parity, and
+zero-audit feasibility. Repository mutation remains a breaking-dependency
+approval checkpoint; rollback is package manifest/lockfile only.
+
+### M76 — Named support and assistive-technology validation
+
+Choose actual browser/device support, then run a real mobile device and NVDA or
+VoiceOver through capture, upload, results, export, high zoom, contrast, and
+reduced motion. No broad accessibility or browser-support claim precedes this.
+
+### M77 — Target-device performance decision
+
+After M76, collect model-readiness and frame-loop p50/p95, long tasks, memory,
+thermals, and route/chunk traces. Optimize workers/chunks/3D only if a predeclared
+budget fails without replay, claims, or camera regressions.
+
+### M78 — Inline-lunge data and label gate
+
+After explicit dataset approval, acquire original timed files, preserve terms and
+checksums, label events independently, split by subject, and predeclare acceptance.
+Failure keeps the protocol research-only. Availability is a later separate gate.
+
+## 6C. Dependency Analysis
+
+```mermaid
+flowchart LR
+  M61["M61 Dataset governance"] --> M62["M62 Benchmark contracts"]
+  M62 --> M63["M63 Pilot adapters + baseline"]
+  M63 --> M64["M64 Failure diagnosis"]
+  M64 --> M65["M65 Optional tracking change"]
+  M62 --> M66["M66 Camera architecture"]
+  M66 --> M67["M67 Camera UX"]
+  M64 -. "view/eligibility evidence" .-> M67
+  M64 --> M68["M68 Results IA"]
+  M68 --> M69["M69 Evidence visuals"]
+  M66 --> M70["M70 Protocol execution + squat parity"]
+  M68 --> M70
+  M61 --> M71["M71 Sit-to-stand evidence"]
+  M70 --> M71
+  M67 --> M72["M72 Sit-to-stand guarded activation"]
+  M69 -. "optional presentation" .-> M72
+  M71 --> M72
+  M72 --> M73["M73 Next protocol research queue"]
+  M67 --> M74["M74 Release readiness"]
+  M68 --> M74
+  M70 --> M74
+  M72 -. "if executed" .-> M74
+```
+
+### Hard prerequisites, soft dependencies, and parallel work
+
+| Question | Resolution |
+|---|---|
+| Must dataset infrastructure precede all UI? | **No.** M61-M62 precede external evidence work. M66 camera decomposition can start after M62 contracts/characterization and run parallel with M63-M64. M67/M68 use M64 evidence where claims/view eligibility change, but responsive hierarchy/dedup work need not wait for every dataset. |
+| Must protocol generalization precede tracking benchmark? | **No.** Benchmark current squat/MediaPipe behavior first. M62-M64 are protocol-aware in metadata but do not need protocol two. |
+| Must squat migrate before protocol two? | **Yes.** M70 routes squat through the full selected-protocol seam with parity before M72 activates sit-to-stand. |
+| Which tracking improvements need external truth? | Angle accuracy, camera-view claims, confidence calibration, and event-lag decisions need reference/paired data. Pure dropout bookkeeping, deterministic metrics, and obvious UI recovery can be tested with pose tapes/synthetic fixtures, but adoption still compares the full baseline. |
+| When are visualizations built? | After M68 identifies the question and M64 validates the signal/event. M69 is optional; M72 does not require decorative charts. |
+| Should camera refactor precede protocol expansion? | **Yes.** M66 precedes M70/M72; it is justified by protocol-specific setup/testability, not cleanliness alone. |
+| Which datasets are needed now? | Metadata for all; pilot access only for OpenCap or UI-PRMD, OCHuman, PoseTrack, plus existing tapes. BML-MoVi/SportsPose are selective later. Human3.6M/AMASS/synthetic/clinical corpora are not immediate downloads. |
+| Highest immediate product improvement? | M67 camera mobile/setup clarity and M68 compact results, while M61-M64 build evidence in parallel. |
+
+### Critical path and approvals
+
+- **Scientific critical path:** M61 → M62 → M63 → M64 → (M65 only if evidence) and M70 → M71 → M72.
+- **Immediate product path:** M62 → M66 → M67 and M64 → M68; these can overlap the scientific path.
+- **Approval checkpoints:** dataset terms/downloads; legal/commercial classification; proprietary data collection; claim/tier promotion; dependency breaking upgrade; protocol availability; any scope change to backend/ML/clinical work.
+- **Deferred research:** full BML-MoVi/Human3.6M/Panoptic/NTU/clinical/synthetic integrations, model training, kinetics, normative cohorts, worker/MediaPipe replacement, and post-sit-to-stand protocol implementation.
+
 ## 7. Research-To-Code Traceability Plan
 
 Create and maintain these artifacts:
@@ -3537,13 +4057,20 @@ Fresh clone caveat:
 
 This order is the current best critical path, not a frozen queue. After every milestone, run the Chief Architect Review Loop in Section 5E, then update this order if the live codebase, validation evidence, dependency graph, or research assumptions changed.
 
-1. Finish M25-M27 before changing protocol runtime: capture quality and landmark confidence are foundational.
-2. Finish M28-M30 only when each protocol can stay honest; blocked stubs are better than fake movement reports.
-3. Finish M32-M34 to close the current roadmap wave and update docs.
-4. Execute M35-M38 before deeper architecture work, so research and claims guardrails are traceable.
-5. Execute M39-M43 to unlock safe protocol runtime generalization.
-6. Execute M44-M49 before any major model/filter/gate changes.
-7. Execute M50-M56 to make the product more trustworthy and usable.
-8. Execute M57-M60 to govern future domain expansion and refresh the roadmap.
+M00-M60 are the completed historical foundation. The current order is:
+
+1. **M61 → M62:** establish dataset governance, neutral benchmark contracts, and skeleton mappings without acquiring a corpus.
+2. **M63 → M64:** only after human access approval, run narrow pilot adapters, freeze the current baseline, and diagnose failures.
+3. **M65 only if M64 evidence warrants it:** run one-variable tracking/filter/gate experiments; retain the default on no demonstrated improvement.
+4. **M66 can begin after M62 and run beside M63-M64:** separate camera orchestration from presentation while preserving behavior.
+5. **M67 and M68:** fix camera/mobile setup hierarchy and compact the results narrative; use M64 evidence wherever eligibility or claims change.
+6. **M69 after M64/M68:** add only evidence-linked visuals with explicit uncertainty and abstention.
+7. **M70 → M71 → M72:** make protocol execution complete, then specify sit-to-stand from evidence, then implement it only if its gates pass.
+8. **M73:** research the subsequent protocol queue; do not pre-commit implementation order.
+9. **M74:** run accessibility, performance, dependency, and release-readiness gates after applicable UI/runtime work.
+
+The immediate handoff is `NEXT_EXECUTION_PACKAGE.md` (M61-M62). M27 is absorbed
+into M65; the old M28-M30 proposals are historical and are superseded by the
+M70-M73 evidence-first sequence.
 
 The guiding rule: every milestone must leave squat working, preserve verdict-or-abstain, preserve pose-tape replayability, and improve traceability between research, code, validation, and product claims.
