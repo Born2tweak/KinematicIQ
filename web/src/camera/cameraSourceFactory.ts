@@ -26,6 +26,9 @@ function createFixtureSource(fixture: CameraFixtureId): CameraSource {
       return createPoseTapeCameraSource(buildCleanSquatPoseTape(), fixture, {
         loop: true,
         loopToFrame: CLEAN_SQUAT_LOOP_TO_FRAME,
+        // Auto-start requires 60 stable observations. Guarantee a small
+        // margin even when headless WebKit throttles requestAnimationFrame.
+        minimumPrerollTicks: 75,
       })
     case 'missing-feet':
       return createPoseTapeCameraSource(buildMissingFeetPoseTape(), fixture, {

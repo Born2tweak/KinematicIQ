@@ -22,7 +22,7 @@
   --confidence-low-bg: rgba(239, 68, 68, 0.15);
 
   --gradient-accent: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%);
-  --gradient-button: linear-gradient(135deg, #2f7df0 0%, #7c5cf0 100%);
+  --gradient-button: linear-gradient(135deg, #2563eb 0%, #6d28d9 100%);
   --glass-blur: blur(22px) saturate(160%);
   --glass-highlight:
     inset 0 1px 0 rgba(255, 255, 255, 0.09),
@@ -3445,7 +3445,7 @@ button.rep-timeline__bar:disabled {
 }
 
 .btn--primary:hover {
-  background: linear-gradient(135deg, #4a90f5 0%, #8d70f5 100%);
+  background: linear-gradient(135deg, #1d4ed8 0%, #5b21b6 100%);
   box-shadow:
     0 6px 28px rgba(80, 120, 245, 0.5),
     inset 0 1px 0 rgba(255, 255, 255, 0.3);

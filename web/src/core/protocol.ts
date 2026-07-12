@@ -41,6 +41,36 @@ export type ProtocolStatus = 'available' | 'planned'
 export type ProtocolInputMode = 'live' | 'upload' | 'replay'
 export type ProtocolCameraView = 'front' | 'side' | 'either' | 'multi-view'
 
+export type ProtocolEvidenceState = 'implemented' | 'research-only'
+export type ProtocolValidationState = 'passed' | 'pending' | 'blocked'
+
+/**
+ * Versioned evidence metadata. This is governance metadata, not an activation
+ * mechanism: `status` remains the only availability switch.
+ */
+export interface ProtocolEvidenceMetadataV2 {
+  schemaVersion: 2
+  researchState: ProtocolEvidenceState
+  evidenceRefs: string[]
+  datasetProvenance: Array<{
+    datasetId: string
+    role: 'development' | 'benchmark' | 'ontology-only'
+  }>
+  cameraAssumptions: {
+    validationState: 'validated' | 'provisional' | 'unvalidated'
+    evidenceRefs: string[]
+  }
+  validationGates: Array<{
+    id: string
+    state: ProtocolValidationState
+    evidenceRefs: string[]
+  }>
+  acceptanceThresholds: {
+    provenance: 'evidence-backed' | 'provisional' | 'not-defined'
+    evidenceRefs: string[]
+  }
+}
+
 /** Capture/setup contract consumed by every input surface. */
 export interface ProtocolCaptureConfig {
   inputModes: ProtocolInputMode[]
@@ -55,6 +85,8 @@ export interface ProtocolDefinition {
   label: string
   kind: ProtocolKind
   status: ProtocolStatus
+  /** Additive M81 governance contract; does not make a protocol available. */
+  evidence: ProtocolEvidenceMetadataV2
   /** Phase vocabulary for this movement's segmentation kind, in order. */
   phases: string[]
   /**
@@ -70,6 +102,35 @@ export interface ProtocolDefinition {
   findingRuleIds: string[]
   /** Observation protocol this definition is validated for, if any (P5). */
   defaultObservationProtocolId?: string
+}
+
+/** Reject contradictory governance/availability combinations at the boundary. */
+export function validateProtocolDefinition(
+  protocol: ProtocolDefinition,
+): ProtocolDefinition {
+  const { evidence } = protocol
+  if (evidence.schemaVersion !== 2) {
+    throw new Error(`Protocol "${protocol.id}" has an unsupported evidence schema.`)
+  }
+  if (protocol.status === 'available') {
+    if (evidence.researchState !== 'implemented') {
+      throw new Error(`Available protocol "${protocol.id}" must be implemented.`)
+    }
+    if (evidence.cameraAssumptions.validationState === 'unvalidated') {
+      throw new Error(`Available protocol "${protocol.id}" cannot use an unvalidated camera contract.`)
+    }
+    if (evidence.acceptanceThresholds.provenance === 'not-defined') {
+      throw new Error(`Available protocol "${protocol.id}" must declare threshold provenance.`)
+    }
+  } else {
+    if (evidence.researchState !== 'research-only') {
+      throw new Error(`Planned protocol "${protocol.id}" must remain research-only.`)
+    }
+    if (protocol.capture.inputModes.length > 0) {
+      throw new Error(`Planned protocol "${protocol.id}" cannot expose input modes.`)
+    }
+  }
+  return protocol
 }
 
 /** True when a protocol is validated enough to analyze. Narrows nothing structurally. */

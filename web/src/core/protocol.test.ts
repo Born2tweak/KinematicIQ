@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 import {
   NotImplementedError,
   isAvailable,
+  validateProtocolDefinition,
   type ProtocolDefinition,
 } from './protocol'
 
@@ -10,6 +11,15 @@ const squatLike: ProtocolDefinition = {
   label: 'Bodyweight squat',
   kind: 'cyclic',
   status: 'available',
+  evidence: {
+    schemaVersion: 2,
+    researchState: 'implemented',
+    evidenceRefs: ['test-evidence'],
+    datasetProvenance: [],
+    cameraAssumptions: { validationState: 'provisional', evidenceRefs: ['test-camera'] },
+    validationGates: [{ id: 'test-gate', state: 'passed', evidenceRefs: ['test'] }],
+    acceptanceThresholds: { provenance: 'provisional', evidenceRefs: ['test'] },
+  },
   phases: ['standing', 'descending', 'bottom', 'ascending'],
   requiredLandmarks: [23, 24, 25, 26, 27, 28],
   capture: {
@@ -28,6 +38,15 @@ const jumpStub: ProtocolDefinition = {
   label: 'Vertical jump',
   kind: 'ballistic',
   status: 'planned',
+  evidence: {
+    schemaVersion: 2,
+    researchState: 'research-only',
+    evidenceRefs: [],
+    datasetProvenance: [],
+    cameraAssumptions: { validationState: 'unvalidated', evidenceRefs: [] },
+    validationGates: [{ id: 'validation', state: 'pending', evidenceRefs: [] }],
+    acceptanceThresholds: { provenance: 'not-defined', evidenceRefs: [] },
+  },
   phases: ['countermovement', 'takeoff', 'flight', 'landing'],
   requiredLandmarks: [23, 24, 27, 28],
   capture: {
@@ -60,5 +79,34 @@ describe('core/protocol', () => {
     expect(err.name).toBe('NotImplementedError')
     expect(err.protocolId).toBe('sprint')
     expect(err.message).toContain('sprint')
+  })
+
+  it('accepts internally consistent available and planned metadata', () => {
+    expect(validateProtocolDefinition(squatLike)).toBe(squatLike)
+    expect(validateProtocolDefinition(jumpStub)).toBe(jumpStub)
+  })
+
+  it('rejects an available protocol with research-only evidence', () => {
+    expect(() => validateProtocolDefinition({
+      ...squatLike,
+      evidence: { ...squatLike.evidence, researchState: 'research-only' },
+    })).toThrow(/must be implemented/)
+  })
+
+  it('rejects an available protocol without threshold provenance', () => {
+    expect(() => validateProtocolDefinition({
+      ...squatLike,
+      evidence: {
+        ...squatLike.evidence,
+        acceptanceThresholds: { provenance: 'not-defined', evidenceRefs: [] },
+      },
+    })).toThrow(/threshold provenance/)
+  })
+
+  it('rejects planned protocols that expose an input mode', () => {
+    expect(() => validateProtocolDefinition({
+      ...jumpStub,
+      capture: { ...jumpStub.capture, inputModes: ['upload'] },
+    })).toThrow(/cannot expose input modes/)
   })
 })

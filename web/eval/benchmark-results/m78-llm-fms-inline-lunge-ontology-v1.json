@@ -1,0 +1,115 @@
+{
+  "schemaVersion": 1,
+  "dataset": {
+    "id": "llm-fms",
+    "version": "figshare-collection-7601630-v1",
+    "rulesSha256": "599e52f695f7a82018f397dde9ccd89aa822acac7baad018fd070a634d1ef189"
+  },
+  "movements": [
+    {
+      "sourceMovementId": "m05",
+      "sourceActionName": "Inline Lunge (Left)",
+      "leadSide": "left",
+      "view": "side",
+      "rules": [
+        {
+          "id": "r01",
+          "type": "angle",
+          "name": "The inclination angle of the torso",
+          "question": "What is the type of angle between the trunk and the vertical axis?",
+          "options": [
+            "Parallel",
+            "Not parallel"
+          ],
+          "bodyParts": [
+            "Torso"
+          ]
+        },
+        {
+          "id": "r02",
+          "type": "distance",
+          "name": "Knee-ankle spacing",
+          "question": "What is the type of distance between the knee joint of the back leg and the ankle joint of the front leg?",
+          "options": [
+            "Near",
+            "Far"
+          ],
+          "bodyParts": [
+            "Left lower limb",
+            "Right lower limb"
+          ]
+        },
+        {
+          "id": "r03",
+          "type": "position",
+          "name": "Height of the back knee",
+          "question": "What is the height type of the posterior leg knee joint relative to the anterior leg ankle joint?",
+          "options": [
+            "Near",
+            "Far"
+          ],
+          "bodyParts": [
+            "Left lower limb",
+            "Right lower limb"
+          ]
+        }
+      ]
+    },
+    {
+      "sourceMovementId": "m06",
+      "sourceActionName": "Inline Lunge (Right)",
+      "leadSide": "right",
+      "view": "side",
+      "rules": [
+        {
+          "id": "r01",
+          "type": "angle",
+          "name": "The inclination Angle of the torso",
+          "question": "What is the type of angle between the trunk and the vertical axis?",
+          "options": [
+            "Parallel",
+            "Not parallel"
+          ],
+          "bodyParts": [
+            "Torso"
+          ]
+        },
+        {
+          "id": "r02",
+          "type": "distance",
+          "name": "Knee-ankle spacing",
+          "question": "What is the type of distance between the knee joint of the back leg and the ankle joint of the front leg?",
+          "options": [
+            "Near",
+            "Far"
+          ],
+          "bodyParts": [
+            "Left lower limb",
+            "Right lower limb"
+          ]
+        },
+        {
+          "id": "r03",
+          "type": "position",
+          "name": "Height of the back knee",
+          "question": "What is the height type of the posterior leg knee joint relative to the anterior leg ankle joint?",
+          "options": [
+            "Near",
+            "Far"
+          ],
+          "bodyParts": [
+            "Left lower limb",
+            "Right lower limb"
+          ]
+        }
+      ]
+    }
+  ],
+  "boundaries": [
+    "Source movement IDs are namespaced to LLM-FMS and must not be mapped to UI-PRMD by number.",
+    "Rules and options are source ontology terms, not KinematicIQ coaching truth.",
+    "Aggregate FMS scores and per-keyframe score fields are excluded.",
+    "Keyframes cannot establish event timing, complete-trial counts, or joint-angle validity.",
+    "Protocol implementation and availability remain separately gated."
+  ]
+}

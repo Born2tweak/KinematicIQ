@@ -143,6 +143,53 @@
       "notes": "User approved this pilot on 2026-07-10. The API source at commit 958aa2046ba4f5760fcc94cb458da8fe72cedf4f is available under MIT, but the 667 MB image/annotation corpus remains unavailable locally because the official download requires an identity form. Approval does not imply acquisition; no corpus checksum is recorded. No biomechanical ground truth; underlying image rights are mixed."
     },
     {
+      "id": "llm-fms",
+      "version": "figshare-collection-7601630-v1",
+      "role": "research-only",
+      "approvalStatus": "approved",
+      "source": {
+        "officialUrl": "https://doi.org/10.6084/m9.figshare.c.7601630.v1",
+        "citation": "Zhou et al., LLM-FMS: A fine-grained dataset for functional movement screen action quality assessment.",
+        "paperDoi": "10.1371/journal.pone.0313707"
+      },
+      "content": {
+        "approxSize": "~195 MB keyframes plus rules and fine-grained label metadata",
+        "modalities": ["rgb-keyframes", "fine-grained-quality-labels", "reasoning-rules"],
+        "skeleton": "none-native",
+        "views": ["source-video-keyframes"],
+        "subjects": "Not used as a product population reference; verify release metadata before any subject split.",
+        "splits": "Seven FMS actions; use inline-lunge records only for ontology research until provenance and rater review complete.",
+        "movementLabels": ["deep-squat", "hurdle-step", "inline-lunge", "shoulder-mobility", "active-straight-leg-raise", "trunk-stability-push-up", "rotary-stability"]
+      },
+      "license": {
+        "name": "CC-BY-4.0",
+        "url": "https://creativecommons.org/licenses/by/4.0/",
+        "commercialUse": "permitted",
+        "redistribution": "permitted",
+        "accessRequirement": "none"
+      },
+      "use": {
+        "allowedUses": [
+          "inline-lunge-annotation-ontology-research",
+          "fine-grained-label-provenance-review",
+          "protocol-negative-fixture-planning"
+        ],
+        "prohibitedClaimUses": [
+          "treat-aggregate-fms-score-as-biomechanical-truth",
+          "joint-angle-validity-claim",
+          "injury-risk-or-diagnosis-claim",
+          "protocol-availability-without-independent-labels"
+        ]
+      },
+      "localPathConvention": "datasets/local/llm-fms/",
+      "checksums": [
+        { "algorithm": "sha256", "value": "599e52f695f7a82018f397dde9ccd89aa822acac7baad018fd070a634d1ef189", "covers": "FMSRules.json" },
+        { "algorithm": "sha256", "value": "06702eb84bc6568b15476d2c4bc1d61c4934e1d968da2c63865961beac454078", "covers": "FMS-Keyframes.rar" },
+        { "algorithm": "sha256", "value": "be11011ad39bb8a36e65deb9d7a4c9e76ccefe36af4957b6f8140ca081e38f0b", "covers": "FMS-FineGrainedLabelInfo.rar" }
+      ],
+      "notes": "Owner approved acquisition on 2026-07-12. Acquired from Figshare collection 7601630 v1; local MD5 values matched Figshare's published hashes (936c3a09767955f7d41fe717904e2569, ccd4713698974b503de34fbb9130545f, c1d266d8115e2c241273cf438459d4e5). Figshare reports CC BY 4.0. Raw keyframes remain local and gitignored. Independent rater/provenance review is still required before benchmark use."
+    },
+    {
       "id": "sportspose",
       "version": "project-release",
       "role": "research-only",

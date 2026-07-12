@@ -20,6 +20,12 @@ export interface PoseTapeCameraSourceOptions {
   loop?: boolean
   /** Frame index to wrap to when looping (default 0), e.g. past a preroll. */
   loopToFrame?: number
+  /**
+   * Minimum getFrame calls used to traverse frames before `loopToFrame`.
+   * Test-only fixture guard: prevents a throttled browser clock from skipping
+   * a frame-counted calibration preroll. Omit for normal wall-clock replay.
+   */
+  minimumPrerollTicks?: number
 }
 
 const PLACEHOLDER_WIDTH = 640
@@ -84,23 +90,38 @@ export function createPoseTapeCameraSource(
   const frameDurationMs = 1000 / fps
 
   let startTimestamp: number | null = null
+  let tickCount = 0
+  let playbackOffset = 0
   let feed: { stream: MediaStream | null; stop(): void } | null = null
   let videoElement: HTMLVideoElement | null = null
 
   function tapeIndexFor(timestampMs: number): number | null {
     const frameCount = tape.frames.length
     if (frameCount === 0) return null
-    if (startTimestamp === null) startTimestamp = timestampMs
-
-    const elapsed = Math.max(0, timestampMs - startTimestamp)
-    const raw = Math.floor(elapsed / frameDurationMs)
-    if (raw < frameCount) return raw
-    if (!loop) return frameCount - 1
-
     const loopStart = Math.min(
       Math.max(options.loopToFrame ?? 0, 0),
       frameCount - 1,
     )
+    const minimumPrerollTicks = Math.max(options.minimumPrerollTicks ?? 0, 0)
+    if (minimumPrerollTicks > 0 && loopStart > 0 && tickCount < minimumPrerollTicks) {
+      const index = Math.min(
+        loopStart - 1,
+        Math.floor((tickCount * loopStart) / minimumPrerollTicks),
+      )
+      tickCount++
+      return index
+    }
+    if (minimumPrerollTicks > 0 && loopStart > 0 && playbackOffset === 0) {
+      playbackOffset = loopStart
+      startTimestamp = timestampMs
+    }
+    if (startTimestamp === null) startTimestamp = timestampMs
+
+    const elapsed = Math.max(0, timestampMs - startTimestamp)
+    const raw = playbackOffset + Math.floor(elapsed / frameDurationMs)
+    if (raw < frameCount) return raw
+    if (!loop) return frameCount - 1
+
     const loopLength = frameCount - loopStart
     return loopStart + ((raw - loopStart) % loopLength)
   }
@@ -142,6 +163,8 @@ export function createPoseTapeCameraSource(
         videoElement = null
       }
       startTimestamp = null
+      tickCount = 0
+      playbackOffset = 0
     },
   }
 }

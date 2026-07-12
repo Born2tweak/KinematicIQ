@@ -36,10 +36,11 @@ predictive of injury.
 
 ## Dataset and label plan
 
-1. Seek separate approval for original UI-PRMD m03 inline-lunge files; preserve
+1. Use the approved original UI-PRMD inline-lunge files when the official timed
+   release is accessible (the UI-PRMD movement namespace must be recorded); preserve
    subject identity only as a pseudonymous split key and retain original timing.
-2. Use LLM-FMS only to shape an annotation ontology until media/label terms and
-   rater provenance are reviewed; never import its aggregate FMS score as truth.
+2. Use approved LLM-FMS m05/m06 only to shape an annotation ontology; never
+   import its aggregate FMS score as truth or confuse its IDs with UI-PRMD IDs.
 3. Independently label standing, step initiation, descent start, bottom, stable
    return, lead side, occlusion, crop, and exclusion reason with two raters.
 4. Split by subject. Predeclare count, event-lag, dropout, and runtime gates

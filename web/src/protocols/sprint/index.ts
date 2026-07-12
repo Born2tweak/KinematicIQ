@@ -13,6 +13,15 @@ export const SPRINT_PROTOCOL_DEFINITION: ProtocolDefinition = {
   label: 'Sprint',
   kind: 'gait',
   status: 'planned',
+  evidence: {
+    schemaVersion: 2,
+    researchState: 'research-only',
+    evidenceRefs: [],
+    datasetProvenance: [],
+    cameraAssumptions: { validationState: 'unvalidated', evidenceRefs: [] },
+    validationGates: [{ id: 'protocol-validation', state: 'pending', evidenceRefs: [] }],
+    acceptanceThresholds: { provenance: 'not-defined', evidenceRefs: [] },
+  },
   phases: ['stance', 'toe-off', 'swing', 'touchdown'],
   requiredLandmarks: [
     LANDMARK_INDICES.LEFT_HIP,

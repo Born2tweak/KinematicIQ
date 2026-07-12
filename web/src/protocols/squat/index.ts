@@ -18,6 +18,25 @@ export const SQUAT_PROTOCOL_DEFINITION: ProtocolDefinition = {
   label: SQUAT_PROFILE.label,
   kind: SQUAT_PROFILE.kind,
   status: 'available',
+  evidence: {
+    schemaVersion: 2,
+    researchState: 'implemented',
+    evidenceRefs: ['docs/implementation/progress/M43-protocol-aware-entry-point.md'],
+    datasetProvenance: [],
+    cameraAssumptions: {
+      validationState: 'provisional',
+      evidenceRefs: ['docs/implementation/progress/M25-capture-readiness-v2.md'],
+    },
+    validationGates: [{
+      id: 'squat-runtime-regression',
+      state: 'passed',
+      evidenceRefs: ['web/src/protocols/runtime.test.ts'],
+    }],
+    acceptanceThresholds: {
+      provenance: 'provisional',
+      evidenceRefs: ['docs/doctrine/deferred-scope.md'],
+    },
+  },
   phases: ['standing', 'descending', 'bottom', 'ascending'],
   requiredLandmarks: [
     LANDMARK_INDICES.LEFT_SHOULDER,

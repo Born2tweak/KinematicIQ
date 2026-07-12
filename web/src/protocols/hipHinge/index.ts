@@ -14,6 +14,15 @@ export const HIP_HINGE_PROTOCOL_DEFINITION: ProtocolDefinition = {
   label: 'Hip hinge',
   kind: 'cyclic',
   status: 'planned',
+  evidence: {
+    schemaVersion: 2,
+    researchState: 'research-only',
+    evidenceRefs: [],
+    datasetProvenance: [],
+    cameraAssumptions: { validationState: 'unvalidated', evidenceRefs: [] },
+    validationGates: [{ id: 'protocol-validation', state: 'pending', evidenceRefs: [] }],
+    acceptanceThresholds: { provenance: 'not-defined', evidenceRefs: [] },
+  },
   phases: ['standing', 'descending', 'bottom', 'ascending'],
   requiredLandmarks: [
     LANDMARK_INDICES.LEFT_SHOULDER,

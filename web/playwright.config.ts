@@ -26,5 +26,19 @@ export default defineConfig({
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
     },
+    {
+      name: 'firefox',
+      use: { ...devices['Desktop Firefox'] },
+    },
+    {
+      name: 'webkit',
+      use: { ...devices['Desktop Safari'] },
+    },
+    {
+      // Automated WebKit/iPhone emulation is a compatibility check, not a
+      // substitute for the real-device Safari pass documented for M76.
+      name: 'webkit-iphone',
+      use: { ...devices['iPhone 13'] },
+    },
   ],
 })

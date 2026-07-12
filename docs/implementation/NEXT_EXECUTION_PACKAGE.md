@@ -4,26 +4,26 @@
 
 **Authority:** M73 portfolio and M74 release-readiness scorecard
 
-**State:** planning/approval package; no deployment, dataset acquisition, or
-breaking dependency migration is authorized by this document
+**State:** M75 complete; M76-M78 partially executed at their approved boundaries.
+No deployment, further dataset acquisition, or protocol activation is authorized
+by this document.
 
 ## Current evidence
 
 - M63-M72 completed with sit-to-stand correctly remaining planned.
 - M73 selects inline lunge for the next research track, not implementation.
-- M74 is not release-ready: production dependencies audit clean and local gates
-  pass, but the dev toolchain has six advisories, manual assistive-technology and
-  target-device checks are absent, and production headers are unverified.
-- An isolated copy proved the proposed Vite/Vitest migration can build, run all
-  529 tests, meet coverage, and reproduce dataset/tape evaluations. This lowers
-  technical uncertainty but does not replace owner approval for the breaking slice.
+- M74 remains not release-ready: manual assistive-technology and target-device
+  checks are absent, and production headers are unverified.
+- M75 is complete after owner approval. The Vite 8/Vitest 4 repository now has a
+  zero-vulnerability audit and passes build, 529 tests, coverage, dataset/tape
+  evaluations, and 10 camera/release Playwright tests.
 
 ## M75 — Approved dev-toolchain security migration
 
-**Requires explicit owner approval before repository mutation.** Upgrade Vite
-5→8, Vitest/coverage 2→4, `@vitejs/plugin-react` 4→6, and add the separately
-versioned `vite-node` 6 CLI used by evaluation scripts. Preserve Node >=20,
-COOP/COEP, coverage include/thresholds, and every existing script.
+**Complete 2026-07-12.** Upgraded Vite 5→8, Vitest/coverage 2→4,
+`@vitejs/plugin-react` 4→6, and added the separately versioned `vite-node` 6 CLI
+used by evaluation scripts. Node >=20, COOP/COEP, coverage configuration, and
+existing scripts were preserved.
 
 Acceptance: clean `npm audit`, production build, 529+ unit tests, coverage gates,
 11-tape baseline, UI-PRMD baseline, camera/release Playwright suites, lockfile
@@ -31,11 +31,11 @@ diff review, and rollback by reverting only `package.json`/lockfile.
 
 ## M76 — Named browser/device and assistive-technology validation
 
-**Requires owner support-matrix choice and human/device access.** Minimum
-recommended initial target: current Chromium desktop plus one real iOS Safari or
-Android Chrome device. Run camera permission/model load, upload, results,
-keyboard/high zoom, rendered contrast, and NVDA or VoiceOver flow. Record exact
-versions and limitations; do not claim unsupported targets.
+**Automated/code-level portion complete.** The selected matrix is Windows 11
+Chrome + Firefox and iPhone Safari. Chromium, Firefox, desktop WebKit, and iPhone
+WebKit emulation now run automated interaction and axe WCAG A/AA coverage.
+Physical iPhone Safari and NVDA/VoiceOver rows remain pending human execution
+under the exact script in `docs/validation/M76_SUPPORT_MATRIX_AND_MANUAL_VERIFICATION.md`.
 
 ## M77 — Target-device performance and bundle decision
 
@@ -46,14 +46,17 @@ The current local navigation sample is not a device budget.
 
 ## M78 — Inline-lunge data and label gate
 
-**Requires separate dataset approval.** Acquire only approved original timed
-UI-PRMD m03 and/or approved LLM-FMS metadata/media. Capture checksums and terms,
-create independent event labels and subject splits, then predeclare benchmark
-criteria. If any gate fails, keep inline lunge research-only; do not enable the
-existing hip-hinge stub as a substitute.
+**Acquisition/provenance portion partially complete after owner approval.** The
+official CC BY 4.0 LLM-FMS release was acquired locally with verified hashes;
+m05/m06 are its inline-lunge keyframes. Original timed UI-PRMD remains blocked by
+the official site's HTTP 403. Independent event labels and subject splits remain
+open under `docs/validation/INLINE_LUNGE_LABELING_PROTOCOL.md`. Keep inline lunge
+research-only; do not enable the existing hip-hinge stub as a substitute.
 
 ## Approval boundaries
 
-The next autonomous code change is M75 only after approval. M76 needs a support
-choice and real assistive/device access. M78 needs data/license approval. M77 is
-not meaningful before M76. No other feature milestone should bypass these gates.
+M75 is complete. M76 automated work is complete but still needs real
+assistive/device execution. M78 acquisition approval is consumed; original timed
+UI-PRMD access and independent human labels remain open. M77 may collect desktop
+automation now, but its iPhone camera/performance decision needs physical-device
+evidence. No other feature milestone should bypass these gates.

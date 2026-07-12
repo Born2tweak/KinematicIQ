@@ -66,6 +66,25 @@ describe('poseTapeCameraSource frame stepping', () => {
     )
   })
 
+  it('does not let a throttled wall clock skip a guarded calibration preroll', () => {
+    const tape = buildCleanSquatPoseTape()
+    const source = createPoseTapeCameraSource(tape, 'clean-squat', {
+      loop: true,
+      loopToFrame: CLEAN_SQUAT_LOOP_TO_FRAME,
+      minimumPrerollTicks: 75,
+    })
+
+    for (let tick = 0; tick < 75; tick++) {
+      const frame = source.getFrame(tick * 1_000, tick)
+      expect(frame!.landmarks).toEqual(
+        tape.frames[Math.floor((tick * CLEAN_SQUAT_LOOP_TO_FRAME) / 75)].landmarks,
+      )
+    }
+    expect(source.getFrame(75_000, 75)!.landmarks).toEqual(
+      tape.frames[CLEAN_SQUAT_LOOP_TO_FRAME].landmarks,
+    )
+  })
+
   it('stop() resets the time anchor so a fresh attach starts from frame 0', () => {
     const tape = buildCleanSquatPoseTape()
     const source = createPoseTapeCameraSource(tape, 'clean-squat')

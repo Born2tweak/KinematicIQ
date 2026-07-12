@@ -7,6 +7,15 @@ export const SIT_TO_STAND_PROTOCOL_DEFINITION: ProtocolDefinition = {
   label: 'Sit to stand',
   kind: 'transition',
   status: 'planned',
+  evidence: {
+    schemaVersion: 2,
+    researchState: 'research-only',
+    evidenceRefs: ['docs/research/SIT_TO_STAND_PROTOCOL_RESEARCH.md'],
+    datasetProvenance: [],
+    cameraAssumptions: { validationState: 'unvalidated', evidenceRefs: [] },
+    validationGates: [{ id: 'protocol-validation', state: 'pending', evidenceRefs: [] }],
+    acceptanceThresholds: { provenance: 'not-defined', evidenceRefs: [] },
+  },
   phases: ['seated', 'rising', 'standing', 'lowering'],
   requiredLandmarks: [
     LANDMARK_INDICES.LEFT_SHOULDER,
@@ -35,4 +44,3 @@ export const SIT_TO_STAND_PROTOCOL: Protocol = {
   definition: SIT_TO_STAND_PROTOCOL_DEFINITION,
   profile: null,
 }
-

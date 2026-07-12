@@ -1,6 +1,6 @@
 # KinematicIQ Living Risk Register
 
-**Updated:** 2026-07-11
+**Updated:** 2026-07-12
 
 **Maintenance:** update when a milestone changes likelihood, impact, evidence, owner, or mitigation. “Closed” requires evidence; deferral is not closure.
 
@@ -18,7 +18,7 @@
 | R-DATA-01 | Public/research data used commercially without permission | Medium | Critical | Many candidate datasets research-only/mixed rights | Role registry, legal approval checkpoint, no blanket downloader | M61; open |
 | R-DATA-02 | Restricted participant media or local paths enter git | Medium | Critical | Tapes ignored; external-data structure absent | Ignore rules, manifest parser, staged diff/secret/media scan | M61-M63; open |
 | R-DATA-03 | Health/biometric data is re-identified or over-retained | Low before collection | Critical | M74 governance plan exists; no proprietary collection occurred | Approve consent/retention/de-identification plan before collection | M74; guarded |
-| R-DATA-04 | Dataset version/license changes invalidate evidence | Medium | High | Links/terms can change | Version/checksum/access-date/license snapshot reference | M61; open |
+| R-DATA-04 | Dataset version/license changes invalidate evidence | Medium | High | LLM-FMS official Figshare v1 acquired with SHA-256 and matching published MD5; original UI-PRMD timed site returns 403 | Version/checksum/access-date/license snapshot reference | M61/M78; reducing |
 | R-SCI-01 | Product copy implies lab or clinical equivalence | Low-medium | High | M74 removed landing “motion lab,” PT/patient, and “validated reps” claims; e2e guard added | Maintain claims scan and human review | M74; mitigated |
 | R-SCI-02 | Camera confidence is confused with validation status | High | High | Evidence shows “High confidence · experimental” | Separate labels/explanation/hierarchy | M68; open |
 | R-SCI-03 | Experimental/proxy metrics drive strong coaching | Medium-high | High | Findings and posture cards can use internal thresholds | Eligibility contract; validation board gate | M64/M68-M72; open |
@@ -34,8 +34,8 @@
 | R-PROT-04 | Sit-to-stand is forced into squat activation/completion | High | High | Current upright/descent auto-start; chair/contact absent | Research package decides transition model from labels | M71; open |
 | R-PERF-01 | Main-thread inference/UI misses frame budget on devices | Medium | High | Targets only; no timing profile; large chunks | Instrument and profile target matrix before worker work | M64/M74; open |
 | R-PERF-02 | Bundle size harms first-use/model readiness | Medium | Medium | Main 505 kB and lazy 3D 907 kB minified; no target-device trace | M76-M77 target-device profile before optimization | open |
-| R-ACC-01 | Accessibility audit claims exceed real assistive-tech evidence | High | High | Manual checks remain; no axe/screen-reader test | NVDA/VoiceOver/manual and automated a11y layer | M67-M69/M74; open |
-| R-DEP-01 | Development-tool vulnerabilities expose local files/server | Medium when dev server is exposed | High | Production audit clean; 6 dev advisories remain; isolated Vite8/Vitest4 migration passes | Loopback-only now; owner-approved M75 migration | M75; approval-blocked |
+| R-ACC-01 | Accessibility audit claims exceed real assistive-tech evidence | Medium-high | High | Axe WCAG A/AA scans run across Chromium, Firefox, desktop/mobile WebKit; NVDA/VoiceOver and physical iPhone remain pending human execution | Exact M76 human scripts; do not promote pending rows | M76; open |
+| R-DEP-01 | Development-tool vulnerabilities expose local files/server | Low | High | Approved Vite 8/Vitest 4 migration applied; full and production audits report zero vulnerabilities; acceptance matrix passes | Keep dependencies audited and local servers loopback-only | M75; mitigated |
 | R-DOC-01 | Canonical docs drift from code | High | High | Traceability marked implemented milestones planned; AI rules conflict with persistence | Update canonical rows, link Aurelian indexes, doc checks | Current task/M61; reducing |
 | R-FIX-01 | CI passes without real validation fixtures | High | High | Real tapes local; CI-safe suite synthetic | Explicit availability report + redistributable redacted fixtures | M62-M63; open |
 

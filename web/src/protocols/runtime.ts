@@ -43,18 +43,14 @@ import { STABLE_FRAMES_REQUIRED, createAutoStartState, updateAutoStart } from '.
 import { standingKneeThreshold, updatePhaseDetector } from '../analysis/phaseDetector'
 import { updateRepCounter } from '../analysis/repCounter'
 import { activateAnalysisPipeline, createFreshAnalysisPipeline } from '../analysis/setActivation'
+import {
+  validateProtocolTrialOutcomeSet,
+  type ProtocolTrialOutcome,
+  type ProtocolTrialOutcomeSetV1,
+} from './outcome'
 
 /** Everything segmentation produces — shape-identical to `runPipelineOnFrames`. */
 export type SegmentationOutput = ReturnType<typeof runPipelineOnFrames>
-
-export interface ProtocolTrialOutcome {
-  id: string
-  kind: 'repetition' | 'transition' | 'ballistic-event' | 'stride'
-  startFrameIndex: number
-  endFrameIndex: number
-  completed: boolean
-  rejectionReason?: string
-}
 
 export interface BuildProtocolSessionInput {
   reps: RepMetrics[]
@@ -112,6 +108,8 @@ export interface ProtocolRuntime {
   protocolId: ProtocolId
   outcomeKinds: ProtocolTrialOutcome['kind'][]
   liveCyclic?: LiveCyclicRuntime
+  /** Additive adapter; legacy segmentation output remains unchanged. */
+  buildTrialOutcomes(segmentation: SegmentationOutput): ProtocolTrialOutcomeSetV1
   /** Frames → reps + per-frame streams (FSM segmentation). */
   segmentFrames(
     frames: readonly PoseFrame[],
@@ -151,6 +149,7 @@ export const SQUAT_RUNTIME: ProtocolRuntime = {
     updateRep: updateRepCounter,
     standingKneeThreshold,
   },
+  buildTrialOutcomes: (segmentation) => adaptSquatTrialOutcomes(segmentation),
   segmentFrames: (frames, initial) => runPipelineOnFrames(frames, initial),
   collectMetrics: ({ reps, sessionConfidenceScore, excludedRepNumbers }) =>
     collectSetMetrics(reps, sessionConfidenceScore, excludedRepNumbers),
@@ -170,6 +169,37 @@ export const SQUAT_RUNTIME: ProtocolRuntime = {
       'squat',
       input.capture,
     ),
+}
+
+export function adaptSquatTrialOutcomes(
+  segmentation: SegmentationOutput,
+): ProtocolTrialOutcomeSetV1 {
+  const observed: ProtocolTrialOutcome[] = [
+    ...segmentation.reps.map((rep, index): ProtocolTrialOutcome => ({
+      id: `squat-repetition-${index + 1}`,
+      kind: 'repetition',
+      status: 'completed',
+      startFrameIndex: rep.startFrameIndex,
+      endFrameIndex: rep.endFrameIndex,
+    })),
+    ...segmentation.repRejections.map((rejection, index): ProtocolTrialOutcome => ({
+      id: `squat-rejection-${index + 1}`,
+      kind: 'repetition',
+      status: 'rejected',
+      startFrameIndex: rejection.startFrameIndex,
+      endFrameIndex: rejection.endFrameIndex,
+      rejectionReason: rejection.reason,
+    })),
+  ].sort((left, right) => {
+    const startDelta = (left.startFrameIndex ?? Infinity) - (right.startFrameIndex ?? Infinity)
+    return startDelta || left.id.localeCompare(right.id)
+  })
+
+  return validateProtocolTrialOutcomeSet({
+    schemaVersion: 1,
+    protocolId: 'squat',
+    trials: observed,
+  })
 }
 
 const RUNTIMES: Partial<Record<ProtocolId, ProtocolRuntime>> = {

@@ -13,6 +13,15 @@ export const JUMP_PROTOCOL_DEFINITION: ProtocolDefinition = {
   label: 'Vertical jump',
   kind: 'ballistic',
   status: 'planned',
+  evidence: {
+    schemaVersion: 2,
+    researchState: 'research-only',
+    evidenceRefs: [],
+    datasetProvenance: [],
+    cameraAssumptions: { validationState: 'unvalidated', evidenceRefs: [] },
+    validationGates: [{ id: 'protocol-validation', state: 'pending', evidenceRefs: [] }],
+    acceptanceThresholds: { provenance: 'not-defined', evidenceRefs: [] },
+  },
   phases: ['standing', 'countermovement', 'takeoff', 'flight', 'landing'],
   requiredLandmarks: [
     LANDMARK_INDICES.LEFT_HIP,

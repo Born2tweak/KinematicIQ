@@ -12,8 +12,19 @@ import {
   buildResultsSummary,
 } from '../session/buildSessionResult'
 import { buildCleanSquatPoseTape } from '../camera/fixtures/cleanSquatPoseTape'
+import { listProtocols } from './registry'
 
 describe('getProtocolRuntime', () => {
+  it('exposes complete v2 evidence metadata without activating stubs', () => {
+    const protocols = listProtocols()
+    expect(protocols).toHaveLength(5)
+    for (const { definition } of protocols) {
+      expect(definition.evidence.schemaVersion).toBe(2)
+      expect(definition.evidence.validationGates.length).toBeGreaterThan(0)
+    }
+    expect(protocols.filter(({ definition }) => definition.status === 'available').map(({ definition }) => definition.id)).toEqual(['squat'])
+  })
+
   it('returns the squat runtime', () => {
     const runtime = getProtocolRuntime('squat')
     expect(runtime.protocolId).toBe('squat')
@@ -45,6 +56,17 @@ describe('squat runtime adapter parity', () => {
     expect(viaRuntime).toEqual(direct)
     // Sanity: the fixture actually produces reps, so parity is meaningful.
     expect(direct.reps.length).toBeGreaterThan(0)
+  })
+
+  it('adapts squat reps to neutral outcomes without changing segmentation', () => {
+    const segmentation = SQUAT_RUNTIME.segmentFrames(frames)
+    const before = structuredClone(segmentation)
+    const outcome = SQUAT_RUNTIME.buildTrialOutcomes(segmentation)
+    expect(segmentation).toEqual(before)
+    expect(outcome.schemaVersion).toBe(1)
+    expect(outcome.protocolId).toBe('squat')
+    expect(outcome.trials).toHaveLength(segmentation.reps.length + segmentation.repRejections.length)
+    expect(outcome.trials.filter((trial) => trial.status === 'completed')).toHaveLength(segmentation.reps.length)
   })
 
   it('assessQuality matches assessSetQuality exactly', () => {

@@ -11,7 +11,7 @@
  * through session/buildSessionResult.
  */
 import type { MovementProfile } from '../analysis/movement/types'
-import { NotImplementedError, type ProtocolId } from '../core/protocol'
+import { NotImplementedError, type ProtocolId, validateProtocolDefinition } from '../core/protocol'
 import { HIP_HINGE_PROTOCOL } from './hipHinge'
 import { JUMP_PROTOCOL } from './jump'
 import { SPRINT_PROTOCOL } from './sprint'
@@ -26,6 +26,10 @@ const PROTOCOLS: Partial<Record<ProtocolId, Protocol>> = {
   jump: JUMP_PROTOCOL,
   sprint: SPRINT_PROTOCOL,
 }
+
+Object.values(PROTOCOLS).forEach((protocol) => {
+  if (protocol) validateProtocolDefinition(protocol.definition)
+})
 
 /** The movement the app analyzes by default until selection UI ships (M10). */
 const ACTIVE_PROTOCOL_ID: ProtocolId = 'squat'
@@ -78,5 +82,6 @@ export function getActiveProtocolProfile(): MovementProfile {
 
 /** Test/M10 seam: register or replace a protocol at runtime. */
 export function registerProtocol(protocol: Protocol): void {
+  validateProtocolDefinition(protocol.definition)
   PROTOCOLS[protocol.definition.id] = protocol
 }

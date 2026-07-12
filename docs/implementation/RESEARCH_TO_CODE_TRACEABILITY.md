@@ -100,7 +100,7 @@ experimental unless stated.
 | Validation corpus manifest / benchmark report generator | R05 | `web/src/eval/corpusManifest.ts`, `benchmarkReport.ts`, `eval-tapes/MANIFEST.example.json`, `docs/validation/validation-corpus.md` | M44–M45 | implemented; current local run has no saved comparison baseline and no bottom-frame labels | — |
 | Reliability calculator and study template | R05 | `web/src/eval/reliability.ts`, `docs/validation/RELIABILITY_STUDY_TEMPLATE.md` | M49 | implemented infrastructure; real repeated-measures study not run | — |
 | Public movement-dataset research and execution mapping | R05, R06, R07, R08, R11 | `docs/research/PUBLIC_MOVEMENT_DATASET_RESEARCH.md`, `docs/implementation/PUBLIC_DATASET_RESEARCH_TO_EXECUTION_MAP.md`, post-M60 roadmap | M61–M74 | planned execution; research/audit artifacts active | — |
-| Metadata-first dataset registry + validator (provenance/license/access/intended-use, local-only path boundary) | R05 governance, R06, R07 claims-policy | `web/src/eval/datasetRegistry.ts`, `web/eval/datasets/registry.json`, `docs/validation/DATASET_OPERATOR_RUNBOOK.md`, `.gitignore` (raw-data boundary) | M61 | implemented — 4 metadata-only pilots registered, nothing acquired (ADR-006, ADR-010) | — |
+| Metadata-first dataset registry + validator (provenance/license/access/intended-use, local-only path boundary) | R05 governance, R06, R07 claims-policy | `web/src/eval/datasetRegistry.ts`, `web/eval/datasets/registry.json`, `docs/validation/DATASET_OPERATOR_RUNBOOK.md`, `.gitignore` (raw-data boundary) | M61, M63, M78 | implemented — approved UI-PRMD reduced and LLM-FMS artifacts acquired locally with immutable checksums; raw data remains gitignored (ADR-006, ADR-010) | — |
 | Neutral benchmark-sequence schema + source-to-canonical skeleton maps, adapter contract, and conservative replay bridge | R05, R06, R08 | `web/src/eval/benchmark/` (`canonicalSkeleton.ts`, `benchmarkSequence.ts`, `skeletonMap.ts`, `adapter.ts`, `benchmarkBridge.ts`, `exampleMaps.ts`) | M62 | implemented — new schema id `benchmark-sequence-v1`, separate from `PoseTape`/`RepMetrics`; explicit missingness; deterministic serialization; bridge abstains on non-squat trials (ADR-007). Synthetic fixtures only, no corpus. | — |
 
 ## Experience layer (R11)
@@ -134,14 +134,22 @@ experimental unless stated.
 | Results narrative and evidence navigation | `resultsNarrative.ts`, `RepTimeline.tsx`, `SessionReplay.tsx` | deterministic narrative and rep-to-bottom-frame replay; no waveform claim |
 | Sit-to-stand transition trials | `SIT_TO_STAND_PROTOCOL_SPEC.md`, planned protocol stub | specified; activation correctly blocked on seed data and labels |
 
-## M73-M75 continuation update (2026-07-11)
+## M73-M75 continuation update (2026-07-12)
 
 | Research concept | Evidence/code | Outcome |
 |---|---|---|
 | Next protocol portfolio | UI-PRMD, LLM-FMS, 2D/3D lunge validity study; `NEXT_PROTOCOL_PORTFOLIO.md` | inline lunge selected for research only |
 | Inline-lunge evidence package | `INLINE_LUNGE_PROTOCOL_RESEARCH.md` | capture/runtime hypothesis and hard gates; no code or availability |
 | Release readiness | `M74_RELEASE_READINESS_SCORECARD.md`, release-readiness e2e | not release-ready; local gates recorded and landing overclaims corrected |
-| Dev-toolchain remediation | npm advisories, official Vite/Vitest migration guides, isolated M75 spike | zero-audit candidate verified; repository migration approval-blocked |
+| Dev-toolchain remediation | `web/package.json`, `web/package-lock.json`, M75 progress note, build/test/evaluation/e2e evidence | approved Vite 8/Vitest 4 migration implemented; full audit zero vulnerabilities and acceptance matrix passes |
+
+## M76-M78 gated execution update (2026-07-12)
+
+| Research concept | Evidence/code | Outcome |
+|---|---|---|
+| Named support/accessibility | `playwright.config.ts`, `accessibility.spec.ts`, M76 support/manual script | automated Chromium, Firefox, desktop/mobile WebKit WCAG and interaction coverage; physical iPhone and NVDA/VoiceOver pending human execution |
+| Target-device performance | M77 progress note, production build, M76 physical-device script | bundle evidence current; no optimization decision until physical iPhone camera/model/thermal evidence |
+| Inline-lunge data gate | dataset registry, LLM-FMS Figshare artifacts, `llmFmsOntology.ts`, M78 ontology report, labeling protocol | official m05/m06 keyframes acquired and integrity-verified; checksum-gated six-rule ontology extracted with scores excluded; timed UI-PRMD and independent labels remain open |
 
 ## Per-metric validation status
 

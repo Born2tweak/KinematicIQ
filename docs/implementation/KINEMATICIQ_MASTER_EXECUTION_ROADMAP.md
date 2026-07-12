@@ -3866,28 +3866,31 @@ split at approval/evidence boundaries:
 
 ### M75 — Dev-toolchain security migration
 
-Owner-approved Vite 8/Vitest 4/plugin-react 6/vite-node 6 migration. The M75
-isolated spike proved build, 529 tests, coverage, dataset pilot, tape parity, and
-zero-audit feasibility. Repository mutation remains a breaking-dependency
-approval checkpoint; rollback is package manifest/lockfile only.
+Completed 2026-07-12 after owner approval: Vite 8.1.4, Vitest/coverage 4.1.10,
+plugin-react 6.0.3, and vite-node 6.0.0. The repository passes a zero-vulnerability
+audit, build, 529 tests, coverage, dataset pilot, tape parity, and 10 Playwright
+tests. Rollback is package manifest/lockfile only to pre-M75 commit `8d8a77d`.
 
 ### M76 — Named support and assistive-technology validation
 
-Choose actual browser/device support, then run a real mobile device and NVDA or
-VoiceOver through capture, upload, results, export, high zoom, contrast, and
-reduced motion. No broad accessibility or browser-support claim precedes this.
+Support selected: Windows 11 Chrome + Firefox and iPhone Safari. Automated
+Chromium/Firefox/desktop-WebKit/iPhone-WebKit interaction and axe WCAG A/AA
+coverage landed 2026-07-12. Exact physical iPhone, NVDA, VoiceOver, keyboard,
+and 400% zoom scripts exist; their rows remain pending human execution.
 
 ### M77 — Target-device performance decision
 
-After M76, collect model-readiness and frame-loop p50/p95, long tasks, memory,
-thermals, and route/chunk traces. Optimize workers/chunks/3D only if a predeclared
-budget fails without replay, claims, or camera regressions.
+Build/bundle evidence was refreshed after M76. Physical iPhone model-readiness,
+frame-loop, memory, thermal, and battery evidence remains pending under the M76
+manual script. No worker/chunk/3D optimization is justified before that evidence.
 
 ### M78 — Inline-lunge data and label gate
 
-After explicit dataset approval, acquire original timed files, preserve terms and
-checksums, label events independently, split by subject, and predeclare acceptance.
-Failure keeps the protocol research-only. Availability is a later separate gate.
+Owner approval was consumed 2026-07-12. Official CC BY 4.0 LLM-FMS artifacts
+were acquired locally with verified published MD5 and recorded SHA-256 values;
+m05/m06 are its inline-lunge keyframes. Original timed UI-PRMD access is blocked
+by HTTP 403. The independent two-rater labeling and acceptance protocol is
+predeclared; execution remains open. Availability is a later separate gate.
 
 ## 6C. Dependency Analysis
 

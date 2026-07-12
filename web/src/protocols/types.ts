@@ -18,8 +18,9 @@ export type {
   ProtocolId,
   ProtocolKind,
   ProtocolStatus,
+  ProtocolEvidenceMetadataV2,
 } from '../core/protocol'
-export { NotImplementedError, isAvailable } from '../core/protocol'
+export { NotImplementedError, isAvailable, validateProtocolDefinition } from '../core/protocol'
 
 export interface Protocol {
   definition: ProtocolDefinition
@@ -35,3 +36,9 @@ export interface Protocol {
 }
 
 export type { ProtocolRuntime, ReportMetadata } from './runtime'
+export type {
+  ProtocolTrialKind,
+  ProtocolTrialOutcome,
+  ProtocolTrialOutcomeSetV1,
+} from './outcome'
+export { validateProtocolTrialOutcomeSet } from './outcome'

@@ -11,9 +11,12 @@
     "test:coverage": "vitest run --coverage",
     "test:e2e": "playwright test",
     "test:e2e:camera": "playwright test tests/e2e/camera-fixture.spec.ts",
+    "test:e2e:a11y": "playwright test tests/e2e/accessibility.spec.ts --workers=1",
+    "test:e2e:support": "playwright test --workers=1",
     "eval:tapes": "vite-node scripts/evalTapes.ts",
     "eval:label": "vite-node scripts/labelTape.ts",
-    "eval:datasets": "vite-node scripts/runDatasetPilots.ts"
+    "eval:datasets": "vite-node scripts/runDatasetPilots.ts",
+    "eval:llm-fms": "vite-node scripts/runLlmFmsOntology.ts"
   },
   "dependencies": {
     "@mediapipe/tasks-vision": "^0.10.14",
@@ -25,16 +28,18 @@
     "three": "^0.185.1"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.10.2",
     "@playwright/test": "^1.61.1",
     "@types/node": "^26.1.0",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
     "@types/three": "^0.185.0",
-    "@vitejs/plugin-react": "^4.3.3",
-    "@vitest/coverage-v8": "^2.1.5",
+    "@vitejs/plugin-react": "^6.0.3",
+    "@vitest/coverage-v8": "^4.1.10",
     "jsdom": "^25.0.1",
     "typescript": "^5.6.3",
-    "vite": "^5.4.10",
-    "vitest": "^2.1.5"
+    "vite": "^8.1.4",
+    "vite-node": "^6.0.0",
+    "vitest": "^4.1.10"
   }
 }

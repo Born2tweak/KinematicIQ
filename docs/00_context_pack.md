@@ -1,97 +1,121 @@
 # KinematicIQ Context Pack
 
-<!-- Hand-maintained as of M34 (2026-07-06). The former generator
-     (scripts/generate-context-pack.ps1) is DEPRECATED — it encodes the
-     pre-protocol-platform milestone model (old M1–M18) and must not be run;
-     it would overwrite this file with stale content. Update this file by
-     hand as part of each docs-sync milestone. -->
+> Hand-maintained on 2026-07-12 at M80; current through M79. Do not run the
+> deprecated `scripts/generate-context-pack.ps1`, which encodes the former
+> milestone model and would overwrite this file with stale content.
 
 ## Workspace
 
-| Key | Value |
-|-----|-------|
-| Repo | `C:\Users\acetu\KinematicIQ` / https://github.com/Born2tweak/KinematicIQ.git |
-| Branch | `master` |
-| App | `web/` — Vite + React + TypeScript — `npm run dev` → http://localhost:5173/ |
-| Pose engine | MediaPipe `@mediapipe/tasks-vision` (on-device, no backend) |
-| Routes | `/` `/camera` `/upload` `/results` `/history` |
-| Tests | `npm test` (vitest, 56 files / 353 tests green at M33) + `npm run test:e2e:camera` (Playwright fixtures, no webcam) |
+| Key | Current value |
+|---|---|
+| Repository | `C:\Users\acetu\KinematicIQ` / `Born2tweak/KinematicIQ` |
+| Branch baseline | `master`; local HEAD and `origin/master` were `8d8a77d` at M79 |
+| Application | `web/` — Vite 8.1.4, React, TypeScript |
+| Pose engine | MediaPipe Tasks Vision in the browser; no application backend or cloud inference |
+| Routes | `/`, `/camera`, `/upload`, `/results`, `/history` |
+| Supported automation targets | Windows 11 Chrome/Firefox and iPhone Safari-compatible WebKit projects |
+| Unit baseline | 80 files / 533 tests passed at the M78 closeout |
+| Coverage baseline | 86.29% statements, 81.62% branches, 92.14% functions, 87.58% lines |
+| Browser baseline | 56 applicable support tests passed across four projects; Chromium fake-camera acquisition passed separately |
 
-## Product
+The repository intentionally contains the uncommitted M74-M79 execution
+package. Preserve unrelated changes. Do not commit, push, deploy, activate a
+protocol, or publish a release without explicit authorization.
 
-Browser-only **movement analysis platform** organized as a protocol engine.
-Squat is the available protocol; hip hinge / jump / sprint are registered
-stubs (`analyze` throws). Camera or upload → MediaPipe Pose → angles → phases
-→ reps → keyed `MetricResult[]` → observation-language `Finding[]` → tabbed
-report (Summary / Evidence / Expert). **Verdict-or-abstain:** an
-untrustworthy recording produces a full abstain, not a hedged report. No
-composite score exists anywhere — permanently forbidden.
+## Product and data flow
 
-Persistence is **opt-in and local-only**: explicit "Save to history" writes a
-versioned record to IndexedDB with a delete-all control (M9/M31). Nothing is
-uploaded, ever. Session reports export as self-contained HTML/JSON (M33);
-pose tapes export separately as JSON.
+KinematicIQ is a client-side movement-analysis platform. Squat is the only
+available protocol. Sit-to-stand, hip hinge, jump, and sprint remain planned
+metadata-only protocols and must fail closed if analysis is attempted.
 
-## Program status (master roadmap M25–M60)
+The live path is:
 
-Source of truth: `docs/implementation/KINEMATICIQ_MASTER_EXECUTION_ROADMAP.md`.
-Per-milestone record: `docs/implementation/progress/` (one note per milestone).
+`camera/upload -> MediaPipe landmarks -> ProtocolRuntime -> set-quality gate -> MetricResult[] -> Finding[] -> report`
+
+`ProtocolRuntime` is the canonical extension point. It owns protocol capture,
+frame analysis, lifecycle state, outcome kind, and outcome construction. Phase
+2 extends this contract; it must not create a parallel “universal” engine.
+
+Untrustworthy evidence produces a full abstention. KinematicIQ does not emit a
+composite score and must not make diagnostic, injury-risk, pathology, kinetic,
+muscle-activation, or normative claims.
+
+## Persistence and privacy
+
+Phase 2 adds no persistence, backend, authentication, telemetry, or cloud
+processing. Existing history is retained for compatibility: only an explicit
+“Save to history” action writes a versioned session record to local IndexedDB,
+and the user can delete all records. Session reports and pose tapes are explicit
+local exports. Nothing is silently saved or uploaded by application code.
+
+MediaPipe runtime/model assets may be fetched by the browser. “Client-side”
+therefore means no application API or cloud inference, not necessarily zero
+network requests after the HTML document loads.
+
+## Program status
+
+Canonical Phase 2 plan: `docs/implementation/KINEMATICIQ_PHASE2_EXECUTION_ROADMAP.md`.
+Living handoff: `docs/implementation/KINEMATICIQ_PHASE2_HANDOFF.md`.
+Per-milestone evidence: `docs/implementation/progress/`.
 
 | Range | Status |
 |---|---|
-| M00–M24 | Done — platform schemas, protocol/metric/finding engines, report UX, history, labeled ground truth, metric expansion, coaching intelligence |
-| M25–M26 | Done — capture readiness v2, per-frame landmark quality |
-| M27 | Blocked — needs a filter candidate + real-tape benchmark evidence |
-| M28–M30 | Blocked on the M39–M43 protocol runtime |
-| M31–M33 | Done — personal baseline, MDC-aware trends, local report export |
-| M34 | Done — this docs sync |
-| M35+ | Not started |
+| M00-M60 | Complete platform foundation, protocol/runtime work, evaluation, reports, and governance recorded in the master roadmap |
+| M61-M73 | Complete research-to-execution and validation infrastructure package |
+| M74-M78 | Complete release-readiness, toolchain, support/accessibility automation, device-performance decision, and inline-lunge data gate |
+| M79 | Complete Phase 2 audit and M79-M98 execution roadmap |
+| M80 | Current canonical context/architecture refresh |
+| M81-M98 | Planned; availability remains gated by evidence and explicit activation |
 
-## Key contracts (current)
+## Current contracts
 
-- `core/` — movement-agnostic schemas: `Confidence`, `Provenance`,
-  `MetricDefinition`/`MetricResult`, `ProtocolDefinition`, `Finding`
-- `protocols/registry.ts` — `getProtocol` / `listProtocols`; squat available,
-  stubs throw `NotImplementedError`
-- `session/setQualityGate.ts` — valid / questionable / invalid; **invalid ⇒
-  full abstain** (no posture, no metrics summary, no coaching)
-- `session/buildSessionResult.ts` — assembles `SessionResult`
-- `session/baseline.ts` + `session/changeDetection.ts` — self-referenced
-  history deltas with MDC-aware "within noise / possible change" language
-- `export/sessionReport.ts` + `sessionReportHtml.ts` — versioned JSON +
-  self-contained offline HTML report artifact
-- `camera/` — pluggable camera sources: real webcam or pose-tape fixtures
-  (deterministic, drives Playwright e2e without hardware)
-- `eval/poseTape.ts` — replayable audit-trail recording; extend additively
-  only, with a version bump
+- `src/core/`: movement-agnostic confidence, provenance, metric, finding, and
+  protocol schemas.
+- `src/protocols/types.ts` and `src/protocols/runtime.ts`: the five-stage
+  protocol runtime and live cyclic runtime adapter.
+- `src/protocols/registry.ts`: protocol discovery and fail-closed availability.
+- `src/session/setQualityGate.ts`: valid/questionable/invalid classification;
+  invalid means full downstream abstention.
+- `src/session/buildSessionResult.ts`: versioned session-result assembly.
+- `src/eval/`: pose-tape replay, benchmark, and dataset-evaluation contracts.
+- `eval/datasets/registry.json`: governed dataset metadata; registration is not
+  protocol activation.
+- `src/storage/`: explicit, opt-in local history only.
+- `src/export/`: local JSON and self-contained HTML report artifacts.
+- `src/camera/`: real and deterministic pose-tape sources used by automation.
 
-## Doctrine (locked — read before writing any user-facing copy)
+## Evidence state
 
-- `docs/doctrine/claims-policy.md` — observation language only; forbidden:
-  diagnosis, injury risk, pathology, kinetics, muscle activation, normative
-  comparison, composite scores. Validation tiers gate language.
-- `docs/doctrine/movement-ontology.md` — reasoning-layer rules.
-- `docs/doctrine/deferred-scope.md` — the do-not-build ledger.
-- `docs/research/` — 11 immutable source specs. Never edit.
+- M75 recorded a zero-vulnerability audit after the toolchain migration.
+- M76 automated code-level accessibility and the declared cross-browser matrix;
+  physical iPhone Safari/VoiceOver and Windows screen-reader scripts are
+  documented and remain pending human execution.
+- M77 retained the current browser pipeline based on measured evidence; it did
+  not authorize a pose-model or filter swap.
+- M78 added a checksum-gated LLM-FMS inline-lunge ontology adapter. Scores are
+  excluded, raw source artifacts remain local and gitignored, and no inline-
+  lunge protocol was activated.
 
-## Do not refactor yet
+## Locked doctrine and external gates
 
-| Item | Why |
-|---|---|
-| Rep-counting gates (`analysis/repCounter.ts`) | Open validation findings #5/#6 pending labeled data |
-| Phase-detector thresholds (`analysis/phaseDetector.ts`) | Same evidence gate |
-| Pose-tape format (`eval/poseTape.ts`) | Audit trail; additive changes + version bump only |
-| MediaPipe engine (`cv/poseEngine.ts`) | Pose-model swap requires a replay-harness benchmark first |
-| Legacy `metrics`/`scoring` dual-write in `SessionResult` | Consumed by report until M40 SessionResult v2 lands |
-| Capture-readiness geometry thresholds (`cv/captureReadiness.ts`) | Provisional pending real-tape validation (M44–M45) |
+Read `docs/doctrine/claims-policy.md`, `movement-ontology.md`, and
+`deferred-scope.md` before changing analysis or user-facing copy. The following
+remain externally gated:
 
-## Rules for agents
+- physical iPhone Safari/VoiceOver and Windows NVDA verification;
+- independent raters and expert biomechanics review;
+- original timed UI-PRMD access (the official endpoint returned HTTP 403);
+- availability of any new protocol; and
+- commit, push, deploy, or release actions.
 
-1. One milestone at a time; verify status against `docs/implementation/progress/` first.
-2. Quality gates from `web/`: `npm run build` clean + `npm test` green; camera
-   changes also `npm run test:e2e:camera`.
-3. One commit per milestone + one progress note. Never push without an
-   explicit ask. Never `git add -A`.
-4. Versioned shapes (`schemaVersion`) — bump on change, never silently reshape.
-5. Rep gates / phase thresholds change only with labeled-tape evidence.
-6. No backend, no auth, no cloud, no composite score, no pose-model swap.
+Do not change rep-count gates, phase thresholds, capture-readiness geometry,
+the pose-tape format, filtering, or MediaPipe without the roadmap’s required
+benchmark/labeled-evidence gate. Versioned shapes change additively or with an
+explicit schema-version migration.
+
+## Verification
+
+Run commands from `web/`. The normal floor is `npm run build` and
+`npm test -- --run`. Use the roadmap’s milestone-specific browser, coverage,
+dataset, tape, accessibility, audit, and support-matrix commands when relevant.
+Never describe a check as passing without current-session output.
