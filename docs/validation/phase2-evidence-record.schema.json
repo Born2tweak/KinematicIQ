@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://kinematiciq.local/schemas/phase2-evidence-record.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["runId", "commit", "platform", "scenario", "result", "artifacts"],
+  "properties": {
+    "runId": { "type": "string", "minLength": 1 },
+    "commit": { "type": "string", "pattern": "^[0-9a-f]{7,40}$" },
+    "platform": { "enum": ["windows-chrome-nvda", "windows-firefox-nvda", "iphone-safari-voiceover", "biomechanics-rater", "expert-review"] },
+    "scenario": { "type": "string", "minLength": 1 },
+    "result": { "enum": ["pending", "pass", "fail", "blocked"] },
+    "artifacts": { "type": "array", "items": { "type": "string" } },
+    "notes": { "type": "string" }
+  }
+}

@@ -1198,6 +1198,9 @@ img {
   gap: var(--space-xl);
   margin-top: var(--space-md);
 }
+.camera-analyst-tool-buttons {
+  display: contents;
+}
 .protocol-picker__group {
   display: grid;
   gap: var(--space-sm);

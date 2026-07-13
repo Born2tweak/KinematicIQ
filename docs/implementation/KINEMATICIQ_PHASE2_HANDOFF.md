@@ -1,7 +1,7 @@
 # KinematicIQ Phase 2 Living Handoff
 
 **Range:** M79-M98
-**Current milestone:** M91
+**Current milestone:** Phase 2 autonomous work complete; external validation pending
 **Protocol availability:** squat only
 
 ## Completed
@@ -46,6 +46,17 @@
 - M90: separated available and research movements, derived squat view/setup copy
   from protocol metadata, and made planned movements structurally non-interactive;
   axe passed 16/16 and the support matrix passed 56 with 4 expected skips.
+- M91-M92: active hierarchy and compact evidence-tab contracts retained; analyst
+  controls expose disclosure state. Fresh numeric scroll comparison remains
+  unavailable because the in-app browser rejected its own session tab.
+- M93-M95: deterministic source-to-product traces and threshold, orphan-metric,
+  coaching-input, and claim-strength lints cover active squat metadata.
+- M96: deterministic synthetic validation statistics include agreement,
+  classification, count/event, and documented ICC(2,1) utilities.
+- M97: exact human/device/rater execution package and blank evidence schema are
+  ready; no human result is fabricated.
+- M98: full autonomous matrix passed after fixing active-phase disclaimer layout
+  churn; activation remains blocked on physical device, rater, and expert gates.
 
 ## Current evidence baseline
 
@@ -83,6 +94,6 @@
 
 ## Continuation
 
-Execute M91 next. Reduce the active-session default hierarchy to status, one
-correction, reps/trials, and the primary action. Keep analyst detail behind an
-accessible disclosure and re-run camera, axe, responsive, and reduced-motion gates.
+Run the M97 human/device package next. Do not activate another protocol or make
+validation claims until physical iPhone VoiceOver, Windows NVDA, independent
+rater, and expert review evidence is completed and explicitly approved.

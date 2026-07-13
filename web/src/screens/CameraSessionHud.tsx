@@ -7,6 +7,7 @@ import type { Pose3DRefValue } from '../cv/pose3d'
 import type { CaptureReadinessAssessment } from '../cv/captureReadiness'
 import {
   canManuallyFinish,
+  showsCameraDisclaimer,
   type CameraSessionPhase,
   type SessionStatusCopy,
 } from './cameraSessionUi'
@@ -98,11 +99,14 @@ export function CameraAnalystTools(props: {
           className={`hud-tool${props.isAnalyst ? ' hud-tool--on' : ''}`}
           onClick={props.toggleAnalyst}
           aria-pressed={props.isAnalyst}
+          aria-expanded={props.isAnalyst}
+          aria-controls="camera-analyst-tool-buttons"
           title="Analyst mode reveals the 3D pose view and debug tools"
         >
-          Analyst
+          Analyst details
         </button>
         {props.isAnalyst && (
+          <span id="camera-analyst-tool-buttons" className="camera-analyst-tool-buttons">
           <button
             type="button"
             className={`hud-tool${props.show3D ? ' hud-tool--on' : ''}`}
@@ -112,8 +116,6 @@ export function CameraAnalystTools(props: {
           >
             3D
           </button>
-        )}
-        {props.isAnalyst && (
           <button
             type="button"
             className={`hud-tool${props.showDebug ? ' hud-tool--on' : ''}`}
@@ -123,10 +125,11 @@ export function CameraAnalystTools(props: {
           >
             DBG
           </button>
+          </span>
         )}
       </div>
       {props.isAnalyst && props.show3D && (
-        <div className={`camera-3d-panel${props.expand3D ? ' camera-3d-panel--expanded' : ''}`}>
+        <div aria-label="Analyst details" className={`camera-3d-panel${props.expand3D ? ' camera-3d-panel--expanded' : ''}`}>
           <button
             type="button"
             className="camera-3d-expand"
@@ -164,7 +167,7 @@ export function CameraActionBar(props: {
         </Button>
         <Button variant="ghost" onClick={props.onCancel}>Cancel</Button>
       </div>
-      {props.phase !== 'ACTIVE' && <DisclaimerBanner />}
+      {showsCameraDisclaimer(props.phase) && <DisclaimerBanner />}
     </div>
   )
 }

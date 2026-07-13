@@ -16,6 +16,10 @@ export function canManuallyFinish(phase: CameraSessionPhase): boolean {
   return phase === 'ACTIVE' || phase === 'AUTO_FINISH_PENDING'
 }
 
+export function showsCameraDisclaimer(phase: CameraSessionPhase): boolean {
+  return phase === 'WAITING' || phase === 'CALIBRATING' || phase === 'READY'
+}
+
 export function getSessionStatusCopy(
   phase: CameraSessionPhase,
   options: {
