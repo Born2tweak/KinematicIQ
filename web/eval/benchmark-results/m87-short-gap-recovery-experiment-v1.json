@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "candidate": {
+    "id": "critical-landmark-linear-short-gap",
+    "version": "1.0.0",
+    "maxGapFrames": 2,
+    "visibilityThreshold": 0.5
+  },
+  "acceptanceGates": {
+    "minimumRecoveredLandmarks": 1,
+    "requireLowerMissingCriticalFrames": true,
+    "requireNoAdditionalImplausibleJumps": true,
+    "requireRepCountParityOnEveryTape": true,
+    "requireNoBottomEventTimingRegression": true
+  },
+  "aggregate": {
+    "tapeCount": 11,
+    "recoveredLandmarks": 7,
+    "baselineMissingCriticalFrames": 624,
+    "candidateMissingCriticalFrames": 620,
+    "baselineImplausibleJumpFrames": 12,
+    "candidateImplausibleJumpFrames": 12,
+    "repParityTapes": 11,
+    "bottomEventNonRegressionTapes": 11
+  },
+  "decision": "accepted",
+  "failedGates": []
+}

@@ -58,6 +58,15 @@ export const SQUAT_PROTOCOL_DEFINITION: ProtocolDefinition = {
       'Keep your head, hands, hips, knees, ankles, and feet visible.',
       'Use even lighting and keep the camera still for the full set.',
     ],
+    recoveryInstructions: {
+      'out-of-frame': 'Step back until your whole body is visible.',
+      missing: 'Move into view and keep your whole body visible.',
+      'low-confidence': 'Improve the lighting and keep your full body visible.',
+      'ambiguous-side': 'Face the camera square-on and keep only one person in frame.',
+      rejected: 'Hold still briefly while tracking resets.',
+      'short-gap': 'Hold your position briefly while tracking recovers.',
+      recovered: 'Keep your position steady.',
+    },
   },
   metrics: SQUAT_METRIC_DEFINITIONS,
   findingRuleIds: [

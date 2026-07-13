@@ -32,6 +32,12 @@ export function lintProtocolCompleteness(
   if (definition.capture.inputModes.length === 0) add('capture.inputModes', 'available protocol requires a capture mode')
   if (!definition.capture.viewInstruction.trim()) add('capture.viewInstruction', 'available protocol requires view guidance')
   if (definition.capture.setupInstructions.length === 0) add('capture.setupInstructions', 'available protocol requires setup guidance')
+  const recoveryStates = ['low-confidence', 'short-gap', 'recovered', 'missing', 'out-of-frame', 'ambiguous-side', 'rejected'] as const
+  for (const state of recoveryStates) {
+    if (!definition.capture.recoveryInstructions?.[state]?.trim()) {
+      add(`capture.recoveryInstructions.${state}`, 'available protocol requires recovery guidance')
+    }
+  }
   if (definition.metrics.length === 0) add('metrics', 'available protocol requires metric declarations')
   if (definition.findingRuleIds.length === 0) add('findingRuleIds', 'available protocol requires finding-rule declarations')
 

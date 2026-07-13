@@ -77,7 +77,18 @@ export interface ProtocolCaptureConfig {
   cameraView: ProtocolCameraView
   viewInstruction: string
   setupInstructions: string[]
+  /** Protocol-owned, non-diagnostic recovery copy keyed by tracker evidence state. */
+  recoveryInstructions?: Partial<Record<ProtocolTrackingState, string>>
 }
+
+export type ProtocolTrackingState =
+  | 'low-confidence'
+  | 'short-gap'
+  | 'recovered'
+  | 'missing'
+  | 'out-of-frame'
+  | 'ambiguous-side'
+  | 'rejected'
 
 export interface ProtocolDefinition {
   id: ProtocolId

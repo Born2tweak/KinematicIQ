@@ -1,7 +1,7 @@
 # KinematicIQ Phase 2 Living Handoff
 
 **Range:** M79-M98
-**Current milestone:** M87
+**Current milestone:** M91
 **Protocol availability:** squat only
 
 ## Completed
@@ -32,6 +32,20 @@
 - M86: additive landmark taxonomy distinguishes direct, low-confidence, gap,
   recovered, missing, out-of-frame, ambiguous-side, and rejected evidence;
   raw tracker output is retained and no recovery is active.
+- M87: the isolated two-frame critical-landmark interpolation candidate passed
+  predeclared gates on 11 tapes (7 recovered samples, missing-critical frames
+  624→620, jumps 12→12, rep/event parity 11/11) and camera E2E 20/20. It is
+  accepted as an experiment but is not silently enabled in live analysis.
+- M88: available protocols now own recovery copy for every non-direct tracking
+  state; one deterministic instruction and analyst-only evidence are emitted,
+  with direct-state abstention and completeness/claims/browser gates passing.
+- M89: audited Landing through History against current responsive, accessibility,
+  confidence, error, and protocol-state evidence; produced prioritized M90–M92
+  wire and UI-system contracts without changing visuals. Fresh in-app-browser
+  screenshots were unavailable due a session/tab ownership error and are not claimed.
+- M90: separated available and research movements, derived squat view/setup copy
+  from protocol metadata, and made planned movements structurally non-interactive;
+  axe passed 16/16 and the support matrix passed 56 with 4 expected skips.
 
 ## Current evidence baseline
 
@@ -63,11 +77,12 @@
 
 - Accepted before Phase 2: guarded WebKit fixture-preroll timing; checksum-gated
   LLM-FMS ontology extraction with scores excluded.
-- No Phase 2 tracking candidate accepted or rejected yet; M85 establishes the
-  baseline before M87 may run one bounded experiment.
+- Accepted in M87: `critical-landmark-linear-short-gap@1.0.0` as an isolated,
+  provenance-preserving candidate. Live recovery remains inactive pending an
+  explicit integration boundary; raw observations remain authoritative.
 
 ## Continuation
 
-Execute M87 next. Predeclare a bounded short-gap recovery candidate and compare
-it against M85. Accept only on measured robustness improvement with unchanged
-rep/event/camera behavior; otherwise record rejection and retain current logic.
+Execute M91 next. Reduce the active-session default hierarchy to status, one
+correction, reps/trials, and the primary action. Keep analyst detail behind an
+accessible disclosure and re-run camera, axe, responsive, and reduced-motion gates.

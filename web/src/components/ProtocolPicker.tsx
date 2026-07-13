@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom'
-import { isAvailable } from '../core/protocol'
 import { listProtocols } from '../protocols/registry'
+import { groupProtocolDefinitions } from './protocolPickerModel'
 
 const KIND_LABELS: Record<string, string> = {
   cyclic: 'rep-based',
@@ -8,48 +8,40 @@ const KIND_LABELS: Record<string, string> = {
   gait: 'stride-based',
 }
 
-/**
- * Minimal protocol picker (M10). Available protocols start a session; planned
- * stubs are honestly labelled "in development — not yet validated" and cannot
- * start an analysis (the engine would throw NotImplementedError anyway).
- */
 export function ProtocolPicker() {
   const navigate = useNavigate()
-  const protocols = listProtocols()
+  const groups = groupProtocolDefinitions(listProtocols().map(({ definition }) => definition))
 
   return (
-    <div className="protocol-picker" role="list" aria-label="Movement protocols">
-      {protocols.map(({ definition }) => {
-        const available = isAvailable(definition)
-        return (
-          <button
-            key={definition.id}
-            role="listitem"
-            type="button"
-            className={`protocol-card${available ? '' : ' protocol-card--planned'}`}
-            disabled={!available}
-            aria-disabled={!available}
-            onClick={
-              available
-                ? () =>
-                    navigate('/camera', {
-                      state: { protocolId: definition.id },
-                    })
-                : undefined
-            }
-          >
-            <span className="protocol-card__label">{definition.label}</span>
-            <span className="protocol-card__kind">
-              {KIND_LABELS[definition.kind] ?? definition.kind}
-            </span>
-            <span
-              className={`protocol-card__status protocol-card__status--${definition.status}`}
-            >
-              {available ? 'Available' : 'In development — not yet validated'}
-            </span>
-          </button>
-        )
-      })}
+    <div className="protocol-picker" aria-label="Movement protocols">
+      <section className="protocol-picker__group" aria-labelledby="available-movements">
+        <h3 id="available-movements">Available now</h3>
+        <div className="protocol-picker__grid" role="list">
+          {groups.available.map((definition) => (
+            <button key={definition.id} role="listitem" type="button" className="protocol-card"
+              onClick={() => navigate('/camera', { state: { protocolId: definition.id } })}>
+              <span className="protocol-card__label">{definition.label}</span>
+              <span className="protocol-card__kind">{KIND_LABELS[definition.kind] ?? definition.kind}</span>
+              <span className="protocol-card__status protocol-card__status--available">Available</span>
+              <span className="protocol-card__instruction">{definition.capture.viewInstruction}</span>
+              <span className="protocol-card__setup">{definition.capture.setupInstructions[0]}</span>
+            </button>
+          ))}
+        </div>
+      </section>
+      <section className="protocol-picker__group" aria-labelledby="research-movements">
+        <h3 id="research-movements">Research roadmap</h3>
+        <p className="protocol-picker__description">These movements are not validated and cannot start an analysis.</p>
+        <div className="protocol-picker__grid" role="list">
+          {groups.research.map((definition) => (
+            <article key={definition.id} role="listitem" className="protocol-card protocol-card--planned">
+              <span className="protocol-card__label">{definition.label}</span>
+              <span className="protocol-card__kind">{KIND_LABELS[definition.kind] ?? definition.kind}</span>
+              <span className="protocol-card__status protocol-card__status--planned">Research only — validation pending</span>
+            </article>
+          ))}
+        </div>
+      </section>
     </div>
   )
 }

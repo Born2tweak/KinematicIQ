@@ -1195,9 +1195,30 @@ img {
 /* Protocol picker (M10). */
 .protocol-picker {
   display: grid;
+  gap: var(--space-xl);
+  margin-top: var(--space-md);
+}
+.protocol-picker__group {
+  display: grid;
+  gap: var(--space-sm);
+}
+.protocol-picker__group h3,
+.protocol-picker__description {
+  margin: 0;
+}
+.protocol-picker__description,
+.protocol-card__instruction,
+.protocol-card__setup {
+  color: var(--color-text-muted);
+}
+.protocol-card__instruction,
+.protocol-card__setup {
+  font-size: 0.85rem;
+}
+.protocol-picker__grid {
+  display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: var(--space-md);
-  margin-top: var(--space-md);
 }
 .protocol-card {
   display: flex;
