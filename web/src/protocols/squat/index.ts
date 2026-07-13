@@ -12,6 +12,7 @@ import { SQUAT_PROFILE } from '../../analysis/movement/profiles/squat'
 import { LANDMARK_INDICES } from '../../cv/types'
 import type { ProtocolDefinition } from '../../core/protocol'
 import type { Protocol } from '../types'
+import { SQUAT_METRIC_DEFINITIONS } from '../../metrics/squatMetrics'
 
 export const SQUAT_PROTOCOL_DEFINITION: ProtocolDefinition = {
   id: 'squat',
@@ -58,8 +59,15 @@ export const SQUAT_PROTOCOL_DEFINITION: ProtocolDefinition = {
       'Use even lighting and keep the camera still for the full set.',
     ],
   },
-  metrics: [],
-  findingRuleIds: [],
+  metrics: SQUAT_METRIC_DEFINITIONS,
+  findingRuleIds: [
+    'rule.squat.depth',
+    'rule.squat.trunkControl',
+    'rule.squat.kneeTracking',
+    'rule.squat.consistency',
+    'rule.squat.symmetry',
+    'rule.squat.tempo',
+  ],
   defaultObservationProtocolId: 'front-view-squat-v1',
 }
 

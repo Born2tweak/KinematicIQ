@@ -55,6 +55,7 @@ export function createRealCameraSource(): CameraSource {
     kind: 'real-camera',
     label: 'Live camera',
     requiresPoseModel: true,
+    frameScheduler: 'animation-frame',
 
     async attach(video: HTMLVideoElement): Promise<void> {
       stopped = false

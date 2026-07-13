@@ -5,7 +5,11 @@ import { DisclaimerBanner } from '../components/DisclaimerBanner'
 import { SessionStatusCard } from '../components/SessionStatusCard'
 import type { Pose3DRefValue } from '../cv/pose3d'
 import type { CaptureReadinessAssessment } from '../cv/captureReadiness'
-import type { CameraSessionPhase, SessionStatusCopy } from './cameraSessionUi'
+import {
+  canManuallyFinish,
+  type CameraSessionPhase,
+  type SessionStatusCopy,
+} from './cameraSessionUi'
 
 const PoseScene3D = lazy(() => import('../components/PoseScene3D'))
 
@@ -147,13 +151,14 @@ export function CameraActionBar(props: {
   onFinish: () => void
   onCancel: () => void
 }) {
+  const canFinish = canManuallyFinish(props.phase)
   return (
     <div className="camera-hud--bottom">
       <div className="camera-action-bar">
         <Button
           variant="secondary"
           onClick={props.onFinish}
-          disabled={props.phase !== 'ACTIVE' || props.isFinishing}
+          disabled={!canFinish || props.isFinishing}
         >
           Finish Now
         </Button>

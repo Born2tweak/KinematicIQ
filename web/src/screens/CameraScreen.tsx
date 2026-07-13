@@ -326,8 +326,17 @@ export function CameraScreen() {
   finishSetRef.current = finishSet
 
   useEffect(() => {
-    let animationFrameId: number
+    let animationFrameId: number | undefined
+    let timerId: number | undefined
     let frameIndex = 0
+
+    const scheduleNextFrame = () => {
+      if (cameraSource.frameScheduler === 'timer') {
+        timerId = window.setTimeout(runLoop, 16)
+      } else {
+        animationFrameId = requestAnimationFrame(runLoop)
+      }
+    }
 
     function computeHipY(poseFrame: PoseFrame): number | null {
       const leftHip = safeLandmark(poseFrame, LANDMARK_INDICES.LEFT_HIP)
@@ -395,7 +404,7 @@ export function CameraScreen() {
           // way as getUserMedia; keep deterministic analysis running with a
           // stable fallback canvas size without altering real camera behavior.
           if (cameraSource.kind === 'real-camera') {
-            animationFrameId = requestAnimationFrame(runLoop)
+            scheduleNextFrame()
             return
           }
           if (canvas.width === 0 || canvas.height === 0) {
@@ -715,15 +724,16 @@ export function CameraScreen() {
         }
       }
 
-      animationFrameId = requestAnimationFrame(runLoop)
+      scheduleNextFrame()
     }
 
     if (!isLoading && !isModelLoading && !error) {
-      animationFrameId = requestAnimationFrame(runLoop)
+      scheduleNextFrame()
     }
 
     return () => {
-      cancelAnimationFrame(animationFrameId)
+      if (animationFrameId !== undefined) cancelAnimationFrame(animationFrameId)
+      if (timerId !== undefined) window.clearTimeout(timerId)
     }
   }, [isLoading, isModelLoading, error, showDebug, cameraSource])
 

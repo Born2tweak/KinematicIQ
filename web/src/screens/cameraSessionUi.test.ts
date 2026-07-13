@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { getSessionStatusCopy } from './cameraSessionUi'
+import { canManuallyFinish, getSessionStatusCopy } from './cameraSessionUi'
 import type { CaptureGuidance } from '../cv/captureGuidance'
 
 const okGuidance: CaptureGuidance = {
@@ -9,6 +9,12 @@ const okGuidance: CaptureGuidance = {
 }
 
 describe('screens/cameraSessionUi', () => {
+  it('keeps manual finish available while automatic finish is pending', () => {
+    expect(canManuallyFinish('ACTIVE')).toBe(true)
+    expect(canManuallyFinish('AUTO_FINISH_PENDING')).toBe(true)
+    expect(canManuallyFinish('READY')).toBe(false)
+    expect(canManuallyFinish('FINISHED')).toBe(false)
+  })
   it('uses the live guidance instruction as the WAITING title', () => {
     const guidance: CaptureGuidance = {
       ok: false,

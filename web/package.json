@@ -16,7 +16,8 @@
     "eval:tapes": "vite-node scripts/evalTapes.ts",
     "eval:label": "vite-node scripts/labelTape.ts",
     "eval:datasets": "vite-node scripts/runDatasetPilots.ts",
-    "eval:llm-fms": "vite-node scripts/runLlmFmsOntology.ts"
+    "eval:llm-fms": "vite-node scripts/runLlmFmsOntology.ts",
+    "eval:tracking": "vite-node scripts/runTrackingRobustnessBaseline.ts"
   },
   "dependencies": {
     "@mediapipe/tasks-vision": "^0.10.14",

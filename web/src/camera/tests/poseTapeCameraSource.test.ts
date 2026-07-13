@@ -12,6 +12,10 @@ import { buildMissingFeetPoseTape } from '../fixtures/missingFeetPoseTape'
 import { simulateCameraLoop } from './cameraLoopSim'
 
 describe('poseTapeCameraSource frame stepping', () => {
+  it('declares a timer scheduler independent of browser render cadence', () => {
+    const source = createPoseTapeCameraSource(buildCleanSquatPoseTape(), 'clean-squat')
+    expect(source.frameScheduler).toBe('timer')
+  })
   it('anchors the tape to the first requested timestamp and rebases frames', () => {
     const tape = buildCleanSquatPoseTape()
     const source = createPoseTapeCameraSource(tape, 'clean-squat')

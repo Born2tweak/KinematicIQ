@@ -130,6 +130,7 @@ export function createPoseTapeCameraSource(
     kind: 'pose-tape',
     label,
     requiresPoseModel: false,
+    frameScheduler: 'timer',
 
     async attach(video: HTMLVideoElement): Promise<void> {
       videoElement = video

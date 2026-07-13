@@ -1,0 +1,604 @@
+{
+  "schemaVersion": 1,
+  "evaluator": {
+    "id": "kinematiciq-tracking-robustness",
+    "version": "1.0.0",
+    "filter": {
+      "minCutoff": 4,
+      "beta": 1.5,
+      "dCutoff": 1
+    },
+    "criticalLandmarkIndices": [
+      11,
+      12,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28
+    ],
+    "visibilityThreshold": 0.5
+  },
+  "corpus": {
+    "tapeCount": 11,
+    "labeledRepCountTapes": 9,
+    "labeledBottomEventTapes": 0,
+    "limitations": [
+      "OCHuman raw images/annotations are not locally acquired; occlusion stress metrics are absent.",
+      "No current tape has labeled bottom-frame events; event accuracy cannot be estimated.",
+      "This baseline measures the current tape corpus only; it is not population or clinical validation."
+    ]
+  },
+  "aggregate": {
+    "frameCount": 3332,
+    "meanCriticalCoverage": 0.9494297719087635,
+    "rawJitterMean": 0.01160086071327699,
+    "oneEuroJitterMean": 0.00798616030718387,
+    "rawImplausibleJumpFrames": 12,
+    "oneEuroImplausibleJumpFrames": 8,
+    "repParityTapes": 11,
+    "repMismatchTapes": []
+  },
+  "tapes": [
+    {
+      "file": "15079385_1080_1920_30fps-2026-07-06.posetape.json",
+      "sha256": "8cb4e69d521bc4bfd19683a0f690650fb1c3ff9c1e8bd4202f30e8758450a680",
+      "input": {
+        "frames": 224,
+        "fps": 15,
+        "appVersion": null,
+        "algorithmVersion": null,
+        "declaredFiltering": "butterworth-offline",
+        "labeledRepCount": 2,
+        "labeledBottomEvents": 0
+      },
+      "frameIntervalsMs": {
+        "mean": 66.66816143497758,
+        "p95": 67,
+        "max": 67
+      },
+      "criticalLandmarks": {
+        "meanCoverage": 0.9860491071428571,
+        "framesMissing": 17,
+        "dropoutRuns": 2,
+        "longestDropoutFrames": 14,
+        "recoveredRuns": 2
+      },
+      "raw": {
+        "jitter": 0.006557551548220553,
+        "implausibleJumpFrames": 0,
+        "repCount": 2,
+        "bottomFrames": [
+          68,
+          208
+        ]
+      },
+      "oneEuro": {
+        "jitter": 0.003847059818911337,
+        "implausibleJumpFrames": 0,
+        "repCount": 2,
+        "bottomFrames": [
+          69,
+          199
+        ]
+      },
+      "parity": {
+        "repCountDelta": 0,
+        "pairedBottomFrameMae": 5
+      }
+    },
+    {
+      "file": "4838220-uhd_2160_3840_24fps-2026-07-06.posetape.json",
+      "sha256": "697fc509ea65283588f42a1a42d6d819d653f8a3ebfe9794f71e25f716f70532",
+      "input": {
+        "frames": 191,
+        "fps": 15,
+        "appVersion": null,
+        "algorithmVersion": null,
+        "declaredFiltering": "butterworth-offline",
+        "labeledRepCount": 2,
+        "labeledBottomEvents": 0
+      },
+      "frameIntervalsMs": {
+        "mean": 66.66842105263157,
+        "p95": 67,
+        "max": 67
+      },
+      "criticalLandmarks": {
+        "meanCoverage": 1,
+        "framesMissing": 0,
+        "dropoutRuns": 0,
+        "longestDropoutFrames": 0,
+        "recoveredRuns": 0
+      },
+      "raw": {
+        "jitter": 0.0016180688820818746,
+        "implausibleJumpFrames": 0,
+        "repCount": 2,
+        "bottomFrames": [
+          28,
+          97
+        ]
+      },
+      "oneEuro": {
+        "jitter": 0.0009189260725539727,
+        "implausibleJumpFrames": 0,
+        "repCount": 2,
+        "bottomFrames": [
+          28,
+          98
+        ]
+      },
+      "parity": {
+        "repCountDelta": 0,
+        "pairedBottomFrameMae": 0.5
+      }
+    },
+    {
+      "file": "4921644-hd_1066_1920_25fps-2026-07-06.posetape.json",
+      "sha256": "41cb863849ee4e9cd383451d9d82bdf16fbd4cb765e11129bad60b98441f2b26",
+      "input": {
+        "frames": 110,
+        "fps": 15,
+        "appVersion": null,
+        "algorithmVersion": null,
+        "declaredFiltering": "butterworth-offline",
+        "labeledRepCount": 2,
+        "labeledBottomEvents": 0
+      },
+      "frameIntervalsMs": {
+        "mean": 66.6697247706422,
+        "p95": 67,
+        "max": 67
+      },
+      "criticalLandmarks": {
+        "meanCoverage": 1,
+        "framesMissing": 0,
+        "dropoutRuns": 0,
+        "longestDropoutFrames": 0,
+        "recoveredRuns": 0
+      },
+      "raw": {
+        "jitter": 0.003112676398207744,
+        "implausibleJumpFrames": 0,
+        "repCount": 2,
+        "bottomFrames": [
+          10,
+          61
+        ]
+      },
+      "oneEuro": {
+        "jitter": 0.0018723708608629796,
+        "implausibleJumpFrames": 0,
+        "repCount": 2,
+        "bottomFrames": [
+          11,
+          61
+        ]
+      },
+      "parity": {
+        "repCountDelta": 0,
+        "pairedBottomFrameMae": 0.5
+      }
+    },
+    {
+      "file": "6454275-uhd_2160_3840_24fps-2026-07-06.posetape.json",
+      "sha256": "8da07decaea8b6057b4983c8d546ff28d79a0b14816479f24f5e42878e2290bc",
+      "input": {
+        "frames": 150,
+        "fps": 15,
+        "appVersion": null,
+        "algorithmVersion": null,
+        "declaredFiltering": "butterworth-offline",
+        "labeledRepCount": 4,
+        "labeledBottomEvents": 0
+      },
+      "frameIntervalsMs": {
+        "mean": 67.11409395973155,
+        "p95": 67,
+        "max": 134
+      },
+      "criticalLandmarks": {
+        "meanCoverage": 0.965,
+        "framesMissing": 7,
+        "dropoutRuns": 1,
+        "longestDropoutFrames": 7,
+        "recoveredRuns": 1
+      },
+      "raw": {
+        "jitter": 0.00898857763339136,
+        "implausibleJumpFrames": 0,
+        "repCount": 4,
+        "bottomFrames": [
+          14,
+          54,
+          92,
+          130
+        ]
+      },
+      "oneEuro": {
+        "jitter": 0.006976964430046825,
+        "implausibleJumpFrames": 0,
+        "repCount": 4,
+        "bottomFrames": [
+          14,
+          54,
+          92,
+          130
+        ]
+      },
+      "parity": {
+        "repCountDelta": 0,
+        "pairedBottomFrameMae": 0
+      }
+    },
+    {
+      "file": "6980032-uhd_2160_4096_30fps-2026-07-06.posetape.json",
+      "sha256": "61eb5a4945e6ee54e75ecc99f28556cfa039e34bd877855a7be8391b02eadece",
+      "input": {
+        "frames": 157,
+        "fps": 15,
+        "appVersion": null,
+        "algorithmVersion": null,
+        "declaredFiltering": "butterworth-offline",
+        "labeledRepCount": 2,
+        "labeledBottomEvents": 0
+      },
+      "frameIntervalsMs": {
+        "mean": 66.66666666666667,
+        "p95": 67,
+        "max": 67
+      },
+      "criticalLandmarks": {
+        "meanCoverage": 1,
+        "framesMissing": 0,
+        "dropoutRuns": 0,
+        "longestDropoutFrames": 0,
+        "recoveredRuns": 0
+      },
+      "raw": {
+        "jitter": 0.004284544229026763,
+        "implausibleJumpFrames": 0,
+        "repCount": 2,
+        "bottomFrames": [
+          5,
+          78
+        ]
+      },
+      "oneEuro": {
+        "jitter": 0.00233825347812842,
+        "implausibleJumpFrames": 0,
+        "repCount": 2,
+        "bottomFrames": [
+          5,
+          81
+        ]
+      },
+      "parity": {
+        "repCountDelta": 0,
+        "pairedBottomFrameMae": 1.5
+      }
+    },
+    {
+      "file": "best-squats-videos-2026-07-06.posetape.json",
+      "sha256": "955744d7f768fd01b6a0ceddc795267349c50a4a4a6bf428ff43ec999e54845d",
+      "input": {
+        "frames": 384,
+        "fps": 15,
+        "appVersion": null,
+        "algorithmVersion": null,
+        "declaredFiltering": "butterworth-offline",
+        "labeledRepCount": 5,
+        "labeledBottomEvents": 0
+      },
+      "frameIntervalsMs": {
+        "mean": 66.66840731070496,
+        "p95": 67,
+        "max": 67
+      },
+      "criticalLandmarks": {
+        "meanCoverage": 1,
+        "framesMissing": 0,
+        "dropoutRuns": 0,
+        "longestDropoutFrames": 0,
+        "recoveredRuns": 0
+      },
+      "raw": {
+        "jitter": 0.0018136184077456362,
+        "implausibleJumpFrames": 0,
+        "repCount": 5,
+        "bottomFrames": [
+          34,
+          104,
+          184,
+          265,
+          346
+        ]
+      },
+      "oneEuro": {
+        "jitter": 0.0010391117540038588,
+        "implausibleJumpFrames": 0,
+        "repCount": 5,
+        "bottomFrames": [
+          34,
+          104,
+          185,
+          265,
+          347
+        ]
+      },
+      "parity": {
+        "repCountDelta": 0,
+        "pairedBottomFrameMae": 0.4
+      }
+    },
+    {
+      "file": "live-session-2026-07-05.posetape.json",
+      "sha256": "517605b8f0246a00e4376e43f72130c10fb30e3d8536d96f9c27b3075ed939df",
+      "input": {
+        "frames": 1475,
+        "fps": 15.5,
+        "appVersion": null,
+        "algorithmVersion": null,
+        "declaredFiltering": "one-euro-live",
+        "labeledRepCount": null,
+        "labeledBottomEvents": 0
+      },
+      "frameIntervalsMs": {
+        "mean": 64.59389077341298,
+        "p95": 82.98999997973442,
+        "max": 1771.5900000035763
+      },
+      "criticalLandmarks": {
+        "meanCoverage": 0.9138983050847458,
+        "framesMissing": 393,
+        "dropoutRuns": 13,
+        "longestDropoutFrames": 120,
+        "recoveredRuns": 12
+      },
+      "raw": {
+        "jitter": 0.018355904196404666,
+        "implausibleJumpFrames": 7,
+        "repCount": 14,
+        "bottomFrames": [
+          1249,
+          1517,
+          1551,
+          1580,
+          1707,
+          1729,
+          1905,
+          1927,
+          1952,
+          1971,
+          2046,
+          2067,
+          2440,
+          2482
+        ]
+      },
+      "oneEuro": {
+        "jitter": 0.013348048741374059,
+        "implausibleJumpFrames": 5,
+        "repCount": 14,
+        "bottomFrames": [
+          1249,
+          1417,
+          1517,
+          1551,
+          1581,
+          1730,
+          1911,
+          1928,
+          1953,
+          1971,
+          2047,
+          2068,
+          2402,
+          2478
+        ]
+      },
+      "parity": {
+        "repCountDelta": 0,
+        "pairedBottomFrameMae": 24.428571428571427
+      }
+    },
+    {
+      "file": "sports-and-leisure-strong-caucasian-man-working-out-using-kettl-2026-07-06.posetape.json",
+      "sha256": "d88dd4d51ded1d84616ec892cc93a7f4540bcfda20e5a6e9d91b37f07f1ca4d3",
+      "input": {
+        "frames": 155,
+        "fps": 15,
+        "appVersion": null,
+        "algorithmVersion": null,
+        "declaredFiltering": "butterworth-offline",
+        "labeledRepCount": null,
+        "labeledBottomEvents": 0
+      },
+      "frameIntervalsMs": {
+        "mean": 66.66883116883118,
+        "p95": 67,
+        "max": 67
+      },
+      "criticalLandmarks": {
+        "meanCoverage": 0.9556451612903226,
+        "framesMissing": 11,
+        "dropoutRuns": 1,
+        "longestDropoutFrames": 11,
+        "recoveredRuns": 1
+      },
+      "raw": {
+        "jitter": 0.006287589189014398,
+        "implausibleJumpFrames": 0,
+        "repCount": 0,
+        "bottomFrames": []
+      },
+      "oneEuro": {
+        "jitter": 0.005035621949668136,
+        "implausibleJumpFrames": 0,
+        "repCount": 0,
+        "bottomFrames": []
+      },
+      "parity": {
+        "repCountDelta": 0,
+        "pairedBottomFrameMae": null
+      }
+    },
+    {
+      "file": "squatting-stock-video-footage-for-free-download-1-2026-07-06.posetape.json",
+      "sha256": "4347e67cfebbd68977911868efa3b438c0812f54192144ab3a9770419f0dd72a",
+      "input": {
+        "frames": 204,
+        "fps": 15,
+        "appVersion": null,
+        "algorithmVersion": null,
+        "declaredFiltering": "butterworth-offline",
+        "labeledRepCount": 4,
+        "labeledBottomEvents": 0
+      },
+      "frameIntervalsMs": {
+        "mean": 66.99507389162562,
+        "p95": 67,
+        "max": 133
+      },
+      "criticalLandmarks": {
+        "meanCoverage": 0.8958333333333334,
+        "framesMissing": 163,
+        "dropoutRuns": 4,
+        "longestDropoutFrames": 86,
+        "recoveredRuns": 3
+      },
+      "raw": {
+        "jitter": 0.004225426890638353,
+        "implausibleJumpFrames": 1,
+        "repCount": 4,
+        "bottomFrames": [
+          24,
+          76,
+          126,
+          173
+        ]
+      },
+      "oneEuro": {
+        "jitter": 0.0027889353676011424,
+        "implausibleJumpFrames": 1,
+        "repCount": 4,
+        "bottomFrames": [
+          24,
+          77,
+          134,
+          173
+        ]
+      },
+      "parity": {
+        "repCountDelta": 0,
+        "pairedBottomFrameMae": 2.25
+      }
+    },
+    {
+      "file": "squatting-stock-video-footage-for-free-download-2-2026-07-06.posetape.json",
+      "sha256": "8278153248667c0cd14e92291a06aeda0a136921f9daacd66091399f91f7c786",
+      "input": {
+        "frames": 148,
+        "fps": 15,
+        "appVersion": null,
+        "algorithmVersion": null,
+        "declaredFiltering": "butterworth-offline",
+        "labeledRepCount": 4,
+        "labeledBottomEvents": 0
+      },
+      "frameIntervalsMs": {
+        "mean": 66.66666666666667,
+        "p95": 67,
+        "max": 67
+      },
+      "criticalLandmarks": {
+        "meanCoverage": 0.9797297297297297,
+        "framesMissing": 21,
+        "dropoutRuns": 2,
+        "longestDropoutFrames": 11,
+        "recoveredRuns": 2
+      },
+      "raw": {
+        "jitter": 0.004651929691995252,
+        "implausibleJumpFrames": 0,
+        "repCount": 4,
+        "bottomFrames": [
+          3,
+          50,
+          95,
+          134
+        ]
+      },
+      "oneEuro": {
+        "jitter": 0.0028524405452025918,
+        "implausibleJumpFrames": 0,
+        "repCount": 4,
+        "bottomFrames": [
+          3,
+          50,
+          95,
+          134
+        ]
+      },
+      "parity": {
+        "repCountDelta": 0,
+        "pairedBottomFrameMae": 0
+      }
+    },
+    {
+      "file": "squatting-stock-video-footage-for-free-download-2026-07-06.posetape.json",
+      "sha256": "499a828e830bd38e7db4f4c6543b3b06c7681171157430691507fe8cabae521d",
+      "input": {
+        "frames": 134,
+        "fps": 15,
+        "appVersion": null,
+        "algorithmVersion": null,
+        "declaredFiltering": "butterworth-offline",
+        "labeledRepCount": 5,
+        "labeledBottomEvents": 0
+      },
+      "frameIntervalsMs": {
+        "mean": 84.70676691729324,
+        "p95": 134,
+        "max": 600
+      },
+      "criticalLandmarks": {
+        "meanCoverage": 0.9850746268656716,
+        "framesMissing": 12,
+        "dropoutRuns": 2,
+        "longestDropoutFrames": 11,
+        "recoveredRuns": 2
+      },
+      "raw": {
+        "jitter": 0.0677135807793203,
+        "implausibleJumpFrames": 4,
+        "repCount": 5,
+        "bottomFrames": [
+          16,
+          49,
+          80,
+          113,
+          149
+        ]
+      },
+      "oneEuro": {
+        "jitter": 0.046830030360669246,
+        "implausibleJumpFrames": 2,
+        "repCount": 5,
+        "bottomFrames": [
+          17,
+          50,
+          80,
+          113,
+          149
+        ]
+      },
+      "parity": {
+        "repCountDelta": 0,
+        "pairedBottomFrameMae": 0.4
+      }
+    }
+  ]
+}

@@ -11,6 +11,7 @@
 import type { PoseFrame } from '../cv/types'
 
 export type CameraSourceKind = 'real-camera' | 'fixture-video' | 'pose-tape'
+export type CameraFrameScheduler = 'animation-frame' | 'timer'
 
 export interface CameraSource {
   kind: CameraSourceKind
@@ -22,6 +23,8 @@ export interface CameraSource {
    * return recorded frames directly and never load the model.
    */
   requiresPoseModel: boolean
+  /** Real video renders on rAF; deterministic fixtures avoid renderer throttling. */
+  frameScheduler: CameraFrameScheduler
   /**
    * Bind the source to the on-screen `<video>` element: acquire the webcam
    * stream (real camera) or attach a harmless placeholder feed (pose tape).

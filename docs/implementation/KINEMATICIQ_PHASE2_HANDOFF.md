@@ -1,7 +1,7 @@
 # KinematicIQ Phase 2 Living Handoff
 
 **Range:** M79-M98
-**Current milestone:** M83
+**Current milestone:** M87
 **Protocol availability:** squat only
 
 ## Completed
@@ -17,6 +17,21 @@
 - M82: additive movement-neutral v1 trial envelope for repetition, transition,
   ballistic-event, and stride outcomes with explicit rejection/missingness and
   deterministic ordering validation; no session artifact migration.
+- M83: squat adapter emits the neutral outcome envelope without changing legacy
+  segmentation/session/tape outputs; 9/9 labeled rep-count parity retained.
+- M83W: isolated headless WebKit rAF throttling, moved pose-tape fixtures to a
+  timer scheduler while real cameras retain rAF, and kept manual finish enabled
+  during auto-finish pending. Ten repeated WebKit acceptance runs and the full
+  support matrix passed.
+- M84: available-protocol completeness lint now requires runtime, capture,
+  landmarks, metrics, findings, confidence, evidence, and acceptance
+  declarations; planned protocols remain metadata-only and non-runnable.
+- M85: versioned robustness baseline covers 11 tapes / 3,332 frames with 11/11
+  raw-versus-One-Euro rep parity; missing OCHuman and bottom-event evidence is
+  explicit rather than inferred.
+- M86: additive landmark taxonomy distinguishes direct, low-confidence, gap,
+  recovered, missing, out-of-frame, ambiguous-side, and rejected evidence;
+  raw tracker output is retained and no recovery is active.
 
 ## Current evidence baseline
 
@@ -51,17 +66,8 @@
 - No Phase 2 tracking candidate accepted or rejected yet; M85 establishes the
   baseline before M87 may run one bounded experiment.
 
-## Current blocker
-
-M83 implementation and all non-WebKit gates pass, including 9/9 labeled tape
-counts. Desktop WebKit's clean-squat fixture remains nondeterministic across
-serial retries (calibration/rep/Finish lifecycle), and one serial iPhone WebKit
-run also failed before a focused rerun passed. This path does not invoke the new
-neutral-outcome adapter. Diagnose the pre-existing WebKit pose-tape scheduling
-and lifecycle behavior before closing M83 or starting M84.
-
 ## Continuation
 
-Resume M83 at the WebKit camera gate. Preserve the adapter and passing evidence;
-inspect the generated traces and the pose-tape frame-counted preroll/lifecycle,
-then rerun desktop and iPhone WebKit serially. Proceed to M84 only after green.
+Execute M87 next. Predeclare a bounded short-gap recovery candidate and compare
+it against M85. Accept only on measured robustness improvement with unchanged
+rep/event/camera behavior; otherwise record rejection and retain current logic.

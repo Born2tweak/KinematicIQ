@@ -1,6 +1,6 @@
 # M83 — Squat Runtime Adapter and Golden Parity
 
-**Status:** verification blocked — implementation complete
+**Status:** complete
 **Date:** 2026-07-12
 **Change class:** additive runtime adapter
 
@@ -29,10 +29,10 @@
   iPhone WebKit. A focused retry passed iPhone WebKit but failed desktop WebKit
   three times at different lifecycle points (no rep or disabled Finish button).
 
-## Blocker
+## Resolved verification blocker
 
-M83 is not marked complete because its declared camera gate is not fully green.
-The failing path predates and does not call the new outcome adapter, while unit,
-tape, Chromium, and Firefox evidence show no squat-output change. Resume by
-diagnosing the existing WebKit pose-tape scheduling/lifecycle instability; do
-not weaken assertions or accept the adapter until that gate passes.
+M83W isolated headless WebKit rAF throttling and the fixture/manual-finish race,
+then fixed both within repository-controlled test infrastructure and UI state.
+The unchanged clean-squat acceptance flow passed 10/10 repeated WebKit runs and
+the full 20-test camera matrix. M83 is complete without threshold, tape, model,
+or legacy result changes.

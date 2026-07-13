@@ -12,6 +12,10 @@ export interface SessionStatusCopy {
   subtitle: string
 }
 
+export function canManuallyFinish(phase: CameraSessionPhase): boolean {
+  return phase === 'ACTIVE' || phase === 'AUTO_FINISH_PENDING'
+}
+
 export function getSessionStatusCopy(
   phase: CameraSessionPhase,
   options: {
