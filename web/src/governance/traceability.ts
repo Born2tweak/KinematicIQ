@@ -1,5 +1,7 @@
 import { SQUAT_METRIC_DEFINITIONS } from '../metrics/squatMetrics'
 import { SQUAT_PROTOCOL_DEFINITION } from '../protocols/squat'
+import { INLINE_LUNGE_PROTOCOL_DEFINITION } from '../protocols/inlineLunge'
+import { INLINE_LUNGE_METRIC_DEFINITIONS } from '../protocols/inlineLunge/metrics'
 
 export type EvidenceStatus = 'internal-tested' | 'provisional' | 'rejected'
 export type ThresholdBasis = 'literature' | 'dataset' | 'expert' | 'heuristic' | 'user-calibrated'
@@ -34,6 +36,23 @@ export const SQUAT_PRODUCT_TRACES: ProductTrace[] = SQUAT_METRIC_DEFINITIONS.map
   copyStrength: metric.validationTier === 'production' ? 'suggestion' : 'observation',
   validationRequirement: `Human/device validation required for ${metric.id}.`,
   failureModes: ['low landmark visibility', 'view dependence', 'insufficient trusted repetitions'],
+}))
+
+export const INLINE_LUNGE_RESEARCH_TRACES: ProductTrace[] = INLINE_LUNGE_METRIC_DEFINITIONS.map((metric, index) => ({
+  id: `trace.${metric.id}`,
+  source: { ref: 'docs/research/INLINE_LUNGE_PROTOCOL_RESEARCH.md', status: 'provisional' },
+  concept: conceptFor(metric.id),
+  signals: ['declared lead side', 'lead foot x', 'pelvis midpoint y', 'lead hip/knee/ankle', 'timestamp'],
+  metricId: metric.id,
+  threshold: {
+    id: `threshold.${metric.id}`,
+    basis: 'heuristic',
+    interpretation: 'Provisional research-runtime threshold; subject-held-out validation required before product use.',
+  },
+  coachingRuleId: INLINE_LUNGE_PROTOCOL_DEFINITION.findingRuleIds[index % INLINE_LUNGE_PROTOCOL_DEFINITION.findingRuleIds.length],
+  copyStrength: 'observation',
+  validationRequirement: `Independent labels and subject-held-out timed evaluation required for ${metric.id}.`,
+  failureModes: ['incorrect declared lead side', 'cropped feet', 'out-of-plane motion', 'landmark dropout', 'camera movement'],
 }))
 
 export const REJECTED_PRODUCT_TRACES = [{

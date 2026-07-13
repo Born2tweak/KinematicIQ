@@ -17,10 +17,12 @@ import { JUMP_PROTOCOL } from './jump'
 import { SPRINT_PROTOCOL } from './sprint'
 import { SIT_TO_STAND_PROTOCOL } from './sitToStand'
 import { SQUAT_PROTOCOL } from './squat'
+import { INLINE_LUNGE_PROTOCOL } from './inlineLunge'
 import type { Protocol } from './types'
 
 const PROTOCOLS: Partial<Record<ProtocolId, Protocol>> = {
   squat: SQUAT_PROTOCOL,
+  inlineLunge: INLINE_LUNGE_PROTOCOL,
   sitToStand: SIT_TO_STAND_PROTOCOL,
   hipHinge: HIP_HINGE_PROTOCOL,
   jump: JUMP_PROTOCOL,

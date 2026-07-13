@@ -1,0 +1,49 @@
+import { makeConfidence } from '../../core/confidence'
+import type { MetricDefinition, MetricResult } from '../../core/metric'
+import type { Provenance } from '../../core/provenance'
+import type { InlineLungeSide, InlineLungeTrial } from './types'
+
+export const INLINE_LUNGE_METRIC_DEFINITIONS: MetricDefinition[] = [
+  { id: 'inlineLunge.trial.count', label: 'Complete trials', unit: 'count', evidenceCategory: 'temporal', validationTier: 'experimental', confidenceBasis: ['protocol-compliance', 'sample-coverage'], description: 'Complete step-to-return trials observed in this set.', included: true },
+  { id: 'inlineLunge.tempo.trial-duration', label: 'Trial duration (avg)', unit: 's', evidenceCategory: 'temporal', validationTier: 'experimental', confidenceBasis: ['temporal-stability', 'sample-coverage'], description: 'Average time from step initiation to stable return across complete trials.', included: true },
+  { id: 'inlineLunge.tempo.descent', label: 'Descent duration (avg)', unit: 's', evidenceCategory: 'temporal', validationTier: 'experimental', confidenceBasis: ['temporal-stability', 'sample-coverage'], description: 'Average time from descent start to the bottom event in complete trials.', included: true },
+  { id: 'inlineLunge.tempo.ascent', label: 'Ascent duration (avg)', unit: 's', evidenceCategory: 'temporal', validationTier: 'experimental', confidenceBasis: ['temporal-stability', 'sample-coverage'], description: 'Average time from ascent start to stable return in complete trials.', included: true },
+  { id: 'inlineLunge.knee.bottom-angle', label: 'Lead-knee angle at bottom (avg)', unit: 'deg', evidenceCategory: 'kinematic-geometry', validationTier: 'experimental', confidenceBasis: ['landmark-visibility', 'protocol-compliance'], description: 'Average projected lead-knee angle at the detected bottom, from this side view; research estimate only.', included: true },
+  { id: 'inlineLunge.tempo.duration-cv', label: 'Trial-duration consistency (CV)', unit: 'percent', evidenceCategory: 'variability', validationTier: 'experimental', confidenceBasis: ['temporal-stability', 'sample-coverage'], description: 'Within-set variation in trial duration; emitted only with at least three complete trials.', included: true },
+]
+
+const mean = (values: number[]) => values.length ? values.reduce((sum, value) => sum + value, 0) / values.length : null
+const cv = (values: number[]) => {
+  const average = mean(values)
+  if (average === null || average === 0 || values.length < 3) return null
+  const variance = values.reduce((sum, value) => sum + (value - average) ** 2, 0) / values.length
+  return Math.sqrt(variance) / average * 100
+}
+
+export function buildInlineLungeMetricResults(trials: readonly InlineLungeTrial[], leadSide: InlineLungeSide, provenance: Provenance): MetricResult[] {
+  const completed = trials.filter((trial) => trial.status === 'completed')
+  const durations = completed.map((trial) => (trial.returnTimestamp - trial.stepTimestamp) / 1000)
+  const values = new Map<string, number | null>([
+    ['inlineLunge.trial.count', completed.length],
+    ['inlineLunge.tempo.trial-duration', mean(durations)],
+    ['inlineLunge.tempo.descent', mean(completed.map((trial) => (trial.bottomTimestamp - trial.descentTimestamp) / 1000))],
+    ['inlineLunge.tempo.ascent', mean(completed.map((trial) => (trial.returnTimestamp - trial.ascentTimestamp) / 1000))],
+    ['inlineLunge.knee.bottom-angle', mean(completed.flatMap((trial) => trial.leadKneeAngleAtBottom === null ? [] : [trial.leadKneeAngleAtBottom]))],
+    ['inlineLunge.tempo.duration-cv', cv(durations)],
+  ])
+  const coverage = completed.length ? mean(completed.map((trial) => trial.readableFrameRatio)) ?? 0 : 0
+  return INLINE_LUNGE_METRIC_DEFINITIONS.map((definition) => {
+    const value = values.get(definition.id) ?? null
+    return {
+      metricId: definition.id,
+      label: definition.label,
+      value,
+      unit: definition.unit,
+      side: definition.id.includes('knee') ? leadSide : 'none',
+      confidence: makeConfidence(value === null ? 0 : Math.min(0.74, coverage), definition.confidenceBasis),
+      provenance,
+      validationTier: definition.validationTier,
+      qualityFlags: value === null ? ['insufficient-research-evidence'] : ['research-only'],
+    }
+  })
+}

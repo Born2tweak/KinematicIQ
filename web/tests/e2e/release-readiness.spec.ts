@@ -1,6 +1,17 @@
 import { expect, test } from '@playwright/test'
 
 test.describe('release readiness', () => {
+  test('inline lunge is research information and cannot start analysis', async ({ page }) => {
+    await page.goto('/')
+    const research = page.getByRole('listitem').filter({ hasText: 'Inline lunge' })
+    await expect(research).toContainText('Research only')
+    await expect(research.getByRole('button')).toHaveCount(0)
+    await expect(research.getByRole('link')).toHaveCount(0)
+    await research.click()
+    await expect(page).toHaveURL(/\/$/)
+    await expect(page.getByRole('button', { name: /Bodyweight squat/ })).toHaveCount(1)
+  })
+
   test('320px reflow keeps the primary landing flow in bounds', async ({ page }) => {
     await page.setViewportSize({ width: 320, height: 800 })
     await page.goto('/')

@@ -18,14 +18,16 @@ export function ProtocolPicker() {
         <h3 id="available-movements">Available now</h3>
         <div className="protocol-picker__grid" role="list">
           {groups.available.map((definition) => (
-            <button key={definition.id} role="listitem" type="button" className="protocol-card"
-              onClick={() => navigate('/camera', { state: { protocolId: definition.id } })}>
-              <span className="protocol-card__label">{definition.label}</span>
-              <span className="protocol-card__kind">{KIND_LABELS[definition.kind] ?? definition.kind}</span>
-              <span className="protocol-card__status protocol-card__status--available">Available</span>
-              <span className="protocol-card__instruction">{definition.capture.viewInstruction}</span>
-              <span className="protocol-card__setup">{definition.capture.setupInstructions[0]}</span>
-            </button>
+            <div key={definition.id} role="listitem" className="protocol-card-listitem">
+              <button type="button" className="protocol-card"
+                onClick={() => navigate('/camera', { state: { protocolId: definition.id } })}>
+                <span className="protocol-card__label">{definition.label}</span>
+                <span className="protocol-card__kind">{KIND_LABELS[definition.kind] ?? definition.kind}</span>
+                <span className="protocol-card__status protocol-card__status--available">Available</span>
+                <span className="protocol-card__instruction">{definition.capture.viewInstruction}</span>
+                <span className="protocol-card__setup">{definition.capture.setupInstructions[0]}</span>
+              </button>
+            </div>
           ))}
         </div>
       </section>

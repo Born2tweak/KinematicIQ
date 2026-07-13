@@ -1319,6 +1319,12 @@ img {
   letter-spacing: 0.01em;
   cursor: pointer;
 }
+.protocol-card-listitem {
+  display: flex;
+}
+.protocol-card-listitem .protocol-card {
+  width: 100%;
+}
 
 button.rep-timeline__bar {
   width: 100%;

@@ -23,7 +23,7 @@
 import type { MetricDefinition } from './metric'
 
 /** Movement identifiers the platform knows about. Matches analysis MovementId. */
-export type ProtocolId = 'squat' | 'sitToStand' | 'hipHinge' | 'jump' | 'sprint'
+export type ProtocolId = 'squat' | 'inlineLunge' | 'sitToStand' | 'hipHinge' | 'jump' | 'sprint'
 
 /**
  * Segmentation engine kind (matches analysis/movement/types.ts `MovementKind`):

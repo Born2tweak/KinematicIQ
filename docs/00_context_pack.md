@@ -1,6 +1,6 @@
 # KinematicIQ Context Pack
 
-> Hand-maintained on 2026-07-12 at M80; current through M79. Do not run the
+> Hand-maintained on 2026-07-13 at M115; current through Phase 3 autonomous closeout. Do not run the
 > deprecated `scripts/generate-context-pack.ps1`, which encodes the former
 > milestone model and would overwrite this file with stale content.
 
@@ -25,8 +25,14 @@ protocol, or publish a release without explicit authorization.
 ## Product and data flow
 
 KinematicIQ is a client-side movement-analysis platform. Squat is the only
-available protocol. Sit-to-stand, hip hinge, jump, and sprint remain planned
+available protocol. Inline lunge, sit-to-stand, hip hinge, jump, and sprint remain planned
 metadata-only protocols and must fail closed if analysis is attempted.
+
+Inline lunge additionally has an isolated executable research seam at
+`protocols/inlineLunge/analyzeInlineLungeResearch`. It is not a public
+`ProtocolRuntime`: its profile is null, input modes are empty, and public
+runtime/profile lookup throws. It requires declared lead-side metadata and
+emits only experimental, observation-language evidence.
 
 The live path is:
 
@@ -65,7 +71,8 @@ Per-milestone evidence: `docs/implementation/progress/`.
 | M74-M78 | Complete release-readiness, toolchain, support/accessibility automation, device-performance decision, and inline-lunge data gate |
 | M79 | Complete Phase 2 audit and M79-M98 execution roadmap |
 | M80 | Current canonical context/architecture refresh |
-| M81-M98 | Planned; availability remains gated by evidence and explicit activation |
+| M81-M98 | Complete Phase 2 autonomous runtime, robustness, UI, traceability, statistics, and activation-audit work |
+| M99-M115 | Complete Phase 3 autonomous inline-lunge research implementation; external validation and activation remain blocked |
 
 ## Current contracts
 

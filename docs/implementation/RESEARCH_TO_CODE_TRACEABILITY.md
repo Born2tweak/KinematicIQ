@@ -151,6 +151,16 @@ experimental unless stated.
 | Target-device performance | M77 progress note, production build, M76 physical-device script | bundle evidence current; no optimization decision until physical iPhone camera/model/thermal evidence |
 | Inline-lunge data gate | dataset registry, LLM-FMS Figshare artifacts, `llmFmsOntology.ts`, M78 ontology report, labeling protocol | official m05/m06 keyframes acquired and integrity-verified; checksum-gated six-rule ontology extracted with scores excluded; timed UI-PRMD and independent labels remain open |
 
+## M99-M115 inline-lunge implementation update (2026-07-13)
+
+| Research concept | Evidence/code | Outcome |
+|---|---|---|
+| Lead-side side-view protocol | `protocols/inlineLunge/types.ts`, `signals.ts`, protocol definition | one planned protocol with required left/right metadata; no source-ID conflation |
+| Six-event complete trial | `segmenter.ts`, neutral transition outcomes, synthetic fixtures | deterministic step/descent/bottom/ascent/return segmentation and explicit rejection; thresholds provisional |
+| Count/timing/projected knee observations | `metrics.ts`, `findings.ts`, `governance/traceability.ts` | experimental, confidence/provenance-bearing observation evidence; no FMS/composite/clinical claim |
+| Offline evaluation | `eval/inlineLungeEvaluation.ts`, M109 synthetic report | per-sequence exact count, event error, false activation, dropout, and rejection output; synthetic only |
+| Availability | registry, picker, runtime/profile tests, four-browser test | research information only; empty input modes and fail-closed public runtime retained |
+
 ## Per-metric validation status
 
 Tier-by-tier detail (evidence behind each tier, failure modes, promotion

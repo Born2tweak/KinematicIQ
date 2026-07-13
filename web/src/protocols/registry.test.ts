@@ -28,6 +28,7 @@ describe('protocols/registry', () => {
     const all = listProtocols()
     expect(all.map((p) => p.definition.id)).toEqual([
       'squat',
+      'inlineLunge',
       'sitToStand',
       'hipHinge',
       'jump',
@@ -37,6 +38,7 @@ describe('protocols/registry', () => {
       'squat',
     ])
     expect(listProtocolsByStatus('planned').map((p) => p.definition.id)).toEqual([
+      'inlineLunge',
       'sitToStand',
       'hipHinge',
       'jump',
@@ -49,7 +51,7 @@ describe('protocols/registry', () => {
     expect(getProtocol('jump').definition.kind).toBe('ballistic')
     expect(getProtocol('sprint').definition.kind).toBe('gait')
     expect(getProtocol('sitToStand').definition.kind).toBe('transition')
-    for (const id of ['hipHinge', 'jump', 'sprint', 'sitToStand'] as const) {
+    for (const id of ['inlineLunge', 'hipHinge', 'jump', 'sprint', 'sitToStand'] as const) {
       expect(getProtocol(id).profile).toBeNull()
       expect(getProtocol(id).definition.phases.length).toBeGreaterThan(0)
       expect(getProtocol(id).definition.requiredLandmarks.length).toBeGreaterThan(0)
@@ -58,6 +60,7 @@ describe('protocols/registry', () => {
 
   it('analyze entry point throws NotImplementedError for planned stubs', () => {
     expect(() => getProtocolProfile('jump')).toThrow(NotImplementedError)
+    expect(() => getProtocolProfile('inlineLunge')).toThrow(NotImplementedError)
     expect(() => getProtocolProfile('sprint')).toThrow(/not yet implemented/)
     // Squat path untouched.
     expect(getProtocolProfile('squat')).toBe(SQUAT_PROFILE)

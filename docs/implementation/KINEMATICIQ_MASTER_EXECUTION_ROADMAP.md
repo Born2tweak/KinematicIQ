@@ -4077,3 +4077,14 @@ into M65; the old M28-M30 proposals are historical and are superseded by the
 M70-M73 evidence-first sequence.
 
 The guiding rule: every milestone must leave squat working, preserve verdict-or-abstain, preserve pose-tape replayability, and improve traceability between research, code, validation, and product claims.
+
+## 12. Phase 3 continuation (M99-M115, 2026-07-13)
+
+Phase 3 is defined in `KINEMATICIQ_PHASE3_EXECUTION_ROADMAP.md` and completed
+autonomously through M115. Inline lunge now has an isolated, deterministic
+research implementation and offline evaluation harness, but remains planned,
+non-actionable, and fail-closed. The next executable work is external: timed
+source access/licensing, independent labeling/adjudication, subject-held-out
+evaluation, physical iPhone Safari/VoiceOver and Windows NVDA, biomechanics
+claims review, and explicit owner activation approval. No later milestone may
+infer activation from the existence of code or synthetic test evidence.

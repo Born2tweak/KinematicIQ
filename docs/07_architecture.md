@@ -171,3 +171,18 @@ UI, dataset, accessibility, or support changes additionally run their declared
 Playwright and evaluation scripts from the Phase 2 roadmap. Physical device,
 screen-reader, expert-review, and independent-rater outcomes remain external
 gates and are recorded as pending until humans actually execute them.
+
+## 11. Phase 3 inline-lunge research adapter
+
+`src/protocols/inlineLunge/` is the first second-engine architecture proof. It
+owns lead-side metadata, standing calibration, side-view signal extraction, a
+six-phase step-to-return FSM, complete/rejected transition trials, experimental
+metrics, bounded findings, and deterministic synthetic fixtures. The offline
+evaluator in `src/eval/inlineLungeEvaluation.ts` consumes that research seam.
+
+This does not create a parallel product runtime. `ProtocolRuntime` remains the
+sole public extension point, while inline lunge deliberately remains outside
+its runtime map until activation gates pass. The registry exposes the protocol
+as non-actionable research information, `capture.inputModes` remains empty,
+and profile/runtime lookup fails closed. A future activation change must adapt
+the validated research stages into `ProtocolRuntime`, not bypass it.

@@ -18,7 +18,8 @@
     "eval:datasets": "vite-node scripts/runDatasetPilots.ts",
     "eval:llm-fms": "vite-node scripts/runLlmFmsOntology.ts",
     "eval:tracking": "vite-node scripts/runTrackingRobustnessBaseline.ts",
-    "eval:short-gap": "vite-node scripts/runShortGapRecoveryExperiment.ts"
+    "eval:short-gap": "vite-node scripts/runShortGapRecoveryExperiment.ts",
+    "eval:inline-lunge": "vite-node scripts/runInlineLungeEvaluation.ts"
   },
   "dependencies": {
     "@mediapipe/tasks-vision": "^0.10.14",

@@ -17,7 +17,7 @@ import { listProtocols } from './registry'
 describe('getProtocolRuntime', () => {
   it('exposes complete v2 evidence metadata without activating stubs', () => {
     const protocols = listProtocols()
-    expect(protocols).toHaveLength(5)
+    expect(protocols).toHaveLength(6)
     for (const { definition } of protocols) {
       expect(definition.evidence.schemaVersion).toBe(2)
       expect(definition.evidence.validationGates.length).toBeGreaterThan(0)
@@ -31,7 +31,7 @@ describe('getProtocolRuntime', () => {
     expect(runtime).toBe(SQUAT_RUNTIME)
   })
 
-  it.each(['sitToStand', 'hipHinge', 'jump', 'sprint'] as const)(
+  it.each(['inlineLunge', 'sitToStand', 'hipHinge', 'jump', 'sprint'] as const)(
     'throws NotImplementedError for planned protocol %s',
     (id) => {
       expect(() => getProtocolRuntime(id)).toThrow(NotImplementedError)
