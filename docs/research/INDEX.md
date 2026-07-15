@@ -99,6 +99,14 @@ Supplemental M73 research: `NEXT_PROTOCOL_PORTFOLIO.md` ranks the next movement
 portfolio, and `INLINE_LUNGE_PROTOCOL_RESEARCH.md` is the sole selected
 research-only package. Neither authorizes data acquisition or implementation.
 
+## Supplemental research: Phase 4 forward-lunge evidence (2026-07-15)
+
+`phase-4/forward-lunge/README.md` is the sole package index for the reconciled
+Forward lunge with stride and return evidence library. Its five reports preserve
+their `8d8a77d` historical observations while recording that `f49558e` later
+added an unavailable six-state experimental seam. The package authorizes no
+collection, acquisition, threshold change, coaching, activation, or release.
+
 - M61 — dataset governance: metadata registry + validator + operator runbook
   + raw-data ignore boundary (`web/src/eval/datasetRegistry.ts`,
   `web/eval/datasets/registry.json`,
