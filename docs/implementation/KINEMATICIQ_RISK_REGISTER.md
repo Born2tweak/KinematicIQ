@@ -39,6 +39,17 @@
 | R-DOC-01 | Canonical docs drift from code | High | High | Traceability marked implemented milestones planned; AI rules conflict with persistence | Update canonical rows, link Aurelian indexes, doc checks | Current task/M61; reducing |
 | R-FIX-01 | CI passes without real validation fixtures | High | High | Real tapes local; CI-safe suite synthetic | Explicit availability report + redistributable redacted fixtures | M62-M63; open |
 
+## Phase 4 Forward Lunge risks
+
+| ID | Risk | Likelihood | Impact | Evidence/trigger | Mitigation/gate | Status |
+|---|---|---|---|---|---|---|
+| R-FLSR-01 | Legacy `inlineLunge` artifacts become unreadable during rename | Medium | High | current serializers and IDs use the legacy value | additive dual-read migration and compatibility tests in P4-M01 | open |
+| R-FLSR-02 | Pelvis-drop bottom is mistaken for validated maximum knee flexion | High | High | `segmenter.ts` selects maximum pelvis drop | ADR-013 development comparison; no P4-M00 threshold change | blocked |
+| R-FLSR-03 | Confirmation frames are reported as first sustained event frames | Medium | High | persistent-frame FSM records confirmation samples | label both constructs; compare before freeze | open |
+| R-FLSR-04 | Synthetic success is promoted as scientific validity | High | Critical | M109 is three synthetic sequences only | claims policy, metric board, locked participant gates | guarded |
+| R-FLSR-05 | Dataset terms/privacy/protocol mismatch is bypassed | Medium | Critical | attractive open Zenodo candidate lacks protocol detail | metadata-only record; separate acquisition approval | blocked |
+| R-FLSR-06 | Forward Lunge becomes available before full integration/evidence | Low | Critical | profile null and input modes empty today | ADR-015 and fail-closed tests; P4-M14 separate decision | guarded |
+
 ## Escalation rules
 
 - **Critical:** stop implementation when the risk becomes active; require explicit approval/evidence.

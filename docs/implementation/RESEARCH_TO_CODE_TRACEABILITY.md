@@ -17,6 +17,20 @@ the files.
 · `research` (Tier 2) · `clinical` (Tier 3). Everything shipped today is
 experimental unless stated.
 
+## Phase 4 Forward Lunge trace (P4-M00)
+
+| Requirement/evidence | Canonical artifact | Current code/test evidence | Status |
+|---|---|---|---|
+| Protocol identity and legacy compatibility | ADR-011, ADR-012; `docs/validation/phase-4/forward-lunge/LUNGE_PROTOCOL_IDENTITY_DECISION.md` | `web/src/core/protocol.ts`, `web/src/protocols/registry.ts`; migration pending | documented; P4-M01 pending |
+| Six-state Phase 3 runtime | ADR-014 | `web/src/protocols/inlineLunge/index.ts`, `segmenter.ts`, `inlineLunge.test.ts` at `f49558e` | implemented, experimental, unavailable |
+| Bottom-event construct | ADR-013; event handbook | pelvis-drop extremum in `segmenter.ts`; no human comparison | development comparison blocked |
+| Synthetic count/rejection verification | Phase 3 handoff; reconciliation audit | `inlineLunge.test.ts`, `inlineLungeEvaluation.test.ts`, M109 JSON | passed only for synthetic fixtures |
+| Camera/temporal observability | Phase 4 research package | no participant-derived lunge evidence | research requirements documented |
+| Human labels and synchronized validity | field protocol, dataset/capture spec, labeling handbook | none | blocked |
+| Numerical gates | `PHASE_4_PREREGISTERED_GATE_REGISTRY.md` (`flsr-gates-v0.1`) | no field estimates | provisional development input only |
+| Sample sizes | `FORWARD_LUNGE_SAMPLE_SIZE_AND_CAPTURE_SCHEDULE.md` | no recruitment authorization | scenario planning only |
+| Availability | ADR-015; `docs/validation/PROTOCOL_STATUS.md` | fail-closed test in `inlineLunge.test.ts` | squat only |
+
 ## Core schemas (R08 §3/§5, R03, R05)
 
 | Research concept | Source | Code | Milestones | Status | Tier |

@@ -399,4 +399,4 @@ No scientific, robustness, angle, implementation, claims, accessibility, privacy
 
 ## 11. Registry-wide current status
 
-**Blocked.** The supplied reconciliation reports no authorized lunge implementation, approved target-task corpus, completed rater pilot, frozen capture bands, signed sample-size calculation, synchronized angle reference, or untouched locked validation execution. Consequently, every numerical cutoff in this document remains a proposal for human review; none is a scientifically validated KinematicIQ acceptance threshold.
+**Blocked for lock/validation.** The repository has an authorized unavailable experimental seam, but no approved target-task corpus, completed rater pilot, frozen capture bands, signed final sample-size calculation, synchronized angle reference, or untouched locked validation execution. The registry is approved only as provisional development input; none of its numerical cutoffs is a scientifically validated or lock-ready KinematicIQ threshold.

@@ -1,5 +1,7 @@
 # KinematicIQ Master Execution Roadmap
 
+> **Current authority (2026-07-15):** P4-M00 reconciles the Forward lunge with stride and return evidence package against implementation commit `f49558e`. P4-M01 additive naming migration is next and remains pending. P4-M02 and later evidence-closure milestones are defined in `PHASE_4_EVIDENCE_CLOSURE_ROADMAP.md` but are not authorized by P4-M00. Squat remains the only available protocol.
+
 Generated 2026-07-06 from a live clone of `https://github.com/Born2tweak/KinematicIQ.git`, branch `master`, at commit `898d7c4`. **Post-dataset-research refresh:** 2026-07-10 at commit `d0532036216f78c2194723b55a10159880909993`; M00–M60 history is preserved and the dependency-aware M61–M74 wave is added below.
 
 This roadmap is an execution plan, not an implementation. It starts from the codebase as it exists now, preserves the completed M00-M24 and M31 work, and defines the next milestones required to turn KinematicIQ into the research-grounded movement-intelligence product described in `docs/research/`.

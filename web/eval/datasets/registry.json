@@ -50,7 +50,48 @@
         { "algorithm": "sha256", "value": "cb7fc799f6441c3addb8448ff6a917df2ca8d74e2f0941896a711a2b57792efb", "covers": "Labels_Incorrect.csv" },
         { "algorithm": "sha256", "value": "6336a463b5ec0de54a037f65851a2aed7325febe067dc510a7893660627d58aa", "covers": "Prepare_Data_for_NN.m" }
       ],
-      "notes": "User approved this pilot on 2026-07-10. Acquired from repository commit 838d3a46b04467610fa07f07827bccc8f2e6cec1. The matrices are centered, scaled, and linearly aligned to 240 samples; they do not preserve absolute degrees, source timing, subject/repetition identity, or a canonical joint mapping. Use only for dataset-scoped waveform and pipeline checks."
+      "notes": "User approved this pilot on 2026-07-10. Acquired from repository commit 838d3a46b04467610fa07f07827bccc8f2e6cec1. The matrices are centered, scaled, and linearly aligned to 240 samples; they do not preserve absolute degrees, source timing, subject/repetition identity, or a canonical joint mapping. Use only for dataset-scoped waveform, ontology, and development checks; UI-PRMD cannot supply final Forward Lunge activation evidence."
+    },
+    {
+      "id": "zenodo-synchronized-smartphone-optitrack-2026",
+      "version": "zenodo-18399031-v2-metadata",
+      "role": "research-only",
+      "approvalStatus": "metadata-only",
+      "source": {
+        "officialUrl": "https://zenodo.org/records/18399031",
+        "citation": "A Synchronized Marker-based and Markerless Motion Capture Dataset, Capital University of Physical Education and Sports, Zenodo v2.",
+        "paperDoi": "10.5281/zenodo.18399031"
+      },
+      "content": {
+        "approxSize": "~1.1 GB described across metadata, marker-based, markerless, and code/model archives",
+        "modalities": ["smartphone-rgb-video", "optitrack-c3d", "participant-metadata"],
+        "skeleton": "optitrack-marker-set-uninspected",
+        "views": ["two-smartphone-views-uninspected"],
+        "subjects": "21 male university physical-education students per public metadata",
+        "splits": "not established; no files acquired",
+        "movementLabels": ["lunges-source-label-protocol-unqualified"]
+      },
+      "license": {
+        "name": "CC-BY-4.0-metadata-reported",
+        "url": "https://creativecommons.org/licenses/by/4.0/",
+        "commercialUse": "permitted",
+        "redistribution": "permitted",
+        "accessRequirement": "none"
+      },
+      "use": {
+        "allowedUses": [
+          "metadata-inspection-candidate",
+          "future-protocol-qualification-review"
+        ],
+        "prohibitedClaimUses": [
+          "activation-gate-closure",
+          "assume-forward-lunge-stride-return-match",
+          "assume-synchronization-validity-without-inventory",
+          "clinical-or-coaching-claim"
+        ]
+      },
+      "localPathConvention": "datasets/local/zenodo-synchronized-smartphone-optitrack-2026/",
+      "notes": "First metadata-inspection candidate for a synchronized reference subset. No files were downloaded and no terms were accepted in P4-M00. Before acquisition or scoring, separately approve privacy/license/protocol review and verify exact lunge instructions, trials, sides, marker map, smartphone calibration, timestamps, dropped frames, and synchronization residual. This public dataset alone cannot close KinematicIQ's activation gate."
     },
     {
       "id": "opencap-validation",

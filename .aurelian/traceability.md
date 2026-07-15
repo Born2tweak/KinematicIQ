@@ -1,5 +1,14 @@
 # Traceability Graph
 
+## Phase 4 forward-lunge chain
+
+| ID | Type | Artifact | Status | Parents | Children | Confidence |
+|---|---|---|---|---|---|---|
+| TRACE-FLSR-01 | implementation frontier | commit `f49558e`; `web/src/protocols/inlineLunge/` | verified synthetic seam; unavailable | Phase 3 | TRACE-FLSR-02, TRACE-FLSR-03 | high |
+| TRACE-FLSR-02 | research package | `docs/research/phase-4/forward-lunge/README.md` | active | `8d8a77d` reports, TRACE-FLSR-01 | TRACE-FLSR-03, TRACE-FLSR-04 | high |
+| TRACE-FLSR-03 | decisions/specifications | ADR-011–015; `docs/validation/phase-4/forward-lunge/` | accepted/provisional as labeled | TRACE-FLSR-01, TRACE-FLSR-02 | P4-M01–P4-M14 | high |
+| TRACE-FLSR-04 | audit/roadmap | Phase 4 reconciliation audit and evidence-closure roadmap | active | TRACE-FLSR-01–03 | P4-M01 next | high |
+
 ## Active chain
 
 | ID | Type | Artifact | Status | Parents | Children | Confidence |

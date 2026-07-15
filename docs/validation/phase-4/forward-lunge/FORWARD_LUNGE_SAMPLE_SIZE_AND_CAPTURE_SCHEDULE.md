@@ -3,7 +3,7 @@
 > **Canonical reconciliation (2026-07-15):** Original repository-status observations below refer to the audited `8d8a77d` snapshot unless a later commit is named. Phase 3 at `f49558e` superseded the no-implementation conclusion with an unavailable experimental six-state seam (`web/src/protocols/inlineLunge/index.ts`, `segmenter.ts`, and `inlineLunge.test.ts`). It did not provide human labels, criterion validity, reliability, live/upload/session/results integration, coaching authority, or public availability. The approved identity is **Forward lunge with stride and return**; `inlineLunge` is historical pending P4-M01. Squat remains the only available protocol. This specification authorizes no collection, acquisition, threshold change, activation, or claim.
 **Protocol:** forward lunge with stride and return (`flsr-v0`)  
 **Purpose:** statistical planning only; no participant data are collected or authorized by this document  
-**Status:** candidate Phase 4 registry input, not an approved gate and not authorization to activate the movement  
+**Status:** approved scenario-planning input only; not a recruitment commitment, locked gate, or activation authorization
 **Prepared:** 2026-07-14
 
 ## Decision summary

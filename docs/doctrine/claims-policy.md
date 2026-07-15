@@ -46,6 +46,14 @@ Injury risk/prediction · diagnosis/pathology ("abnormal/dysfunctional/damaged")
 
 Clinical/functional-assessment framing is explicitly out of scope in this build: **no diagnosis, no injury prediction, no return-to-play**. Domain profiles may add movement definitions and observation questions, never medical conclusions. Sport/clinical "norms" are deferred until per-(question, protocol) validation exists.
 
+## Forward Lunge claim boundary
+
+Forward Lunge is unavailable and unvalidated. Its Phase 3 outputs are internal
+experimental observations only. No count, timing, projected angle, completion,
+consistency, or event output may be used for coaching, clinical, injury,
+kinetic, normative, or public-performance claims. Synthetic success is never a
+substitute for participant validity.
+
 ## Copy-review checklist (run against every changed user-facing string)
 
 - [ ] No forbidden word/claim above

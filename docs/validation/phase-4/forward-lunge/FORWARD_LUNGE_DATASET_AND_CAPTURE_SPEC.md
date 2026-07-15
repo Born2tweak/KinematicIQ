@@ -18,7 +18,7 @@ It implements the four dataset roles in `INLINE_LUNGE_FIELD_VALIDATION_PROTOCOL.
 3. locked subject-held-out pre-activation validation;
 4. an optional synchronized reference subset.
 
-The audited `8d8a77d` snapshot contained no lunge implementation and called the research track “inline lunge.” Phase 3 later added the unavailable `f49558e` seam; the canonical identity decision supersedes that name. Evidence review shows that the proposed stepping task is not the fixed-stance FMS inline lunge. The owner must approve the identity before any participant capture or external acquisition. This specification does not authorize either action.
+The audited `8d8a77d` snapshot contained no lunge implementation and called the research track “inline lunge.” Phase 3 later added the unavailable `f49558e` seam; the canonical identity decision supersedes that name. Evidence review shows that the stepping task is not the fixed-stance FMS inline lunge. Identity is now approved, but participant capture and external acquisition still require separate approvals. This specification authorizes neither action.
 
 Raw participant media, participant-linked landmarks, local manifests, contact keys, and reference-system data never enter git. KinematicIQ remains browser-only and local-first. Only schemas, synthetic/redacted fixtures, and non-identifying aggregate reports may be tracked.
 

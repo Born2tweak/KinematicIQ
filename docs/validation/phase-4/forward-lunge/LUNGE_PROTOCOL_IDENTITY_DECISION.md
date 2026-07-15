@@ -1,7 +1,7 @@
 # Lunge Protocol Identity and Naming Decision
 
 > **Canonical reconciliation (2026-07-15):** Original repository-status observations below refer to the audited `8d8a77d` snapshot unless a later commit is named. Phase 3 at `f49558e` superseded the no-implementation conclusion with an unavailable experimental six-state seam (`web/src/protocols/inlineLunge/index.ts`, `segmenter.ts`, and `inlineLunge.test.ts`). It did not provide human labels, criterion validity, reliability, live/upload/session/results integration, coaching authority, or public availability. The approved identity is **Forward lunge with stride and return**; `inlineLunge` is historical pending P4-M01. Squat remains the only available protocol. This specification authorizes no collection, acquisition, threshold change, activation, or claim.
-**Status:** Recommendation pending owner approval  
+**Status:** Accepted for canonical documentation; additive code migration pending P4-M01
 **Decision type:** Product, biomechanics, research-transfer, and architecture identity  
 **Repository snapshot:** `Born2tweak/KinematicIQ`, `master` / `origin/master` at `8d8a77d8ab0a6ab0c240f8327ef51e467dfd4cc2` (verified 2026-07-14)  
 **Research basis:** Completed Phase 4 package dated 2026-07-14, layered locally over the repository snapshot  

@@ -56,9 +56,9 @@ Left- and right-lead trials are operationally separate. The lead side must be de
 
 ## 3. Repository baseline
 
-### 3.1 Controlling state observed
+### 3.1 Controlling state observed at `8d8a77d`
 
-| Repository evidence | Current state | Confidence |
+| Repository evidence | State at original audit | Confidence |
 |---|---|---|
 | `docs/research/INLINE_LUNGE_PROTOCOL_RESEARCH.md` | “Research only; not approved for implementation or availability”; proposes side view and step/descent/bottom/ascent/return | High |
 | `docs/implementation/NEXT_EXECUTION_PACKAGE.md` | M78 is a data-and-label gate requiring separate dataset approval; failure keeps lunge research-only | High |
@@ -115,7 +115,7 @@ Evidence saturation was reached when additional studies repeated the same action
 |---|---|---|---|
 | “Inline lunge” means step forward and return | Unsupported naming assumption | Conflicts with published FMS inline-lunge procedure | Rename/resolve before labels or code |
 | Side view is appropriate | Literature-supported but task-specific | Sagittal side view is defensible for lead-knee/event research when line of progression is parallel to image plane | Calibrate view tolerance; lead side near camera; validate on consumer devices |
-| Six phases are already implemented | False repository assumption | No implementation exists | Treat phases as annotation candidates only |
+| Six phases are already implemented | False at `8d8a77d`; later partly superseded | `f49558e` implements six runtime states, but not the Phase 4 human-label ontology | Compare runtime states to label events; do not claim construct parity |
 | A cyclic squat engine can be configured for lunge | Architectural hypothesis | Current engine tracks the minimum of bilateral knee angles and squat-shaped descent/return; it has no step/contact/lead-side state | Do not reuse without a protocol-specific design and parity/negative tests |
 | Maximum knee flexion defines bottom | Literature-consistent convention | Common reversal event for stance segmentation, but plateaus and noisy local extrema remain ambiguous | Label with a deterministic window/tie rule and adjudication |
 | Lead-foot contact is RGB-observable | Unsupported as physical contact | Studies define contact by force threshold; 2D visible heel strike is a proxy | Name it `visible lead-foot plant` in RGB labels; never claim force contact |

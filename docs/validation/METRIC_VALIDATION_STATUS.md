@@ -43,6 +43,21 @@ finding rules, M31/M32 baseline deltas, M33 report export.
 | `posture.head.forward-angle` | experimental | 3D worldLandmarks proxy (M21); no validated reference | nose/ears, shoulders | worldLandmark depth noise; absent stream → abstain |
 | `posture.shoulder.elevation-ratio` | experimental | M21 proxy | shoulders, hips | same |
 
+## Included metrics — Forward Lunge experimental research seam
+
+These metrics exist at implementation commit `f49558e` under the deprecated
+runtime ID `inlineLunge`. They are unavailable to the product and have only
+synthetic verification. None is approved for coaching or scientific claims.
+
+| Metric family | Tier | Evidence | Blocking gaps |
+|---|---|---|---|
+| Trial count/completion | experimental | deterministic fixtures and M109 evaluator | human labels, wrong-movement prevalence, subject-held-out validation |
+| Trial/event timing | experimental | ordered synthetic states | first-sustained-frame labels, FPS/discontinuity/reacquisition validation |
+| Projected lead-knee angle at bottom | experimental | synthetic computation only | synchronized reference, bottom-construct comparison, camera sensitivity |
+| Within-set variation | experimental | unit/synthetic tests | repeat-session reliability and minimum usable-trial evidence |
+
+No tier may move until the applicable `flsr-gates-v0.1` successor is frozen and passed.
+
 ## Excluded metrics (cataloged, never computed — R03 §12)
 
 | Metric id | Why excluded | Stays excluded until |

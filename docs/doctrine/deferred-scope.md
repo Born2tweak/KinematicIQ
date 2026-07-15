@@ -18,6 +18,9 @@
 | **PDF report generation / cloud report sharing** (M33 decision) | Local-only artifact strategy; HTML+JSON cover audit and sharing without a backend or heavyweight dependency | Explicit product decision post-validation; cloud sharing additionally gated on the backend scope change above |
 | **Build-time app-version injection** | `APP_VERSION` in `export/sessionReport.ts` is a manual constant matching `web/package.json` | M46 model/algorithm version registry provides the single source |
 | **Live filtering stack upgrade** (Butterworth or alternate live filter) | Current one-euro live variant is load-bearing for tape parity | M27: a named filter candidate + replay-harness benchmark on the labeled tape suite showing improvement |
+| **Forward Lunge participant collection** | Consent, protocol, raters, privacy, and development plan are not approved for execution | Separate P4-M06 manual authorization after earlier milestone gates |
+| **Forward Lunge dataset acquisition** | Metadata review is not acquisition approval; terms/privacy/protocol fit require separate review | Dataset-specific owner approval under the operator runbook |
+| **Forward Lunge public activation or coaching** | Phase 3 is synthetic-only and unavailable | P4-M14 separate availability decision after locked evidence and claims review |
 
 ## Explicitly not-refactored in this build (leave working as-is)
 

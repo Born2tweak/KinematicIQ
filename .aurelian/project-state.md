@@ -39,8 +39,7 @@
 
 ## Active milestone and gates
 
-- Active milestone: P4-M00 documentation and authority reconciliation.
-- P4-M00 may close only after document import, cross-reference/status/encoding/privacy checks, ordered commits, and safe push.
+- Completed milestone: P4-M00 documentation and authority reconciliation. Its acceptance evidence is recorded in `docs/implementation/progress/P4-M00-phase4-documentation-reconciliation.md`.
 - Next milestone: P4-M01 additive naming migration. It remains pending and must preserve old artifacts and read compatibility.
 - Next manual gate: owner approval to execute P4-M01 after review of the migration contract.
 - P4-M02 and later work is not authorized by this package.

@@ -1,5 +1,14 @@
 # Resource Index
 
+## Phase 4 Forward Lunge
+
+- Package index: `docs/research/phase-4/forward-lunge/README.md`
+- Canonical specifications: `docs/validation/phase-4/forward-lunge/`
+- Reconciliation audit: `reports/audits/PHASE_4_LUNGE_RESEARCH_TO_CODE_RECONCILIATION.md`
+- Evidence-closure roadmap: `docs/implementation/PHASE_4_EVIDENCE_CLOSURE_ROADMAP.md`
+- Current protocol board: `docs/validation/PROTOCOL_STATUS.md`
+- Decisions: ADR-011 through ADR-015
+
 ## Canonical internal resources
 
 | Resource | Location | Reliability | Use when |

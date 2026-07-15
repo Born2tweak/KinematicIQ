@@ -1,5 +1,7 @@
 # KinematicIQ Context Pack
 
+> **Phase 4 authority update (2026-07-15):** `master` uses implementation frontier `f49558e`. Squat is the only available protocol. Forward Lunge / Forward lunge with stride and return is an unavailable experimental six-state seam under deprecated ID `inlineLunge`; canonical ID migration to `forwardLungeStrideReturn` is pending P4-M01. Participant work, dataset acquisition, threshold changes, claims, activation, deployment, and release are prohibited by the current package.
+
 > Hand-maintained on 2026-07-13 at M115; current through Phase 3 autonomous closeout. Do not run the
 > deprecated `scripts/generate-context-pack.ps1`, which encodes the former
 > milestone model and would overwrite this file with stale content.

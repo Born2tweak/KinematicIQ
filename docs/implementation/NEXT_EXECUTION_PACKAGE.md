@@ -1,5 +1,16 @@
 # Next Execution Package — M75-M78
 
+> **Superseded as immediate authority (2026-07-15):** M75-M78 and Phase 3 are historical completed packages. The current package is P4-M00 documentation/authority reconciliation. After P4-M00 acceptance, the exact next milestone is P4-M01: additive migration from deprecated `inlineLunge` reads to canonical `forwardLungeStrideReturn`, with legacy artifacts preserved. P4-M02 and participant/dataset work are not authorized.
+
+## P4-M01 acceptance contract (pending)
+
+1. Expand protocol identity types and registries to accept both IDs without changing availability or thresholds.
+2. Write new artifacts with `forwardLungeStrideReturn`; read historical `inlineLunge` artifacts unchanged.
+3. Migrate observation identity to `side-view-forward-lunge-stride-return-v1` additively.
+4. Qualify source-native FMS `inline-lunge` dataset labels rather than renaming source truth.
+5. Pass protocol, registry, runtime, pose-tape, evaluator, and serialization compatibility tests; Squat remains the only available protocol.
+6. Do not begin P4-M02 or remove the alias in the same milestone.
+
 **Issued:** 2026-07-11
 
 **Authority:** M73 portfolio and M74 release-readiness scorecard
