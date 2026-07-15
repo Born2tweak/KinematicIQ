@@ -1,5 +1,22 @@
 # Decision Log
 
+## 2026-07-15: Reconcile Phase 3 and approve the Phase 4 identity contract
+
+- Status: accepted for P4-M00 documentation; code migration remains pending P4-M01.
+- Decision: the movement is user-facing `Forward Lunge`, scientifically `Forward lunge with stride and return`, with future canonical ID `forwardLungeStrideReturn`, task version `forward-lunge-stride-return-v1`, and observation protocol `side-view-forward-lunge-stride-return-v1`.
+- Compatibility: `inlineLunge` becomes a deprecated historical/read-compatible alias and may remain only when a source-native dataset label is explicitly qualified.
+- Runtime/ontology separation: the Phase 3 six-state runtime and Phase 4 human-label event ontology are related but not interchangeable.
+- Bottom construct: compare pelvis-drop and maximum lead-knee-flexion candidates during development; do not change thresholds or runtime events in P4-M00.
+- Availability: squat remains the only available protocol. Forward Lunge remains planned, experimental, unavailable, and non-actionable.
+- Evidence: ADR-011 through ADR-015; `web/src/protocols/inlineLunge/index.ts`; `segmenter.ts`; `inlineLunge.test.ts`; implementation commit `f49558e`.
+
+## 2026-07-15: Fast-forward the authoritative frontier
+
+- Status: accepted.
+- Context: `origin/master` was `8d8a77d`; `f49558e` was pushed on `origin/agent/phase2-runtime-and-validation`; `master` had no unique commits and was an ancestor of the Phase 3 tip.
+- Decision: establish `f49558e` as the authoritative implementation frontier using fast-forward integration; preserve all five intervening commits.
+- Consequences: Phase 4 documents must qualify their original `8d8a77d` observations and cite the superseding Phase 3 source and tests.
+
 ## 2026-07-10: Use an Aurelian compatibility layer
 
 - Status: accepted.

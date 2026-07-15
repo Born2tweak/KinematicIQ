@@ -1,5 +1,13 @@
 # Architecture Decision Records
 
+## Phase 4 forward-lunge decisions
+
+- ADR-011 — canonical Forward Lunge / forward-lunge-with-stride-and-return identity.
+- ADR-012 — deprecated `inlineLunge` legacy-read compatibility.
+- ADR-013 — bottom-event development comparison before construct freeze.
+- ADR-014 — separation of six-state runtime and human-label ontology.
+- ADR-015 — continued squat-only availability.
+
 Durable records of the decisions that make KinematicIQ trustworthy and that
 constrain future work. An ADR is written when a decision is (a) hard to
 reverse, (b) load-bearing for trust/safety, or (c) likely to be re-litigated

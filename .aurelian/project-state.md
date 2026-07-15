@@ -1,29 +1,50 @@
 # Project State
 
-## Current objective
+## Authoritative frontier
 
-- Objective: translate the public movement-dataset research into a dependency-aware KinematicIQ product and engineering roadmap.
-- Done criteria: audit, research-to-execution map, risk/decision/gap records, canonical roadmap, and immediately executable next package agree with the live repository.
-- In scope: reversible repository inspection, baseline verification, and documentation/governance changes.
-- Out of scope: product implementation, dataset downloads, license acceptance, backend/cloud work, deployment, push, and stronger scientific claims.
+- Authoritative branch: `master`.
+- Authoritative implementation commit: `f49558edec40ca6a972ec65bd6ff07898c161c4b`.
+- Frontier reconciliation: remote `master` at `8d8a77d8ab0a6ab0c240f8327ef51e467dfd4cc2` had no unique commits and was fast-forwarded locally through the five pushed commits on `origin/agent/phase2-runtime-and-validation`; no history was discarded.
+- Current documentation authority: the Phase 4 package and canonical repository files at `master` HEAD. The exact resulting commit is recorded in the Phase 4 handoff and Git history because a commit cannot contain its own hash.
 
-## Current state (verified 2026-07-10)
+## Protocol state
 
-- Phase: post-M60 research-to-execution alignment.
-- Branch: `master` at `d0532036216f78c2194723b55a10159880909993`; 17 local commits ahead of `origin/master` after a successful fetch/pull check.
-- Baseline: build passed; 72 Vitest files/472 tests passed; coverage passed at 88.56% lines/statements; camera e2e 3/3 passed; 11 local tapes evaluated with 0 execution errors and 9/9 exact labeled rep counts.
-- Known blockers: no saved benchmark comparison baseline; no external biomechanical ground-truth dataset integrated; no repeated-measures reliability study; restricted-dataset licenses not accepted.
-- Highest risks: squat-specific live/upload execution behind a protocol-shaped API, inconsistent camera-view guidance, mobile camera/report density, unvalidated tracking/metric thresholds, dataset licensing/privacy.
+- Available: Squat only.
+- Experimental and unavailable: Forward Lunge, scientifically named **Forward lunge with stride and return**.
+- Canonical protocol ID approved for the additive P4-M01 migration: `forwardLungeStrideReturn`.
+- Current Phase 3 runtime ID: deprecated historical `inlineLunge`; retained until P4-M01 for legacy-read compatibility.
+- Dataset/task version: `forward-lunge-stride-return-v1`.
+- Observation protocol ID: `side-view-forward-lunge-stride-return-v1`.
+- Public, coaching, clinical, injury, kinetic, and normative use: not authorized.
 
-## Active context
+## Verified implementation evidence (2026-07-15)
 
-- Audit: `reports/audits/KINEMATICIQ_POST_DATASET_RESEARCH_AUDIT.md`
-- Integration map: `docs/implementation/PUBLIC_DATASET_RESEARCH_TO_EXECUTION_MAP.md`
-- Roadmap: `docs/implementation/KINEMATICIQ_MASTER_EXECUTION_ROADMAP.md`
-- Immediate package: `docs/implementation/NEXT_EXECUTION_PACKAGE.md`
-- Risks: `docs/implementation/KINEMATICIQ_RISK_REGISTER.md`
-- Research gaps: `docs/implementation/POST_DATASET_RESEARCH_GAPS.md`
+- Phase 3 source: `web/src/protocols/inlineLunge/index.ts`, `segmenter.ts`, `metrics.ts`, and `findings.ts` at `f49558e`.
+- Six ordered runtime states: standing, stepping, descending, bottom, ascending, returning.
+- Fail-closed evidence: `web/src/protocols/inlineLunge/inlineLunge.test.ts`; status is `planned`, `capture.inputModes` is empty, profile is null, and public profile/runtime lookup throws `NotImplementedError`.
+- Full unit run: 91 files discovered; 90 passed and 1 skipped; 576 tests passed and 4 skipped (580 total).
+- Coverage: 86.15% statements, 79.63% branches, 92.10% functions, 87.58% lines. The prior 86.9% statement claim is not exactly reproducible with the current locked toolchain.
+- Build: passed with 720 modules transformed and existing large-chunk warnings.
+- Synthetic evaluator: 3 sequences; exact-count rate 1; count MAE 0; false activation 0; dropout 0.
 
-## Next reversible step
+## Scientific blockers
 
-Execute M61 dataset governance and benchmark metadata foundation without downloading restricted data or changing runtime behavior.
+- No separately validated visible-plant or return-initiation event.
+- Stable-standing evidence is incomplete.
+- Bottom is currently pelvis-drop-based, not validated maximum lead-knee flexion.
+- Confirmation frames may not equal first sustained event frames.
+- Rejection, temporal-discontinuity, and reacquisition coverage are incomplete.
+- No participant-derived labels, synchronized criterion validity, repeat-session reliability, or claims review exists.
+- Synthetic success is engineering verification, not scientific validation.
+
+## Active milestone and gates
+
+- Active milestone: P4-M00 documentation and authority reconciliation.
+- P4-M00 may close only after document import, cross-reference/status/encoding/privacy checks, ordered commits, and safe push.
+- Next milestone: P4-M01 additive naming migration. It remains pending and must preserve old artifacts and read compatibility.
+- Next manual gate: owner approval to execute P4-M01 after review of the migration contract.
+- P4-M02 and later work is not authorized by this package.
+
+## Prohibited actions
+
+No participant recruitment or recording; no dataset acquisition, terms acceptance, registration, or researcher contact; no production threshold or event-construct change; no lunge activation; no coaching/clinical/injury/kinetic/normative claims; no deployment or release.
