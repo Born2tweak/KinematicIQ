@@ -45,7 +45,8 @@
 - Completed milestone: P4-M03 deterministic perturbation library; CV-owner sign-off remains a human gate.
 - Completed milestone: P4-M04 temporal diagnostics baseline; owner classification remains a human gate.
 - Completed engineering milestone: P4-M05 independent event-labeling tool; usability, accessibility, and blinding-owner reviews remain human gates.
-- Next milestone: P4-M06 consented field-development pilot, blocked pending the roadmap's signed human/privacy/data prerequisites and expressly outside autonomous engineering authority.
+- P4-M06 autonomous preflight/report tooling is implemented; collection remains blocked on signed human/privacy/data prerequisites.
+- Active autonomous package: P4-M07 rater-qualification tooling (human qualification itself remains blocked on M06 evidence).
 - Next manual gate: dataset-custodian/privacy review before any human collection; schema work itself is authorized.
 - P4-M01 through P4-M05 engineering work is authorized by the user's 2026-07-16 instruction; human/research gates remain non-autonomous.
 
