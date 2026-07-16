@@ -1,0 +1,96 @@
+{
+  "schemaVersion": 1,
+  "protocolId": "forwardLungeStrideReturn",
+  "rows": [
+    {
+      "id": "identity",
+      "frameCount": 59,
+      "manifest": {
+        "version": "pose-perturbation-v1",
+        "seed": 20260716,
+        "sourceSha256": "e1940a5be758c4c43a25e4ad3e8ce74f671dc3aef9a2c54e665c8a79953b877a",
+        "outputSha256": "e1940a5be758c4c43a25e4ad3e8ce74f671dc3aef9a2c54e665c8a79953b877a",
+        "operations": [
+          {
+            "kind": "identity"
+          }
+        ]
+      }
+    },
+    {
+      "id": "critical-dropout",
+      "frameCount": 59,
+      "manifest": {
+        "version": "pose-perturbation-v1",
+        "seed": 20260716,
+        "sourceSha256": "e1940a5be758c4c43a25e4ad3e8ce74f671dc3aef9a2c54e665c8a79953b877a",
+        "outputSha256": "b3a2a31396e69120048e610653e847632efb9bb7495167094f535e7c23f8aa32",
+        "operations": [
+          {
+            "kind": "dropout",
+            "startFrame": 18,
+            "endFrame": 22,
+            "landmarkIndices": [
+              23,
+              24,
+              25,
+              26,
+              27,
+              28
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "coordinate-jitter",
+      "frameCount": 59,
+      "manifest": {
+        "version": "pose-perturbation-v1",
+        "seed": 20260716,
+        "sourceSha256": "e1940a5be758c4c43a25e4ad3e8ce74f671dc3aef9a2c54e665c8a79953b877a",
+        "outputSha256": "bcba8c659b9251b355cd4dd3058418841e6edc7b904420b7710a18145058769f",
+        "operations": [
+          {
+            "kind": "coordinateJitter",
+            "startFrame": 15,
+            "endFrame": 30,
+            "amplitude": 0.01
+          }
+        ]
+      }
+    },
+    {
+      "id": "timestamp-jitter",
+      "frameCount": 59,
+      "manifest": {
+        "version": "pose-perturbation-v1",
+        "seed": 20260716,
+        "sourceSha256": "e1940a5be758c4c43a25e4ad3e8ce74f671dc3aef9a2c54e665c8a79953b877a",
+        "outputSha256": "6931bac7d08e5c1c2f39336386260bcf9c2b58a5ccae12ad66e4c9de249b2605",
+        "operations": [
+          {
+            "kind": "timestampJitter",
+            "amplitudeMs": 4
+          }
+        ]
+      }
+    },
+    {
+      "id": "fps-15",
+      "frameCount": 30,
+      "manifest": {
+        "version": "pose-perturbation-v1",
+        "seed": 20260716,
+        "sourceSha256": "e1940a5be758c4c43a25e4ad3e8ce74f671dc3aef9a2c54e665c8a79953b877a",
+        "outputSha256": "92eaa61c26a2b49b0b1a30fbb3647a64e2dd91b2e9a9c2c3224d43950a48b9f7",
+        "operations": [
+          {
+            "kind": "fpsResample",
+            "targetFps": 15
+          }
+        ]
+      }
+    }
+  ]
+}
