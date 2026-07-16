@@ -48,7 +48,8 @@
 - P4-M06 autonomous preflight/report tooling is implemented; collection remains blocked on signed human/privacy/data prerequisites.
 - P4-M07 autonomous qualification tooling is implemented; human qualification remains blocked on approved M06 recordings and owner sign-off.
 - P4-M08 autonomous experiment tooling is implemented; candidate selection remains blocked on qualified real development labels and owner review.
-- Active autonomous package: P4-M09 freeze/gate/sample-size tooling; human freeze approval remains non-autonomous.
+- P4-M09 autonomous freeze/gate/precision tooling is implemented; no real package is frozen and G-FREEZE remains blocked.
+- Active autonomous package: P4-M10 locked-run preflight/report tooling; confirmatory execution remains blocked without M09.
 - Next manual gate: dataset-custodian/privacy review before any human collection; schema work itself is authorized.
 - P4-M01 through P4-M05 engineering work is authorized by the user's 2026-07-16 instruction; human/research gates remain non-autonomous.
 
