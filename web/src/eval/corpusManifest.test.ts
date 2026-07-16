@@ -25,6 +25,10 @@ function validRaw() {
         truthRepCount: 4,
         consent: 'public-stock',
         validationUse: 'benchmark',
+        sha256: 'a'.repeat(64),
+        subjectKey: 'subject-example',
+        split: 'validation',
+        observationProtocolId: 'front-view-squat-v1',
       },
     ],
   }
@@ -47,6 +51,13 @@ describe('parseCorpusManifest', () => {
     const manifest = parseCorpusManifest(validRaw())
     expect(manifest.entries[0].id).toBe('stock-01')
     expect(manifest.entries[0].truthRepCount).toBe(4)
+  })
+
+  it('normalizes a legacy v1 manifest in memory', () => {
+    const raw = validRaw()
+    raw.manifestVersion = 1
+    delete (raw.entries[0] as Record<string, unknown>).sha256
+    expect(parseCorpusManifest(raw).manifestVersion).toBe(2)
   })
 
   it('refuses unknown manifest versions rather than misreading them', () => {

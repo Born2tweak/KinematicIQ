@@ -41,7 +41,8 @@
 
 - Completed milestone: P4-M00 documentation and authority reconciliation. Its acceptance evidence is recorded in `docs/implementation/progress/P4-M00-phase4-documentation-reconciliation.md`.
 - Completed milestone: P4-M01 additive naming migration with legacy-read compatibility.
-- Active milestone: P4-M02 auditable evidence schemas.
+- Completed milestone: P4-M02 auditable evidence schemas.
+- Active milestone: P4-M03 deterministic perturbation library.
 - Next manual gate: dataset-custodian/privacy review before any human collection; schema work itself is authorized.
 - P4-M02 and later work is not authorized by this package.
 

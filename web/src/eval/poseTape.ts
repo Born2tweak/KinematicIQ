@@ -13,6 +13,25 @@ import {
   ANALYSIS_ALGORITHM_VERSION,
   APP_VERSION,
 } from '../core/versioning'
+import { normalizeObservationProtocolId, normalizeProtocolId, type ProtocolId } from '../core/protocol'
+
+export interface PoseTapeEvidenceV2 {
+  protocolId: ProtocolId
+  observationProtocolId: string
+  protocolParameters: { leadSide?: 'left' | 'right' }
+  rawFrameAuthority: true
+  sourceSha256: string
+  subjectKey: string
+  sessionKey: string
+  visitKey?: string
+  device: { class: string; browser?: string; fps: number; view: string }
+  captureVersion: string
+  processingVersion: string
+  transformations: Array<{ id: string; parentId: string; kind: string; version: string; seed?: number; parameters: Record<string, unknown>; sha256: string }>
+  labelSets: Array<{ id: string; sha256: string }>
+  split: 'development' | 'validation' | 'test'
+  frozen: boolean
+}
 
 /**
  * Pipeline entry state at the moment the set activated, captured so replay
@@ -87,9 +106,11 @@ export interface PoseTapeDiagnostics {
 }
 
 export interface PoseTape {
+  schemaVersion?: 1 | 2
   meta: PoseTapeMeta
   frames: PoseFrame[]
   diagnostics?: PoseTapeDiagnostics
+  evidence?: PoseTapeEvidenceV2
 }
 
 export function createTape(
@@ -107,6 +128,39 @@ export function createTape(
   return diagnostics
     ? { meta: stamped, frames, diagnostics }
     : { meta: stamped, frames }
+}
+
+const SHA256 = /^[a-f0-9]{64}$/
+const safeKey = (value: string) => /^[a-z0-9][a-z0-9_-]*$/i.test(value) && !value.includes('..')
+
+/** New evidence writers use v2; legacy tapes remain readable without on-disk mutation. */
+export function createEvidenceTapeV2(frames: PoseFrame[], meta: PoseTapeMeta, evidence: PoseTapeEvidenceV2, diagnostics?: PoseTapeDiagnostics): PoseTape {
+  validatePoseTapeEvidence(evidence)
+  const tape = createTape(frames, { ...meta, protocolId: normalizeObservationProtocolId(evidence.observationProtocolId), framesFiltered: false }, diagnostics)
+  return { ...tape, schemaVersion: 2, evidence: { ...evidence, protocolId: normalizeProtocolId(evidence.protocolId), observationProtocolId: normalizeObservationProtocolId(evidence.observationProtocolId), rawFrameAuthority: true } }
+}
+
+export function validatePoseTapeEvidence(evidence: PoseTapeEvidenceV2): PoseTapeEvidenceV2 {
+  normalizeProtocolId(evidence.protocolId)
+  if (!SHA256.test(evidence.sourceSha256)) throw new Error('PoseTape v2 requires a lowercase SHA-256 source checksum.')
+  for (const [name, value] of [['subjectKey', evidence.subjectKey], ['sessionKey', evidence.sessionKey], ['visitKey', evidence.visitKey]] as const) {
+    if (value !== undefined && !safeKey(value)) throw new Error(`${name} must be a pseudonymous safe key.`)
+  }
+  if (evidence.protocolId === 'forwardLungeStrideReturn' && !evidence.protocolParameters.leadSide) throw new Error('Forward Lunge evidence requires leadSide.')
+  if (evidence.frozen && evidence.split === 'development') throw new Error('Frozen evidence cannot be a development/tuning input.')
+  const ids = new Set<string>()
+  for (const item of evidence.transformations) {
+    if (!safeKey(item.id) || ids.has(item.id) || !SHA256.test(item.sha256)) throw new Error('Transformation ids/checksums must be unique and valid.')
+    if (item.parentId === item.id) throw new Error('Transformation lineage must be acyclic.')
+    ids.add(item.id)
+  }
+  for (const item of evidence.transformations) if (item.parentId !== 'raw' && !ids.has(item.parentId)) throw new Error(`Missing transformation parent ${item.parentId}.`)
+  return evidence
+}
+
+export function normalizePoseTapeV2(tape: PoseTape): PoseTape {
+  if (tape.schemaVersion === 2 && tape.evidence) { validatePoseTapeEvidence(tape.evidence); return tape }
+  return { ...tape, schemaVersion: 1, meta: { ...tape.meta, protocolId: tape.meta.protocolId ? normalizeObservationProtocolId(tape.meta.protocolId) : undefined, framesFiltered: tape.meta.framesFiltered ?? false } }
 }
 
 /**
@@ -132,7 +186,7 @@ export function deserializeTape(json: string): PoseTape {
   if (typeof parsed.meta.fps !== 'number' || parsed.meta.fps <= 0) {
     throw new Error('Invalid pose tape: meta.fps must be a positive number')
   }
-  return parsed
+  return normalizePoseTapeV2(parsed)
 }
 
 export interface TapeRecorder {

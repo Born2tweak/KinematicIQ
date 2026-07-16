@@ -13,7 +13,7 @@
  */
 import { normalizeProtocolId, type ProtocolId } from '../core/protocol'
 
-export const CORPUS_MANIFEST_VERSION = 1
+export const CORPUS_MANIFEST_VERSION = 2
 
 /** Where a tape's frames came from. */
 export type CorpusSource = 'live' | 'upload' | 'stock-video'
@@ -39,6 +39,12 @@ export interface CorpusEntry {
   validationUse: CorpusValidationUse
   /** Edge cases: clipped descents, second person in frame, camera angle… */
   notes?: string
+  /** V2 evidence linkage; absent/unknown when normalized from v1. */
+  sha256?: string
+  subjectKey?: string
+  split?: 'development' | 'validation' | 'test'
+  observationProtocolId?: string
+  leadSide?: 'left' | 'right'
 }
 
 export interface CorpusManifest {
@@ -71,7 +77,7 @@ export function parseCorpusManifest(raw: unknown): CorpusManifest {
     throw new Error('Corpus manifest must be a JSON object.')
   }
   const manifest = raw as Record<string, unknown>
-  if (manifest.manifestVersion !== CORPUS_MANIFEST_VERSION) {
+  if (manifest.manifestVersion !== 1 && manifest.manifestVersion !== CORPUS_MANIFEST_VERSION) {
     throw new Error(
       `Unsupported corpus manifest version ${String(manifest.manifestVersion)} — this reader understands v${CORPUS_MANIFEST_VERSION}.`,
     )
@@ -125,10 +131,16 @@ export function parseCorpusManifest(raw: unknown): CorpusManifest {
         `${where}: validationUse must be one of ${[...USES].join(', ')}.`,
       )
     }
+    const v2 = manifest.manifestVersion === 2
+    if (v2 && (typeof entry.sha256 !== 'string' || !/^[a-f0-9]{64}$/.test(entry.sha256))) throw new Error(`${where}: v2 requires a lowercase SHA-256.`)
+    if (v2 && (typeof entry.subjectKey !== 'string' || !/^[a-z0-9_-]+$/i.test(entry.subjectKey))) throw new Error(`${where}: v2 requires a pseudonymous subjectKey.`)
+    if (v2 && !['development', 'validation', 'test'].includes(String(entry.split))) throw new Error(`${where}: v2 requires a split.`)
+    const protocolId = normalizeProtocolId(entry.protocolId)
+    if (v2 && protocolId === 'forwardLungeStrideReturn' && !['left', 'right'].includes(String(entry.leadSide))) throw new Error(`${where}: Forward Lunge v2 requires leadSide.`)
     return {
       id: entry.id,
       file: entry.file,
-      protocolId: normalizeProtocolId(entry.protocolId),
+      protocolId,
       source: entry.source as CorpusSource,
       hasTruth: entry.hasTruth,
       truthRepCount:
@@ -136,6 +148,11 @@ export function parseCorpusManifest(raw: unknown): CorpusManifest {
       consent: entry.consent as CorpusConsent,
       validationUse: entry.validationUse as CorpusValidationUse,
       notes: typeof entry.notes === 'string' ? entry.notes : undefined,
+      sha256: typeof entry.sha256 === 'string' ? entry.sha256 : undefined,
+      subjectKey: typeof entry.subjectKey === 'string' ? entry.subjectKey : undefined,
+      split: entry.split as CorpusEntry['split'],
+      observationProtocolId: typeof entry.observationProtocolId === 'string' ? entry.observationProtocolId : undefined,
+      leadSide: entry.leadSide as CorpusEntry['leadSide'],
     }
   })
 

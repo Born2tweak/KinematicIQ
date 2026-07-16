@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "studyId": "flsr-synthetic-example",
+  "sources": [{
+    "id": "source-synthetic-001",
+    "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "subjectKey": "synthetic-subject-001",
+    "sessionKey": "synthetic-session-001",
+    "protocolId": "forwardLungeStrideReturn",
+    "observationProtocolId": "side-view-forward-lunge-stride-return-v1",
+    "leadSide": "left",
+    "split": "validation",
+    "consent": "synthetic",
+    "use": "locked-validation",
+    "frozen": true,
+    "relativePath": "sources/example.posetape.json"
+  }],
+  "labelSets": [],
+  "transformations": []
+}

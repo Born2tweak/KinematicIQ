@@ -1,5 +1,5 @@
 {
-  "manifestVersion": 1,
+  "manifestVersion": 2,
   "storageNote": "Real tapes live in this folder locally and are gitignored (athlete motion data). Back them up with the source recordings per docs/validation/session-log.md. Copy this file to MANIFEST.json (also gitignored) and describe your local corpus there.",
   "entries": [
     {
@@ -11,6 +11,10 @@
       "truthRepCount": 3,
       "consent": "public-stock",
       "validationUse": "benchmark",
+      "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "subjectKey": "example-subject-01",
+      "split": "validation",
+      "observationProtocolId": "front-view-squat-v1",
       "notes": "Example entry only — no such tape ships with the repo. Final descent cut at clip end."
     },
     {
@@ -21,6 +25,10 @@
       "hasTruth": false,
       "consent": "owner",
       "validationUse": "regression",
+      "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "subjectKey": "example-subject-02",
+      "split": "development",
+      "observationProtocolId": "front-view-squat-v1",
       "notes": "Example of an unlabeled owner-consented regression tape."
     }
   ]
