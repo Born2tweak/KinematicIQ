@@ -44,7 +44,7 @@ export interface InlineLungeTrial {
 
 export interface InlineLungeAnalysisResult {
   schemaVersion: 1
-  protocolId: 'inlineLunge'
+  protocolId: 'forwardLungeStrideReturn'
   leadSide: InlineLungeSide
   calibration: { frameCount: number; leadFootX: number; pelvisY: number }
   signals: InlineLungeSignalSample[]

@@ -11,7 +11,7 @@
  * of this schema; a real local manifest (`eval-tapes/MANIFEST.json`) stays
  * gitignored alongside the tapes it describes.
  */
-import type { ProtocolId } from '../core/protocol'
+import { normalizeProtocolId, type ProtocolId } from '../core/protocol'
 
 export const CORPUS_MANIFEST_VERSION = 1
 
@@ -128,7 +128,7 @@ export function parseCorpusManifest(raw: unknown): CorpusManifest {
     return {
       id: entry.id,
       file: entry.file,
-      protocolId: entry.protocolId as ProtocolId,
+      protocolId: normalizeProtocolId(entry.protocolId),
       source: entry.source as CorpusSource,
       hasTruth: entry.hasTruth,
       truthRepCount:

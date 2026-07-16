@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest'
 import { buildSyntheticInlineLungeFrames } from '../protocols/inlineLunge/fixtures'
-import { evaluateInlineLungeCases } from './inlineLungeEvaluation'
+import { evaluateInlineLungeCases } from './forwardLungeEvaluation'
 import { makeProvenance } from '../core/provenance'
 
-const provenance = makeProvenance({ captureSource: 'synthetic', protocolId: 'side-view-inline-lunge-v1' })
+const provenance = makeProvenance({ captureSource: 'synthetic', protocolId: 'side-view-forward-lunge-stride-return-v1' })
 
 describe('inline-lunge offline evaluation', () => {
   it('reports exact counts and declared negative behavior deterministically', () => {

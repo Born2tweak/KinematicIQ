@@ -2,6 +2,8 @@
 
 > **Superseded as immediate authority (2026-07-15):** M75-M78 and Phase 3 are historical completed packages. The current package is P4-M00 documentation/authority reconciliation. After P4-M00 acceptance, the exact next milestone is P4-M01: additive migration from deprecated `inlineLunge` reads to canonical `forwardLungeStrideReturn`, with legacy artifacts preserved. P4-M02 and participant/dataset work are not authorized.
 
+> **2026-07-16 update:** P4-M01 is complete. P4-M02 auditable evidence schemas is the active authorized milestone; participant collection and dataset acquisition remain prohibited.
+
 ## P4-M01 acceptance contract (pending)
 
 1. Expand protocol identity types and registries to accept both IDs without changing availability or thresholds.

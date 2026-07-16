@@ -2,6 +2,8 @@ import { describe, expect, it } from 'vitest'
 import {
   NotImplementedError,
   isAvailable,
+  normalizeObservationProtocolId,
+  normalizeProtocolId,
   validateProtocolDefinition,
   type ProtocolDefinition,
 } from './protocol'
@@ -60,6 +62,12 @@ const jumpStub: ProtocolDefinition = {
 }
 
 describe('core/protocol', () => {
+  it('normalizes the deprecated lunge identifiers and rejects unknown ids', () => {
+    expect(normalizeProtocolId('inlineLunge')).toBe('forwardLungeStrideReturn')
+    expect(normalizeProtocolId('forwardLungeStrideReturn')).toBe('forwardLungeStrideReturn')
+    expect(normalizeObservationProtocolId('side-view-inline-lunge-v1')).toBe('side-view-forward-lunge-stride-return-v1')
+    expect(() => normalizeProtocolId('mystery')).toThrow(/not registered/)
+  })
   it('isAvailable reflects lifecycle status', () => {
     expect(isAvailable(squatLike)).toBe(true)
     expect(isAvailable(jumpStub)).toBe(false)

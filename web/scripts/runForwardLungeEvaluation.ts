@@ -1,10 +1,10 @@
 import { mkdirSync, writeFileSync } from 'node:fs'
 import { resolve } from 'node:path'
-import { evaluateInlineLungeCases } from '../src/eval/inlineLungeEvaluation'
+import { evaluateInlineLungeCases } from '../src/eval/forwardLungeEvaluation'
 import { buildSyntheticInlineLungeFrames } from '../src/protocols/inlineLunge/fixtures'
 import { makeProvenance } from '../src/core/provenance'
 
-const provenance = makeProvenance({ captureSource: 'synthetic', protocolId: 'side-view-inline-lunge-v1' })
+const provenance = makeProvenance({ captureSource: 'synthetic', protocolId: 'side-view-forward-lunge-stride-return-v1' })
 
 const report = evaluateInlineLungeCases([
   { sequenceId: 'synthetic-left-3', leadSide: 'left', provenance, frames: buildSyntheticInlineLungeFrames({ leadSide: 'left', trials: 3 }), expectedCompleteTrials: 3, negative: false },
@@ -13,7 +13,7 @@ const report = evaluateInlineLungeCases([
 ])
 
 const outputDirectory = resolve('eval/benchmark-results')
-const outputPath = resolve(outputDirectory, 'm109-inline-lunge-synthetic-evaluation-v1.json')
+const outputPath = resolve(outputDirectory, 'm109-forward-lunge-stride-return-synthetic-evaluation-v1.json')
 mkdirSync(outputDirectory, { recursive: true })
 writeFileSync(outputPath, `${JSON.stringify(report, null, 2)}\n`, 'utf8')
 process.stdout.write(`${JSON.stringify(report.summary)}\n${outputPath}\n`)

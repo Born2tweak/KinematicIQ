@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "protocolId": "forwardLungeStrideReturn",
+  "rows": [
+    {
+      "sequenceId": "synthetic-left-3",
+      "expectedCompleteTrials": 3,
+      "observedCompleteTrials": 3,
+      "countAbsoluteError": 0,
+      "bottomFrameAbsoluteErrors": [],
+      "falseActivation": false,
+      "dropout": false,
+      "rejectionReasons": []
+    },
+    {
+      "sequenceId": "synthetic-right-3",
+      "expectedCompleteTrials": 3,
+      "observedCompleteTrials": 3,
+      "countAbsoluteError": 0,
+      "bottomFrameAbsoluteErrors": [],
+      "falseActivation": false,
+      "dropout": false,
+      "rejectionReasons": []
+    },
+    {
+      "sequenceId": "synthetic-dropout-negative",
+      "expectedCompleteTrials": 0,
+      "observedCompleteTrials": 0,
+      "countAbsoluteError": 0,
+      "bottomFrameAbsoluteErrors": [],
+      "falseActivation": false,
+      "dropout": false,
+      "rejectionReasons": [
+        "critical-landmarks-unreadable"
+      ]
+    }
+  ],
+  "summary": {
+    "sequenceCount": 3,
+    "exactCountRate": 1,
+    "countMae": 0,
+    "falseActivationRate": 0,
+    "dropoutRate": 0
+  }
+}

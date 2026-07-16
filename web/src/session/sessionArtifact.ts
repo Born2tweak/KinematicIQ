@@ -14,7 +14,7 @@
  * user history — so we don't migrate storage at all).
  */
 import { ANALYSIS_ALGORITHM_VERSION } from '../core/versioning'
-import type { ProtocolId } from '../core/protocol'
+import { normalizeProtocolId, type ProtocolId } from '../core/protocol'
 import type { Provenance } from '../core/provenance'
 import type { MetricResult } from '../core/metric'
 import { buildSquatMetricResults } from '../metrics/squatMetrics'
@@ -69,7 +69,7 @@ export function toSessionArtifact(record: StoredSession): SessionArtifact {
   return {
     schemaVersion: record.schemaVersion,
     algorithmVersion: record.algorithmVersion ?? LEGACY_ALGORITHM_VERSION,
-    protocolId: record.protocolId,
+    protocolId: normalizeProtocolId(record.protocolId),
     createdAt: new Date(record.timestamp).toISOString(),
     result: record.result,
   }

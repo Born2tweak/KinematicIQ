@@ -11,7 +11,7 @@
  * through session/buildSessionResult.
  */
 import type { MovementProfile } from '../analysis/movement/types'
-import { NotImplementedError, type ProtocolId, validateProtocolDefinition } from '../core/protocol'
+import { normalizeProtocolId, NotImplementedError, type ProtocolId, type ProtocolIdInput, validateProtocolDefinition } from '../core/protocol'
 import { HIP_HINGE_PROTOCOL } from './hipHinge'
 import { JUMP_PROTOCOL } from './jump'
 import { SPRINT_PROTOCOL } from './sprint'
@@ -22,7 +22,7 @@ import type { Protocol } from './types'
 
 const PROTOCOLS: Partial<Record<ProtocolId, Protocol>> = {
   squat: SQUAT_PROTOCOL,
-  inlineLunge: INLINE_LUNGE_PROTOCOL,
+  forwardLungeStrideReturn: INLINE_LUNGE_PROTOCOL,
   sitToStand: SIT_TO_STAND_PROTOCOL,
   hipHinge: HIP_HINGE_PROTOCOL,
   jump: JUMP_PROTOCOL,
@@ -37,8 +37,8 @@ Object.values(PROTOCOLS).forEach((protocol) => {
 const ACTIVE_PROTOCOL_ID: ProtocolId = 'squat'
 
 /** Look up a protocol by id. Throws for unregistered ids. */
-export function getProtocol(id: ProtocolId): Protocol {
-  const protocol = PROTOCOLS[id]
+export function getProtocol(id: ProtocolIdInput): Protocol {
+  const protocol = PROTOCOLS[normalizeProtocolId(id)]
   if (!protocol) {
     throw new Error(`Protocol not registered: ${id}`)
   }
@@ -69,7 +69,7 @@ export function getActiveProtocol(): Protocol {
  * stubs (M10) have no profile — this throws `NotImplementedError` so nothing
  * upstream can accidentally run an unvalidated analysis.
  */
-export function getProtocolProfile(id: ProtocolId): MovementProfile {
+export function getProtocolProfile(id: ProtocolIdInput): MovementProfile {
   const { profile, definition } = getProtocol(id)
   if (!profile) {
     throw new NotImplementedError(definition.id)

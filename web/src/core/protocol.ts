@@ -23,7 +23,23 @@
 import type { MetricDefinition } from './metric'
 
 /** Movement identifiers the platform knows about. Matches analysis MovementId. */
-export type ProtocolId = 'squat' | 'inlineLunge' | 'sitToStand' | 'hipHinge' | 'jump' | 'sprint'
+export type ProtocolId = 'squat' | 'forwardLungeStrideReturn' | 'sitToStand' | 'hipHinge' | 'jump' | 'sprint'
+export type LegacyProtocolId = 'inlineLunge'
+export type ProtocolIdInput = ProtocolId | LegacyProtocolId
+
+/** Normalize serialized historical IDs without creating a second registry entry. */
+export function normalizeProtocolId(value: unknown): ProtocolId {
+  if (value === 'inlineLunge') return 'forwardLungeStrideReturn'
+  if (value === 'squat' || value === 'forwardLungeStrideReturn' || value === 'sitToStand' || value === 'hipHinge' || value === 'jump' || value === 'sprint') return value
+  throw new Error(`Protocol not registered: ${String(value)}`)
+}
+
+export const FORWARD_LUNGE_OBSERVATION_PROTOCOL_ID = 'side-view-forward-lunge-stride-return-v1'
+export function normalizeObservationProtocolId(value: unknown): string {
+  if (value === 'side-view-inline-lunge-v1') return FORWARD_LUNGE_OBSERVATION_PROTOCOL_ID
+  if (typeof value === 'string' && value.length > 0) return value
+  throw new Error(`Invalid observation protocol id: ${String(value)}`)
+}
 
 /**
  * Segmentation engine kind (matches analysis/movement/types.ts `MovementKind`):

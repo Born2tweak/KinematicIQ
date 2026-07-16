@@ -25,7 +25,7 @@ import type { RepRejection } from '../analysis/repCounter'
 import { deriveCoaching, type CoachingOutput } from '../findings/engine'
 import { assessSetQuality } from '../session/setQualityGate'
 import { buildResultsSummary } from '../session/buildSessionResult'
-import { NotImplementedError, type ProtocolId } from '../core/protocol'
+import { normalizeProtocolId, NotImplementedError, type ProtocolId, type ProtocolIdInput } from '../core/protocol'
 import type { ComponentScores, ConfidenceLevel } from '../session/types'
 import type {
   SessionResult,
@@ -212,17 +212,18 @@ const RUNTIMES: Partial<Record<ProtocolId, ProtocolRuntime>> = {
  * `getProtocol`. Lives here (not registry.ts) to keep the registry free of
  * an import cycle through session/buildSessionResult.
  */
-export function getProtocolRuntime(id: ProtocolId): ProtocolRuntime {
-  const runtime = RUNTIMES[id]
+export function getProtocolRuntime(id: ProtocolIdInput): ProtocolRuntime {
+  const canonicalId = normalizeProtocolId(id)
+  const runtime = RUNTIMES[canonicalId]
   if (runtime) {
     return runtime
   }
   // Throws for unregistered ids; distinguishes planned from broken below.
-  const { definition } = getProtocol(id)
+  const { definition } = getProtocol(canonicalId)
   if (definition.status === 'planned') {
     throw new NotImplementedError(definition.id)
   }
   throw new Error(
-    `Protocol "${id}" is available but has no registered runtime — register it in protocols/runtime.ts.`,
+    `Protocol "${canonicalId}" is available but has no registered runtime — register it in protocols/runtime.ts.`,
   )
 }

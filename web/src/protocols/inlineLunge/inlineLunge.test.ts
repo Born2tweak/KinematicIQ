@@ -7,7 +7,7 @@ import { buildSyntheticInlineLungeFrames } from './fixtures'
 import { analyzeInlineLungeResearch, INLINE_LUNGE_PROTOCOL } from '.'
 import { makeProvenance } from '../../core/provenance'
 
-const provenance = makeProvenance({ captureSource: 'synthetic', protocolId: 'side-view-inline-lunge-v1' })
+const provenance = makeProvenance({ captureSource: 'synthetic', protocolId: 'side-view-forward-lunge-stride-return-v1' })
 
 describe('inline-lunge research protocol', () => {
   it.each(['left', 'right'] as const)('segments a complete %s-lead trial with ordered events', (leadSide) => {
@@ -17,7 +17,7 @@ describe('inline-lunge research protocol', () => {
     expect(trial.status).toBe('completed')
     expect([trial.standingStartFrame, trial.stepInitiationFrame, trial.descentStartFrame, trial.bottomFrame, trial.ascentStartFrame, trial.stableReturnFrame]).toEqual([...new Set([trial.standingStartFrame, trial.stepInitiationFrame, trial.descentStartFrame, trial.bottomFrame, trial.ascentStartFrame, trial.stableReturnFrame])].sort((a, b) => a - b))
     expect(result.outcomes.trials[0].kind).toBe('transition')
-    expect(result.metricResults.find((metric) => metric.metricId === 'inlineLunge.trial.count')?.value).toBe(1)
+    expect(result.metricResults.find((metric) => metric.metricId === 'forwardLungeStrideReturn.trial.count')?.value).toBe(1)
   })
 
   it('emits within-set consistency only with at least three trials', () => {
@@ -36,20 +36,29 @@ describe('inline-lunge research protocol', () => {
   })
 
   it('remains planned, non-actionable, complete as a stub, and fail-closed publicly', () => {
-    expect(getProtocol('inlineLunge').definition.status).toBe('planned')
-    expect(getProtocol('inlineLunge').definition.capture.inputModes).toEqual([])
+    expect(getProtocol('forwardLungeStrideReturn').definition.status).toBe('planned')
+    expect(getProtocol('forwardLungeStrideReturn').definition.capture.inputModes).toEqual([])
     expect(lintProtocolCompleteness(INLINE_LUNGE_PROTOCOL)).toEqual([])
-    expect(() => getProtocolProfile('inlineLunge')).toThrow(NotImplementedError)
-    expect(() => getProtocolRuntime('inlineLunge')).toThrow(NotImplementedError)
-    expect(getProtocol('inlineLunge').definition.evidence.datasetProvenance).toEqual([{ datasetId: 'llm-fms', role: 'ontology-only' }])
+    expect(() => getProtocolProfile('forwardLungeStrideReturn')).toThrow(NotImplementedError)
+    expect(() => getProtocolRuntime('forwardLungeStrideReturn')).toThrow(NotImplementedError)
+    expect(getProtocol('forwardLungeStrideReturn').definition.evidence.datasetProvenance).toEqual([{ datasetId: 'llm-fms', role: 'ontology-only' }])
   })
 
   it('serializes research outcomes without changing the session-artifact schema', () => {
     const result = analyzeInlineLungeResearch(buildSyntheticInlineLungeFrames(), { leadSide: 'left', provenance })
     const restored = JSON.parse(JSON.stringify(result)) as typeof result
-    expect(restored.protocolId).toBe('inlineLunge')
+    expect(restored.protocolId).toBe('forwardLungeStrideReturn')
     expect(restored.outcomes.trials[0]).toMatchObject({ kind: 'transition', status: 'completed' })
     expect(restored.metricResults.every((metric) => metric.validationTier === 'experimental')).toBe(true)
+  })
+
+  it('accepts legacy observation provenance but emits canonical provenance', () => {
+    const result = analyzeInlineLungeResearch(buildSyntheticInlineLungeFrames(), {
+      leadSide: 'left',
+      provenance: makeProvenance({ captureSource: 'replay', protocolId: 'side-view-inline-lunge-v1' }),
+    })
+    expect(result.protocolId).toBe('forwardLungeStrideReturn')
+    expect(result.metricResults.every((metric) => metric.provenance.protocolId === 'side-view-forward-lunge-stride-return-v1')).toBe(true)
   })
 
   it('fails calibration when the declared lead leg is unreadable', () => {
@@ -62,6 +71,6 @@ describe('inline-lunge research protocol', () => {
     expect(() => analyzeInlineLungeResearch(buildSyntheticInlineLungeFrames(), {
       leadSide: 'left',
       provenance: makeProvenance({ captureSource: 'replay', protocolId: 'front-view-squat-v1' }),
-    })).toThrow(/side-view-inline-lunge-v1 provenance/)
+    })).toThrow(/side-view-forward-lunge-stride-return-v1 provenance/)
   })
 })

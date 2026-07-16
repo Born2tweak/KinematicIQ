@@ -26,7 +26,7 @@ export interface InlineLungeEvaluationRow {
 
 export interface InlineLungeEvaluationReport {
   schemaVersion: 1
-  protocolId: 'inlineLunge'
+  protocolId: 'forwardLungeStrideReturn'
   rows: InlineLungeEvaluationRow[]
   summary: { sequenceCount: number; exactCountRate: number; countMae: number; falseActivationRate: number; dropoutRate: number }
 }
@@ -49,7 +49,7 @@ export function evaluateInlineLungeCases(cases: readonly InlineLungeEvaluationCa
   })
   const average = (values: number[]) => values.reduce((sum, value) => sum + value, 0) / values.length
   return {
-    schemaVersion: 1, protocolId: 'inlineLunge', rows,
+    schemaVersion: 1, protocolId: 'forwardLungeStrideReturn', rows,
     summary: {
       sequenceCount: rows.length,
       exactCountRate: average(rows.map((row) => Number(row.countAbsoluteError === 0))),

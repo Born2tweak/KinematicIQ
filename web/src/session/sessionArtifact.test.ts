@@ -94,6 +94,14 @@ function legacyV1Record(result: SessionResult = makeResult()): StoredSession {
 }
 
 describe('buildSessionArtifact', () => {
+  it('normalizes the historical lunge protocol id in memory', () => {
+    const record = {
+      ...legacyV1Record(),
+      protocolId: 'inlineLunge',
+      result: { ...makeResult(), protocolId: 'forwardLungeStrideReturn' },
+    } as unknown as StoredSession
+    expect(toSessionArtifact(record).protocolId).toBe('forwardLungeStrideReturn')
+  })
   it('wraps a fresh result as an explicitly versioned artifact', () => {
     const artifact = buildSessionArtifact(makeResult(), { now: NOW })
     expect(artifact.schemaVersion).toBe(SESSION_ARTIFACT_SCHEMA_VERSION)

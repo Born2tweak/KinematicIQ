@@ -8,7 +8,7 @@ describe('protocol picker information architecture', () => {
     expect(groups.available.map((item) => item.id)).toEqual(['squat'])
     expect(groups.research).toHaveLength(5)
     expect(groups.research.every((item) => item.status === 'planned')).toBe(true)
-    const inlineLunge = groups.research.find((item) => item.id === 'inlineLunge')
+    const inlineLunge = groups.research.find((item) => item.id === 'forwardLungeStrideReturn')
     expect(inlineLunge?.capture.inputModes).toEqual([])
     expect(inlineLunge?.capture.viewInstruction).toMatch(/Research protocol/)
   })
