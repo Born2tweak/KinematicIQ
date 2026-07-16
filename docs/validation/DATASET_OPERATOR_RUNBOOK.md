@@ -107,3 +107,7 @@ license, content, `localPathConvention`, and both `allowedUses` and
 `prohibitedClaimUses`. Run `npm test` — `datasetRegistry.test.ts` validates
 the file. Registration alone authorizes nothing; acquisition still runs this
 runbook.
+
+## Local event-label storage
+
+Keep source media, draft labels, frozen labels, and `.recovery` files in the approved local study directory; all are ignored by Git. Initialize labels from the original media so its SHA-256 is captured. Work in blinded mode only, freeze two independent raw records before comparison, and write adjudication to a new third file. Never put participant paths, names, media, raw labels, or recovery files in a tracked directory. Verify exports with the label parser before backup or custody transfer.

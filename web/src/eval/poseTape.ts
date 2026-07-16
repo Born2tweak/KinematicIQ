@@ -160,7 +160,8 @@ export function validatePoseTapeEvidence(evidence: PoseTapeEvidenceV2): PoseTape
 
 export function normalizePoseTapeV2(tape: PoseTape): PoseTape {
   if (tape.schemaVersion === 2 && tape.evidence) { validatePoseTapeEvidence(tape.evidence); return tape }
-  return { ...tape, schemaVersion: 1, meta: { ...tape.meta, protocolId: tape.meta.protocolId ? normalizeObservationProtocolId(tape.meta.protocolId) : undefined, framesFiltered: tape.meta.framesFiltered ?? false } }
+  if (!tape.meta.protocolId) return tape
+  return { ...tape, schemaVersion: tape.schemaVersion ?? 1, meta: { ...tape.meta, protocolId: normalizeObservationProtocolId(tape.meta.protocolId) } }
 }
 
 /**

@@ -1,6 +1,6 @@
-# Inline-Lunge Independent Labeling Protocol
+# Forward Lunge With Stride and Return Independent Labeling Protocol
 
-**Purpose:** create event/count truth for timed inline-lunge sequences without
+**Purpose:** create event/count truth for timed forward-lunge-with-stride-and-return sequences without
 turning source FMS scores or KinematicIQ output into ground truth.
 
 ## Source boundary
@@ -30,26 +30,35 @@ is one of `none`, `wrong_movement`, `wrong_view`, `cropped_feet`, `lead_side_unk
 For every visible trial, each rater independently records:
 
 ```text
-sequence_id,trial_index,standing_start_frame,step_initiation_frame,
-descent_start_frame,bottom_frame,ascent_start_frame,stable_return_frame,
+sequence_id,trial_index,standing_anchor_frame,step_initiation_frame,
+visible_plant_frame,descent_onset_frame,bottom_frame,ascent_onset_frame,
+return_initiation_frame,stable_return_frame,
 lead_side,occlusion_present,crop_present,complete_trial,rater_id,notes
 ```
 
 Definitions:
 
-- `standing_start_frame`: first frame of stable upright stance before the step.
+- `standing_anchor_frame`: first frame of stable upright stance before the step.
 - `step_initiation_frame`: first persistent lead-foot departure from its standing
   region; ignore one-frame tracking noise.
-- `descent_start_frame`: first persistent lowering after the step begins.
+- `visible_plant_frame`: first frame the lead foot is visibly planted after the step.
+- `descent_onset_frame`: first persistent lowering after plant.
 - `bottom_frame`: lowest visible pelvis/rear-knee configuration before ascent;
   use the earliest frame when a plateau spans multiple frames.
-- `ascent_start_frame`: first persistent upward movement after bottom.
+- `ascent_onset_frame`: first persistent upward movement after bottom.
+- `return_initiation_frame`: first persistent lead-foot movement toward the standing region.
 - `stable_return_frame`: first frame of a stable upright stance after the lead
   foot returns to its calibrated region.
-- `complete_trial`: true only when all six events are visible and ordered.
+- `complete_trial`: true only when all eight events are visible and ordered.
 
-Missing events are `null`, never guessed. A side change creates a new trial only
+Missing events are `null` with a reason, never guessed. A side change creates a new trial only
 after a stable return.
+
+## Local blinded tool
+
+From `web/`, use `npm run eval:event-labels --` followed by one command. `init MEDIA OUTPUT ID RATER FPS FRAME_COUNT` hashes the original media and creates a blinded draft. `time LABELS FRAME` prints exact source time for keyboard navigation; `set LABELS EVENT FRAME` records one of the eight events (use `null REASON` when missing); `freeze LABELS` makes the raw opinion immutable; `compare LEFT RIGHT` is rejected until both are frozen; and `adjudicate LEFT RIGHT OUTPUT ID RATER` creates a third linked record.
+
+Every save uses an adjacent `.recovery` file followed by atomic rename. If interrupted, retain both files and validate them before choosing the newer draft; never silently merge or overwrite a frozen record. The schema rejects source-checksum mismatch, impossible event ordering, frame/time mismatch, and model/FMS/KinematicIQ output fields.
 
 ## Independence and adjudication
 

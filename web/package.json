@@ -22,7 +22,8 @@
     "eval:forward-lunge": "vite-node scripts/runForwardLungeEvaluation.ts",
     "eval:inline-lunge": "npm run eval:forward-lunge",
     "eval:perturbations": "vite-node scripts/runPerturbationMatrix.ts",
-    "eval:lunge-diagnostics": "vite-node scripts/runLungeTemporalDiagnostics.ts"
+    "eval:lunge-diagnostics": "vite-node scripts/runLungeTemporalDiagnostics.ts",
+    "eval:event-labels": "vite-node scripts/eventLabelTool.ts"
   },
   "dependencies": {
     "@mediapipe/tasks-vision": "^0.10.14",
