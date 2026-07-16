@@ -43,7 +43,8 @@
 - Completed milestone: P4-M01 additive naming migration with legacy-read compatibility.
 - Completed milestone: P4-M02 auditable evidence schemas.
 - Completed milestone: P4-M03 deterministic perturbation library; CV-owner sign-off remains a human gate.
-- Active milestone: P4-M04 temporal diagnostics baseline.
+- Completed milestone: P4-M04 temporal diagnostics baseline; owner classification remains a human gate.
+- Active milestone: P4-M05 independent event-labeling tool.
 - Next manual gate: dataset-custodian/privacy review before any human collection; schema work itself is authorized.
 - P4-M01 through P4-M05 engineering work is authorized by the user's 2026-07-16 instruction; human/research gates remain non-autonomous.
 

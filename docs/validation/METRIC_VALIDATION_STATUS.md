@@ -45,9 +45,11 @@ finding rules, M31/M32 baseline deltas, M33 report export.
 
 ## Included metrics — Forward Lunge experimental research seam
 
-These metrics exist at implementation commit `f49558e` under the deprecated
-runtime ID `inlineLunge`. They are unavailable to the product and have only
-synthetic verification. None is approved for coaching or scientific claims.
+These metrics use the canonical `forwardLungeStrideReturn` identity; the legacy
+`inlineLunge` value remains read-compatible only. They are unavailable to the
+product and have only synthetic verification. None is approved for coaching or
+scientific claims. The P4-M04 temporal baseline exposes, but does not resolve,
+FPS sensitivity, missingness, raw/filter lag, and event-frame sensitivity.
 
 | Metric family | Tier | Evidence | Blocking gaps |
 |---|---|---|---|

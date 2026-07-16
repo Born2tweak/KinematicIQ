@@ -1,0 +1,2848 @@
+{
+  "schemaVersion": 1,
+  "evaluator": {
+    "id": "forward-lunge-temporal-diagnostics",
+    "version": "1.0.0",
+    "algorithmVersion": "forward-lunge-stride-return-v1",
+    "perturbationVersions": [
+      "pose-perturbation-v1"
+    ]
+  },
+  "denominators": {
+    "sequences": 4,
+    "frames": 207,
+    "landmarks": 132
+  },
+  "aggregate": {
+    "missingFrames": {
+      "count": 132,
+      "median": 0,
+      "p95": 0,
+      "max": 5
+    },
+    "countDeltas": {
+      "count": 8,
+      "median": 0,
+      "p95": 1,
+      "max": 2
+    },
+    "bottomEventDeltas": {
+      "count": 5,
+      "median": 1,
+      "p95": 1,
+      "max": 1
+    },
+    "worstCases": [
+      {
+        "sequenceId": "fps-15",
+        "score": 2000
+      },
+      {
+        "sequenceId": "dropout-bottom",
+        "score": 1030
+      },
+      {
+        "sequenceId": "identity",
+        "score": 0
+      },
+      {
+        "sequenceId": "jitter-001",
+        "score": 0
+      }
+    ]
+  },
+  "rows": [
+    {
+      "sequenceId": "identity",
+      "sourceSha256": "e1940a5be758c4c43a25e4ad3e8ce74f671dc3aef9a2c54e665c8a79953b877a",
+      "transformationId": "identity",
+      "frameCount": 59,
+      "timestamp": {
+        "nonPositiveIntervals": 0,
+        "effectiveFps": 30.303030303030305,
+        "intervalsMs": {
+          "count": 58,
+          "median": 33,
+          "p95": 33,
+          "max": 33
+        }
+      },
+      "landmarks": [
+        {
+          "index": 0,
+          "readableFrames": 59,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 59,
+            "p95": 59,
+            "max": 59
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0,
+          "maxAcceleration": 0
+        },
+        {
+          "index": 1,
+          "readableFrames": 59,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 59,
+            "p95": 59,
+            "max": 59
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0,
+          "maxAcceleration": 0
+        },
+        {
+          "index": 2,
+          "readableFrames": 59,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 59,
+            "p95": 59,
+            "max": 59
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0,
+          "maxAcceleration": 0
+        },
+        {
+          "index": 3,
+          "readableFrames": 59,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 59,
+            "p95": 59,
+            "max": 59
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0,
+          "maxAcceleration": 0
+        },
+        {
+          "index": 4,
+          "readableFrames": 59,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 59,
+            "p95": 59,
+            "max": 59
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0,
+          "maxAcceleration": 0
+        },
+        {
+          "index": 5,
+          "readableFrames": 59,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 59,
+            "p95": 59,
+            "max": 59
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0,
+          "maxAcceleration": 0
+        },
+        {
+          "index": 6,
+          "readableFrames": 59,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 59,
+            "p95": 59,
+            "max": 59
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0,
+          "maxAcceleration": 0
+        },
+        {
+          "index": 7,
+          "readableFrames": 59,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 59,
+            "p95": 59,
+            "max": 59
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0,
+          "maxAcceleration": 0
+        },
+        {
+          "index": 8,
+          "readableFrames": 59,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 59,
+            "p95": 59,
+            "max": 59
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0,
+          "maxAcceleration": 0
+        },
+        {
+          "index": 9,
+          "readableFrames": 59,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 59,
+            "p95": 59,
+            "max": 59
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0,
+          "maxAcceleration": 0
+        },
+        {
+          "index": 10,
+          "readableFrames": 59,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 59,
+            "p95": 59,
+            "max": 59
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0,
+          "maxAcceleration": 0
+        },
+        {
+          "index": 11,
+          "readableFrames": 59,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 59,
+            "p95": 59,
+            "max": 59
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0,
+          "maxAcceleration": 0
+        },
+        {
+          "index": 12,
+          "readableFrames": 59,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 59,
+            "p95": 59,
+            "max": 59
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0,
+          "maxAcceleration": 0
+        },
+        {
+          "index": 13,
+          "readableFrames": 59,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 59,
+            "p95": 59,
+            "max": 59
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0,
+          "maxAcceleration": 0
+        },
+        {
+          "index": 14,
+          "readableFrames": 59,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 59,
+            "p95": 59,
+            "max": 59
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0,
+          "maxAcceleration": 0
+        },
+        {
+          "index": 15,
+          "readableFrames": 59,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 59,
+            "p95": 59,
+            "max": 59
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0,
+          "maxAcceleration": 0
+        },
+        {
+          "index": 16,
+          "readableFrames": 59,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 59,
+            "p95": 59,
+            "max": 59
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0,
+          "maxAcceleration": 0
+        },
+        {
+          "index": 17,
+          "readableFrames": 59,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 59,
+            "p95": 59,
+            "max": 59
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0,
+          "maxAcceleration": 0
+        },
+        {
+          "index": 18,
+          "readableFrames": 59,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 59,
+            "p95": 59,
+            "max": 59
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0,
+          "maxAcceleration": 0
+        },
+        {
+          "index": 19,
+          "readableFrames": 59,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 59,
+            "p95": 59,
+            "max": 59
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0,
+          "maxAcceleration": 0
+        },
+        {
+          "index": 20,
+          "readableFrames": 59,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 59,
+            "p95": 59,
+            "max": 59
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0,
+          "maxAcceleration": 0
+        },
+        {
+          "index": 21,
+          "readableFrames": 59,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 59,
+            "p95": 59,
+            "max": 59
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0,
+          "maxAcceleration": 0
+        },
+        {
+          "index": 22,
+          "readableFrames": 59,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 59,
+            "p95": 59,
+            "max": 59
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0,
+          "maxAcceleration": 0
+        },
+        {
+          "index": 23,
+          "readableFrames": 59,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 59,
+            "p95": 59,
+            "max": 59
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0.7575757575757566,
+          "maxAcceleration": 0.7575757575757566
+        },
+        {
+          "index": 24,
+          "readableFrames": 59,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 59,
+            "p95": 59,
+            "max": 59
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0.7575757575757566,
+          "maxAcceleration": 0.7575757575757566
+        },
+        {
+          "index": 25,
+          "readableFrames": 59,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 59,
+            "p95": 59,
+            "max": 59
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0.9560173836457538,
+          "maxAcceleration": 0.9560173836457538
+        },
+        {
+          "index": 26,
+          "readableFrames": 59,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 59,
+            "p95": 59,
+            "max": 59
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0.26515151515151286,
+          "maxAcceleration": 0.26515151515151286
+        },
+        {
+          "index": 27,
+          "readableFrames": 59,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 59,
+            "p95": 59,
+            "max": 59
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 1.8030303030303028,
+          "maxAcceleration": 1.8030303030303028
+        },
+        {
+          "index": 28,
+          "readableFrames": 59,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 59,
+            "p95": 59,
+            "max": 59
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0,
+          "maxAcceleration": 0
+        },
+        {
+          "index": 29,
+          "readableFrames": 59,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 59,
+            "p95": 59,
+            "max": 59
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0,
+          "maxAcceleration": 0
+        },
+        {
+          "index": 30,
+          "readableFrames": 59,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 59,
+            "p95": 59,
+            "max": 59
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0,
+          "maxAcceleration": 0
+        },
+        {
+          "index": 31,
+          "readableFrames": 59,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 59,
+            "p95": 59,
+            "max": 59
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 2.121212121212123,
+          "maxAcceleration": 2.121212121212123
+        },
+        {
+          "index": 32,
+          "readableFrames": 59,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 59,
+            "p95": 59,
+            "max": 59
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0,
+          "maxAcceleration": 0
+        }
+      ],
+      "sideContinuityFlips": 4,
+      "raw": {
+        "filter": "raw",
+        "completedTrials": 2,
+        "eventFrames": [
+          15,
+          19,
+          22,
+          26,
+          33,
+          37,
+          41,
+          44,
+          48,
+          55
+        ]
+      },
+      "oneEuro": {
+        "filter": "one-euro-live",
+        "version": {
+          "minCutoff": 4,
+          "beta": 1.5,
+          "dCutoff": 1
+        },
+        "completedTrials": 2,
+        "eventFrames": [
+          16,
+          20,
+          23,
+          27,
+          34,
+          38,
+          42,
+          45,
+          49,
+          56
+        ],
+        "meanCoordinateLag": 0.0010396055268687362
+      },
+      "sensitivity": {
+        "countDelta": 0,
+        "perturbationCountDelta": 0,
+        "pairedBottomFrameDeltas": [
+          1,
+          1
+        ]
+      },
+      "missingnessByPhase": {
+        "standing": 0,
+        "stepping": 0,
+        "descending": 0,
+        "bottom": 0,
+        "ascending": 0,
+        "returning": 0
+      },
+      "phasePersistenceFrames": {
+        "count": 12,
+        "median": 3,
+        "p95": 7,
+        "max": 7
+      }
+    },
+    {
+      "sequenceId": "dropout-bottom",
+      "sourceSha256": "e1940a5be758c4c43a25e4ad3e8ce74f671dc3aef9a2c54e665c8a79953b877a",
+      "transformationId": "dropout-bottom",
+      "frameCount": 59,
+      "timestamp": {
+        "nonPositiveIntervals": 0,
+        "effectiveFps": 30.303030303030305,
+        "intervalsMs": {
+          "count": 58,
+          "median": 33,
+          "p95": 33,
+          "max": 33
+        }
+      },
+      "landmarks": [
+        {
+          "index": 0,
+          "readableFrames": 59,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 59,
+            "p95": 59,
+            "max": 59
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0,
+          "maxAcceleration": 0
+        },
+        {
+          "index": 1,
+          "readableFrames": 59,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 59,
+            "p95": 59,
+            "max": 59
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0,
+          "maxAcceleration": 0
+        },
+        {
+          "index": 2,
+          "readableFrames": 59,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 59,
+            "p95": 59,
+            "max": 59
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0,
+          "maxAcceleration": 0
+        },
+        {
+          "index": 3,
+          "readableFrames": 59,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 59,
+            "p95": 59,
+            "max": 59
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0,
+          "maxAcceleration": 0
+        },
+        {
+          "index": 4,
+          "readableFrames": 59,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 59,
+            "p95": 59,
+            "max": 59
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0,
+          "maxAcceleration": 0
+        },
+        {
+          "index": 5,
+          "readableFrames": 59,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 59,
+            "p95": 59,
+            "max": 59
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0,
+          "maxAcceleration": 0
+        },
+        {
+          "index": 6,
+          "readableFrames": 59,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 59,
+            "p95": 59,
+            "max": 59
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0,
+          "maxAcceleration": 0
+        },
+        {
+          "index": 7,
+          "readableFrames": 59,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 59,
+            "p95": 59,
+            "max": 59
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0,
+          "maxAcceleration": 0
+        },
+        {
+          "index": 8,
+          "readableFrames": 59,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 59,
+            "p95": 59,
+            "max": 59
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0,
+          "maxAcceleration": 0
+        },
+        {
+          "index": 9,
+          "readableFrames": 59,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 59,
+            "p95": 59,
+            "max": 59
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0,
+          "maxAcceleration": 0
+        },
+        {
+          "index": 10,
+          "readableFrames": 59,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 59,
+            "p95": 59,
+            "max": 59
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0,
+          "maxAcceleration": 0
+        },
+        {
+          "index": 11,
+          "readableFrames": 59,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 59,
+            "p95": 59,
+            "max": 59
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0,
+          "maxAcceleration": 0
+        },
+        {
+          "index": 12,
+          "readableFrames": 59,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 59,
+            "p95": 59,
+            "max": 59
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0,
+          "maxAcceleration": 0
+        },
+        {
+          "index": 13,
+          "readableFrames": 59,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 59,
+            "p95": 59,
+            "max": 59
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0,
+          "maxAcceleration": 0
+        },
+        {
+          "index": 14,
+          "readableFrames": 59,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 59,
+            "p95": 59,
+            "max": 59
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0,
+          "maxAcceleration": 0
+        },
+        {
+          "index": 15,
+          "readableFrames": 59,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 59,
+            "p95": 59,
+            "max": 59
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0,
+          "maxAcceleration": 0
+        },
+        {
+          "index": 16,
+          "readableFrames": 59,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 59,
+            "p95": 59,
+            "max": 59
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0,
+          "maxAcceleration": 0
+        },
+        {
+          "index": 17,
+          "readableFrames": 59,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 59,
+            "p95": 59,
+            "max": 59
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0,
+          "maxAcceleration": 0
+        },
+        {
+          "index": 18,
+          "readableFrames": 59,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 59,
+            "p95": 59,
+            "max": 59
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0,
+          "maxAcceleration": 0
+        },
+        {
+          "index": 19,
+          "readableFrames": 59,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 59,
+            "p95": 59,
+            "max": 59
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0,
+          "maxAcceleration": 0
+        },
+        {
+          "index": 20,
+          "readableFrames": 59,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 59,
+            "p95": 59,
+            "max": 59
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0,
+          "maxAcceleration": 0
+        },
+        {
+          "index": 21,
+          "readableFrames": 59,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 59,
+            "p95": 59,
+            "max": 59
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0,
+          "maxAcceleration": 0
+        },
+        {
+          "index": 22,
+          "readableFrames": 59,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 59,
+            "p95": 59,
+            "max": 59
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0,
+          "maxAcceleration": 0
+        },
+        {
+          "index": 23,
+          "readableFrames": 54,
+          "missingFrames": 5,
+          "readableRuns": {
+            "count": 2,
+            "median": 20,
+            "p95": 20,
+            "max": 34
+          },
+          "dropoutRuns": {
+            "count": 1,
+            "median": 5,
+            "p95": 5,
+            "max": 5
+          },
+          "maxVelocity": 0.7575757575757566,
+          "maxAcceleration": 0.7575757575757566
+        },
+        {
+          "index": 24,
+          "readableFrames": 54,
+          "missingFrames": 5,
+          "readableRuns": {
+            "count": 2,
+            "median": 20,
+            "p95": 20,
+            "max": 34
+          },
+          "dropoutRuns": {
+            "count": 1,
+            "median": 5,
+            "p95": 5,
+            "max": 5
+          },
+          "maxVelocity": 0.7575757575757566,
+          "maxAcceleration": 0.7575757575757566
+        },
+        {
+          "index": 25,
+          "readableFrames": 54,
+          "missingFrames": 5,
+          "readableRuns": {
+            "count": 2,
+            "median": 20,
+            "p95": 20,
+            "max": 34
+          },
+          "dropoutRuns": {
+            "count": 1,
+            "median": 5,
+            "p95": 5,
+            "max": 5
+          },
+          "maxVelocity": 0.9560173836457538,
+          "maxAcceleration": 0.9560173836457538
+        },
+        {
+          "index": 26,
+          "readableFrames": 54,
+          "missingFrames": 5,
+          "readableRuns": {
+            "count": 2,
+            "median": 20,
+            "p95": 20,
+            "max": 34
+          },
+          "dropoutRuns": {
+            "count": 1,
+            "median": 5,
+            "p95": 5,
+            "max": 5
+          },
+          "maxVelocity": 0.26515151515151286,
+          "maxAcceleration": 0.26515151515151286
+        },
+        {
+          "index": 27,
+          "readableFrames": 54,
+          "missingFrames": 5,
+          "readableRuns": {
+            "count": 2,
+            "median": 20,
+            "p95": 20,
+            "max": 34
+          },
+          "dropoutRuns": {
+            "count": 1,
+            "median": 5,
+            "p95": 5,
+            "max": 5
+          },
+          "maxVelocity": 1.8030303030303028,
+          "maxAcceleration": 1.8030303030303028
+        },
+        {
+          "index": 28,
+          "readableFrames": 54,
+          "missingFrames": 5,
+          "readableRuns": {
+            "count": 2,
+            "median": 20,
+            "p95": 20,
+            "max": 34
+          },
+          "dropoutRuns": {
+            "count": 1,
+            "median": 5,
+            "p95": 5,
+            "max": 5
+          },
+          "maxVelocity": 0,
+          "maxAcceleration": 0
+        },
+        {
+          "index": 29,
+          "readableFrames": 59,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 59,
+            "p95": 59,
+            "max": 59
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0,
+          "maxAcceleration": 0
+        },
+        {
+          "index": 30,
+          "readableFrames": 59,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 59,
+            "p95": 59,
+            "max": 59
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0,
+          "maxAcceleration": 0
+        },
+        {
+          "index": 31,
+          "readableFrames": 59,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 59,
+            "p95": 59,
+            "max": 59
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 2.121212121212123,
+          "maxAcceleration": 2.121212121212123
+        },
+        {
+          "index": 32,
+          "readableFrames": 59,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 59,
+            "p95": 59,
+            "max": 59
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0,
+          "maxAcceleration": 0
+        }
+      ],
+      "sideContinuityFlips": 4,
+      "raw": {
+        "filter": "raw",
+        "completedTrials": 1,
+        "eventFrames": [
+          37,
+          41,
+          44,
+          48,
+          55
+        ]
+      },
+      "oneEuro": {
+        "filter": "one-euro-live",
+        "version": {
+          "minCutoff": 4,
+          "beta": 1.5,
+          "dCutoff": 1
+        },
+        "completedTrials": 1,
+        "eventFrames": [
+          38,
+          42,
+          45,
+          49,
+          56
+        ],
+        "meanCoordinateLag": 0.0010396055268687362
+      },
+      "sensitivity": {
+        "countDelta": 0,
+        "perturbationCountDelta": -1,
+        "pairedBottomFrameDeltas": [
+          1
+        ]
+      },
+      "missingnessByPhase": {
+        "standing": 0,
+        "stepping": 0,
+        "descending": 0,
+        "bottom": 0,
+        "ascending": 0,
+        "returning": 0
+      },
+      "phasePersistenceFrames": {
+        "count": 6,
+        "median": 3,
+        "p95": 4,
+        "max": 7
+      }
+    },
+    {
+      "sequenceId": "jitter-001",
+      "sourceSha256": "e1940a5be758c4c43a25e4ad3e8ce74f671dc3aef9a2c54e665c8a79953b877a",
+      "transformationId": "jitter-001",
+      "frameCount": 59,
+      "timestamp": {
+        "nonPositiveIntervals": 0,
+        "effectiveFps": 30.303030303030305,
+        "intervalsMs": {
+          "count": 58,
+          "median": 33,
+          "p95": 33,
+          "max": 33
+        }
+      },
+      "landmarks": [
+        {
+          "index": 0,
+          "readableFrames": 59,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 59,
+            "p95": 59,
+            "max": 59
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0.622863185320299,
+          "maxAcceleration": 0.40893082816763426
+        },
+        {
+          "index": 1,
+          "readableFrames": 59,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 59,
+            "p95": 59,
+            "max": 59
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0.601383820696884,
+          "maxAcceleration": 0.4163243636168693
+        },
+        {
+          "index": 2,
+          "readableFrames": 59,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 59,
+            "p95": 59,
+            "max": 59
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0.7616878880114916,
+          "maxAcceleration": 0.4156517156948521
+        },
+        {
+          "index": 3,
+          "readableFrames": 59,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 59,
+            "p95": 59,
+            "max": 59
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0.6493418053371388,
+          "maxAcceleration": 0.3531362187825245
+        },
+        {
+          "index": 4,
+          "readableFrames": 59,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 59,
+            "p95": 59,
+            "max": 59
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0.6326653654578059,
+          "maxAcceleration": 0.4331509022967654
+        },
+        {
+          "index": 5,
+          "readableFrames": 59,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 59,
+            "p95": 59,
+            "max": 59
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0.759855929395634,
+          "maxAcceleration": 0.4349652914507993
+        },
+        {
+          "index": 6,
+          "readableFrames": 59,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 59,
+            "p95": 59,
+            "max": 59
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0.6649351021533986,
+          "maxAcceleration": 0.44878330810867884
+        },
+        {
+          "index": 7,
+          "readableFrames": 59,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 59,
+            "p95": 59,
+            "max": 59
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0.769495961772645,
+          "maxAcceleration": 0.5476583979129621
+        },
+        {
+          "index": 8,
+          "readableFrames": 59,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 59,
+            "p95": 59,
+            "max": 59
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0.6865320760631977,
+          "maxAcceleration": 0.5105358205038634
+        },
+        {
+          "index": 9,
+          "readableFrames": 59,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 59,
+            "p95": 59,
+            "max": 59
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0.6285170995694188,
+          "maxAcceleration": 0.44663866510197187
+        },
+        {
+          "index": 10,
+          "readableFrames": 59,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 59,
+            "p95": 59,
+            "max": 59
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0.8066787520846966,
+          "maxAcceleration": 0.7853881735354121
+        },
+        {
+          "index": 11,
+          "readableFrames": 59,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 59,
+            "p95": 59,
+            "max": 59
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0.6453292535619967,
+          "maxAcceleration": 0.37030660510646474
+        },
+        {
+          "index": 12,
+          "readableFrames": 59,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 59,
+            "p95": 59,
+            "max": 59
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0.6943426617848073,
+          "maxAcceleration": 0.35561046093798154
+        },
+        {
+          "index": 13,
+          "readableFrames": 59,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 59,
+            "p95": 59,
+            "max": 59
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0.7273002732520636,
+          "maxAcceleration": 0.5219388953234538
+        },
+        {
+          "index": 14,
+          "readableFrames": 59,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 59,
+            "p95": 59,
+            "max": 59
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0.697414587221515,
+          "maxAcceleration": 0.5138034202254805
+        },
+        {
+          "index": 15,
+          "readableFrames": 59,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 59,
+            "p95": 59,
+            "max": 59
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0.7397356945658384,
+          "maxAcceleration": 0.36084039436686854
+        },
+        {
+          "index": 16,
+          "readableFrames": 59,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 59,
+            "p95": 59,
+            "max": 59
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0.7231671947472113,
+          "maxAcceleration": 0.4194028313478778
+        },
+        {
+          "index": 17,
+          "readableFrames": 59,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 59,
+            "p95": 59,
+            "max": 59
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0.7230620032304568,
+          "maxAcceleration": 0.42142331272354794
+        },
+        {
+          "index": 18,
+          "readableFrames": 59,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 59,
+            "p95": 59,
+            "max": 59
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0.6250726390145381,
+          "maxAcceleration": 0.44112558127414647
+        },
+        {
+          "index": 19,
+          "readableFrames": 59,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 59,
+            "p95": 59,
+            "max": 59
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0.6205107655366967,
+          "maxAcceleration": 0.41309187035334627
+        },
+        {
+          "index": 20,
+          "readableFrames": 59,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 59,
+            "p95": 59,
+            "max": 59
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0.7661376654141878,
+          "maxAcceleration": 0.6407884633647086
+        },
+        {
+          "index": 21,
+          "readableFrames": 59,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 59,
+            "p95": 59,
+            "max": 59
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0.6290819143962731,
+          "maxAcceleration": 0.47562232589306686
+        },
+        {
+          "index": 22,
+          "readableFrames": 59,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 59,
+            "p95": 59,
+            "max": 59
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0.6386823241708136,
+          "maxAcceleration": 0.4720485469807899
+        },
+        {
+          "index": 23,
+          "readableFrames": 59,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 59,
+            "p95": 59,
+            "max": 59
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0.974726585087354,
+          "maxAcceleration": 0.6703378350323483
+        },
+        {
+          "index": 24,
+          "readableFrames": 59,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 59,
+            "p95": 59,
+            "max": 59
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 1.1497673956722585,
+          "maxAcceleration": 1.0121373256238326
+        },
+        {
+          "index": 25,
+          "readableFrames": 59,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 59,
+            "p95": 59,
+            "max": 59
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0.8266848888347516,
+          "maxAcceleration": 0.8077234088489744
+        },
+        {
+          "index": 26,
+          "readableFrames": 59,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 59,
+            "p95": 59,
+            "max": 59
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0.6599502165178055,
+          "maxAcceleration": 0.429356977556236
+        },
+        {
+          "index": 27,
+          "readableFrames": 59,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 59,
+            "p95": 59,
+            "max": 59
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 2.042023391743306,
+          "maxAcceleration": 2.042023391743306
+        },
+        {
+          "index": 28,
+          "readableFrames": 59,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 59,
+            "p95": 59,
+            "max": 59
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0.6733773691383367,
+          "maxAcceleration": 0.4472278261638347
+        },
+        {
+          "index": 29,
+          "readableFrames": 59,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 59,
+            "p95": 59,
+            "max": 59
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0.7034601951310766,
+          "maxAcceleration": 0.48530256241437375
+        },
+        {
+          "index": 30,
+          "readableFrames": 59,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 59,
+            "p95": 59,
+            "max": 59
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0.6738869234319967,
+          "maxAcceleration": 0.4815514687102437
+        },
+        {
+          "index": 31,
+          "readableFrames": 59,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 59,
+            "p95": 59,
+            "max": 59
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 2.3822789423519137,
+          "maxAcceleration": 2.3822789423519137
+        },
+        {
+          "index": 32,
+          "readableFrames": 59,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 59,
+            "p95": 59,
+            "max": 59
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0.8112751691338529,
+          "maxAcceleration": 0.4904943091049915
+        }
+      ],
+      "sideContinuityFlips": 4,
+      "raw": {
+        "filter": "raw",
+        "completedTrials": 2,
+        "eventFrames": [
+          15,
+          19,
+          22,
+          26,
+          33,
+          37,
+          41,
+          44,
+          48,
+          55
+        ]
+      },
+      "oneEuro": {
+        "filter": "one-euro-live",
+        "version": {
+          "minCutoff": 4,
+          "beta": 1.5,
+          "dCutoff": 1
+        },
+        "completedTrials": 2,
+        "eventFrames": [
+          16,
+          20,
+          23,
+          27,
+          34,
+          38,
+          42,
+          45,
+          50,
+          56
+        ],
+        "meanCoordinateLag": 0.0035553232188372677
+      },
+      "sensitivity": {
+        "countDelta": 0,
+        "perturbationCountDelta": 0,
+        "pairedBottomFrameDeltas": [
+          1,
+          1
+        ]
+      },
+      "missingnessByPhase": {
+        "standing": 0,
+        "stepping": 0,
+        "descending": 0,
+        "bottom": 0,
+        "ascending": 0,
+        "returning": 0
+      },
+      "phasePersistenceFrames": {
+        "count": 12,
+        "median": 3,
+        "p95": 7,
+        "max": 7
+      }
+    },
+    {
+      "sequenceId": "fps-15",
+      "sourceSha256": "e1940a5be758c4c43a25e4ad3e8ce74f671dc3aef9a2c54e665c8a79953b877a",
+      "transformationId": "fps-15",
+      "frameCount": 30,
+      "timestamp": {
+        "nonPositiveIntervals": 0,
+        "effectiveFps": 14.999999999999993,
+        "intervalsMs": {
+          "count": 29,
+          "median": 66.66666666666669,
+          "p95": 66.66666666666674,
+          "max": 66.66666666666674
+        }
+      },
+      "landmarks": [
+        {
+          "index": 0,
+          "readableFrames": 30,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 30,
+            "p95": 30,
+            "max": 30
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0,
+          "maxAcceleration": 0
+        },
+        {
+          "index": 1,
+          "readableFrames": 30,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 30,
+            "p95": 30,
+            "max": 30
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0,
+          "maxAcceleration": 0
+        },
+        {
+          "index": 2,
+          "readableFrames": 30,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 30,
+            "p95": 30,
+            "max": 30
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0,
+          "maxAcceleration": 0
+        },
+        {
+          "index": 3,
+          "readableFrames": 30,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 30,
+            "p95": 30,
+            "max": 30
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0,
+          "maxAcceleration": 0
+        },
+        {
+          "index": 4,
+          "readableFrames": 30,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 30,
+            "p95": 30,
+            "max": 30
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0,
+          "maxAcceleration": 0
+        },
+        {
+          "index": 5,
+          "readableFrames": 30,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 30,
+            "p95": 30,
+            "max": 30
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0,
+          "maxAcceleration": 0
+        },
+        {
+          "index": 6,
+          "readableFrames": 30,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 30,
+            "p95": 30,
+            "max": 30
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0,
+          "maxAcceleration": 0
+        },
+        {
+          "index": 7,
+          "readableFrames": 30,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 30,
+            "p95": 30,
+            "max": 30
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0,
+          "maxAcceleration": 0
+        },
+        {
+          "index": 8,
+          "readableFrames": 30,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 30,
+            "p95": 30,
+            "max": 30
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0,
+          "maxAcceleration": 0
+        },
+        {
+          "index": 9,
+          "readableFrames": 30,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 30,
+            "p95": 30,
+            "max": 30
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0,
+          "maxAcceleration": 0
+        },
+        {
+          "index": 10,
+          "readableFrames": 30,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 30,
+            "p95": 30,
+            "max": 30
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0,
+          "maxAcceleration": 0
+        },
+        {
+          "index": 11,
+          "readableFrames": 30,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 30,
+            "p95": 30,
+            "max": 30
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0,
+          "maxAcceleration": 0
+        },
+        {
+          "index": 12,
+          "readableFrames": 30,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 30,
+            "p95": 30,
+            "max": 30
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0,
+          "maxAcceleration": 0
+        },
+        {
+          "index": 13,
+          "readableFrames": 30,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 30,
+            "p95": 30,
+            "max": 30
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0,
+          "maxAcceleration": 0
+        },
+        {
+          "index": 14,
+          "readableFrames": 30,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 30,
+            "p95": 30,
+            "max": 30
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0,
+          "maxAcceleration": 0
+        },
+        {
+          "index": 15,
+          "readableFrames": 30,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 30,
+            "p95": 30,
+            "max": 30
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0,
+          "maxAcceleration": 0
+        },
+        {
+          "index": 16,
+          "readableFrames": 30,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 30,
+            "p95": 30,
+            "max": 30
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0,
+          "maxAcceleration": 0
+        },
+        {
+          "index": 17,
+          "readableFrames": 30,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 30,
+            "p95": 30,
+            "max": 30
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0,
+          "maxAcceleration": 0
+        },
+        {
+          "index": 18,
+          "readableFrames": 30,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 30,
+            "p95": 30,
+            "max": 30
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0,
+          "maxAcceleration": 0
+        },
+        {
+          "index": 19,
+          "readableFrames": 30,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 30,
+            "p95": 30,
+            "max": 30
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0,
+          "maxAcceleration": 0
+        },
+        {
+          "index": 20,
+          "readableFrames": 30,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 30,
+            "p95": 30,
+            "max": 30
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0,
+          "maxAcceleration": 0
+        },
+        {
+          "index": 21,
+          "readableFrames": 30,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 30,
+            "p95": 30,
+            "max": 30
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0,
+          "maxAcceleration": 0
+        },
+        {
+          "index": 22,
+          "readableFrames": 30,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 30,
+            "p95": 30,
+            "max": 30
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0,
+          "maxAcceleration": 0
+        },
+        {
+          "index": 23,
+          "readableFrames": 30,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 30,
+            "p95": 30,
+            "max": 30
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0.524999999999999,
+          "maxAcceleration": 0.524999999999999
+        },
+        {
+          "index": 24,
+          "readableFrames": 30,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 30,
+            "p95": 30,
+            "max": 30
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0.524999999999999,
+          "maxAcceleration": 0.524999999999999
+        },
+        {
+          "index": 25,
+          "readableFrames": 30,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 30,
+            "p95": 30,
+            "max": 30
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0.6755102238308474,
+          "maxAcceleration": 0.6755102238308474
+        },
+        {
+          "index": 26,
+          "readableFrames": 30,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 30,
+            "p95": 30,
+            "max": 30
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0.18374999999999952,
+          "maxAcceleration": 0.18374999999999952
+        },
+        {
+          "index": 27,
+          "readableFrames": 30,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 30,
+            "p95": 30,
+            "max": 30
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 1.2750000000000004,
+          "maxAcceleration": 1.2750000000000004
+        },
+        {
+          "index": 28,
+          "readableFrames": 30,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 30,
+            "p95": 30,
+            "max": 30
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0,
+          "maxAcceleration": 0
+        },
+        {
+          "index": 29,
+          "readableFrames": 30,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 30,
+            "p95": 30,
+            "max": 30
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0,
+          "maxAcceleration": 0
+        },
+        {
+          "index": 30,
+          "readableFrames": 30,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 30,
+            "p95": 30,
+            "max": 30
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0,
+          "maxAcceleration": 0
+        },
+        {
+          "index": 31,
+          "readableFrames": 30,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 30,
+            "p95": 30,
+            "max": 30
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 1.5000000000000007,
+          "maxAcceleration": 1.5000000000000007
+        },
+        {
+          "index": 32,
+          "readableFrames": 30,
+          "missingFrames": 0,
+          "readableRuns": {
+            "count": 1,
+            "median": 30,
+            "p95": 30,
+            "max": 30
+          },
+          "dropoutRuns": {
+            "count": 0,
+            "median": null,
+            "p95": null,
+            "max": null
+          },
+          "maxVelocity": 0,
+          "maxAcceleration": 0
+        }
+      ],
+      "sideContinuityFlips": 4,
+      "raw": {
+        "filter": "raw",
+        "completedTrials": 0,
+        "eventFrames": []
+      },
+      "oneEuro": {
+        "filter": "one-euro-live",
+        "version": {
+          "minCutoff": 4,
+          "beta": 1.5,
+          "dCutoff": 1
+        },
+        "completedTrials": 0,
+        "eventFrames": [],
+        "meanCoordinateLag": 0.000977996486068637
+      },
+      "sensitivity": {
+        "countDelta": 0,
+        "perturbationCountDelta": -2,
+        "pairedBottomFrameDeltas": []
+      },
+      "missingnessByPhase": {
+        "standing": 0,
+        "stepping": 0,
+        "descending": 0,
+        "bottom": 0,
+        "ascending": 0,
+        "returning": 0
+      },
+      "phasePersistenceFrames": {
+        "count": 0,
+        "median": null,
+        "p95": null,
+        "max": null
+      }
+    }
+  ],
+  "limitations": [
+    "Synthetic and repository fixtures are engineering diagnostics, not population validation.",
+    "No filter, threshold, recovery, protocol availability, or product output is selected or changed by this report."
+  ]
+}

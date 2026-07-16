@@ -21,7 +21,8 @@
     "eval:short-gap": "vite-node scripts/runShortGapRecoveryExperiment.ts",
     "eval:forward-lunge": "vite-node scripts/runForwardLungeEvaluation.ts",
     "eval:inline-lunge": "npm run eval:forward-lunge",
-    "eval:perturbations": "vite-node scripts/runPerturbationMatrix.ts"
+    "eval:perturbations": "vite-node scripts/runPerturbationMatrix.ts",
+    "eval:lunge-diagnostics": "vite-node scripts/runLungeTemporalDiagnostics.ts"
   },
   "dependencies": {
     "@mediapipe/tasks-vision": "^0.10.14",

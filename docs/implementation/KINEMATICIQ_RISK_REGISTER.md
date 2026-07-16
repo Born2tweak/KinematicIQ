@@ -49,6 +49,7 @@
 | R-FLSR-04 | Synthetic success is promoted as scientific validity | High | Critical | M109 is three synthetic sequences only | claims policy, metric board, locked participant gates | guarded |
 | R-FLSR-05 | Dataset terms/privacy/protocol mismatch is bypassed | Medium | Critical | attractive open Zenodo candidate lacks protocol detail | metadata-only record; separate acquisition approval | blocked |
 | R-FLSR-06 | Forward Lunge becomes available before full integration/evidence | Low | Critical | profile null and input modes empty today | ADR-015 and fail-closed tests; P4-M14 separate decision | guarded |
+| R-FLSR-07 | Event count depends on effective FPS | High | High | P4-M04 synthetic 15 FPS resample produced 0 trials versus 2 at identity cadence | classify with real development labels; do not tune or recover from synthetic-only evidence | open |
 
 ## Escalation rules
 
