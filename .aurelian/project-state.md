@@ -52,7 +52,8 @@
 - P4-M10 autonomous locked-run preflight/report tooling is implemented; no confirmatory run occurred and G-LOCK remains blocked.
 - P4-M11 autonomous synchronized-angle tooling is implemented; G-ANGLE remains blocked on approved reference data and signatures.
 - P4-M12 autonomous reliability tooling is implemented; G-REL remains blocked on real repeat sessions and signatures.
-- Active autonomous package: P4-M13 claims-review lint/packet; independent review remains required.
+- P4-M13 autonomous claims-review lint/packet is implemented; G-CLAIMS remains blocked and product copy is suppressed.
+- Active autonomous package: P4-M14 fail-closed availability decision; owner signatures remain required for any alternative.
 - Next manual gate: dataset-custodian/privacy review before any human collection; schema work itself is authorized.
 - P4-M01 through P4-M05 engineering work is authorized by the user's 2026-07-16 instruction; human/research gates remain non-autonomous.
 
