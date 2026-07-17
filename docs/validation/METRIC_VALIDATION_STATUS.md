@@ -60,6 +60,8 @@ FPS sensitivity, missingness, raw/filter lag, and event-frame sensitivity.
 
 No tier may move until the applicable `flsr-gates-v0.1` successor is frozen and passed.
 
+P4-M11 and P4-M12 engineering evaluators now exist, but no approved synchronized reference or repeat-session study was supplied. Projected lead-knee angle and repeat-session language therefore remain experimental/internal and suppressed from product use; tooling readiness does not promote either tier.
+
 ## Excluded metrics (cataloged, never computed — R03 §12)
 
 | Metric id | Why excluded | Stays excluded until |

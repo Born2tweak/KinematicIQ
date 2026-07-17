@@ -53,7 +53,8 @@
 - P4-M11 autonomous synchronized-angle tooling is implemented; G-ANGLE remains blocked on approved reference data and signatures.
 - P4-M12 autonomous reliability tooling is implemented; G-REL remains blocked on real repeat sessions and signatures.
 - P4-M13 autonomous claims-review lint/packet is implemented; G-CLAIMS remains blocked and product copy is suppressed.
-- Active autonomous package: P4-M14 fail-closed availability decision; owner signatures remain required for any alternative.
+- P4-M14 fail-closed availability disposition is recorded in ADR-016: Forward Lunge remains unavailable and G-AVAIL is blocked.
+- Phase 4 autonomous repository work is complete through M14. Work stops at P4-M06 external-input gates until signed approvals and real authorized evidence are supplied.
 - Next manual gate: dataset-custodian/privacy review before any human collection; schema work itself is authorized.
 - P4-M01 through P4-M05 engineering work is authorized by the user's 2026-07-16 instruction; human/research gates remain non-autonomous.
 

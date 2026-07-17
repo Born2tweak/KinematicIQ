@@ -1,6 +1,6 @@
 # KinematicIQ Master Execution Roadmap
 
-> **Current authority (2026-07-15):** P4-M00 reconciles the Forward lunge with stride and return evidence package against implementation commit `f49558e`. P4-M01 additive naming migration is next and remains pending. P4-M02 and later evidence-closure milestones are defined in `PHASE_4_EVIDENCE_CLOSURE_ROADMAP.md` but are not authorized by P4-M00. Squat remains the only available protocol.
+> **Current authority (2026-07-16):** Phase 4 autonomous engineering work has progressed through P4-M14. Human/scientific gates from P4-M06 onward remain blocked for lack of approved participant/reference/repeat-session evidence and independent signatures. ADR-016 records the binding fail-closed disposition: Forward Lunge remains unavailable and Squat remains the only available protocol.
 
 Generated 2026-07-06 from a live clone of `https://github.com/Born2tweak/KinematicIQ.git`, branch `master`, at commit `898d7c4`. **Post-dataset-research refresh:** 2026-07-10 at commit `d0532036216f78c2194723b55a10159880909993`; M00–M60 history is preserved and the dependency-aware M61–M74 wave is added below.
 
