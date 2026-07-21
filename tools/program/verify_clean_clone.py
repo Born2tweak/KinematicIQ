@@ -56,6 +56,7 @@ def main() -> int:
             [npm, "--prefix", "web", "test", "--", "--run", "--reporter=dot"],
             [npm, "--prefix", "web", "run", "eval:forward-lunge"],
             [npm, "--prefix", "web", "run", "eval:tapes"],
+            ["git", "diff", "--exit-code"],
         ]
         for command in commands:
             record = run(command, clone)
