@@ -59,7 +59,8 @@ def _load_yaml(path: Path) -> dict[str, Any]:
 
 
 def _sha256(path: Path) -> str:
-    return hashlib.sha256(path.read_bytes()).hexdigest()
+    canonical_text = path.read_text(encoding="utf-8").replace("\r\n", "\n")
+    return hashlib.sha256(canonical_text.encode("utf-8")).hexdigest()
 
 
 def _milestone_map(registry: dict[str, Any]) -> dict[str, dict[str, Any]]:

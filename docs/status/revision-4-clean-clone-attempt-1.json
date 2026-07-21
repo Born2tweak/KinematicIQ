@@ -1,0 +1,85 @@
+{
+  "all_required_checks_passed": false,
+  "branch": "agent/expanded-10-revision-4",
+  "checks": [
+    {
+      "accepted": true,
+      "command": [
+        "git",
+        "clone",
+        "--branch",
+        "agent/expanded-10-revision-4",
+        "--single-branch",
+        "https://github.com/Born2tweak/KinematicIQ.git",
+        "C:\\Users\\acetu\\AppData\\Local\\Temp\\kinematiciq-clean-clone-0zeiyi58\\KinematicIQ"
+      ],
+      "exit_code": 0,
+      "stderr": "Cloning into 'C:\\Users\\acetu\\AppData\\Local\\Temp\\kinematiciq-clean-clone-0zeiyi58\\KinematicIQ'...\n",
+      "stdout": ""
+    },
+    {
+      "accepted": true,
+      "command": [
+        "python",
+        "-m",
+        "pip",
+        "install",
+        "-r",
+        "requirements-program.txt"
+      ],
+      "exit_code": 0,
+      "stderr": "\n[notice] A new release of pip is available: 25.3 -> 26.1.2\n[notice] To update, run: python.exe -m pip install --upgrade pip\n",
+      "stdout": "Defaulting to user installation because normal site-packages is not writeable\nRequirement already satisfied: jsonschema==4.26.0 in c:\\users\\acetu\\appdata\\roaming\\python\\python314\\site-packages (from -r requirements-program.txt (line 1)) (4.26.0)\nRequirement already satisfied: PyYAML==6.0.3 in c:\\users\\acetu\\appdata\\roaming\\python\\python314\\site-packages (from -r requirements-program.txt (line 2)) (6.0.3)\nRequirement already satisfied: attrs>=22.2.0 in c:\\users\\acetu\\appdata\\roaming\\python\\python314\\site-packages (from jsonschema==4.26.0->-r requirements-program.txt (line 1)) (26.1.0)\nRequirement already satisfied: jsonschema-specifications>=2023.03.6 in c:\\users\\acetu\\appdata\\roaming\\python\\python314\\site-packages (from jsonschema==4.26.0->-r requirements-program.txt (line 1)) (2025.9.1)\nRequirement already satisfied: referencing>=0.28.4 in c:\\users\\acetu\\appdata\\roaming\\python\\python314\\site-packages (from jsonschema==4.26.0->-r requirements-program.txt (line 1)) (0.37.0)\nRequirement already satisfied: rpds-py>=0.25.0 in c:\\users\\acetu\\appdata\\roaming\\python\\python314\\site-packages (from jsonschema==4.26.0->-r requirements-program.txt (line 1)) (2026.6.3)\n"
+    },
+    {
+      "accepted": true,
+      "command": [
+        "python",
+        "tools/program/verify_milestone.py",
+        "--structure-only"
+      ],
+      "exit_code": 0,
+      "stderr": "",
+      "stdout": "{\n  \"schema_valid\": true,\n  \"semantic_contract_valid\": true,\n  \"milestone_count\": 175\n}\n"
+    },
+    {
+      "accepted": true,
+      "command": [
+        "python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests/program",
+        "-p",
+        "test_*.py",
+        "-v"
+      ],
+      "exit_code": 0,
+      "stderr": "test_all_ten_normative_fixtures (test_execution_fixtures.ExecutionFixtureTests.test_all_ten_normative_fixtures) ... ok\ntest_release_without_gate_pass_is_rejected (test_execution_fixtures.ExecutionFixtureTests.test_release_without_gate_pass_is_rejected) ... ok\ntest_skip_without_complete_decision_metadata_is_rejected (test_execution_fixtures.ExecutionFixtureTests.test_skip_without_complete_decision_metadata_is_rejected) ... ok\ntest_authoritative_registry_passes_schema_and_semantics (test_program_contract.ProgramContractTests.test_authoritative_registry_passes_schema_and_semantics) ... ok\ntest_mandatory_dependency_cannot_accept_skip (test_program_contract.ProgramContractTests.test_mandatory_dependency_cannot_accept_skip) ... ok\ntest_release_outcome_requires_gate_pass_dependency (test_program_contract.ProgramContractTests.test_release_outcome_requires_gate_pass_dependency) ... ok\ntest_skip_requires_declared_policy_and_outcome (test_program_contract.ProgramContractTests.test_skip_requires_declared_policy_and_outcome) ... ok\ntest_unknown_predicate_fails_closed (test_program_contract.ProgramContractTests.test_unknown_predicate_fails_closed) ... ok\ntest_cli_regenerates_and_verifies_same_manifest (test_schedule_wave.WaveScheduleTests.test_cli_regenerates_and_verifies_same_manifest) ... ok\ntest_every_id_is_classified_once_and_committed_is_dependency_closed (test_schedule_wave.WaveScheduleTests.test_every_id_is_classified_once_and_committed_is_dependency_closed) ... ok\ntest_manifest_is_deterministic_and_capacity_feasible (test_schedule_wave.WaveScheduleTests.test_manifest_is_deterministic_and_capacity_feasible) ... ok\ntest_verifier_rejects_capacity_and_dependency_corruption (test_schedule_wave.WaveScheduleTests.test_verifier_rejects_capacity_and_dependency_corruption) ... ok\n\n----------------------------------------------------------------------\nRan 12 tests in 22.365s\n\nOK\n",
+      "stdout": "PASS: generated and verified C:\\Users\\acetu\\AppData\\Local\\Temp\\tmpbexdf481\\wave.yaml\nPASS: generated and verified C:\\Users\\acetu\\AppData\\Local\\Temp\\tmpbexdf481\\wave.yaml\nPASS: verified C:\\Users\\acetu\\AppData\\Local\\Temp\\tmpbexdf481\\wave.yaml\n"
+    },
+    {
+      "accepted": false,
+      "command": [
+        "python",
+        "tools/program/schedule_wave.py",
+        "--verify",
+        "--output",
+        "docs/program/WAVE_1_SCHEDULE.yaml"
+      ],
+      "exit_code": 1,
+      "stderr": "Traceback (most recent call last):\n  File \"C:\\Users\\acetu\\AppData\\Local\\Temp\\kinematiciq-clean-clone-0zeiyi58\\KinematicIQ\\tools\\program\\schedule_wave.py\", line 419, in <module>\n    raise SystemExit(main())\n                     ~~~~^^\n  File \"C:\\Users\\acetu\\AppData\\Local\\Temp\\kinematiciq-clean-clone-0zeiyi58\\KinematicIQ\\tools\\program\\schedule_wave.py\", line 409, in main\n    raise ScheduleError(f\"{args.output} is valid but stale; regenerate it\")\nScheduleError: docs\\program\\WAVE_1_SCHEDULE.yaml is valid but stale; regenerate it\n",
+      "stdout": ""
+    }
+  ],
+  "clone_head": "c365d0c7c2bf3eab0e764ca444619b802fd33857",
+  "generated_at": "2026-07-21T20:08:55.389384+00:00",
+  "ignored_status": [
+    "!! tests/program/__pycache__/",
+    "!! tools/program/__pycache__/"
+  ],
+  "replay_policy": "eval:tapes must either evaluate checked-in eligible tapes or explicitly report the clean-clone corpus absence without fabricating participant evidence",
+  "repository": "https://github.com/Born2tweak/KinematicIQ.git",
+  "schema_version": 1
+}

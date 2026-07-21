@@ -3,9 +3,9 @@ program_id: kinematiciq-expanded-10
 wave_id: expanded-10-wave-1
 sources:
   milestone_registry: docs/program/milestone_registry.yaml
-  milestone_registry_sha256: b13924fe2c68faade2abbed75c627baa83e38a25407f1c7e59f9f1486ca8c27f
+  milestone_registry_sha256: be5cd0780872617b2a054d4018d1244c931ed3210fd09ee49740e28071bacee5
   resource_registry: docs/program/resource_registry.yaml
-  resource_registry_sha256: 34cd13765e495a36cc6dee060964a432d55ed26e89c238d06f7e016b3516f2fc
+  resource_registry_sha256: b10c001806da017f3f0876a77eb8db34c82870bc745140f8b9b9afc0c56a4c22
 policy:
   worker_count: 4
   productive_hours_per_worker_day: 6
