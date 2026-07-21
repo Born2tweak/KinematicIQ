@@ -3,6 +3,8 @@
 ## Authoritative frontier
 
 - Authoritative branch: `master`.
+- Expanded-10 program integration branch: `agent/expanded-10-revision-4`.
+- Revision 4 is the canonical candidate execution contract in `docs/implementation/KINEMATICIQ_MASTER_EXECUTION_ROADMAP.md`, backed by the machine-readable registries in `docs/program/`; it does not receive scheduler authority until KQ-001 through KQ-015 prove repository-bound validation and clean-clone behavior.
 - Authoritative implementation commit: `f49558edec40ca6a972ec65bd6ff07898c161c4b`.
 - Frontier reconciliation: remote `master` at `8d8a77d8ab0a6ab0c240f8327ef51e467dfd4cc2` had no unique commits and was fast-forwarded locally through the five pushed commits on `origin/agent/phase2-runtime-and-validation`; no history was discarded.
 - Current documentation authority: the Phase 4 package and canonical repository files at `master` HEAD. The exact resulting commit is recorded in the Phase 4 handoff and Git history because a commit cannot contain its own hash.
@@ -39,6 +41,7 @@
 
 ## Active milestone and gates
 
+- Active Expanded-10 integration milestone: KQ-001, reconcile the live repository frontier and record current-commit evidence. KQ work may proceed autonomously on the dedicated branch subject to the milestone registry, while scientific release remains pass-only and evidence-gated.
 - Completed milestone: P4-M00 documentation and authority reconciliation. Its acceptance evidence is recorded in `docs/implementation/progress/P4-M00-phase4-documentation-reconciliation.md`.
 - Completed milestone: P4-M01 additive naming migration with legacy-read compatibility.
 - Completed milestone: P4-M02 auditable evidence schemas.

@@ -1,0 +1,445 @@
+schema_version: 2
+program_id: kinematiciq-expanded-10
+policy:
+  population: healthy_adults_and_athletes
+  public_experimental_route: forbidden
+  minimum_product_rule: Every protocol must pass a useful minimum measurement set; optional metrics may abstain independently.
+  interpretation_rule: One evidence-bounded interpretation is required; a claim that coaching improves movement requires a separate intervention-effect
+    gate.
+  threshold_rule: UNSET_BLOCKING is an explicit registered blocker and cannot be treated as a wildcard or pass.
+  registry_role: These records seed evidence synthesis and preregistration; they do not authorize opening locked evidence.
+  equal_rigor_rule: Use the same decision discipline for every claim, but select the least burdensome reference tier that directly measures that
+    claim.
+  manifest_creation_rule: Create one signed validation_manifest.yaml per protocol only after task, claims, thresholds, sample rule, supported
+    cells, references, resources, and privacy are resolved.
+metric_class_gates:
+  count:
+    required_reporting:
+    - exact_session_accuracy
+    - insertion_rate
+    - deletion_rate
+    - participant_level_confidence_interval
+  event_time:
+    required_reporting:
+    - bias_ms
+    - mae_ms
+    - limits_of_agreement_ms
+    - frame_rate_strata
+    - participant_level_confidence_interval
+  continuous_kinematic:
+    required_reporting:
+    - bias
+    - mae
+    - rmse
+    - limits_of_agreement
+    - calibration
+    - participant_level_confidence_interval
+  spatiotemporal:
+    required_reporting:
+    - bias
+    - mae
+    - limits_of_agreement
+    - scale_error
+    - participant_level_confidence_interval
+  categorical_interpretation:
+    required_reporting:
+    - confusion_matrix
+    - sensitivity
+    - specificity
+    - agreement
+    - evidence_scope
+  intervention_effect:
+    required_reporting:
+    - preregistered_comparator
+    - participant_level_effect
+    - uncertainty
+    - harms
+    - transfer_limitations
+protocols:
+  squat:
+    canonical_task: Bodyweight bilateral squat with frozen start, depth, return, tempo, and invalid-trial rules.
+    initial_supported_cells:
+    - left_side_live
+    - right_side_live
+    - left_side_upload
+    - right_side_upload
+    minimum_claims:
+    - valid_rep_count
+    - bottom_event
+    - return_event
+    - projected_knee_angle
+    - trunk_inclination
+    - evidence_bounded_interpretation
+    criterion_references:
+    - two_qualified_raters
+    - synchronized_kinematics
+    - repeat_sessions
+    evidence_pack_status: OpenBlocking
+    registered_unknowns:
+    - decision_relevant_angle_error
+    - participant_precision_target
+    - validated_device_cells
+    contract_status: PreRegistrationOpen
+    reference_justification:
+      event_and_count: two qualified blinded raters
+      projected_kinematics: synchronized criterion kinematics
+      repeatability: repeat sessions
+    locked_manifest_path: docs/validation/squat/validation_manifest.yaml
+    lock_preconditions:
+    - dedicated primary-source evidence pack audited
+    - task and minimum core claims frozen
+    - numeric thresholds and participant-level sample rule preregistered
+    - supported view/device/input cells frozen
+    - reference access and synchronization confirmed
+    - privacy, consent, custody, and required signatures complete
+  forward_lunge:
+    canonical_task: Alternating or fixed-lead forward lunge only after lead-leg policy, step, bottom, return, and invalid-trial rules are frozen.
+    initial_supported_cells:
+    - left_side_by_lead_leg
+    - right_side_by_lead_leg
+    - upload_same_cells
+    minimum_claims:
+    - valid_rep_count
+    - step_event
+    - bottom_event
+    - return_event
+    - projected_knee_angle
+    - trunk_inclination
+    - evidence_bounded_interpretation
+    criterion_references:
+    - two_qualified_raters
+    - synchronized_kinematics
+    - repeat_sessions
+    evidence_pack_status: OpenBlocking
+    registered_unknowns:
+    - lead_leg_policy
+    - angle_error_thresholds
+    - real_participant_locked_set
+    contract_status: PreRegistrationOpen
+    reference_justification:
+      event_and_count: two qualified blinded raters
+      projected_kinematics: synchronized criterion kinematics
+      repeatability: repeat sessions
+    locked_manifest_path: docs/validation/forward_lunge/validation_manifest.yaml
+    lock_preconditions:
+    - dedicated primary-source evidence pack audited
+    - task and minimum core claims frozen
+    - numeric thresholds and participant-level sample rule preregistered
+    - supported view/device/input cells frozen
+    - reference access and synchronization confirmed
+    - privacy, consent, custody, and required signatures complete
+  hip_hinge:
+    canonical_task: Unloaded bilateral hip hinge with standardized tempo and explicit squat/good-morning-like confusion rules.
+    initial_supported_cells:
+    - left_side_live
+    - right_side_live
+    - upload_same_cells
+    minimum_claims:
+    - valid_rep_count
+    - hinge_bottom_event
+    - return_event
+    - trunk_inclination
+    - knee_excursion
+    - evidence_bounded_interpretation
+    criterion_references:
+    - two_qualified_raters
+    - synchronized_kinematics
+    - repeat_sessions
+    evidence_pack_status: OpenBlocking
+    registered_unknowns:
+    - task_boundary
+    - trunk_reference_definition
+    - confusion_threshold
+    contract_status: PreRegistrationOpen
+    reference_justification:
+      event_and_count: two qualified blinded raters
+      segment_kinematics: synchronized criterion kinematics
+      repeatability: repeat sessions
+    locked_manifest_path: docs/validation/hip_hinge/validation_manifest.yaml
+    lock_preconditions:
+    - dedicated primary-source evidence pack audited
+    - task and minimum core claims frozen
+    - numeric thresholds and participant-level sample rule preregistered
+    - supported view/device/input cells frozen
+    - reference access and synchronization confirmed
+    - privacy, consent, custody, and required signatures complete
+  push_up:
+    canonical_task: Standard floor push-up with foot and knee variants treated as separate versions unless equivalence is proven.
+    initial_supported_cells:
+    - left_side_live
+    - right_side_live
+    - upload_same_cells
+    minimum_claims:
+    - valid_rep_count
+    - bottom_event
+    - lockout_event
+    - elbow_angle
+    - trunk_line
+    - evidence_bounded_interpretation
+    criterion_references:
+    - two_qualified_raters
+    - synchronized_kinematics
+    - repeat_sessions
+    evidence_pack_status: OpenBlocking
+    registered_unknowns:
+    - variant_policy
+    - floor_occlusion_limit
+    - camera_height_band
+    contract_status: PreRegistrationOpen
+    reference_justification:
+      event_and_count: two qualified blinded raters
+      projected_kinematics: synchronized criterion kinematics only for angle/segment claims
+      repeatability: repeat sessions
+    locked_manifest_path: docs/validation/push_up/validation_manifest.yaml
+    lock_preconditions:
+    - dedicated primary-source evidence pack audited
+    - task and minimum core claims frozen
+    - numeric thresholds and participant-level sample rule preregistered
+    - supported view/device/input cells frozen
+    - reference access and synchronization confirmed
+    - privacy, consent, custody, and required signatures complete
+  pull:
+    canonical_task: Pull-up or inverted-row variant selected by a scored trade study; variants cannot be silently combined.
+    initial_supported_cells:
+    - variant_dependent_side_or_oblique
+    - upload_same_cells
+    minimum_claims:
+    - valid_rep_count
+    - bottom_event
+    - top_event
+    - elbow_angle
+    - swing_or_trunk_control
+    - evidence_bounded_interpretation
+    criterion_references:
+    - two_qualified_raters
+    - synchronized_kinematics
+    - object_or_bar_geometry
+    - repeat_sessions
+    evidence_pack_status: OpenBlocking
+    registered_unknowns:
+    - variant_selection
+    - object_relation_method
+    - equipment_variation
+    contract_status: PreRegistrationOpen
+    reference_justification:
+      event_and_count: two qualified blinded raters plus bar/object geometry
+      projected_kinematics: synchronized criterion kinematics only for angle/segment claims
+      repeatability: repeat sessions
+    locked_manifest_path: docs/validation/pull/validation_manifest.yaml
+    lock_preconditions:
+    - dedicated primary-source evidence pack audited
+    - task and minimum core claims frozen
+    - numeric thresholds and participant-level sample rule preregistered
+    - supported view/device/input cells frozen
+    - reference access and synchronization confirmed
+    - privacy, consent, custody, and required signatures complete
+  rotation:
+    canonical_task: Controlled torso rotation with frozen target, tempo, stance, arm position, pelvis rule, and cycle definition.
+    initial_supported_cells:
+    - front_live
+    - rear_live
+    - eligible_oblique_upload
+    minimum_claims:
+    - valid_cycle_count
+    - turn_event
+    - return_event
+    - validated_shoulder_pelvis_measure
+    - return_control
+    - evidence_bounded_interpretation
+    criterion_references:
+    - two_qualified_raters
+    - synchronized_3d_kinematics
+    - repeat_sessions
+    evidence_pack_status: OpenBlocking
+    registered_unknowns:
+    - target_and_tempo
+    - proxy_construct_validity
+    - axial_wording_eligibility
+    contract_status: PreRegistrationOpen
+    reference_justification:
+      cycle_events: two qualified blinded raters
+      axial_or_segment_measure: synchronized 3D criterion kinematics
+      repeatability: repeat sessions
+    locked_manifest_path: docs/validation/rotation/validation_manifest.yaml
+    lock_preconditions:
+    - dedicated primary-source evidence pack audited
+    - task and minimum core claims frozen
+    - numeric thresholds and participant-level sample rule preregistered
+    - supported view/device/input cells frozen
+    - reference access and synchronization confirmed
+    - privacy, consent, custody, and required signatures complete
+  gait:
+    canonical_task: Straight-lane walking with fixed lane length, pace instruction, pass rules, and scale procedure.
+    initial_supported_cells:
+    - side_or_oblique_upload_first
+    - validated_live_cells_only
+    minimum_claims:
+    - step_count
+    - foot_contact_events
+    - cadence
+    - temporal_measures
+    - evidence_bounded_interpretation
+    optional_claims:
+    - speed
+    - step_length
+    criterion_references:
+    - two_qualified_raters
+    - instrumented_walkway_or_timing
+    - repeat_sessions
+    evidence_pack_status: OpenBlocking
+    registered_unknowns:
+    - lane_length
+    - scale_method
+    - moving_subject_frame_loss_limit
+    contract_status: PreRegistrationOpen
+    reference_justification:
+      events_and_count: qualified raters or synchronized contact reference
+      temporal_and_speed: instrumented walkway or timing reference
+      repeatability: repeat sessions
+    locked_manifest_path: docs/validation/gait/validation_manifest.yaml
+    lock_preconditions:
+    - dedicated primary-source evidence pack audited
+    - task and minimum core claims frozen
+    - numeric thresholds and participant-level sample rule preregistered
+    - supported view/device/input cells frozen
+    - reference access and synchronization confirmed
+    - privacy, consent, custody, and required signatures complete
+  jump:
+    canonical_task: Countermovement jump with fixed arm policy, start, takeoff, landing, and valid-attempt rules.
+    initial_supported_cells:
+    - side_upload_first
+    - validated_live_cells_only
+    minimum_claims:
+    - valid_attempt
+    - takeoff_event
+    - landing_event
+    - flight_time
+    - evidence_bounded_interpretation
+    optional_claims:
+    - jump_height
+    criterion_references:
+    - force_or_contact_system
+    - synchronized_high_speed_video
+    - repeat_sessions
+    evidence_pack_status: OpenBlocking
+    registered_unknowns:
+    - eligible_frame_rate
+    - event_error_threshold_ms
+    - height_error_threshold
+    contract_status: PreRegistrationOpen
+    reference_justification:
+      takeoff_landing_flight: force/contact system or independently validated synchronized high-speed reference
+      height: criterion system appropriate to the registered height method
+      repeatability: repeat sessions
+    locked_manifest_path: docs/validation/jump/validation_manifest.yaml
+    lock_preconditions:
+    - dedicated primary-source evidence pack audited
+    - task and minimum core claims frozen
+    - numeric thresholds and participant-level sample rule preregistered
+    - supported view/device/input cells frozen
+    - reference access and synchronization confirmed
+    - privacy, consent, custody, and required signatures complete
+  landing:
+    canonical_task: Standardized drop landing with fixed platform height, step-off, arm/foot stance, landing, and invalid-trial rules.
+    initial_supported_cells:
+    - sequential_front_and_side_upload
+    - validated_live_cells_only
+    minimum_claims:
+    - contact_event
+    - landing_phase
+    - projected_knee_measure
+    - trunk_inclination
+    - evidence_bounded_interpretation
+    optional_claims:
+    - stabilization_time
+    forbidden_claims:
+    - force
+    - load
+    - injury_risk
+    - return_to_play
+    criterion_references:
+    - force_or_contact_system
+    - synchronized_kinematics
+    - two_qualified_raters
+    - repeat_sessions
+    evidence_pack_status: OpenBlocking
+    registered_unknowns:
+    - drop_height
+    - sequential_view_protocol
+    - stabilization_observability
+    contract_status: PreRegistrationOpen
+    reference_justification:
+      contact: force/contact system
+      projected_kinematics: synchronized criterion kinematics
+      phase_labels: two qualified blinded raters
+      repeatability: repeat sessions
+    locked_manifest_path: docs/validation/landing/validation_manifest.yaml
+    lock_preconditions:
+    - dedicated primary-source evidence pack audited
+    - task and minimum core claims frozen
+    - numeric thresholds and participant-level sample rule preregistered
+    - supported view/device/input cells frozen
+    - reference access and synchronization confirmed
+    - privacy, consent, custody, and required signatures complete
+  sprint:
+    canonical_task: Straight-line acceleration with fixed distance, start, lane calibration, acceleration interval, attempt, and safety rules.
+    initial_supported_cells:
+    - side_or_oblique_upload_first
+    - validated_live_cells_only
+    minimum_claims:
+    - start_event
+    - contact_events
+    - split_time
+    - step_count
+    - cadence
+    - evidence_bounded_interpretation
+    optional_claims:
+    - trunk_angle
+    criterion_references:
+    - timing_gates
+    - synchronized_high_speed_video
+    - repeat_sessions
+    evidence_pack_status: OpenBlocking
+    registered_unknowns:
+    - distance
+    - lane_calibration
+    - contact_visibility
+    - eligible_live_cells
+    contract_status: PreRegistrationOpen
+    reference_justification:
+      start_split: timing gates
+      contact_events: synchronized high-speed reference or qualified frame labels
+      repeatability: repeat sessions
+    locked_manifest_path: docs/validation/sprint/validation_manifest.yaml
+    lock_preconditions:
+    - dedicated primary-source evidence pack audited
+    - task and minimum core claims frozen
+    - numeric thresholds and participant-level sample rule preregistered
+    - supported view/device/input cells frozen
+    - reference access and synchronization confirmed
+    - privacy, consent, custody, and required signatures complete
+validation_manifest_template:
+  required_fields:
+  - protocol_version
+  - preregistration_hash
+  - code_hash
+  - model_hash
+  - dataset_hashes
+  - participant_unit
+  - sample_rule
+  - exclusions
+  - missingness
+  - core_claims
+  - supported_cells
+  - thresholds
+  - false_confidence_limit
+  - reliability_rules
+  - signatures
+  forbidden_values_at_lock:
+  - TBD
+  - null
+  - unset
+  - later
+  - best_effort
+  locked_data_rule: Opening locked evidence before manifest freeze invalidates the candidate version.
+status: preregistration_work_queue_not_locked_validation_manifests

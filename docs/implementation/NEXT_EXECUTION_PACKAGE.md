@@ -1,5 +1,9 @@
 # Next Execution Package — M75-M78
 
+> **Expanded-10 Revision 4 authority (2026-07-21):** The next repository milestone is KQ-001 in `KINEMATICIQ_MASTER_EXECUTION_ROADMAP.md`, using `docs/program/milestone_registry.yaml` as the candidate execution contract. KQ-001 through KQ-015 must bind and verify the scheduler semantics in a clean clone before scheduler authority is granted. Squat remains the only available protocol; Forward Lunge and every additional movement remain unavailable until their preregistered release gates produce `GATE_PASS`.
+
+> The M75-M78 and Phase 4 material below is preserved as historical execution context. It no longer defines the immediate engineering queue, but its scientific and human gates remain binding inputs to the Expanded-10 program.
+
 > **Phase 4 handoff (2026-07-16):** Autonomous repository work is complete through P4-M14. The next executable work requires the external inputs listed in `PHASE_4_HANDOFF.md`, beginning with signed P4-M06 privacy/legal/product/custodian/biomechanics prerequisites. Forward Lunge remains unavailable under ADR-016; no activation or release work is authorized.
 
 > **Superseded as immediate authority (2026-07-15):** M75-M78 and Phase 3 are historical completed packages. The current package is P4-M00 documentation/authority reconciliation. After P4-M00 acceptance, the exact next milestone is P4-M01: additive migration from deprecated `inlineLunge` reads to canonical `forwardLungeStrideReturn`, with legacy artifacts preserved. P4-M02 and participant/dataset work are not authorized.

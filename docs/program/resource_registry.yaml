@@ -1,0 +1,294 @@
+schema_version: 2
+program_id: kinematiciq-expanded-10
+policy:
+  default_status: UnresolvedExternal
+  financial_authority_usd: 0
+  rule: A missing resource blocks only the claims and milestones that cite it.
+  fallback_rule: Research a scientifically equivalent reference or narrow the claim; never weaken a locked standard.
+  accountability_rule: Every unresolved resource has one named accountable owner, one executor, a dated next action, and an escalation condition.
+  zero_budget_rule: USD 0 is a current authority limit, not evidence that acquisition is feasible; inability to secure a valid no-cost path becomes
+    an owner decision.
+resources:
+- id: RES-PARTICIPANTS
+  name: Healthy-adult and athlete participant cohort
+  status: UnresolvedExternal
+  required_for:
+  - squat
+  - forward_lunge
+  - hip_hinge
+  - push_up
+  - pull
+  - rotation
+  - gait
+  - jump
+  - landing
+  - sprint
+  minimum_path: Consent-ready pilot cohort followed by precision-justified locked cohort with participant-level splits.
+  candidate_sources:
+  - Purdue student and athlete volunteers
+  - local training facilities
+  - sports clubs
+  - physical-performance partners
+  target_lead_time_days: 14
+  cost_ceiling_usd: 0
+  unresolved_reason: No approved recruitment channel, consent package, or funded participant compensation is recorded.
+  start_trigger: Protocol identity and minimum claim set are locked.
+  cutoff_action: Keep affected validation milestones BlockedExternal and continue all engineering work.
+  accountable_owner: Andrian Kolliegbo
+  execution_owner: study_operations_agent
+  acquisition:
+    outreach_status: NotStarted
+    named_contact: null
+    first_action: Draft the consent-bounded recruitment packet and identify the first approved Purdue or partner recruitment channel.
+    next_action_due: within 2 execution days of start_trigger
+    approval_route: Andrian Kolliegbo for outreach/relationship commitment; privacy or institutional authority when applicable
+    escalation: If no scientifically valid no-cost path is confirmed by target_lead_time_days, present cost, scope-narrowing, and partnership
+      options for owner decision.
+    contact_log_artifact: docs/program/resources/res-participants-contact-log.yaml
+- id: RES-RATER
+  name: Two qualified independent movement raters plus adjudicator
+  status: UnresolvedExternal
+  required_for:
+  - all_protocols
+  minimum_path: Qualification set, blinded labels, independent agreement, adjudication, and frozen handbook.
+  candidate_sources:
+  - certified strength coaches
+  - sports scientists
+  - physical therapists
+  - biomechanics graduate researchers
+  target_lead_time_days: 10
+  cost_ceiling_usd: 0
+  unresolved_reason: Named raters, credentials, availability, and conflict-of-interest checks are not yet recorded.
+  start_trigger: First event-label handbook is frozen.
+  cutoff_action: Preserve unlabeled captures but do not open locked event/count evaluation.
+  accountable_owner: Andrian Kolliegbo
+  execution_owner: validation_operations_agent
+  acquisition:
+    outreach_status: NotStarted
+    named_contact: null
+    first_action: Prepare the qualification packet and produce a candidate list with credentials, conflicts, availability, and contact status.
+    next_action_due: within 2 execution days of start_trigger
+    approval_route: Andrian Kolliegbo for outreach/relationship commitment; privacy or institutional authority when applicable
+    escalation: If no scientifically valid no-cost path is confirmed by target_lead_time_days, present cost, scope-narrowing, and partnership
+      options for owner decision.
+    contact_log_artifact: docs/program/resources/res-rater-contact-log.yaml
+- id: RES-DEVICES
+  name: Consumer phone and laptop device matrix
+  status: PartiallyAvailable
+  required_for:
+  - all_protocols
+  minimum_path: At least one current iPhone, one Android, and one laptop webcam across named supported browsers, with frame-rate and resolution
+    logs.
+  candidate_sources:
+  - team-owned devices
+  - Purdue device lab
+  - volunteer loaners
+  - cloud device testing for non-camera UI only
+  target_lead_time_days: 7
+  cost_ceiling_usd: 0
+  unresolved_reason: Exact physical device inventory and camera-capable borrowing access are not yet frozen.
+  start_trigger: Capture contract v1 exists.
+  cutoff_action: Release only the validated device cells; do not generalize to untested classes.
+  accountable_owner: Andrian Kolliegbo
+  execution_owner: device_test_agent
+  acquisition:
+    outreach_status: NotStarted
+    named_contact: null
+    first_action: Inventory team-owned physical devices and request camera-capable loan access for missing device cells.
+    next_action_due: within 2 execution days of start_trigger
+    approval_route: Andrian Kolliegbo for outreach/relationship commitment; privacy or institutional authority when applicable
+    escalation: If no scientifically valid no-cost path is confirmed by target_lead_time_days, present cost, scope-narrowing, and partnership
+      options for owner decision.
+    contact_log_artifact: docs/program/resources/res-devices-contact-log.yaml
+- id: RES-REPEAT
+  name: Repeat-session scheduling
+  status: UnresolvedExternal
+  required_for:
+  - all_protocols
+  minimum_path: Preregistered interval, same-participant repeat sessions, environment/device metadata, and attrition handling.
+  candidate_sources:
+  - same participant cohort and partner facilities
+  target_lead_time_days: 21
+  cost_ceiling_usd: 0
+  unresolved_reason: No cohort calendar or retention plan exists.
+  start_trigger: Initial capture appointments are confirmed.
+  cutoff_action: Criterion validity may complete, but reliability and release eligibility remain blocked.
+  accountable_owner: Andrian Kolliegbo
+  execution_owner: study_operations_agent
+  acquisition:
+    outreach_status: NotStarted
+    named_contact: null
+    first_action: Draft retention and repeat-session scheduling rules after the participant channel is approved.
+    next_action_due: within 2 execution days of start_trigger
+    approval_route: Andrian Kolliegbo for outreach/relationship commitment; privacy or institutional authority when applicable
+    escalation: If no scientifically valid no-cost path is confirmed by target_lead_time_days, present cost, scope-narrowing, and partnership
+      options for owner decision.
+    contact_log_artifact: docs/program/resources/res-repeat-contact-log.yaml
+- id: RES-PRIVACY
+  name: Consent, privacy, custody, retention, and deletion authority
+  status: UnresolvedHumanGate
+  required_for:
+  - all_original_capture
+  - any_remote_video_processing
+  minimum_path: Approved consent text, data-flow map, access roles, retention duration, deletion verification, incident path, and de-identification
+    rules.
+  candidate_sources:
+  - Purdue research/compliance guidance
+  - project legal/privacy review
+  - partner data-use agreement
+  target_lead_time_days: 14
+  cost_ceiling_usd: 0
+  unresolved_reason: Human approval is required before collecting participant video or sending video off-device.
+  start_trigger: Original capture or hybrid processing is proposed.
+  cutoff_action: Use public/de-identified development data only; prohibit real capture and remote transfer.
+  accountable_owner: Andrian Kolliegbo
+  execution_owner: privacy_steward
+  acquisition:
+    outreach_status: NotStarted
+    named_contact: null
+    first_action: Route the consent, custody, retention, deletion, and optional remote-processing packet for owner/compliance review.
+    next_action_due: within 2 execution days of start_trigger
+    approval_route: Andrian Kolliegbo for outreach/relationship commitment; privacy or institutional authority when applicable
+    escalation: If no scientifically valid no-cost path is confirmed by target_lead_time_days, present cost, scope-narrowing, and partnership
+      options for owner decision.
+    contact_log_artifact: docs/program/resources/res-privacy-contact-log.yaml
+- id: RES-KINEMATICS
+  name: Synchronized criterion kinematics
+  status: UnresolvedExternal
+  required_for:
+  - squat
+  - forward_lunge
+  - hip_hinge
+  - push_up
+  - pull
+  - rotation
+  - landing
+  minimum_path: Synchronized 3D motion-capture or independently validated equivalent with calibration, synchronization error, and export access.
+  candidate_sources:
+  - Purdue biomechanics or human-performance laboratory
+  - clinical gait laboratory
+  - university collaborator
+  target_lead_time_days: 30
+  cost_ceiling_usd: 0
+  unresolved_reason: No named facility, access agreement, instrument schedule, or export format is confirmed.
+  start_trigger: A metric requires criterion joint/segment kinematics.
+  cutoff_action: Retain count/event claims that can use qualified references; withhold criterion-angle claims.
+  accountable_owner: Andrian Kolliegbo
+  execution_owner: instrumentation_partner_agent
+  acquisition:
+    outreach_status: NotStarted
+    named_contact: null
+    first_action: Create a one-page instrument/access request and identify the first Purdue biomechanics or human-performance lab contact.
+    next_action_due: within 2 execution days of start_trigger
+    approval_route: Andrian Kolliegbo for outreach/relationship commitment; privacy or institutional authority when applicable
+    escalation: If no scientifically valid no-cost path is confirmed by target_lead_time_days, present cost, scope-narrowing, and partnership
+      options for owner decision.
+    contact_log_artifact: docs/program/resources/res-kinematics-contact-log.yaml
+- id: RES-FORCE_CONTACT
+  name: Force/contact reference system
+  status: UnresolvedExternal
+  required_for:
+  - jump
+  - landing
+  minimum_path: Force plate, contact mat, or validated high-speed/contact reference with synchronized timestamps and calibration.
+  candidate_sources:
+  - Purdue biomechanics laboratory
+  - sports-performance facility
+  - validated portable contact system partner
+  target_lead_time_days: 30
+  cost_ceiling_usd: 0
+  unresolved_reason: No instrument access or synchronization plan is confirmed.
+  start_trigger: Jump/landing event and flight-time claim matrix is drafted.
+  cutoff_action: Withhold flight-time, height, and landing-contact claims lacking criterion reference.
+  accountable_owner: Andrian Kolliegbo
+  execution_owner: instrumentation_partner_agent
+  acquisition:
+    outreach_status: NotStarted
+    named_contact: null
+    first_action: Identify a force plate, contact mat, or validated reference owner and request synchronization/export requirements.
+    next_action_due: within 2 execution days of start_trigger
+    approval_route: Andrian Kolliegbo for outreach/relationship commitment; privacy or institutional authority when applicable
+    escalation: If no scientifically valid no-cost path is confirmed by target_lead_time_days, present cost, scope-narrowing, and partnership
+      options for owner decision.
+    contact_log_artifact: docs/program/resources/res-force_contact-contact-log.yaml
+- id: RES-TIMING
+  name: Timing gates or instrumented walkway
+  status: UnresolvedExternal
+  required_for:
+  - gait
+  - sprint
+  minimum_path: Calibrated timing gates or instrumented walkway synchronized to video with known error.
+  candidate_sources:
+  - Purdue athletics/performance lab
+  - local track facility
+  - gait laboratory
+  - sports club
+  target_lead_time_days: 21
+  cost_ceiling_usd: 0
+  unresolved_reason: Facility, equipment, lane, and synchronization access are not confirmed.
+  start_trigger: Gait speed or sprint split claim is proposed.
+  cutoff_action: Limit outputs to independently validated event/count measures or block protocol core usefulness if minimum claims fail.
+  accountable_owner: Andrian Kolliegbo
+  execution_owner: instrumentation_partner_agent
+  acquisition:
+    outreach_status: NotStarted
+    named_contact: null
+    first_action: Identify the first timing-gate or instrumented-walkway facility and request access and export constraints.
+    next_action_due: within 2 execution days of start_trigger
+    approval_route: Andrian Kolliegbo for outreach/relationship commitment; privacy or institutional authority when applicable
+    escalation: If no scientifically valid no-cost path is confirmed by target_lead_time_days, present cost, scope-narrowing, and partnership
+      options for owner decision.
+    contact_log_artifact: docs/program/resources/res-timing-contact-log.yaml
+- id: RES-CALIBRATED_PLATFORM
+  name: Standardized drop-landing platform
+  status: UnresolvedExternal
+  required_for:
+  - landing
+  minimum_path: Stable measured-height platform, safety inspection, operator procedure, and calibrated floor/reference geometry.
+  candidate_sources:
+  - university lab
+  - sports-performance facility
+  - approved portable platform
+  target_lead_time_days: 14
+  cost_ceiling_usd: 0
+  unresolved_reason: Height, equipment, site, and safety owner are not confirmed.
+  start_trigger: Landing task identity is locked.
+  cutoff_action: Do not conduct original drop-landing capture.
+  accountable_owner: Andrian Kolliegbo
+  execution_owner: study_operations_agent
+  acquisition:
+    outreach_status: NotStarted
+    named_contact: null
+    first_action: Lock the evidence-supported drop height before requesting a safety-approved platform and site.
+    next_action_due: within 2 execution days of start_trigger
+    approval_route: Andrian Kolliegbo for outreach/relationship commitment; privacy or institutional authority when applicable
+    escalation: If no scientifically valid no-cost path is confirmed by target_lead_time_days, present cost, scope-narrowing, and partnership
+      options for owner decision.
+    contact_log_artifact: docs/program/resources/res-calibrated_platform-contact-log.yaml
+- id: RES-PARTNER
+  name: Institutional capture and validation partner
+  status: UnresolvedExternal
+  required_for:
+  - instrumented_validation
+  minimum_path: Named contact, written scope, facility/equipment access, data-use terms, schedule, and export rights.
+  candidate_sources:
+  - Purdue faculty laboratories
+  - Purdue athletics performance staff
+  - local clinics
+  - sports-performance organizations
+  target_lead_time_days: 30
+  cost_ceiling_usd: 0
+  unresolved_reason: No partner commitment is currently documented.
+  start_trigger: Shared instrumentation requirements are compiled.
+  cutoff_action: Continue software and public-dataset work; keep instrument-dependent release gates blocked.
+  accountable_owner: Andrian Kolliegbo
+  execution_owner: partnership_agent
+  acquisition:
+    outreach_status: NotStarted
+    named_contact: null
+    first_action: Prepare a partner one-pager that states protocols, equipment, data rights, scheduling, and zero-budget constraints.
+    next_action_due: within 2 execution days of start_trigger
+    approval_route: Andrian Kolliegbo for outreach/relationship commitment; privacy or institutional authority when applicable
+    escalation: If no scientifically valid no-cost path is confirmed by target_lead_time_days, present cost, scope-narrowing, and partnership
+      options for owner decision.
+    contact_log_artifact: docs/program/resources/res-partner-contact-log.yaml
