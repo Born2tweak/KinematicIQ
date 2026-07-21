@@ -72,7 +72,9 @@ def main() -> int:
         }
         rendered = json.dumps(payload, indent=2, sort_keys=True) + "\n"
         if args.evidence_out:
-            Path(args.evidence_out).resolve().write_text(rendered, encoding="utf-8")
+            evidence_path = Path(args.evidence_out).resolve()
+            evidence_path.parent.mkdir(parents=True, exist_ok=True)
+            evidence_path.write_text(rendered, encoding="utf-8")
         print(rendered, end="")
         return 0 if payload["all_required_checks_passed"] else 1
     except RuntimeError as error:
