@@ -28,11 +28,16 @@ class WaveScheduleTests(unittest.TestCase):
         second = schedule_wave.build_manifest(self.registry_path, self.resource_path)
         self.assertEqual(first, second)
         self.assertEqual(first["bands"]["committed"]["ids"], list(schedule_wave.COMMITTED_IDS))
-        self.assertEqual(first["bands"]["committed"]["hours"], 58)
+        hours_by_id = {item["id"]: item["expected_work_hours"] for item in self.registry["milestones"]}
+        imported_hours = sum(hours_by_id[item] for item in first["imported_satisfied"]["ids"])
+        self.assertEqual(first["bands"]["committed"]["hours"] + imported_hours, 58)
         self.assertEqual(first["capacity"]["review_synthesis_replan_overhead_hours"], 16)
-        self.assertEqual(first["capacity"]["committed_scheduled_hours"], 74)
+        self.assertEqual(
+            first["capacity"]["committed_scheduled_hours"],
+            first["bands"]["committed"]["hours"] + 16,
+        )
         self.assertLessEqual(first["capacity"]["committed_scheduled_hours"], 134)
-        self.assertEqual(first["imported_satisfied"]["ids"], [])
+        self.assertEqual(first["imported_satisfied"]["ids"], sorted(first["imported_satisfied"]["ids"]))
         self.assertLessEqual(
             max(item["window"]["finish_productive_hour"] for item in first["bands"]["committed"]["schedule"]),
             42,
@@ -52,14 +57,16 @@ class WaveScheduleTests(unittest.TestCase):
         manifest = schedule_wave.build_manifest(self.registry_path, self.resource_path)
         over_capacity = deepcopy(manifest)
         over_capacity["capacity"]["review_synthesis_replan_overhead_hours"] = 100
-        over_capacity["capacity"]["committed_scheduled_hours"] = 158
+        over_capacity["capacity"]["committed_scheduled_hours"] = (
+            over_capacity["capacity"]["committed_milestone_hours"] + 100
+        )
         with self.assertRaisesRegex(schedule_wave.ScheduleError, "exceeds 134"):
             schedule_wave.verify_manifest(over_capacity, self.registry, self.resources)
 
         broken_dependency = deepcopy(manifest)
-        kq002 = next(item for item in broken_dependency["bands"]["committed"]["schedule"] if item["id"] == "KQ-002")
-        kq002["window"]["start_productive_hour"] = 0
-        with self.assertRaisesRegex(schedule_wave.ScheduleError, "starts before KQ-001"):
+        kq003 = next(item for item in broken_dependency["bands"]["committed"]["schedule"] if item["id"] == "KQ-003")
+        kq003["window"]["start_productive_hour"] = 0
+        with self.assertRaisesRegex(schedule_wave.ScheduleError, "starts before KQ-002"):
             schedule_wave.verify_manifest(broken_dependency, self.registry, self.resources)
 
     def test_cli_regenerates_and_verifies_same_manifest(self):

@@ -1,5 +1,14 @@
 # Decision Log
 
+## 2026-07-21: Restrict negative-decision skips to typed conditional nodes
+
+- Status: accepted for the Revision 4 repository control kernel.
+- Decision: only KQ-042, KQ-054, and KQ-168 may produce `SkippedByDecision`; only edges explicitly typed `conditional_decision` may consume it. Mandatory safety, privacy, validation, reproducibility, and release edges require their declared passed or owned blocker dispositions.
+- Evidence: `docs/program/milestone_schema.yaml`, `docs/program/milestone_registry.yaml`, `docs/program/predicate_catalog.yaml`, and the ten execution fixtures.
+- Consequence: a negative challenger, hybrid, or optional multi-protocol decision can preserve baseline progress without creating a general gate bypass.
+- Revisit when: the registry adds another genuinely optional implementation whose absence is an intended evidence-backed outcome.
+
+
 ## 2026-07-15: Reconcile Phase 3 and approve the Phase 4 identity contract
 
 - Status: accepted for P4-M00 documentation; code migration remains pending P4-M01.

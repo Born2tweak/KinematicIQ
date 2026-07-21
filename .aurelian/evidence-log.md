@@ -1,5 +1,18 @@
 # Evidence Log
 
+## 2026-07-21 — Expanded-10 KQ-001 and Revision 4 repository-integration gate
+
+- Git: `agent/expanded-10-revision-4` was pushed through `0702e842d9e22e537bc06f65c8acaca7219cae5f`; no merge to master or deployment occurred.
+- Registry: 175 milestone records validate against the tightened schema and semantic compiler; one root, no cycles, and reversible unlocks remain enforced.
+- Skip control: 759 broadly skippable edges were reduced to four typed conditional-decision edges backed by three explicit skip producers.
+- Fixtures: 12 program tests passed, including all ten required execution scenarios and negative skip/release cases.
+- Capacity: deterministic Wave 1 commits KQ-001 through KQ-015 at 58 milestone hours plus 16 overhead hours, 74/134 committed hours.
+- Application: production build passed; full suite reported 104 files passed and 1 skipped, with 626 tests passed and 4 skipped; targeted squat/lunge slice reported 5 files and 32 tests passed.
+- Forward Lunge synthetic evaluator: 3 sequences, exact-count rate 1, count MAE 0, false activation 0, dropout 0. This is engineering evidence only.
+- Clean clone: remote commit `0702e84` passed install, schema/semantics, program tests, schedule verification, build, full tests, lunge evaluation, and logical tracked-diff check.
+- Replay limitation: clean clones contain no eligible private `.posetape.json` files; `eval:tapes` produced the explicit `UNAVAILABLE_CLEAN_CLONE_CORPUS_EXPLICIT` disposition. No replay or human evidence was fabricated.
+
+
 ## 2026-07-15 — Phase 4 P4-M00 reconciliation
 
 - Git: `master` at `8d8a77d` had no unique commits relative to pushed `f49558e`; fast-forward integration preserved five Phase 2/3 commits.

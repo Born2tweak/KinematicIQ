@@ -1,6 +1,6 @@
 # Next Execution Package — M75-M78
 
-> **Expanded-10 Revision 4 authority (2026-07-21):** The next repository milestone is KQ-001 in `KINEMATICIQ_MASTER_EXECUTION_ROADMAP.md`, using `docs/program/milestone_registry.yaml` as the candidate execution contract. KQ-001 through KQ-015 must bind and verify the scheduler semantics in a clean clone before scheduler authority is granted. Squat remains the only available protocol; Forward Lunge and every additional movement remain unavailable until their preregistered release gates produce `GATE_PASS`.
+> **Expanded-10 Revision 4 authority (2026-07-21):** KQ-001 is complete with repository-bound evidence; KQ-002 is the next dependency-ready milestone in `KINEMATICIQ_MASTER_EXECUTION_ROADMAP.md`. The execution-semantics integration suite and remote clean-clone gate pass, while KQ-002 through KQ-015 remain the committed Phase A queue before scheduler authority is granted. Squat remains the only available protocol; Forward Lunge and every additional movement remain unavailable until their preregistered release gates produce `GATE_PASS`.
 
 > The M75-M78 and Phase 4 material below is preserved as historical execution context. It no longer defines the immediate engineering queue, but its scientific and human gates remain binding inputs to the Expanded-10 program.
 

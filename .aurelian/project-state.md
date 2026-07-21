@@ -5,7 +5,8 @@
 - Authoritative branch: `master`.
 - Expanded-10 program integration branch: `agent/expanded-10-revision-4`.
 - Revision 4 is the canonical candidate execution contract in `docs/implementation/KINEMATICIQ_MASTER_EXECUTION_ROADMAP.md`, backed by the machine-readable registries in `docs/program/`; it does not receive scheduler authority until KQ-001 through KQ-015 prove repository-bound validation and clean-clone behavior.
-- Authoritative implementation commit: `f49558edec40ca6a972ec65bd6ff07898c161c4b`.
+- Expanded-10 integration frontier: remote branch commit `0702e842d9e22e537bc06f65c8acaca7219cae5f`; KQ-001 status/evidence follows in the next evidence commit.
+- Preserved pre-Expanded-10 implementation frontier: `f49558edec40ca6a972ec65bd6ff07898c161c4b`.
 - Frontier reconciliation: remote `master` at `8d8a77d8ab0a6ab0c240f8327ef51e467dfd4cc2` had no unique commits and was fast-forwarded locally through the five pushed commits on `origin/agent/phase2-runtime-and-validation`; no history was discarded.
 - Current documentation authority: the Phase 4 package and canonical repository files at `master` HEAD. The exact resulting commit is recorded in the Phase 4 handoff and Git history because a commit cannot contain its own hash.
 
@@ -19,7 +20,16 @@
 - Observation protocol ID: `side-view-forward-lunge-stride-return-v1`.
 - Public, coaching, clinical, injury, kinetic, and normative use: not authorized.
 
-## Verified implementation evidence (2026-07-15)
+## Verified implementation evidence (2026-07-21)
+
+- Revision 4 control kernel: all 175 records pass the authoritative schema and cross-field semantic verifier.
+- Controlled decisions: only KQ-042, KQ-054, and KQ-168 can produce `SkippedByDecision`; only four typed conditional edges consume those skips.
+- Execution fixtures: all ten normative pass/fail/block/invalidation/isolation cases pass in the repository and a clean clone.
+- Wave 1: KQ-001 through KQ-015 require 58 milestone hours plus 16 review/synthesis/replan hours, totaling 74 of 134 committed hours.
+- Clean clone at `0702e84`: production build passed; 104 test files passed and 1 skipped; 626 tests passed and 4 skipped; synthetic Forward Lunge evaluation remained 3 sequences with exact-count rate 1 and zero count MAE, false activation, and dropout.
+- PoseTape replay remains explicitly unavailable in a clean clone because private athlete tapes are gitignored. No replay or participant-evidence pass is claimed.
+
+### Preserved Phase 4 baseline (2026-07-15)
 
 - Phase 3 source: `web/src/protocols/inlineLunge/index.ts`, `segmenter.ts`, `metrics.ts`, and `findings.ts` at `f49558e`.
 - Six ordered runtime states: standing, stepping, descending, bottom, ascending, returning.
@@ -41,7 +51,8 @@
 
 ## Active milestone and gates
 
-- Active Expanded-10 integration milestone: KQ-001, reconcile the live repository frontier and record current-commit evidence. KQ work may proceed autonomously on the dedicated branch subject to the milestone registry, while scientific release remains pass-only and evidence-gated.
+- Completed Expanded-10 milestone: KQ-001 repository frontier reconciliation. Next dependency-ready milestone: KQ-002 locked product charter.
+- Phase A scheduler authority is still withheld until KQ-002 through KQ-015 pass; the clean-clone integration mechanism itself is now executable and passing.
 - Completed milestone: P4-M00 documentation and authority reconciliation. Its acceptance evidence is recorded in `docs/implementation/progress/P4-M00-phase4-documentation-reconciliation.md`.
 - Completed milestone: P4-M01 additive naming migration with legacy-read compatibility.
 - Completed milestone: P4-M02 auditable evidence schemas.

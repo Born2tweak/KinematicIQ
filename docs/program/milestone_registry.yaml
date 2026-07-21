@@ -20,7 +20,7 @@ milestones:
   title: Reconcile repository frontier
   phase: A
   class: blocking_kernel
-  milestone_status: Pending
+  milestone_status: Passed
   expected_work_hours: 4
   objective: 'Produce and verify one bounded outcome: Reconcile repository frontier.'
   user_visible_outcome: none
