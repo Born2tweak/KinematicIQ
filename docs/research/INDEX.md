@@ -99,6 +99,24 @@ Supplemental M73 research: `NEXT_PROTOCOL_PORTFOLIO.md` ranks the next movement
 portfolio, and `INLINE_LUNGE_PROTOCOL_RESEARCH.md` is the sole selected
 research-only package. Neither authorizes data acquisition or implementation.
 
+The 2026-07-14 Phase 4 decision update adds three supplemental reports without
+creating a new immutable R-id:
+
+- `INLINE_LUNGE_EVIDENCE_UPDATE.md` resolves the current task as a proposed
+  forward lunge with stride and return, records the FMS naming conflict, and
+  audits evidence against the live repository.
+- `SINGLE_CAMERA_LUNGE_OBSERVABILITY_REVIEW.md` classifies every candidate
+  observation by view, landmarks, evidence, confidence, and abstention.
+- `TEMPORAL_TRACKING_FAILURE_AND_RECOVERY_REVIEW.md` defines the shared
+  temporal-failure taxonomy, recovery quarantine, and perturbation plan.
+
+Their synthesis lives in
+`docs/validation/INLINE_LUNGE_FIELD_VALIDATION_PROTOCOL.md`,
+`INLINE_LUNGE_DATASET_AND_CAPTURE_SPEC.md`, and
+`INLINE_LUNGE_EVENT_LABELING_HANDBOOK.md`. These artifacts preserve the current
+M73/M78 research-only and owner/data approval boundaries; they do not authorize
+capture, implementation, or availability.
+
 - M61 — dataset governance: metadata registry + validator + operator runbook
   + raw-data ignore boundary (`web/src/eval/datasetRegistry.ts`,
   `web/eval/datasets/registry.json`,

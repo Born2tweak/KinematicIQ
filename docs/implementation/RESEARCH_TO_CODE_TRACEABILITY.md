@@ -140,6 +140,10 @@ experimental unless stated.
 |---|---|---|
 | Next protocol portfolio | UI-PRMD, LLM-FMS, 2D/3D lunge validity study; `NEXT_PROTOCOL_PORTFOLIO.md` | inline lunge selected for research only |
 | Inline-lunge evidence package | `INLINE_LUNGE_PROTOCOL_RESEARCH.md` | capture/runtime hypothesis and hard gates; no code or availability |
+| Lunge evidence/identity update | `INLINE_LUNGE_EVIDENCE_UPDATE.md` | Proposed task is forward lunge with stride and return, not FMS inline lunge; identity decision blocks capture/code |
+| Single-camera lunge observability | `SINGLE_CAMERA_LUNGE_OBSERVABILITY_REVIEW.md` | Count/events remain experimental, projected knee angle analyst-only, frontal/COM unavailable, kinetics/clinical claims forbidden |
+| Temporal failure and recovery | `TEMPORAL_TRACKING_FAILURE_AND_RECOVERY_REVIEW.md` | Shared tracking/suspect/missing/quarantine/discontinuity contract and versioned perturbation requirements; no code authorized |
+| Lunge validation/data/label system | `docs/validation/INLINE_LUNGE_FIELD_VALIDATION_PROTOCOL.md`, `INLINE_LUNGE_DATASET_AND_CAPTURE_SPEC.md`, `INLINE_LUNGE_EVENT_LABELING_HANDBOOK.md` | Preregistration, subject-held-out split, immutable dual-rater truth, capture/schema contracts, and separate human activation authority; implementation remains blocked |
 | Release readiness | `M74_RELEASE_READINESS_SCORECARD.md`, release-readiness e2e | not release-ready; local gates recorded and landing overclaims corrected |
 | Dev-toolchain remediation | npm advisories, official Vite/Vitest migration guides, isolated M75 spike | zero-audit candidate verified; repository migration approval-blocked |
 
