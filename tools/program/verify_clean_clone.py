@@ -11,7 +11,16 @@ from typing import Any
 
 
 def run(command: list[str], cwd: Path) -> dict[str, Any]:
-    result = subprocess.run(command, cwd=cwd, capture_output=True, text=True)
+    try:
+        result = subprocess.run(command, cwd=cwd, capture_output=True, text=True)
+    except OSError as error:
+        return {
+            "command": command,
+            "exit_code": 127,
+            "accepted": False,
+            "stdout": "",
+            "stderr": str(error),
+        }
     return {
         "command": command,
         "exit_code": result.returncode,
@@ -31,6 +40,7 @@ def main() -> int:
 
     temp_root = Path(tempfile.mkdtemp(prefix="kinematiciq-clean-clone-"))
     clone = temp_root / "KinematicIQ"
+    npm = shutil.which("npm.cmd") or shutil.which("npm") or "npm"
     checks: list[dict[str, Any]] = []
     try:
         checks.append(run(["git", "clone", "--branch", args.branch, "--single-branch", args.repository, str(clone)], temp_root))
@@ -41,11 +51,11 @@ def main() -> int:
             ["python", "tools/program/verify_milestone.py", "--structure-only"],
             ["python", "-m", "unittest", "discover", "-s", "tests/program", "-p", "test_*.py", "-v"],
             ["python", "tools/program/schedule_wave.py", "--verify", "--output", "docs/program/WAVE_1_SCHEDULE.yaml"],
-            ["npm", "--prefix", "web", "ci"],
-            ["npm", "--prefix", "web", "run", "build"],
-            ["npm", "--prefix", "web", "test", "--", "--run", "--reporter=dot"],
-            ["npm", "--prefix", "web", "run", "eval:forward-lunge"],
-            ["npm", "--prefix", "web", "run", "eval:tapes"],
+            [npm, "--prefix", "web", "ci"],
+            [npm, "--prefix", "web", "run", "build"],
+            [npm, "--prefix", "web", "test", "--", "--run", "--reporter=dot"],
+            [npm, "--prefix", "web", "run", "eval:forward-lunge"],
+            [npm, "--prefix", "web", "run", "eval:tapes"],
         ]
         for command in commands:
             record = run(command, clone)
