@@ -1,0 +1,23 @@
+name: cross_protocol_isolation
+milestones:
+  - {id: squat-study, protocol_id: squat-v1, status: Passed, result_code: GATE_FAIL_RECORDED}
+  - {id: squat-disposition, protocol_id: squat-v1, status: Passed}
+  - {id: lunge-research, protocol_id: lunge-v1, status: Passed, stage: Researched, evidence_bearing: true}
+  - id: lunge-engineering
+    protocol_id: lunge-v1
+    status: Pending
+    dependencies: [{id: lunge-research}]
+  - id: rolling-dashboard
+    status: Pending
+    dependencies: [{id: squat-disposition}, {id: lunge-research}]
+protocols:
+  - id: squat-v1
+    decisions:
+      - {kind: failed_gate, signed_by: reviewer-a, signed_at: 2026-07-21T12:00:00Z}
+  - {id: lunge-v1}
+expected:
+  ready_queue: [lunge-engineering, rolling-dashboard]
+  protocols:
+    lunge-v1: {lifecycle: Researched, data_ready: false, engineering_ready: false, validation_ready: false}
+    squat-v1: {lifecycle: FailedGate, data_ready: false, engineering_ready: false, validation_ready: false}
+  terminal_dispositions: {squat-v1: FailedGate}

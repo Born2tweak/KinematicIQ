@@ -1,0 +1,23 @@
+name: negative_model_decision
+milestones:
+  - id: challenger
+    protocol_id: squat-v1
+    status: SkippedByDecision
+    result_code: NEGATIVE_DECISION_RECORDED
+    skip_decision:
+      decision_id: DEC-MODEL-001
+      authority: program_policy
+      rationale: challenger trigger not met
+      affected_scope: [challenger implementation only]
+      evidence: [KQ-040, KQ-041]
+      reconsideration_trigger: registered MediaPipe failure cluster or required missing capability
+  - id: baseline-next
+    protocol_id: squat-v1
+    status: Pending
+    dependencies: [{id: challenger, accepted_statuses: [SkippedByDecision]}]
+protocols: [{id: squat-v1}]
+expected:
+  ready_queue: [baseline-next]
+  protocols:
+    squat-v1: {lifecycle: Candidate, data_ready: false, engineering_ready: false, validation_ready: false}
+  terminal_dispositions: {}

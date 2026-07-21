@@ -1,0 +1,34 @@
+schema_version: 1
+milestone_id: KQ-001
+subject_frontier:
+  branch: agent/expanded-10-revision-4
+  imported_head: 4c0dbad67720adef7b610d49126d63aa4b95dc30
+  roadmap_status: canonical_candidate_repository_verification_pending
+  application:
+    available_protocols: [squat]
+    unavailable_research_protocols: [forwardLungeStrideReturn]
+    baseline_pose_engine: MediaPipe
+    processing_default: browser_local_first
+  scientific_blockers:
+    participant_evidence: absent
+    qualified_rater_evidence: absent
+    synchronized_reference: absent
+    repeat_session_evidence: absent
+    release_gate_passes: absent
+  authority:
+    production_deployment: forbidden_without_separate_authority
+    master_merge: forbidden_without_separate_authority
+assertions:
+- id: KQ-001-OUTCOME
+  actual: Code/docs/commits/current availability and blocked evidence agree
+evidence_sources:
+- web/src/protocols/registry.ts
+- web/src/protocols/runtime.ts
+- web/src/governance/phase4Availability.test.ts
+- docs/validation/PROTOCOL_STATUS.md
+- docs/adr/ADR-016-forward-lunge-remains-unavailable.md
+- .aurelian/project-state.md
+- docs/program/resource_registry.yaml
+- docs/validation/protocol_validation_registry.yaml
+unsupported_claims_rejected:
+- No new participant, dataset, accuracy, reliability, validity, or public-release evidence is claimed.

@@ -4,6 +4,8 @@
 **Planning basis:** four bounded workers, dedicated-branch commits/pushes, no production deployment authority
 **Forecast status:** must be regenerated after live-repository reconciliation and after each material velocity change
 
+**Executable Wave 1 manifest:** `docs/program/WAVE_1_SCHEDULE.yaml`, generated and verified by `tools/program/schedule_wave.py`. The manifest, rather than the prose bands below, is authoritative for ID assignments, closures, lane constraints, and capacity arithmetic.
+
 ## 1. Correction to the former seven-day promise
 
 The former six-package target is withdrawn. Its unique dependency closure was 339 modeled worker-hours; six `EngineeringComplete` packages required 476 worker-hours. Those totals cannot be represented honestly as a normal seven-day engineering commitment for four workers.
@@ -39,6 +41,8 @@ The scheduler recomputes earliest start, resource feasibility, and ready work af
 ## 4. Initial seven-day forecast bands
 
 These bands are provisional until KQ-001 replaces estimates with live-repository evidence.
+
+The initial ID-level manifest commits only KQ-001 through KQ-015: 58 milestone hours plus 16 review/synthesis/replan hours, or 74 of 134 committed-capacity hours. It explicitly keeps the full squat and lunge package closures outside the committed band. No milestone is imported as satisfied without a matching current evidence record.
 
 ### Committed — capacity reserved first
 

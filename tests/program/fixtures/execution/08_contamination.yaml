@@ -1,0 +1,15 @@
+name: locked_data_contamination
+milestones:
+  - {id: contaminated-open, protocol_id: squat-v1, status: Passed, result_code: CONTAMINATION_RECORDED}
+  - {id: repreregister, protocol_id: squat-v2, status: Pending}
+protocols:
+  - id: squat-v1
+    decisions:
+      - {kind: invalidated, signed_by: study-lead, signed_at: 2026-07-21T12:00:00Z}
+  - {id: squat-v2}
+expected:
+  ready_queue: [repreregister]
+  protocols:
+    squat-v1: {lifecycle: Invalidated, data_ready: false, engineering_ready: false, validation_ready: false}
+    squat-v2: {lifecycle: Candidate, data_ready: false, engineering_ready: false, validation_ready: false}
+  terminal_dispositions: {squat-v1: Invalidated}

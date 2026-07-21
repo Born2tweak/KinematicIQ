@@ -1,0 +1,15 @@
+name: public_claim_invalidation
+milestones:
+  - {id: evidence-review, protocol_id: squat-v1, status: Passed, result_code: PUBLIC_CLAIM_INVALIDATED}
+  - {id: candidate-update, protocol_id: squat-v2, status: Pending}
+protocols:
+  - id: squat-v1
+    decisions:
+      - {kind: invalidated, signed_by: claim-reviewer, signed_at: 2026-07-21T12:00:00Z, public_action: frozen_withheld}
+  - {id: squat-v2}
+expected:
+  ready_queue: [candidate-update]
+  protocols:
+    squat-v1: {lifecycle: Invalidated, data_ready: false, engineering_ready: false, validation_ready: false}
+    squat-v2: {lifecycle: Candidate, data_ready: false, engineering_ready: false, validation_ready: false}
+  terminal_dispositions: {squat-v1: Invalidated}

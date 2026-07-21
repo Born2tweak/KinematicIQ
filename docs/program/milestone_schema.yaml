@@ -7,8 +7,26 @@ properties:
   schema_version: {const: 4}
   program_id: {const: kinematiciq-expanded-10}
   status: {type: string}
-  registry_policy: {type: object}
-  verification_profiles: {type: object, minProperties: 1}
+  registry_generated_from: {type: string}
+  registry_policy:
+    type: object
+    additionalProperties: false
+    required: [default_branch, automatic_commit, automatic_push, automatic_production_deploy, fail_closed, status_model, ready_rule, blocked_rule, release_rule, dependency_authority]
+    properties:
+      default_branch: {const: agent/expanded-10-revision-4}
+      automatic_commit: {const: true}
+      automatic_push: {const: true}
+      automatic_production_deploy: {const: false}
+      fail_closed: {const: true}
+      status_model: {type: string, minLength: 12}
+      ready_rule: {type: string, minLength: 12}
+      blocked_rule: {type: string, minLength: 12}
+      release_rule: {type: string, pattern: "GATE_PASS"}
+      dependency_authority: {type: string, minLength: 12}
+  verification_profiles:
+    type: object
+    minProperties: 1
+    additionalProperties: {type: string, minLength: 12}
   milestones:
     type: array
     minItems: 175
@@ -82,15 +100,10 @@ $defs:
       acceptance:
         type: array
         minItems: 3
-        items:
-          type: object
-          required: [id, predicate]
-          properties:
-            id: {type: string}
-            predicate: {type: string}
-          additionalProperties: true
+        items: {$ref: "#/$defs/predicate"}
       verification:
         type: object
+        additionalProperties: false
         required: [profile, automated, manual_gate, clean_clone_required]
         properties:
           profile: {type: string}
@@ -99,17 +112,35 @@ $defs:
             minItems: 1
             items:
               type: object
+              additionalProperties: false
               required: [id, command]
               properties:
                 id: {type: string}
                 command: {type: string, minLength: 3}
-          manual_gate: {type: [object, "null"]}
+          manual_gate:
+            oneOf:
+              - {type: "null"}
+              - type: object
+                additionalProperties: false
+                required: [required_when, acceptable_evidence, absence_behavior]
+                properties:
+                  required_when: {type: string, minLength: 12}
+                  acceptable_evidence: {type: array, minItems: 1, items: {type: string}}
+                  absence_behavior: {type: string, minLength: 12}
           clean_clone_required: {type: boolean}
       failure:
         type: object
+        additionalProperties: false
         required: [classify_as, abstain_or_rollback, research_trigger, retry_budget, locked_evidence_retuning_forbidden]
+        properties:
+          classify_as: {const: FailedTechnical}
+          abstain_or_rollback: {type: string, minLength: 12}
+          research_trigger: {type: [string, "null"]}
+          retry_budget: {type: integer, minimum: 0, maximum: 5}
+          locked_evidence_retuning_forbidden: {type: boolean}
       outcomes:
         type: object
+        additionalProperties: false
         required: [pass, technical_failure, human_block, external_block]
         properties:
           pass: {$ref: "#/$defs/outcome"}
@@ -117,28 +148,127 @@ $defs:
           human_block: {$ref: "#/$defs/outcome"}
           external_block: {$ref: "#/$defs/outcome"}
           gate_fail: {$ref: "#/$defs/outcome"}
+          decision_skip: {$ref: "#/$defs/outcome"}
       state_updates:
         type: array
         minItems: 2
         items: {type: string}
       commit_policy:
         type: object
+        additionalProperties: false
         required: [class, commit_on_pass, push_on_pass, batchable]
+        properties:
+          class: {enum: [code_atomic, generated_status_batch, scientific_freeze_signed]}
+          commit_on_pass: {type: boolean}
+          push_on_pass: {type: boolean}
+          batchable: {type: boolean}
+      skip_policy:
+        type: object
+        additionalProperties: false
+        required: [decision_id, authority, rationale, affected_scope, evidence, reconsideration_trigger]
+        properties:
+          decision_id: {type: string, pattern: "^DEC-[A-Z0-9-]+$"}
+          authority: {enum: [program_policy, scientific_governance, product_owner]}
+          rationale: {type: string, minLength: 12}
+          affected_scope: {type: array, minItems: 1, items: {type: string}}
+          evidence: {type: array, minItems: 1, items: {type: string}}
+          expires_at: {type: [string, "null"], format: date-time}
+          reconsideration_trigger: {type: string, minLength: 12}
       unlocks:
         type: array
         items: {type: string, pattern: "^KQ-[0-9]{3}$"}
+  predicate:
+    oneOf:
+      - type: object
+        additionalProperties: false
+        required: [id, predicate, inputs]
+        properties:
+          id: {type: string}
+          predicate: {const: all_artifacts_exist_and_nonempty}
+          inputs: {type: array, minItems: 1, items: {type: string}}
+      - type: object
+        additionalProperties: false
+        required: [id, predicate, evidence, expected]
+        properties:
+          id: {type: string}
+          predicate: {const: current_run_evidence_matches_head}
+          evidence: {type: string}
+          expected:
+            type: object
+            additionalProperties: false
+            required: [milestone_id, all_required_checks_passed]
+            properties:
+              milestone_id: {type: string, pattern: "^KQ-[0-9]{3}$"}
+              all_required_checks_passed: {const: true}
+      - type: object
+        additionalProperties: false
+        required: [id, predicate, contract, assertion_id]
+        properties:
+          id: {type: string}
+          predicate: {const: contract_output_assertion_passes}
+          contract: {type: string}
+          assertion_id: {type: string, pattern: "^KQ-[0-9]{3}-OUTCOME$"}
+      - type: object
+        additionalProperties: false
+        required: [id, predicate, command_id, expected]
+        properties:
+          id: {type: string}
+          predicate: {const: command_exit_code_equals}
+          command_id: {type: string}
+          expected: {const: 0}
+      - type: object
+        additionalProperties: false
+        required: [id, predicate, command_ids, expected]
+        properties:
+          id: {type: string}
+          predicate: {const: regression_floor_passes}
+          command_ids: {type: array, minItems: 1, uniqueItems: true, items: {type: string}}
+          expected:
+            type: object
+            additionalProperties: false
+            required: [failed_tests, build_exit_code]
+            properties:
+              failed_tests: {const: 0}
+              build_exit_code: {const: 0}
+      - type: object
+        additionalProperties: false
+        required: [id, predicate, allowed_result_codes]
+        properties:
+          id: {type: string}
+          predicate: {const: validation_disposition_is_signed_and_allowed}
+          allowed_result_codes:
+            type: array
+            minItems: 1
+            uniqueItems: true
+            items: {enum: [GATE_PASS, GATE_FAIL_RECORDED, BLOCKED_EXTERNAL_WITH_OWNER, BLOCKED_HUMAN_WITH_OWNER]}
+      - type: object
+        additionalProperties: false
+        required: [id, predicate, release_result, required_upstream_result]
+        properties:
+          id: {type: string}
+          predicate: {const: release_eligibility_requires_gate_pass_only}
+          release_result: {const: RELEASE_ELIGIBLE}
+          required_upstream_result: {const: GATE_PASS}
   dependency:
     type: object
     additionalProperties: false
     required: [id, accepted_milestone_statuses]
     properties:
       id: {type: string, pattern: "^KQ-[0-9]{3}$"}
+      edge_class: {enum: [mandatory, conditional_decision, release_disposition]}
       accepted_milestone_statuses:
         type: array
         minItems: 1
+        uniqueItems: true
         items: {$ref: "#/$defs/milestoneStatus"}
+      accepted_result_codes:
+        type: array
+        minItems: 1
+        uniqueItems: true
+        items: {type: string, pattern: "^[A-Z][A-Z0-9_]+$"}
   outcome:
     type: object
+    additionalProperties: false
     required: [milestone_status, result_code]
     properties:
       milestone_status: {$ref: "#/$defs/milestoneStatus"}

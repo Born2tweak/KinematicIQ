@@ -112,7 +112,6 @@ milestones:
   - id: KQ-001
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -212,11 +211,9 @@ milestones:
   - id: KQ-001
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-002
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -306,7 +303,6 @@ milestones:
   - id: KQ-003
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -425,7 +421,6 @@ milestones:
   - id: KQ-004
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -512,7 +507,6 @@ milestones:
   - id: KQ-005
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -615,11 +609,9 @@ milestones:
   - id: KQ-002
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-004
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -707,11 +699,9 @@ milestones:
   - id: KQ-004
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-006
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -827,15 +817,12 @@ milestones:
   - id: KQ-004
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-007
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-008
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -942,11 +929,9 @@ milestones:
   - id: KQ-003
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-004
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -1049,7 +1034,6 @@ milestones:
   - id: KQ-009
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -1152,7 +1136,6 @@ milestones:
   - id: KQ-008
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -1249,7 +1232,6 @@ milestones:
   - id: KQ-009
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -1336,15 +1318,12 @@ milestones:
   - id: KQ-004
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-008
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-009
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -1433,43 +1412,33 @@ milestones:
   - id: KQ-005
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-006
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-007
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-008
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-009
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-010
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-011
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-012
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-013
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-014
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -1510,6 +1479,10 @@ milestones:
     predicate: contract_output_assertion_passes
     contract: docs/program/artifacts/kq-015.yaml
     assertion_id: KQ-015-OUTCOME
+  - id: KQ-015-A4
+    predicate: command_exit_code_equals
+    command_id: clean_clone_gate
+    expected: 0
   verification:
     profile: program_contract
     automated:
@@ -1518,6 +1491,8 @@ milestones:
         --id KQ-015
     - id: targeted_contract_checks
       command: python tools/program/run_contract_checks.py --id KQ-015 --evidence-out docs/status/milestones/KQ-015.json
+    - id: clean_clone_gate
+      command: python tools/program/verify_clean_clone.py --branch agent/expanded-10-revision-4
     manual_gate: null
     clean_clone_required: true
   failure:
@@ -1564,11 +1539,9 @@ milestones:
   - id: KQ-001
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-003
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -1674,11 +1647,9 @@ milestones:
   - id: KQ-001
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-003
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -1783,11 +1754,9 @@ milestones:
   - id: KQ-016
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-017
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -1892,7 +1861,6 @@ milestones:
   - id: KQ-018
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -1998,7 +1966,6 @@ milestones:
   - id: KQ-019
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -2102,7 +2069,6 @@ milestones:
   - id: KQ-019
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -2206,11 +2172,9 @@ milestones:
   - id: KQ-018
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-019
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -2317,7 +2281,6 @@ milestones:
   - id: KQ-022
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -2419,11 +2382,9 @@ milestones:
   - id: KQ-018
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-022
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -2526,11 +2487,9 @@ milestones:
   - id: KQ-019
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-022
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -2634,11 +2593,9 @@ milestones:
   - id: KQ-002
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-004
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -2747,7 +2704,6 @@ milestones:
   - id: KQ-026
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -2863,7 +2819,6 @@ milestones:
   - id: KQ-026
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -2969,11 +2924,9 @@ milestones:
   - id: KQ-022
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-026
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -3102,7 +3055,6 @@ milestones:
   - id: KQ-029
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -3207,7 +3159,6 @@ milestones:
   - id: KQ-026
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -3312,15 +3263,12 @@ milestones:
   - id: KQ-029
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-030
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-031
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -3428,11 +3376,9 @@ milestones:
   - id: KQ-016
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-032
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -3535,31 +3481,24 @@ milestones:
   - id: KQ-026
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-027
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-028
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-029
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-030
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-031
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-032
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -3667,39 +3606,30 @@ milestones:
   - id: KQ-016
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-017
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-020
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-021
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-023
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-024
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-025
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-033
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-034
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -3819,11 +3749,9 @@ milestones:
   - id: KQ-022
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-026
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -3928,7 +3856,6 @@ milestones:
   - id: KQ-036
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -4041,7 +3968,6 @@ milestones:
   - id: KQ-036
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -4146,15 +4072,12 @@ milestones:
   - id: KQ-036
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-037
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-038
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -4272,11 +4195,9 @@ milestones:
   - id: KQ-038
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-039
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -4380,23 +4301,18 @@ milestones:
   - id: KQ-040
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-043
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-044
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-045
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-046
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -4496,6 +4412,15 @@ milestones:
   title: Implement selected research adapter
   phase: C
   class: deferred_hardening
+  skip_policy:
+    decision_id: DEC-NO-CHALLENGER-ADAPTER
+    authority: program_policy
+    rationale: A challenger implementation is unnecessary when KQ-041 selects no evidence-backed challenger.
+    affected_scope:
+    - research-only challenger adapter implementation
+    evidence:
+    - docs/status/milestones/KQ-041.json
+    reconsideration_trigger: A registered MediaPipe failure cluster or required missing capability satisfies KQ-040.
   milestone_status: Pending
   expected_work_hours: 7
   objective: 'Produce and verify one bounded outcome: Implement selected research adapter.'
@@ -4504,7 +4429,6 @@ milestones:
   - id: KQ-041
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -4584,6 +4508,9 @@ milestones:
     external_block:
       milestone_status: BlockedExternal
       result_code: BLOCKED_EXTERNAL_WITH_OWNER
+    decision_skip:
+      milestone_status: SkippedByDecision
+      result_code: NO_CHALLENGER_REQUIRED
   state_updates:
   - milestone.KQ-042.status=<outcome.milestone_status>
   - milestone.KQ-042.result_code=<outcome.result_code>
@@ -4606,15 +4533,12 @@ milestones:
   - id: KQ-016
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-017
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-038
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -4722,11 +4646,9 @@ milestones:
   - id: KQ-039
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-043
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -4831,11 +4753,9 @@ milestones:
   - id: KQ-039
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-043
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -4940,11 +4860,9 @@ milestones:
   - id: KQ-039
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-043
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -5051,23 +4969,20 @@ milestones:
   - id: KQ-041
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-042
+    edge_class: conditional_decision
     accepted_milestone_statuses:
     - Passed
     - SkippedByDecision
   - id: KQ-044
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-045
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-046
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -5174,11 +5089,9 @@ milestones:
   - id: KQ-025
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-047
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -5281,7 +5194,6 @@ milestones:
   - id: KQ-029
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -5387,7 +5299,6 @@ milestones:
   - id: KQ-049
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -5489,19 +5400,15 @@ milestones:
   - id: KQ-049
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-050
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-063
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-064
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies:
   - RES-RATER
@@ -5611,15 +5518,12 @@ milestones:
   - id: KQ-029
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-049
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-051
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -5726,19 +5630,15 @@ milestones:
   - id: KQ-038
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-046
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-052
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-061
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -5836,6 +5736,15 @@ milestones:
   title: Decide or implement hybrid candidate
   phase: C
   class: deferred_hardening
+  skip_policy:
+    decision_id: DEC-NO-HYBRID-CANDIDATE
+    authority: program_policy
+    rationale: Hybrid implementation is unnecessary when the local-first expansion trigger is not satisfied.
+    affected_scope:
+    - optional remote processing candidate
+    evidence:
+    - docs/status/milestones/KQ-053.json
+    reconsideration_trigger: KQ-053 records a validated local capability gap and a consented product-value case.
   milestone_status: Pending
   expected_work_hours: 7
   objective: 'Produce and verify one bounded outcome: Decide or implement hybrid candidate.'
@@ -5844,7 +5753,6 @@ milestones:
   - id: KQ-053
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies:
   - RES-PRIVACY
@@ -5926,6 +5834,9 @@ milestones:
     external_block:
       milestone_status: BlockedExternal
       result_code: BLOCKED_EXTERNAL_WITH_OWNER
+    decision_skip:
+      milestone_status: SkippedByDecision
+      result_code: NO_HYBRID_REQUIRED
   state_updates:
   - milestone.KQ-054.status=<outcome.milestone_status>
   - milestone.KQ-054.result_code=<outcome.result_code>
@@ -5950,60 +5861,47 @@ milestones:
   - id: KQ-037
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-039
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-040
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-041
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-043
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-044
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-045
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-046
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-047
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-048
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-049
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-051
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-052
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-053
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-054
+    edge_class: conditional_decision
     accepted_milestone_statuses:
     - Passed
     - SkippedByDecision
@@ -6122,11 +6020,9 @@ milestones:
   - id: KQ-002
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-004
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -6247,7 +6143,6 @@ milestones:
   - id: KQ-056
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -6363,7 +6258,6 @@ milestones:
   - id: KQ-056
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -6479,7 +6373,6 @@ milestones:
   - id: KQ-058
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -6581,11 +6474,9 @@ milestones:
   - id: KQ-012
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-058
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -6688,7 +6579,6 @@ milestones:
   - id: KQ-056
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies:
   - RES-PRIVACY
@@ -6806,11 +6696,9 @@ milestones:
   - id: KQ-019
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-061
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -6923,11 +6811,9 @@ milestones:
   - id: KQ-027
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-056
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -7042,7 +6928,6 @@ milestones:
   - id: KQ-063
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -7155,11 +7040,9 @@ milestones:
   - id: KQ-058
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-061
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -7274,15 +7157,12 @@ milestones:
   - id: KQ-056
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-057
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-065
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -7397,7 +7277,6 @@ milestones:
   - id: KQ-056
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -7514,11 +7393,9 @@ milestones:
   - id: KQ-057
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-067
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -7632,11 +7509,9 @@ milestones:
   - id: KQ-057
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-067
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -7750,19 +7625,15 @@ milestones:
   - id: KQ-029
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-030
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-052
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-067
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -7878,15 +7749,12 @@ milestones:
   - id: KQ-058
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-065
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-067
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -8001,19 +7869,17 @@ milestones:
   - id: KQ-020
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-021
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-054
+    edge_class: conditional_decision
     accepted_milestone_statuses:
     - Passed
     - SkippedByDecision
   - id: KQ-067
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -8130,11 +7996,9 @@ milestones:
   - id: KQ-056
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-057
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -8260,43 +8124,33 @@ milestones:
   - id: KQ-028
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-056
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-057
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-066
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-068
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-069
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-070
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-071
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-072
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-073
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -8418,67 +8272,51 @@ milestones:
   - id: KQ-058
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-059
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-061
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-062
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-063
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-064
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-065
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-066
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-067
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-068
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-069
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-070
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-071
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-072
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-073
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-074
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -8595,15 +8433,12 @@ milestones:
   - id: KQ-002
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-027
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-028
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -8718,11 +8553,9 @@ milestones:
   - id: KQ-027
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-028
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -8836,15 +8669,12 @@ milestones:
   - id: KQ-026
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-027
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-029
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -8961,15 +8791,12 @@ milestones:
   - id: KQ-049
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-051
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-078
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -9084,19 +8911,15 @@ milestones:
   - id: KQ-020
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-021
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-032
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-078
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -9212,11 +9035,9 @@ milestones:
   - id: KQ-030
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-032
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -9330,11 +9151,9 @@ milestones:
   - id: KQ-031
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-056
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -9449,15 +9268,12 @@ milestones:
   - id: KQ-028
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-073
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-077
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -9573,31 +9389,24 @@ milestones:
   - id: KQ-076
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-078
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-079
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-080
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-081
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-082
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-083
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -9706,39 +9515,30 @@ milestones:
   - id: KQ-076
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-077
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-078
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-079
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-080
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-081
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-082
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-083
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-084
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -9849,23 +9649,18 @@ milestones:
   - id: KQ-002
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-004
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-008
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-012
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-027
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -9957,23 +9752,18 @@ milestones:
   - id: KQ-086
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-029
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-056
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-057
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-073
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -10066,31 +9856,24 @@ milestones:
   - id: KQ-087
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-058
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-061
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-062
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-063
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-064
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-065
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies:
   - RES-PARTICIPANTS
@@ -10199,23 +9982,18 @@ milestones:
   - id: KQ-087
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-029
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-035
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-037
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-039
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -10328,39 +10106,30 @@ milestones:
   - id: KQ-089
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-076
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-077
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-078
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-079
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-080
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-081
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-082
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-083
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -10472,47 +10241,36 @@ milestones:
   - id: KQ-088
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-089
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-090
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-066
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-067
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-068
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-069
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-070
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-071
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-072
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-073
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -10625,7 +10383,6 @@ milestones:
   - id: KQ-091
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies:
   - RES-PARTICIPANTS
@@ -10737,15 +10494,19 @@ milestones:
   user_visible_outcome: none
   dependencies:
   - id: KQ-092
+    edge_class: release_disposition
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
     - BlockedExternal
     - BlockedHuman
+    accepted_result_codes:
+    - GATE_PASS
+    - GATE_FAIL_RECORDED
+    - BLOCKED_EXTERNAL_WITH_OWNER
+    - BLOCKED_HUMAN_WITH_OWNER
   - id: KQ-074
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -10844,23 +10605,18 @@ milestones:
   - id: KQ-002
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-004
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-008
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-012
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-027
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -10952,23 +10708,18 @@ milestones:
   - id: KQ-094
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-029
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-056
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-057
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-073
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -11061,31 +10812,24 @@ milestones:
   - id: KQ-095
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-058
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-061
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-062
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-063
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-064
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-065
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies:
   - RES-PARTICIPANTS
@@ -11193,23 +10937,18 @@ milestones:
   - id: KQ-095
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-029
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-035
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-037
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-039
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -11321,39 +11060,30 @@ milestones:
   - id: KQ-097
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-076
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-077
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-078
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-079
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-080
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-081
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-082
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-083
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -11465,47 +11195,36 @@ milestones:
   - id: KQ-096
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-097
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-098
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-066
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-067
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-068
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-069
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-070
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-071
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-072
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-073
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -11618,7 +11337,6 @@ milestones:
   - id: KQ-099
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies:
   - RES-PARTICIPANTS
@@ -11730,15 +11448,19 @@ milestones:
   user_visible_outcome: none
   dependencies:
   - id: KQ-100
+    edge_class: release_disposition
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
     - BlockedExternal
     - BlockedHuman
+    accepted_result_codes:
+    - GATE_PASS
+    - GATE_FAIL_RECORDED
+    - BLOCKED_EXTERNAL_WITH_OWNER
+    - BLOCKED_HUMAN_WITH_OWNER
   - id: KQ-074
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -11837,23 +11559,18 @@ milestones:
   - id: KQ-002
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-004
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-008
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-012
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-027
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -11945,23 +11662,18 @@ milestones:
   - id: KQ-102
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-029
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-056
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-057
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-073
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -12055,31 +11767,24 @@ milestones:
   - id: KQ-103
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-058
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-061
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-062
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-063
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-064
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-065
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies:
   - RES-PARTICIPANTS
@@ -12187,23 +11892,18 @@ milestones:
   - id: KQ-103
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-029
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-035
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-037
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-039
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -12315,39 +12015,30 @@ milestones:
   - id: KQ-105
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-076
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-077
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-078
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-079
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-080
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-081
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-082
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-083
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -12459,47 +12150,36 @@ milestones:
   - id: KQ-104
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-105
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-106
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-066
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-067
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-068
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-069
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-070
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-071
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-072
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-073
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -12612,7 +12292,6 @@ milestones:
   - id: KQ-107
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies:
   - RES-PARTICIPANTS
@@ -12724,15 +12403,19 @@ milestones:
   user_visible_outcome: none
   dependencies:
   - id: KQ-108
+    edge_class: release_disposition
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
     - BlockedExternal
     - BlockedHuman
+    accepted_result_codes:
+    - GATE_PASS
+    - GATE_FAIL_RECORDED
+    - BLOCKED_EXTERNAL_WITH_OWNER
+    - BLOCKED_HUMAN_WITH_OWNER
   - id: KQ-074
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -12831,23 +12514,18 @@ milestones:
   - id: KQ-002
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-004
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-008
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-012
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-027
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -12939,23 +12617,18 @@ milestones:
   - id: KQ-110
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-029
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-056
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-057
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-073
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -13048,31 +12721,24 @@ milestones:
   - id: KQ-111
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-058
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-061
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-062
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-063
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-064
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-065
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies:
   - RES-PARTICIPANTS
@@ -13180,23 +12846,18 @@ milestones:
   - id: KQ-111
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-029
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-035
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-037
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-039
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -13308,39 +12969,30 @@ milestones:
   - id: KQ-113
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-076
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-077
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-078
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-079
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-080
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-081
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-082
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-083
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -13452,47 +13104,36 @@ milestones:
   - id: KQ-112
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-113
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-114
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-066
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-067
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-068
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-069
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-070
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-071
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-072
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-073
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -13605,7 +13246,6 @@ milestones:
   - id: KQ-115
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies:
   - RES-PARTICIPANTS
@@ -13717,15 +13357,19 @@ milestones:
   user_visible_outcome: none
   dependencies:
   - id: KQ-116
+    edge_class: release_disposition
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
     - BlockedExternal
     - BlockedHuman
+    accepted_result_codes:
+    - GATE_PASS
+    - GATE_FAIL_RECORDED
+    - BLOCKED_EXTERNAL_WITH_OWNER
+    - BLOCKED_HUMAN_WITH_OWNER
   - id: KQ-074
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -13824,23 +13468,18 @@ milestones:
   - id: KQ-002
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-004
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-008
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-012
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-027
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -13933,23 +13572,18 @@ milestones:
   - id: KQ-118
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-029
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-056
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-057
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-073
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -14043,31 +13677,24 @@ milestones:
   - id: KQ-119
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-058
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-061
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-062
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-063
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-064
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-065
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies:
   - RES-PARTICIPANTS
@@ -14175,23 +13802,18 @@ milestones:
   - id: KQ-119
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-029
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-035
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-037
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-039
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -14303,39 +13925,30 @@ milestones:
   - id: KQ-121
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-076
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-077
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-078
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-079
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-080
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-081
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-082
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-083
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -14447,47 +14060,36 @@ milestones:
   - id: KQ-120
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-121
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-122
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-066
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-067
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-068
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-069
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-070
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-071
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-072
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-073
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -14600,7 +14202,6 @@ milestones:
   - id: KQ-123
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies:
   - RES-PARTICIPANTS
@@ -14712,15 +14313,19 @@ milestones:
   user_visible_outcome: none
   dependencies:
   - id: KQ-124
+    edge_class: release_disposition
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
     - BlockedExternal
     - BlockedHuman
+    accepted_result_codes:
+    - GATE_PASS
+    - GATE_FAIL_RECORDED
+    - BLOCKED_EXTERNAL_WITH_OWNER
+    - BLOCKED_HUMAN_WITH_OWNER
   - id: KQ-074
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -14819,23 +14424,18 @@ milestones:
   - id: KQ-002
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-004
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-008
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-012
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-027
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -14927,23 +14527,18 @@ milestones:
   - id: KQ-126
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-029
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-056
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-057
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-073
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -15037,31 +14632,24 @@ milestones:
   - id: KQ-127
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-058
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-061
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-062
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-063
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-064
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-065
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies:
   - RES-PARTICIPANTS
@@ -15169,23 +14757,18 @@ milestones:
   - id: KQ-127
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-029
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-035
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-037
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-039
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -15297,39 +14880,30 @@ milestones:
   - id: KQ-129
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-076
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-077
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-078
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-079
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-080
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-081
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-082
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-083
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -15441,47 +15015,36 @@ milestones:
   - id: KQ-128
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-129
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-130
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-066
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-067
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-068
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-069
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-070
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-071
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-072
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-073
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -15594,7 +15157,6 @@ milestones:
   - id: KQ-131
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies:
   - RES-PARTICIPANTS
@@ -15706,15 +15268,19 @@ milestones:
   user_visible_outcome: none
   dependencies:
   - id: KQ-132
+    edge_class: release_disposition
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
     - BlockedExternal
     - BlockedHuman
+    accepted_result_codes:
+    - GATE_PASS
+    - GATE_FAIL_RECORDED
+    - BLOCKED_EXTERNAL_WITH_OWNER
+    - BLOCKED_HUMAN_WITH_OWNER
   - id: KQ-074
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -15813,23 +15379,18 @@ milestones:
   - id: KQ-002
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-004
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-008
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-012
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-027
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -15921,23 +15482,18 @@ milestones:
   - id: KQ-134
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-029
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-056
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-057
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-073
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -16030,31 +15586,24 @@ milestones:
   - id: KQ-135
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-058
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-061
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-062
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-063
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-064
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-065
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies:
   - RES-PARTICIPANTS
@@ -16162,23 +15711,18 @@ milestones:
   - id: KQ-135
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-029
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-035
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-037
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-039
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -16290,39 +15834,30 @@ milestones:
   - id: KQ-137
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-076
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-077
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-078
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-079
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-080
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-081
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-082
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-083
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -16434,47 +15969,36 @@ milestones:
   - id: KQ-136
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-137
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-138
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-066
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-067
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-068
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-069
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-070
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-071
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-072
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-073
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -16587,7 +16111,6 @@ milestones:
   - id: KQ-139
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies:
   - RES-PARTICIPANTS
@@ -16699,15 +16222,19 @@ milestones:
   user_visible_outcome: none
   dependencies:
   - id: KQ-140
+    edge_class: release_disposition
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
     - BlockedExternal
     - BlockedHuman
+    accepted_result_codes:
+    - GATE_PASS
+    - GATE_FAIL_RECORDED
+    - BLOCKED_EXTERNAL_WITH_OWNER
+    - BLOCKED_HUMAN_WITH_OWNER
   - id: KQ-074
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -16806,23 +16333,18 @@ milestones:
   - id: KQ-002
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-004
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-008
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-012
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-027
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -16914,23 +16436,18 @@ milestones:
   - id: KQ-142
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-029
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-056
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-057
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-073
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -17024,31 +16541,24 @@ milestones:
   - id: KQ-143
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-058
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-061
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-062
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-063
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-064
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-065
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies:
   - RES-PARTICIPANTS
@@ -17156,23 +16666,18 @@ milestones:
   - id: KQ-143
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-029
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-035
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-037
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-039
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -17284,39 +16789,30 @@ milestones:
   - id: KQ-145
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-076
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-077
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-078
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-079
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-080
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-081
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-082
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-083
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -17428,47 +16924,36 @@ milestones:
   - id: KQ-144
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-145
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-146
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-066
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-067
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-068
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-069
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-070
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-071
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-072
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-073
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -17581,7 +17066,6 @@ milestones:
   - id: KQ-147
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies:
   - RES-PARTICIPANTS
@@ -17693,15 +17177,19 @@ milestones:
   user_visible_outcome: none
   dependencies:
   - id: KQ-148
+    edge_class: release_disposition
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
     - BlockedExternal
     - BlockedHuman
+    accepted_result_codes:
+    - GATE_PASS
+    - GATE_FAIL_RECORDED
+    - BLOCKED_EXTERNAL_WITH_OWNER
+    - BLOCKED_HUMAN_WITH_OWNER
   - id: KQ-074
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -17800,23 +17288,18 @@ milestones:
   - id: KQ-002
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-004
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-008
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-012
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-027
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -17908,23 +17391,18 @@ milestones:
   - id: KQ-150
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-029
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-056
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-057
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-073
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -18018,31 +17496,24 @@ milestones:
   - id: KQ-151
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-058
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-061
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-062
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-063
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-064
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-065
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies:
   - RES-PARTICIPANTS
@@ -18151,23 +17622,18 @@ milestones:
   - id: KQ-151
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-029
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-035
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-037
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-039
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -18279,39 +17745,30 @@ milestones:
   - id: KQ-153
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-076
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-077
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-078
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-079
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-080
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-081
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-082
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-083
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -18423,47 +17880,36 @@ milestones:
   - id: KQ-152
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-153
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-154
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-066
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-067
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-068
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-069
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-070
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-071
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-072
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-073
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -18576,7 +18022,6 @@ milestones:
   - id: KQ-155
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies:
   - RES-PARTICIPANTS
@@ -18689,15 +18134,19 @@ milestones:
   user_visible_outcome: none
   dependencies:
   - id: KQ-156
+    edge_class: release_disposition
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
     - BlockedExternal
     - BlockedHuman
+    accepted_result_codes:
+    - GATE_PASS
+    - GATE_FAIL_RECORDED
+    - BLOCKED_EXTERNAL_WITH_OWNER
+    - BLOCKED_HUMAN_WITH_OWNER
   - id: KQ-074
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -18796,23 +18245,18 @@ milestones:
   - id: KQ-002
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-004
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-008
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-012
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-027
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -18904,23 +18348,18 @@ milestones:
   - id: KQ-158
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-029
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-056
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-057
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-073
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -19014,31 +18453,24 @@ milestones:
   - id: KQ-159
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-058
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-061
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-062
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-063
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-064
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-065
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies:
   - RES-PARTICIPANTS
@@ -19146,23 +18578,18 @@ milestones:
   - id: KQ-159
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-029
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-035
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-037
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-039
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -19274,39 +18701,30 @@ milestones:
   - id: KQ-161
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-076
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-077
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-078
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-079
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-080
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-081
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-082
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-083
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -19418,47 +18836,36 @@ milestones:
   - id: KQ-160
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-161
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-162
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-066
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-067
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-068
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-069
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-070
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-071
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-072
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-073
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -19571,7 +18978,6 @@ milestones:
   - id: KQ-163
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies:
   - RES-PARTICIPANTS
@@ -19683,15 +19089,19 @@ milestones:
   user_visible_outcome: none
   dependencies:
   - id: KQ-164
+    edge_class: release_disposition
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
     - BlockedExternal
     - BlockedHuman
+    accepted_result_codes:
+    - GATE_PASS
+    - GATE_FAIL_RECORDED
+    - BLOCKED_EXTERNAL_WITH_OWNER
+    - BLOCKED_HUMAN_WITH_OWNER
   - id: KQ-074
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -19790,43 +19200,33 @@ milestones:
   - id: KQ-089
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-097
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-105
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-113
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-121
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-129
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-137
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-145
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-153
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-161
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -19923,15 +19323,12 @@ milestones:
   - id: KQ-051
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-052
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-166
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -20011,6 +19408,15 @@ milestones:
   title: Multi-protocol session architecture
   phase: G
   class: deferred_hardening
+  skip_policy:
+    decision_id: DEC-NO-MULTIPROTOCOL-SESSION
+    authority: program_policy
+    rationale: Multi-protocol sessions remain absent when validated evidence and product need do not justify the added contract.
+    affected_scope:
+    - optional multi-protocol session architecture
+    evidence:
+    - docs/status/milestones/KQ-167.json
+    reconsideration_trigger: Validated cross-protocol evidence establishes a concrete multi-protocol session need.
   milestone_status: Pending
   expected_work_hours: 6
   objective: 'Produce and verify one bounded outcome: Multi-protocol session architecture.'
@@ -20019,11 +19425,9 @@ milestones:
   - id: KQ-166
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-167
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -20088,6 +19492,9 @@ milestones:
     external_block:
       milestone_status: BlockedExternal
       result_code: BLOCKED_EXTERNAL_WITH_OWNER
+    decision_skip:
+      milestone_status: SkippedByDecision
+      result_code: NO_MULTIPROTOCOL_SESSION_REQUIRED
   state_updates:
   - milestone.KQ-168.status=<outcome.milestone_status>
   - milestone.KQ-168.result_code=<outcome.result_code>
@@ -20109,51 +19516,39 @@ milestones:
   - id: KQ-031
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-082
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-089
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-097
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-105
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-113
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-121
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-129
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-137
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-145
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-153
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-161
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -20250,19 +19645,15 @@ milestones:
   - id: KQ-032
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-073
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-083
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-169
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -20349,17 +19740,16 @@ milestones:
   user_visible_outcome: none
   dependencies:
   - id: KQ-054
+    edge_class: conditional_decision
     accepted_milestone_statuses:
     - Passed
     - SkippedByDecision
   - id: KQ-061
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-072
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -20447,55 +19837,42 @@ milestones:
   - id: KQ-046
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-084
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-085
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-089
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-097
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-105
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-113
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-121
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-129
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-137
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-145
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-153
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-161
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -20593,39 +19970,30 @@ milestones:
   - id: KQ-015
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-035
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-055
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-075
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-085
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-166
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-170
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-171
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-172
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -20719,47 +20087,36 @@ milestones:
   - id: KQ-093
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-101
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-109
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-117
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-125
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-133
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-141
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-149
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-157
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-165
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-173
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:
@@ -20855,27 +20212,21 @@ milestones:
   - id: KQ-011
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-013
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-014
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-060
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-074
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   - id: KQ-174
     accepted_milestone_statuses:
     - Passed
-    - SkippedByDecision
   soft_dependencies: []
   resource_dependencies: []
   requirements:

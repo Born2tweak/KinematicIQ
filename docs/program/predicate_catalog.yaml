@@ -1,0 +1,41 @@
+schema_version: 1
+catalog_id: kinematiciq-expanded-10-predicates
+authority: docs/program/milestone_registry.yaml
+expected_value_rule: A produced artifact is never its own authority. Contract outcome assertions are compared with the milestone registry's first in_scope entry.
+evidence_provenance:
+  required:
+    - milestone_id
+    - subject_commit
+    - generated_at
+    - environment
+    - verifier_version
+    - verifier_hashes
+    - predicate_catalog_version
+    - command_hashes
+    - input_hashes
+    - checks
+    - all_required_checks_passed
+predicates:
+  all_artifacts_exist_and_nonempty:
+    inputs: {inputs: list[path]}
+    output: boolean
+  current_run_evidence_matches_head:
+    inputs: {evidence: path, expected: object}
+    output: boolean
+    stale_rule: subject_commit must be current HEAD or its ancestor and every recorded input hash must match
+  contract_output_assertion_passes:
+    inputs: {contract: path, assertion_id: string}
+    expected_from: milestone.in_scope[0]
+    output: boolean
+  command_exit_code_equals:
+    inputs: {command_id: string, expected: integer}
+    output: boolean
+  regression_floor_passes:
+    inputs: {command_ids: list[string], expected: object}
+    output: boolean
+  validation_disposition_is_signed_and_allowed:
+    inputs: {allowed_result_codes: list[string]}
+    output: boolean
+  release_eligibility_requires_gate_pass_only:
+    inputs: {release_result: string, required_upstream_result: string}
+    output: boolean

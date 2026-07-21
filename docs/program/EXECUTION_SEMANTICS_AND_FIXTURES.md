@@ -1,7 +1,9 @@
 # KinematicIQ Revision 4 — Execution Semantics and Required Fixtures
 
 **Authority:** companion contract for `KINEMATICIQ_MILESTONE_REGISTRY.yaml` schema v4
-**Status:** integration specification; fixtures must pass in a clean clone before the registry is declared canonical
+**Status:** repository implementation present; clean-clone evidence remains required before scheduler authority
+
+**Executable authority:** `tools/program/program_contract.py`, `tools/program/execution_semantics.py`, `tools/program/verify_milestone.py`, `tools/program/run_contract_checks.py`, the closed catalog in `predicate_catalog.yaml`, and the ten cases under `tests/program/fixtures/execution/`. The Markdown rules remain normative; code and fixtures must fail when they diverge.
 
 ## 1. Three independent state dimensions
 
@@ -19,6 +21,7 @@ A locked study that runs correctly and misses a preregistered threshold has mile
 
 - Dependencies are authoritative. `unlocks` is a generated reverse index and must match exactly.
 - Normal edges accept `Passed` or an explicitly authorized `SkippedByDecision`.
+- `SkippedByDecision` is legal only for a milestone with both a typed `skip_policy` and `decision_skip` outcome. Only a `conditional_decision` edge from that milestone may consume the skip. The current eligible nodes are KQ-042, KQ-054, and KQ-168; mandatory edges accept `Passed` only.
 - A release-disposition node may additionally accept `BlockedHuman` or `BlockedExternal` from its locked-study predecessor solely to record the blocker.
 - `FailedTechnical` never unlocks downstream scientific or release work. It opens diagnosis/retry/replan.
 - Program dashboards and closeout consume per-protocol disposition records, not an assumption that every protocol passed.
@@ -63,5 +66,14 @@ Revision 4 becomes scheduler-authoritative only when a clean clone proves:
 5. squat and forward lunge execute as the first real vertical slice;
 6. a resource-constrained schedule is regenerated from observed completion times;
 7. branch commit/push behavior works without production deployment authority.
+
+Run the repository implementation with:
+
+```text
+python tools/program/verify_milestone.py --structure-only
+python -m unittest discover -s tests/program -p "test_*.py" -v
+python tools/program/schedule_wave.py --verify --output docs/program/WAVE_1_SCHEDULE.yaml
+python tools/program/verify_clean_clone.py --branch agent/expanded-10-revision-4
+```
 
 Until then, the bundle is the canonical candidate specification—not evidence that the scheduler, validation, or release machinery has run.

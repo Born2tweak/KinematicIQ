@@ -1,0 +1,3403 @@
+schema_version: 1
+program_id: kinematiciq-expanded-10
+wave_id: expanded-10-wave-1
+sources:
+  milestone_registry: docs/program/milestone_registry.yaml
+  milestone_registry_sha256: b13924fe2c68faade2abbed75c627baa83e38a25407f1c7e59f9f1486ca8c27f
+  resource_registry: docs/program/resource_registry.yaml
+  resource_registry_sha256: 34cd13765e495a36cc6dee060964a432d55ed26e89c238d06f7e016b3516f2fc
+policy:
+  worker_count: 4
+  productive_hours_per_worker_day: 6
+  wave_days: 7
+  gross_capacity_hours: 168
+  planning_utilization_percent: 80
+  committed_capacity_hours: 134
+  maximum_concurrent_code_mutations: 2
+  maximum_concurrent_research_jobs: 3
+  reserved_review_synthesis_workers: 1
+workers:
+- id: W1
+  capabilities:
+  - code_and_architecture
+  - program_contracts
+  mutation_lane: A
+- id: W2
+  capabilities:
+  - code_and_architecture
+  - verification_and_fixtures
+  mutation_lane: B
+- id: W3
+  capabilities:
+  - program_contracts
+  - research_and_docs
+  mutation_lane: null
+- id: W4
+  capabilities:
+  - review
+  - synthesis
+  - replanning
+  mutation_lane: null
+imported_satisfied:
+  ids: []
+  evidence: []
+  explanation: Only registry-Passed milestones with a matching passing status artifact are imported. No such evidence exists;
+    no milestone is assumed satisfied.
+capacity:
+  committed_milestone_hours: 58
+  review_synthesis_replan_overhead_hours: 16
+  committed_scheduled_hours: 74
+  committed_capacity_hours: 134
+  uncommitted_capacity_hours: 60
+review_synthesis_constraints:
+  reserved_worker_id: W4
+  rule: W4 receives no milestone mutation assignment and remains the review/synthesis slot.
+  overhead:
+  - id: OH-REVIEW
+    hours: 7
+    worker_id: W4
+    window: distributed_across_days_1_7
+    start_condition: each review follows a coherent milestone diff
+    purpose: Daily diff and unsupported-claim review
+  - id: OH-SYNTHESIS
+    hours: 5
+    worker_id: W4
+    window: at_integration_boundaries_days_3_7
+    start_condition: two or more research, fixture, or integration outputs require synthesis
+    purpose: Fixture and integration synthesis
+  - id: OH-REPLAN
+    hours: 4
+    worker_id: W4
+    window: at_checkpoint_or_state_transition
+    start_condition: a pass, block, failure, estimate change, or checkpoint produces new evidence
+    purpose: Checkpoint evidence and dependency replan
+bands:
+  committed:
+    ids:
+    - KQ-001
+    - KQ-002
+    - KQ-003
+    - KQ-004
+    - KQ-005
+    - KQ-006
+    - KQ-007
+    - KQ-008
+    - KQ-009
+    - KQ-010
+    - KQ-011
+    - KQ-012
+    - KQ-013
+    - KQ-014
+    - KQ-015
+    hours: 58
+    schedule:
+    - id: KQ-001
+      title: Reconcile repository frontier
+      hours: 4
+      dependencies: []
+      unsatisfied_ancestor_closure_at_wave_start: []
+      required_capability: program_contracts
+      worker_id: W1
+      mutation_lane: null
+      start_condition: all dependencies have an accepted passing or controlled-skip disposition
+      window:
+        start_productive_hour: 0
+        finish_productive_hour: 4
+        earliest_start_day: 1
+        latest_finish_day: 1
+    - id: KQ-002
+      title: Approve locked product charter
+      hours: 3
+      dependencies:
+      - KQ-001
+      unsatisfied_ancestor_closure_at_wave_start:
+      - KQ-001
+      required_capability: program_contracts
+      worker_id: W1
+      mutation_lane: null
+      start_condition: all dependencies have an accepted passing or controlled-skip disposition
+      window:
+        start_productive_hour: 4
+        finish_productive_hour: 7
+        earliest_start_day: 1
+        latest_finish_day: 2
+    - id: KQ-003
+      title: Install canonical program artifact structure
+      hours: 2
+      dependencies:
+      - KQ-001
+      - KQ-002
+      unsatisfied_ancestor_closure_at_wave_start:
+      - KQ-001
+      - KQ-002
+      required_capability: program_contracts
+      worker_id: W1
+      mutation_lane: null
+      start_condition: all dependencies have an accepted passing or controlled-skip disposition
+      window:
+        start_productive_hour: 7
+        finish_productive_hour: 9
+        earliest_start_day: 2
+        latest_finish_day: 2
+    - id: KQ-004
+      title: Create milestone registry schema
+      hours: 4
+      dependencies:
+      - KQ-003
+      unsatisfied_ancestor_closure_at_wave_start:
+      - KQ-001
+      - KQ-002
+      - KQ-003
+      required_capability: code_and_architecture
+      worker_id: W1
+      mutation_lane: A
+      start_condition: all dependencies have an accepted passing or controlled-skip disposition
+      window:
+        start_productive_hour: 9
+        finish_productive_hour: 13
+        earliest_start_day: 2
+        latest_finish_day: 3
+    - id: KQ-005
+      title: Import completed milestone history
+      hours: 4
+      dependencies:
+      - KQ-004
+      unsatisfied_ancestor_closure_at_wave_start:
+      - KQ-001
+      - KQ-002
+      - KQ-003
+      - KQ-004
+      required_capability: research_and_docs
+      worker_id: W3
+      mutation_lane: null
+      start_condition: all dependencies have an accepted passing or controlled-skip disposition
+      window:
+        start_productive_hour: 13
+        finish_productive_hour: 17
+        earliest_start_day: 3
+        latest_finish_day: 3
+    - id: KQ-006
+      title: Build decision/evidence ID migration
+      hours: 4
+      dependencies:
+      - KQ-005
+      unsatisfied_ancestor_closure_at_wave_start:
+      - KQ-001
+      - KQ-002
+      - KQ-003
+      - KQ-004
+      - KQ-005
+      required_capability: code_and_architecture
+      worker_id: W1
+      mutation_lane: A
+      start_condition: all dependencies have an accepted passing or controlled-skip disposition
+      window:
+        start_productive_hour: 17
+        finish_productive_hour: 21
+        earliest_start_day: 3
+        latest_finish_day: 4
+    - id: KQ-008
+      title: Encode inflection/replan schema
+      hours: 4
+      dependencies:
+      - KQ-004
+      - KQ-006
+      unsatisfied_ancestor_closure_at_wave_start:
+      - KQ-001
+      - KQ-002
+      - KQ-003
+      - KQ-004
+      - KQ-005
+      - KQ-006
+      required_capability: code_and_architecture
+      worker_id: W1
+      mutation_lane: A
+      start_condition: all dependencies have an accepted passing or controlled-skip disposition
+      window:
+        start_productive_hour: 21
+        finish_productive_hour: 25
+        earliest_start_day: 4
+        latest_finish_day: 5
+    - id: KQ-007
+      title: Encode execution policy
+      hours: 3
+      dependencies:
+      - KQ-002
+      - KQ-004
+      unsatisfied_ancestor_closure_at_wave_start:
+      - KQ-001
+      - KQ-002
+      - KQ-003
+      - KQ-004
+      required_capability: program_contracts
+      worker_id: W3
+      mutation_lane: null
+      start_condition: all dependencies have an accepted passing or controlled-skip disposition
+      window:
+        start_productive_hour: 17
+        finish_productive_hour: 20
+        earliest_start_day: 3
+        latest_finish_day: 4
+    - id: KQ-009
+      title: Build status compiler
+      hours: 5
+      dependencies:
+      - KQ-004
+      - KQ-007
+      - KQ-008
+      unsatisfied_ancestor_closure_at_wave_start:
+      - KQ-001
+      - KQ-002
+      - KQ-003
+      - KQ-004
+      - KQ-005
+      - KQ-006
+      - KQ-007
+      - KQ-008
+      required_capability: code_and_architecture
+      worker_id: W1
+      mutation_lane: A
+      start_condition: all dependencies have an accepted passing or controlled-skip disposition
+      window:
+        start_productive_hour: 25
+        finish_productive_hour: 30
+        earliest_start_day: 5
+        latest_finish_day: 5
+    - id: KQ-014
+      title: Create critical-path scheduler
+      hours: 5
+      dependencies:
+      - KQ-004
+      - KQ-008
+      - KQ-009
+      unsatisfied_ancestor_closure_at_wave_start:
+      - KQ-001
+      - KQ-002
+      - KQ-003
+      - KQ-004
+      - KQ-005
+      - KQ-006
+      - KQ-007
+      - KQ-008
+      - KQ-009
+      required_capability: program_contracts
+      worker_id: W1
+      mutation_lane: null
+      start_condition: all dependencies have an accepted passing or controlled-skip disposition
+      window:
+        start_productive_hour: 30
+        finish_productive_hour: 35
+        earliest_start_day: 6
+        latest_finish_day: 6
+    - id: KQ-010
+      title: Build traceability link validator
+      hours: 4
+      dependencies:
+      - KQ-003
+      - KQ-004
+      unsatisfied_ancestor_closure_at_wave_start:
+      - KQ-001
+      - KQ-002
+      - KQ-003
+      - KQ-004
+      required_capability: code_and_architecture
+      worker_id: W2
+      mutation_lane: B
+      start_condition: all dependencies have an accepted passing or controlled-skip disposition
+      window:
+        start_productive_hour: 13
+        finish_productive_hour: 17
+        earliest_start_day: 3
+        latest_finish_day: 3
+    - id: KQ-012
+      title: Create research-question workflow
+      hours: 4
+      dependencies:
+      - KQ-008
+      unsatisfied_ancestor_closure_at_wave_start:
+      - KQ-001
+      - KQ-002
+      - KQ-003
+      - KQ-004
+      - KQ-005
+      - KQ-006
+      - KQ-008
+      required_capability: program_contracts
+      worker_id: W3
+      mutation_lane: null
+      start_condition: all dependencies have an accepted passing or controlled-skip disposition
+      window:
+        start_productive_hour: 25
+        finish_productive_hour: 29
+        earliest_start_day: 5
+        latest_finish_day: 5
+    - id: KQ-011
+      title: Build stale-authority detector
+      hours: 3
+      dependencies:
+      - KQ-009
+      unsatisfied_ancestor_closure_at_wave_start:
+      - KQ-001
+      - KQ-002
+      - KQ-003
+      - KQ-004
+      - KQ-005
+      - KQ-006
+      - KQ-007
+      - KQ-008
+      - KQ-009
+      required_capability: code_and_architecture
+      worker_id: W2
+      mutation_lane: B
+      start_condition: all dependencies have an accepted passing or controlled-skip disposition
+      window:
+        start_productive_hour: 30
+        finish_productive_hour: 33
+        earliest_start_day: 6
+        latest_finish_day: 6
+    - id: KQ-013
+      title: Create automatic checkpoint generator
+      hours: 3
+      dependencies:
+      - KQ-009
+      unsatisfied_ancestor_closure_at_wave_start:
+      - KQ-001
+      - KQ-002
+      - KQ-003
+      - KQ-004
+      - KQ-005
+      - KQ-006
+      - KQ-007
+      - KQ-008
+      - KQ-009
+      required_capability: research_and_docs
+      worker_id: W3
+      mutation_lane: null
+      start_condition: all dependencies have an accepted passing or controlled-skip disposition
+      window:
+        start_productive_hour: 30
+        finish_productive_hour: 33
+        earliest_start_day: 6
+        latest_finish_day: 6
+    - id: KQ-015
+      title: Phase A integration gate
+      hours: 6
+      dependencies:
+      - KQ-005
+      - KQ-006
+      - KQ-007
+      - KQ-008
+      - KQ-009
+      - KQ-010
+      - KQ-011
+      - KQ-012
+      - KQ-013
+      - KQ-014
+      unsatisfied_ancestor_closure_at_wave_start:
+      - KQ-001
+      - KQ-002
+      - KQ-003
+      - KQ-004
+      - KQ-005
+      - KQ-006
+      - KQ-007
+      - KQ-008
+      - KQ-009
+      - KQ-010
+      - KQ-011
+      - KQ-012
+      - KQ-013
+      - KQ-014
+      required_capability: research_and_docs
+      worker_id: W3
+      mutation_lane: null
+      start_condition: all dependencies have an accepted passing or controlled-skip disposition
+      window:
+        start_productive_hour: 35
+        finish_productive_hour: 41
+        earliest_start_day: 6
+        latest_finish_day: 7
+  probable:
+    ids:
+    - KQ-016
+    - KQ-017
+    - KQ-018
+    - KQ-019
+    - KQ-022
+    - KQ-025
+    - KQ-026
+    - KQ-029
+    - KQ-030
+    hours: 54
+    items:
+    - id: KQ-016
+      title: Freeze squat golden corpus
+      hours: 6
+      dependencies:
+      - KQ-001
+      - KQ-003
+      unsatisfied_ancestor_count_at_wave_start: 3
+      required_capability: code_and_architecture
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote only after committed evidence preserves capacity; then satisfy all dependencies
+      window: not_committed_or_slotted
+      unsatisfied_ancestor_closure_at_wave_start:
+      - KQ-001
+      - KQ-002
+      - KQ-003
+    - id: KQ-017
+      title: Freeze forward-lunge research corpus
+      hours: 6
+      dependencies:
+      - KQ-001
+      - KQ-003
+      unsatisfied_ancestor_count_at_wave_start: 3
+      required_capability: code_and_architecture
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote only after committed evidence preserves capacity; then satisfy all dependencies
+      window: not_committed_or_slotted
+      unsatisfied_ancestor_closure_at_wave_start:
+      - KQ-001
+      - KQ-002
+      - KQ-003
+    - id: KQ-018
+      title: Audit legacy PoseTape/session schemas
+      hours: 6
+      dependencies:
+      - KQ-016
+      - KQ-017
+      unsatisfied_ancestor_count_at_wave_start: 5
+      required_capability: code_and_architecture
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote only after committed evidence preserves capacity; then satisfy all dependencies
+      window: not_committed_or_slotted
+      unsatisfied_ancestor_closure_at_wave_start:
+      - KQ-001
+      - KQ-002
+      - KQ-003
+      - KQ-016
+      - KQ-017
+    - id: KQ-019
+      title: Define `FramePacket` v1
+      hours: 6
+      dependencies:
+      - KQ-018
+      unsatisfied_ancestor_count_at_wave_start: 6
+      required_capability: code_and_architecture
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote only after committed evidence preserves capacity; then satisfy all dependencies
+      window: not_committed_or_slotted
+      unsatisfied_ancestor_closure_at_wave_start:
+      - KQ-001
+      - KQ-002
+      - KQ-003
+      - KQ-016
+      - KQ-017
+      - KQ-018
+    - id: KQ-022
+      title: Define normalized `PoseSequence` v3
+      hours: 6
+      dependencies:
+      - KQ-018
+      - KQ-019
+      unsatisfied_ancestor_count_at_wave_start: 7
+      required_capability: code_and_architecture
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote only after committed evidence preserves capacity; then satisfy all dependencies
+      window: not_committed_or_slotted
+      unsatisfied_ancestor_closure_at_wave_start:
+      - KQ-001
+      - KQ-002
+      - KQ-003
+      - KQ-016
+      - KQ-017
+      - KQ-018
+      - KQ-019
+    - id: KQ-025
+      title: Define execution-segment provenance
+      hours: 6
+      dependencies:
+      - KQ-019
+      - KQ-022
+      unsatisfied_ancestor_count_at_wave_start: 8
+      required_capability: code_and_architecture
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote only after committed evidence preserves capacity; then satisfy all dependencies
+      window: not_committed_or_slotted
+      unsatisfied_ancestor_closure_at_wave_start:
+      - KQ-001
+      - KQ-002
+      - KQ-003
+      - KQ-016
+      - KQ-017
+      - KQ-018
+      - KQ-019
+      - KQ-022
+    - id: KQ-026
+      title: Define protocol package schema
+      hours: 6
+      dependencies:
+      - KQ-002
+      - KQ-004
+      unsatisfied_ancestor_count_at_wave_start: 4
+      required_capability: code_and_architecture
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote only after committed evidence preserves capacity; then satisfy all dependencies
+      window: not_committed_or_slotted
+      unsatisfied_ancestor_closure_at_wave_start:
+      - KQ-001
+      - KQ-002
+      - KQ-003
+      - KQ-004
+    - id: KQ-029
+      title: Define metric observability contract
+      hours: 6
+      dependencies:
+      - KQ-022
+      - KQ-026
+      unsatisfied_ancestor_count_at_wave_start: 10
+      required_capability: code_and_architecture
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote only after committed evidence preserves capacity; then satisfy all dependencies
+      window: not_committed_or_slotted
+      unsatisfied_ancestor_closure_at_wave_start:
+      - KQ-001
+      - KQ-002
+      - KQ-003
+      - KQ-004
+      - KQ-016
+      - KQ-017
+      - KQ-018
+      - KQ-019
+      - KQ-022
+      - KQ-026
+    - id: KQ-030
+      title: Define metric-level abstention contract
+      hours: 6
+      dependencies:
+      - KQ-029
+      unsatisfied_ancestor_count_at_wave_start: 11
+      required_capability: code_and_architecture
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote only after committed evidence preserves capacity; then satisfy all dependencies
+      window: not_committed_or_slotted
+      unsatisfied_ancestor_closure_at_wave_start:
+      - KQ-001
+      - KQ-002
+      - KQ-003
+      - KQ-004
+      - KQ-016
+      - KQ-017
+      - KQ-018
+      - KQ-019
+      - KQ-022
+      - KQ-026
+      - KQ-029
+  stretch:
+    ids:
+    - KQ-020
+    - KQ-021
+    - KQ-023
+    - KQ-024
+    - KQ-027
+    - KQ-028
+    - KQ-031
+    - KQ-032
+    - KQ-033
+    - KQ-034
+    - KQ-035
+    hours: 66
+    items:
+    - id: KQ-020
+      title: Adapt live camera source
+      hours: 6
+      dependencies:
+      - KQ-019
+      unsatisfied_ancestor_count_at_wave_start: 7
+      required_capability: code_and_architecture
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote only from measured throughput after committed and probable work; then satisfy all dependencies
+      window: not_committed_or_slotted
+      unsatisfied_ancestor_closure_at_wave_start:
+      - KQ-001
+      - KQ-002
+      - KQ-003
+      - KQ-016
+      - KQ-017
+      - KQ-018
+      - KQ-019
+    - id: KQ-021
+      title: Adapt upload source
+      hours: 6
+      dependencies:
+      - KQ-019
+      unsatisfied_ancestor_count_at_wave_start: 7
+      required_capability: code_and_architecture
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote only from measured throughput after committed and probable work; then satisfy all dependencies
+      window: not_committed_or_slotted
+      unsatisfied_ancestor_closure_at_wave_start:
+      - KQ-001
+      - KQ-002
+      - KQ-003
+      - KQ-016
+      - KQ-017
+      - KQ-018
+      - KQ-019
+    - id: KQ-023
+      title: Add PoseTape v3 writer
+      hours: 6
+      dependencies:
+      - KQ-022
+      unsatisfied_ancestor_count_at_wave_start: 8
+      required_capability: code_and_architecture
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote only from measured throughput after committed and probable work; then satisfy all dependencies
+      window: not_committed_or_slotted
+      unsatisfied_ancestor_closure_at_wave_start:
+      - KQ-001
+      - KQ-002
+      - KQ-003
+      - KQ-016
+      - KQ-017
+      - KQ-018
+      - KQ-019
+      - KQ-022
+    - id: KQ-024
+      title: Add PoseTape legacy reader
+      hours: 6
+      dependencies:
+      - KQ-018
+      - KQ-022
+      unsatisfied_ancestor_count_at_wave_start: 8
+      required_capability: code_and_architecture
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote only from measured throughput after committed and probable work; then satisfy all dependencies
+      window: not_committed_or_slotted
+      unsatisfied_ancestor_closure_at_wave_start:
+      - KQ-001
+      - KQ-002
+      - KQ-003
+      - KQ-016
+      - KQ-017
+      - KQ-018
+      - KQ-019
+      - KQ-022
+    - id: KQ-027
+      title: Expand protocol identity registry
+      hours: 6
+      dependencies:
+      - KQ-026
+      unsatisfied_ancestor_count_at_wave_start: 5
+      required_capability: code_and_architecture
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote only from measured throughput after committed and probable work; then satisfy all dependencies
+      window: not_committed_or_slotted
+      unsatisfied_ancestor_closure_at_wave_start:
+      - KQ-001
+      - KQ-002
+      - KQ-003
+      - KQ-004
+      - KQ-026
+    - id: KQ-028
+      title: Expand lifecycle states
+      hours: 6
+      dependencies:
+      - KQ-026
+      unsatisfied_ancestor_count_at_wave_start: 5
+      required_capability: code_and_architecture
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote only from measured throughput after committed and probable work; then satisfy all dependencies
+      window: not_committed_or_slotted
+      unsatisfied_ancestor_closure_at_wave_start:
+      - KQ-001
+      - KQ-002
+      - KQ-003
+      - KQ-004
+      - KQ-026
+    - id: KQ-031
+      title: Define coach-configuration contract
+      hours: 6
+      dependencies:
+      - KQ-026
+      unsatisfied_ancestor_count_at_wave_start: 5
+      required_capability: code_and_architecture
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote only from measured throughput after committed and probable work; then satisfy all dependencies
+      window: not_committed_or_slotted
+      unsatisfied_ancestor_closure_at_wave_start:
+      - KQ-001
+      - KQ-002
+      - KQ-003
+      - KQ-004
+      - KQ-026
+    - id: KQ-032
+      title: Define versioned result vNext
+      hours: 6
+      dependencies:
+      - KQ-029
+      - KQ-030
+      - KQ-031
+      unsatisfied_ancestor_count_at_wave_start: 13
+      required_capability: code_and_architecture
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote only from measured throughput after committed and probable work; then satisfy all dependencies
+      window: not_committed_or_slotted
+      unsatisfied_ancestor_closure_at_wave_start:
+      - KQ-001
+      - KQ-002
+      - KQ-003
+      - KQ-004
+      - KQ-016
+      - KQ-017
+      - KQ-018
+      - KQ-019
+      - KQ-022
+      - KQ-026
+      - KQ-029
+      - KQ-030
+      - KQ-031
+    - id: KQ-033
+      title: Add backward-compatible result adapters
+      hours: 6
+      dependencies:
+      - KQ-016
+      - KQ-032
+      unsatisfied_ancestor_count_at_wave_start: 14
+      required_capability: code_and_architecture
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote only from measured throughput after committed and probable work; then satisfy all dependencies
+      window: not_committed_or_slotted
+      unsatisfied_ancestor_closure_at_wave_start:
+      - KQ-001
+      - KQ-002
+      - KQ-003
+      - KQ-004
+      - KQ-016
+      - KQ-017
+      - KQ-018
+      - KQ-019
+      - KQ-022
+      - KQ-026
+      - KQ-029
+      - KQ-030
+      - KQ-031
+      - KQ-032
+    - id: KQ-034
+      title: Build protocol completeness lint v3
+      hours: 6
+      dependencies:
+      - KQ-026
+      - KQ-027
+      - KQ-028
+      - KQ-029
+      - KQ-030
+      - KQ-031
+      - KQ-032
+      unsatisfied_ancestor_count_at_wave_start: 16
+      required_capability: code_and_architecture
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote only from measured throughput after committed and probable work; then satisfy all dependencies
+      window: not_committed_or_slotted
+      unsatisfied_ancestor_closure_at_wave_start:
+      - KQ-001
+      - KQ-002
+      - KQ-003
+      - KQ-004
+      - KQ-016
+      - KQ-017
+      - KQ-018
+      - KQ-019
+      - KQ-022
+      - KQ-026
+      - KQ-027
+      - KQ-028
+      - KQ-029
+      - KQ-030
+      - KQ-031
+      - KQ-032
+    - id: KQ-035
+      title: Phase B parity gate
+      hours: 6
+      dependencies:
+      - KQ-016
+      - KQ-017
+      - KQ-020
+      - KQ-021
+      - KQ-023
+      - KQ-024
+      - KQ-025
+      - KQ-033
+      - KQ-034
+      unsatisfied_ancestor_count_at_wave_start: 23
+      required_capability: code_and_architecture
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote only from measured throughput after committed and probable work; then satisfy all dependencies
+      window: not_committed_or_slotted
+      unsatisfied_ancestor_closure_at_wave_start:
+      - KQ-001
+      - KQ-002
+      - KQ-003
+      - KQ-004
+      - KQ-016
+      - KQ-017
+      - KQ-018
+      - KQ-019
+      - KQ-020
+      - KQ-021
+      - KQ-022
+      - KQ-023
+      - KQ-024
+      - KQ-025
+      - KQ-026
+      - KQ-027
+      - KQ-028
+      - KQ-029
+      - KQ-030
+      - KQ-031
+      - KQ-032
+      - KQ-033
+      - KQ-034
+  external_wait:
+    ids:
+    - KQ-051
+    - KQ-054
+    - KQ-061
+    - KQ-088
+    - KQ-092
+    - KQ-096
+    - KQ-100
+    - KQ-104
+    - KQ-108
+    - KQ-112
+    - KQ-116
+    - KQ-120
+    - KQ-124
+    - KQ-128
+    - KQ-132
+    - KQ-136
+    - KQ-140
+    - KQ-144
+    - KQ-148
+    - KQ-152
+    - KQ-156
+    - KQ-160
+    - KQ-164
+    hours: 140
+    items:
+    - id: KQ-051
+      title: Validate capture/view quality detector
+      hours: 7
+      dependencies:
+      - KQ-049
+      - KQ-050
+      - KQ-063
+      - KQ-064
+      unsatisfied_ancestor_count_at_wave_start: 17
+      required_capability: code_and_architecture
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies:
+      - RES-RATER
+      start_condition: all listed resources are READY and all dependencies have accepted dispositions
+      window: not_committed_or_slotted
+    - id: KQ-054
+      title: Decide or implement hybrid candidate
+      hours: 7
+      dependencies:
+      - KQ-053
+      unsatisfied_ancestor_count_at_wave_start: 27
+      required_capability: code_and_architecture
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies:
+      - RES-PRIVACY
+      start_condition: all listed resources are READY and all dependencies have accepted dispositions
+      window: not_committed_or_slotted
+    - id: KQ-061
+      title: Define original-data governance
+      hours: 6
+      dependencies:
+      - KQ-056
+      unsatisfied_ancestor_count_at_wave_start: 5
+      required_capability: code_and_architecture
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies:
+      - RES-PRIVACY
+      start_condition: all listed resources are READY and all dependencies have accepted dispositions
+      window: not_committed_or_slotted
+    - id: KQ-088
+      title: Squat data/resource readiness
+      hours: 4
+      dependencies:
+      - KQ-087
+      - KQ-058
+      - KQ-061
+      - KQ-062
+      - KQ-063
+      - KQ-064
+      - KQ-065
+      unsatisfied_ancestor_count_at_wave_start: 27
+      required_capability: research_and_docs
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies:
+      - RES-PARTICIPANTS
+      - RES-RATER
+      - RES-DEVICES
+      - RES-REPEAT
+      - RES-PRIVACY
+      - RES-KINEMATICS
+      start_condition: all listed resources are READY and all dependencies have accepted dispositions
+      window: not_committed_or_slotted
+    - id: KQ-092
+      title: Squat locked study
+      hours: 8
+      dependencies:
+      - KQ-091
+      unsatisfied_ancestor_count_at_wave_start: 70
+      required_capability: research_and_docs
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies:
+      - RES-PARTICIPANTS
+      - RES-RATER
+      - RES-DEVICES
+      - RES-REPEAT
+      - RES-PRIVACY
+      - RES-KINEMATICS
+      start_condition: all listed resources are READY and all dependencies have accepted dispositions
+      window: not_committed_or_slotted
+    - id: KQ-096
+      title: Lunge data/resource readiness
+      hours: 4
+      dependencies:
+      - KQ-095
+      - KQ-058
+      - KQ-061
+      - KQ-062
+      - KQ-063
+      - KQ-064
+      - KQ-065
+      unsatisfied_ancestor_count_at_wave_start: 27
+      required_capability: research_and_docs
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies:
+      - RES-PARTICIPANTS
+      - RES-RATER
+      - RES-DEVICES
+      - RES-REPEAT
+      - RES-PRIVACY
+      - RES-KINEMATICS
+      start_condition: all listed resources are READY and all dependencies have accepted dispositions
+      window: not_committed_or_slotted
+    - id: KQ-100
+      title: Lunge locked study
+      hours: 8
+      dependencies:
+      - KQ-099
+      unsatisfied_ancestor_count_at_wave_start: 70
+      required_capability: research_and_docs
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies:
+      - RES-PARTICIPANTS
+      - RES-RATER
+      - RES-DEVICES
+      - RES-REPEAT
+      - RES-PRIVACY
+      - RES-KINEMATICS
+      start_condition: all listed resources are READY and all dependencies have accepted dispositions
+      window: not_committed_or_slotted
+    - id: KQ-104
+      title: Hinge data/resource readiness
+      hours: 4
+      dependencies:
+      - KQ-103
+      - KQ-058
+      - KQ-061
+      - KQ-062
+      - KQ-063
+      - KQ-064
+      - KQ-065
+      unsatisfied_ancestor_count_at_wave_start: 27
+      required_capability: research_and_docs
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies:
+      - RES-PARTICIPANTS
+      - RES-RATER
+      - RES-DEVICES
+      - RES-REPEAT
+      - RES-PRIVACY
+      - RES-KINEMATICS
+      start_condition: all listed resources are READY and all dependencies have accepted dispositions
+      window: not_committed_or_slotted
+    - id: KQ-108
+      title: Hinge locked study
+      hours: 8
+      dependencies:
+      - KQ-107
+      unsatisfied_ancestor_count_at_wave_start: 70
+      required_capability: research_and_docs
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies:
+      - RES-PARTICIPANTS
+      - RES-RATER
+      - RES-DEVICES
+      - RES-REPEAT
+      - RES-PRIVACY
+      - RES-KINEMATICS
+      start_condition: all listed resources are READY and all dependencies have accepted dispositions
+      window: not_committed_or_slotted
+    - id: KQ-112
+      title: Push-up data/resource readiness
+      hours: 4
+      dependencies:
+      - KQ-111
+      - KQ-058
+      - KQ-061
+      - KQ-062
+      - KQ-063
+      - KQ-064
+      - KQ-065
+      unsatisfied_ancestor_count_at_wave_start: 27
+      required_capability: research_and_docs
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies:
+      - RES-PARTICIPANTS
+      - RES-RATER
+      - RES-DEVICES
+      - RES-REPEAT
+      - RES-PRIVACY
+      - RES-KINEMATICS
+      start_condition: all listed resources are READY and all dependencies have accepted dispositions
+      window: not_committed_or_slotted
+    - id: KQ-116
+      title: Push-up locked study
+      hours: 8
+      dependencies:
+      - KQ-115
+      unsatisfied_ancestor_count_at_wave_start: 70
+      required_capability: research_and_docs
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies:
+      - RES-PARTICIPANTS
+      - RES-RATER
+      - RES-DEVICES
+      - RES-REPEAT
+      - RES-PRIVACY
+      - RES-KINEMATICS
+      start_condition: all listed resources are READY and all dependencies have accepted dispositions
+      window: not_committed_or_slotted
+    - id: KQ-120
+      title: Pull data/resource readiness
+      hours: 4
+      dependencies:
+      - KQ-119
+      - KQ-058
+      - KQ-061
+      - KQ-062
+      - KQ-063
+      - KQ-064
+      - KQ-065
+      unsatisfied_ancestor_count_at_wave_start: 27
+      required_capability: research_and_docs
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies:
+      - RES-PARTICIPANTS
+      - RES-RATER
+      - RES-DEVICES
+      - RES-REPEAT
+      - RES-PRIVACY
+      - RES-KINEMATICS
+      start_condition: all listed resources are READY and all dependencies have accepted dispositions
+      window: not_committed_or_slotted
+    - id: KQ-124
+      title: Pull locked study
+      hours: 8
+      dependencies:
+      - KQ-123
+      unsatisfied_ancestor_count_at_wave_start: 70
+      required_capability: research_and_docs
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies:
+      - RES-PARTICIPANTS
+      - RES-RATER
+      - RES-DEVICES
+      - RES-REPEAT
+      - RES-PRIVACY
+      - RES-KINEMATICS
+      start_condition: all listed resources are READY and all dependencies have accepted dispositions
+      window: not_committed_or_slotted
+    - id: KQ-128
+      title: Rotation data/resource readiness
+      hours: 4
+      dependencies:
+      - KQ-127
+      - KQ-058
+      - KQ-061
+      - KQ-062
+      - KQ-063
+      - KQ-064
+      - KQ-065
+      unsatisfied_ancestor_count_at_wave_start: 27
+      required_capability: research_and_docs
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies:
+      - RES-PARTICIPANTS
+      - RES-RATER
+      - RES-DEVICES
+      - RES-REPEAT
+      - RES-PRIVACY
+      - RES-KINEMATICS
+      start_condition: all listed resources are READY and all dependencies have accepted dispositions
+      window: not_committed_or_slotted
+    - id: KQ-132
+      title: Rotation locked study
+      hours: 8
+      dependencies:
+      - KQ-131
+      unsatisfied_ancestor_count_at_wave_start: 70
+      required_capability: research_and_docs
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies:
+      - RES-PARTICIPANTS
+      - RES-RATER
+      - RES-DEVICES
+      - RES-REPEAT
+      - RES-PRIVACY
+      - RES-KINEMATICS
+      start_condition: all listed resources are READY and all dependencies have accepted dispositions
+      window: not_committed_or_slotted
+    - id: KQ-136
+      title: Gait data/resource readiness
+      hours: 4
+      dependencies:
+      - KQ-135
+      - KQ-058
+      - KQ-061
+      - KQ-062
+      - KQ-063
+      - KQ-064
+      - KQ-065
+      unsatisfied_ancestor_count_at_wave_start: 27
+      required_capability: research_and_docs
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies:
+      - RES-PARTICIPANTS
+      - RES-RATER
+      - RES-DEVICES
+      - RES-REPEAT
+      - RES-PRIVACY
+      - RES-TIMING
+      start_condition: all listed resources are READY and all dependencies have accepted dispositions
+      window: not_committed_or_slotted
+    - id: KQ-140
+      title: Gait locked study
+      hours: 8
+      dependencies:
+      - KQ-139
+      unsatisfied_ancestor_count_at_wave_start: 70
+      required_capability: research_and_docs
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies:
+      - RES-PARTICIPANTS
+      - RES-RATER
+      - RES-DEVICES
+      - RES-REPEAT
+      - RES-PRIVACY
+      - RES-TIMING
+      start_condition: all listed resources are READY and all dependencies have accepted dispositions
+      window: not_committed_or_slotted
+    - id: KQ-144
+      title: Jump data/resource readiness
+      hours: 4
+      dependencies:
+      - KQ-143
+      - KQ-058
+      - KQ-061
+      - KQ-062
+      - KQ-063
+      - KQ-064
+      - KQ-065
+      unsatisfied_ancestor_count_at_wave_start: 27
+      required_capability: research_and_docs
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies:
+      - RES-PARTICIPANTS
+      - RES-RATER
+      - RES-DEVICES
+      - RES-REPEAT
+      - RES-PRIVACY
+      - RES-FORCE_CONTACT
+      start_condition: all listed resources are READY and all dependencies have accepted dispositions
+      window: not_committed_or_slotted
+    - id: KQ-148
+      title: Jump locked study
+      hours: 8
+      dependencies:
+      - KQ-147
+      unsatisfied_ancestor_count_at_wave_start: 70
+      required_capability: research_and_docs
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies:
+      - RES-PARTICIPANTS
+      - RES-RATER
+      - RES-DEVICES
+      - RES-REPEAT
+      - RES-PRIVACY
+      - RES-FORCE_CONTACT
+      start_condition: all listed resources are READY and all dependencies have accepted dispositions
+      window: not_committed_or_slotted
+    - id: KQ-152
+      title: Landing data/resource readiness
+      hours: 4
+      dependencies:
+      - KQ-151
+      - KQ-058
+      - KQ-061
+      - KQ-062
+      - KQ-063
+      - KQ-064
+      - KQ-065
+      unsatisfied_ancestor_count_at_wave_start: 27
+      required_capability: research_and_docs
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies:
+      - RES-PARTICIPANTS
+      - RES-RATER
+      - RES-DEVICES
+      - RES-REPEAT
+      - RES-PRIVACY
+      - RES-FORCE_CONTACT
+      - RES-CALIBRATED_PLATFORM
+      start_condition: all listed resources are READY and all dependencies have accepted dispositions
+      window: not_committed_or_slotted
+    - id: KQ-156
+      title: Landing locked study
+      hours: 8
+      dependencies:
+      - KQ-155
+      unsatisfied_ancestor_count_at_wave_start: 70
+      required_capability: research_and_docs
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies:
+      - RES-PARTICIPANTS
+      - RES-RATER
+      - RES-DEVICES
+      - RES-REPEAT
+      - RES-PRIVACY
+      - RES-FORCE_CONTACT
+      - RES-CALIBRATED_PLATFORM
+      start_condition: all listed resources are READY and all dependencies have accepted dispositions
+      window: not_committed_or_slotted
+    - id: KQ-160
+      title: Sprint data/resource readiness
+      hours: 4
+      dependencies:
+      - KQ-159
+      - KQ-058
+      - KQ-061
+      - KQ-062
+      - KQ-063
+      - KQ-064
+      - KQ-065
+      unsatisfied_ancestor_count_at_wave_start: 27
+      required_capability: research_and_docs
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies:
+      - RES-PARTICIPANTS
+      - RES-RATER
+      - RES-DEVICES
+      - RES-REPEAT
+      - RES-PRIVACY
+      - RES-TIMING
+      start_condition: all listed resources are READY and all dependencies have accepted dispositions
+      window: not_committed_or_slotted
+    - id: KQ-164
+      title: Sprint locked study
+      hours: 8
+      dependencies:
+      - KQ-163
+      unsatisfied_ancestor_count_at_wave_start: 70
+      required_capability: research_and_docs
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies:
+      - RES-PARTICIPANTS
+      - RES-RATER
+      - RES-DEVICES
+      - RES-REPEAT
+      - RES-PRIVACY
+      - RES-TIMING
+      start_condition: all listed resources are READY and all dependencies have accepted dispositions
+      window: not_committed_or_slotted
+  deferred:
+    ids:
+    - KQ-036
+    - KQ-037
+    - KQ-038
+    - KQ-039
+    - KQ-040
+    - KQ-041
+    - KQ-042
+    - KQ-043
+    - KQ-044
+    - KQ-045
+    - KQ-046
+    - KQ-047
+    - KQ-048
+    - KQ-049
+    - KQ-050
+    - KQ-052
+    - KQ-053
+    - KQ-055
+    - KQ-056
+    - KQ-057
+    - KQ-058
+    - KQ-059
+    - KQ-060
+    - KQ-062
+    - KQ-063
+    - KQ-064
+    - KQ-065
+    - KQ-066
+    - KQ-067
+    - KQ-068
+    - KQ-069
+    - KQ-070
+    - KQ-071
+    - KQ-072
+    - KQ-073
+    - KQ-074
+    - KQ-075
+    - KQ-076
+    - KQ-077
+    - KQ-078
+    - KQ-079
+    - KQ-080
+    - KQ-081
+    - KQ-082
+    - KQ-083
+    - KQ-084
+    - KQ-085
+    - KQ-086
+    - KQ-087
+    - KQ-089
+    - KQ-090
+    - KQ-091
+    - KQ-093
+    - KQ-094
+    - KQ-095
+    - KQ-097
+    - KQ-098
+    - KQ-099
+    - KQ-101
+    - KQ-102
+    - KQ-103
+    - KQ-105
+    - KQ-106
+    - KQ-107
+    - KQ-109
+    - KQ-110
+    - KQ-111
+    - KQ-113
+    - KQ-114
+    - KQ-115
+    - KQ-117
+    - KQ-118
+    - KQ-119
+    - KQ-121
+    - KQ-122
+    - KQ-123
+    - KQ-125
+    - KQ-126
+    - KQ-127
+    - KQ-129
+    - KQ-130
+    - KQ-131
+    - KQ-133
+    - KQ-134
+    - KQ-135
+    - KQ-137
+    - KQ-138
+    - KQ-139
+    - KQ-141
+    - KQ-142
+    - KQ-143
+    - KQ-145
+    - KQ-146
+    - KQ-147
+    - KQ-149
+    - KQ-150
+    - KQ-151
+    - KQ-153
+    - KQ-154
+    - KQ-155
+    - KQ-157
+    - KQ-158
+    - KQ-159
+    - KQ-161
+    - KQ-162
+    - KQ-163
+    - KQ-165
+    - KQ-166
+    - KQ-167
+    - KQ-168
+    - KQ-169
+    - KQ-170
+    - KQ-171
+    - KQ-172
+    - KQ-173
+    - KQ-174
+    - KQ-175
+    hours: 780
+    items:
+    - id: KQ-036
+      title: Define `PoseModelAdapter` SDK
+      hours: 7
+      dependencies:
+      - KQ-022
+      - KQ-026
+      unsatisfied_ancestor_count_at_wave_start: 10
+      required_capability: code_and_architecture
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-037
+      title: Wrap MediaPipe adapter
+      hours: 7
+      dependencies:
+      - KQ-036
+      unsatisfied_ancestor_count_at_wave_start: 11
+      required_capability: code_and_architecture
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-038
+      title: Create model capability manifest
+      hours: 7
+      dependencies:
+      - KQ-036
+      unsatisfied_ancestor_count_at_wave_start: 11
+      required_capability: code_and_architecture
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-039
+      title: Create adapter conformance suite
+      hours: 7
+      dependencies:
+      - KQ-036
+      - KQ-037
+      - KQ-038
+      unsatisfied_ancestor_count_at_wave_start: 13
+      required_capability: code_and_architecture
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-040
+      title: Define model-expansion trigger
+      hours: 7
+      dependencies:
+      - KQ-038
+      - KQ-039
+      unsatisfied_ancestor_count_at_wave_start: 14
+      required_capability: code_and_architecture
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-041
+      title: Select one evidence-backed challenger
+      hours: 7
+      dependencies:
+      - KQ-040
+      - KQ-043
+      - KQ-044
+      - KQ-045
+      - KQ-046
+      unsatisfied_ancestor_count_at_wave_start: 19
+      required_capability: code_and_architecture
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-042
+      title: Implement selected research adapter
+      hours: 7
+      dependencies:
+      - KQ-041
+      unsatisfied_ancestor_count_at_wave_start: 20
+      required_capability: code_and_architecture
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-043
+      title: Create pose benchmark corpus manifest
+      hours: 7
+      dependencies:
+      - KQ-016
+      - KQ-017
+      - KQ-038
+      unsatisfied_ancestor_count_at_wave_start: 12
+      required_capability: code_and_architecture
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-044
+      title: Benchmark keypoint accuracy and coverage
+      hours: 7
+      dependencies:
+      - KQ-039
+      - KQ-043
+      unsatisfied_ancestor_count_at_wave_start: 15
+      required_capability: code_and_architecture
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-045
+      title: Benchmark temporal stability and events
+      hours: 7
+      dependencies:
+      - KQ-039
+      - KQ-043
+      unsatisfied_ancestor_count_at_wave_start: 15
+      required_capability: code_and_architecture
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-046
+      title: Benchmark consumer-device performance
+      hours: 7
+      dependencies:
+      - KQ-039
+      - KQ-043
+      unsatisfied_ancestor_count_at_wave_start: 15
+      required_capability: code_and_architecture
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-047
+      title: Build session-level route evaluator
+      hours: 7
+      dependencies:
+      - KQ-041
+      - KQ-042
+      - KQ-044
+      - KQ-045
+      - KQ-046
+      unsatisfied_ancestor_count_at_wave_start: 21
+      required_capability: code_and_architecture
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-048
+      title: Build safe fallback segmentation
+      hours: 7
+      dependencies:
+      - KQ-025
+      - KQ-047
+      unsatisfied_ancestor_count_at_wave_start: 23
+      required_capability: code_and_architecture
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-049
+      title: Define view taxonomy and label handbook
+      hours: 7
+      dependencies:
+      - KQ-029
+      unsatisfied_ancestor_count_at_wave_start: 11
+      required_capability: code_and_architecture
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-050
+      title: Build view-estimation research baseline
+      hours: 7
+      dependencies:
+      - KQ-049
+      unsatisfied_ancestor_count_at_wave_start: 12
+      required_capability: code_and_architecture
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-052
+      title: Build metric observability evaluator
+      hours: 7
+      dependencies:
+      - KQ-029
+      - KQ-049
+      - KQ-051
+      unsatisfied_ancestor_count_at_wave_start: 18
+      required_capability: code_and_architecture
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-053
+      title: Define hybrid expansion trigger and contract
+      hours: 7
+      dependencies:
+      - KQ-038
+      - KQ-046
+      - KQ-052
+      - KQ-061
+      unsatisfied_ancestor_count_at_wave_start: 26
+      required_capability: code_and_architecture
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-055
+      title: Phase C routing gate
+      hours: 7
+      dependencies:
+      - KQ-037
+      - KQ-039
+      - KQ-040
+      - KQ-041
+      - KQ-043
+      - KQ-044
+      - KQ-045
+      - KQ-046
+      - KQ-047
+      - KQ-048
+      - KQ-049
+      - KQ-051
+      - KQ-052
+      - KQ-053
+      - KQ-054
+      unsatisfied_ancestor_count_at_wave_start: 36
+      required_capability: code_and_architecture
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-056
+      title: Formalize universal validation standard
+      hours: 6
+      dependencies:
+      - KQ-002
+      - KQ-004
+      unsatisfied_ancestor_count_at_wave_start: 4
+      required_capability: code_and_architecture
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-057
+      title: Define metric reference-tier registry
+      hours: 6
+      dependencies:
+      - KQ-056
+      unsatisfied_ancestor_count_at_wave_start: 5
+      required_capability: code_and_architecture
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-058
+      title: Build dataset legal/suitability schema
+      hours: 6
+      dependencies:
+      - KQ-056
+      unsatisfied_ancestor_count_at_wave_start: 5
+      required_capability: code_and_architecture
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-059
+      title: Re-audit existing public datasets
+      hours: 6
+      dependencies:
+      - KQ-058
+      unsatisfied_ancestor_count_at_wave_start: 6
+      required_capability: code_and_architecture
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-060
+      title: Create continual dataset discovery workflow
+      hours: 6
+      dependencies:
+      - KQ-012
+      - KQ-058
+      unsatisfied_ancestor_count_at_wave_start: 10
+      required_capability: code_and_architecture
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-062
+      title: Define common capture metadata v2
+      hours: 6
+      dependencies:
+      - KQ-019
+      - KQ-061
+      unsatisfied_ancestor_count_at_wave_start: 10
+      required_capability: code_and_architecture
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-063
+      title: Generalize blind labeling tool
+      hours: 6
+      dependencies:
+      - KQ-027
+      - KQ-056
+      unsatisfied_ancestor_count_at_wave_start: 7
+      required_capability: code_and_architecture
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-064
+      title: Build rater qualification evaluator v2
+      hours: 6
+      dependencies:
+      - KQ-063
+      unsatisfied_ancestor_count_at_wave_start: 8
+      required_capability: code_and_architecture
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-065
+      title: Build split/leakage validator
+      hours: 6
+      dependencies:
+      - KQ-058
+      - KQ-061
+      unsatisfied_ancestor_count_at_wave_start: 7
+      required_capability: code_and_architecture
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-066
+      title: Build preregistration compiler
+      hours: 6
+      dependencies:
+      - KQ-056
+      - KQ-057
+      - KQ-065
+      unsatisfied_ancestor_count_at_wave_start: 9
+      required_capability: code_and_architecture
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-067
+      title: Extend statistical library
+      hours: 6
+      dependencies:
+      - KQ-056
+      unsatisfied_ancestor_count_at_wave_start: 5
+      required_capability: code_and_architecture
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-068
+      title: Build accuracy report generator
+      hours: 6
+      dependencies:
+      - KQ-057
+      - KQ-067
+      unsatisfied_ancestor_count_at_wave_start: 7
+      required_capability: code_and_architecture
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-069
+      title: Build reliability report generator
+      hours: 6
+      dependencies:
+      - KQ-057
+      - KQ-067
+      unsatisfied_ancestor_count_at_wave_start: 7
+      required_capability: code_and_architecture
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-070
+      title: Build observability/abstention report
+      hours: 6
+      dependencies:
+      - KQ-029
+      - KQ-030
+      - KQ-052
+      - KQ-067
+      unsatisfied_ancestor_count_at_wave_start: 21
+      required_capability: code_and_architecture
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-071
+      title: Build generalization report
+      hours: 6
+      dependencies:
+      - KQ-058
+      - KQ-065
+      - KQ-067
+      unsatisfied_ancestor_count_at_wave_start: 9
+      required_capability: code_and_architecture
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-072
+      title: Build live/upload and local/remote parity reports
+      hours: 6
+      dependencies:
+      - KQ-020
+      - KQ-021
+      - KQ-054
+      - KQ-067
+      unsatisfied_ancestor_count_at_wave_start: 31
+      required_capability: code_and_architecture
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-073
+      title: Build claims-strength evaluator
+      hours: 6
+      dependencies:
+      - KQ-056
+      - KQ-057
+      unsatisfied_ancestor_count_at_wave_start: 6
+      required_capability: code_and_architecture
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-074
+      title: Build deterministic eligibility evaluator
+      hours: 6
+      dependencies:
+      - KQ-028
+      - KQ-056
+      - KQ-057
+      - KQ-066
+      - KQ-068
+      - KQ-069
+      - KQ-070
+      - KQ-071
+      - KQ-072
+      - KQ-073
+      unsatisfied_ancestor_count_at_wave_start: 43
+      required_capability: code_and_architecture
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-075
+      title: Phase D synthetic integration gate
+      hours: 6
+      dependencies:
+      - KQ-058
+      - KQ-059
+      - KQ-061
+      - KQ-062
+      - KQ-063
+      - KQ-064
+      - KQ-065
+      - KQ-066
+      - KQ-067
+      - KQ-068
+      - KQ-069
+      - KQ-070
+      - KQ-071
+      - KQ-072
+      - KQ-073
+      - KQ-074
+      unsatisfied_ancestor_count_at_wave_start: 46
+      required_capability: code_and_architecture
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-076
+      title: Expanded-10 journey and IA audit
+      hours: 7
+      dependencies:
+      - KQ-002
+      - KQ-027
+      - KQ-028
+      unsatisfied_ancestor_count_at_wave_start: 7
+      required_capability: code_and_architecture
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-077
+      title: Build protocol discovery model
+      hours: 7
+      dependencies:
+      - KQ-027
+      - KQ-028
+      unsatisfied_ancestor_count_at_wave_start: 7
+      required_capability: code_and_architecture
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-078
+      title: Build movement-specific setup shell
+      hours: 7
+      dependencies:
+      - KQ-026
+      - KQ-027
+      - KQ-029
+      unsatisfied_ancestor_count_at_wave_start: 12
+      required_capability: code_and_architecture
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-079
+      title: Build adaptive capture guidance
+      hours: 7
+      dependencies:
+      - KQ-049
+      - KQ-051
+      - KQ-078
+      unsatisfied_ancestor_count_at_wave_start: 19
+      required_capability: code_and_architecture
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-080
+      title: Build live/upload shared progress UI
+      hours: 7
+      dependencies:
+      - KQ-020
+      - KQ-021
+      - KQ-032
+      - KQ-078
+      unsatisfied_ancestor_count_at_wave_start: 18
+      required_capability: code_and_architecture
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-081
+      title: Build metric-abstention results UI
+      hours: 7
+      dependencies:
+      - KQ-030
+      - KQ-032
+      unsatisfied_ancestor_count_at_wave_start: 14
+      required_capability: code_and_architecture
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-082
+      title: Build coach-configuration UI boundaries
+      hours: 7
+      dependencies:
+      - KQ-031
+      - KQ-056
+      unsatisfied_ancestor_count_at_wave_start: 7
+      required_capability: code_and_architecture
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-083
+      title: Build protocol/version evidence panel
+      hours: 7
+      dependencies:
+      - KQ-028
+      - KQ-073
+      - KQ-077
+      unsatisfied_ancestor_count_at_wave_start: 11
+      required_capability: code_and_architecture
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-084
+      title: Build accessibility/device verification matrix
+      hours: 7
+      dependencies:
+      - KQ-076
+      - KQ-078
+      - KQ-079
+      - KQ-080
+      - KQ-081
+      - KQ-082
+      - KQ-083
+      unsatisfied_ancestor_count_at_wave_start: 34
+      required_capability: code_and_architecture
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-085
+      title: Phase E comprehension gate
+      hours: 7
+      dependencies:
+      - KQ-076
+      - KQ-077
+      - KQ-078
+      - KQ-079
+      - KQ-080
+      - KQ-081
+      - KQ-082
+      - KQ-083
+      - KQ-084
+      unsatisfied_ancestor_count_at_wave_start: 35
+      required_capability: code_and_architecture
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-086
+      title: Squat identity/evidence reconciliation
+      hours: 6
+      dependencies:
+      - KQ-002
+      - KQ-004
+      - KQ-008
+      - KQ-012
+      - KQ-027
+      unsatisfied_ancestor_count_at_wave_start: 10
+      required_capability: research_and_docs
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-087
+      title: Squat core-claim/observability manifest
+      hours: 6
+      dependencies:
+      - KQ-086
+      - KQ-029
+      - KQ-056
+      - KQ-057
+      - KQ-073
+      unsatisfied_ancestor_count_at_wave_start: 20
+      required_capability: research_and_docs
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-089
+      title: Squat vNext internal package
+      hours: 12
+      dependencies:
+      - KQ-087
+      - KQ-029
+      - KQ-035
+      - KQ-037
+      - KQ-039
+      unsatisfied_ancestor_count_at_wave_start: 37
+      required_capability: code_and_architecture
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-090
+      title: Squat product integration
+      hours: 8
+      dependencies:
+      - KQ-089
+      - KQ-076
+      - KQ-077
+      - KQ-078
+      - KQ-079
+      - KQ-080
+      - KQ-081
+      - KQ-082
+      - KQ-083
+      unsatisfied_ancestor_count_at_wave_start: 51
+      required_capability: code_and_architecture
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-091
+      title: Squat development freeze
+      hours: 6
+      dependencies:
+      - KQ-088
+      - KQ-089
+      - KQ-090
+      - KQ-066
+      - KQ-067
+      - KQ-068
+      - KQ-069
+      - KQ-070
+      - KQ-071
+      - KQ-072
+      - KQ-073
+      unsatisfied_ancestor_count_at_wave_start: 69
+      required_capability: research_and_docs
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-093
+      title: Squat claim/release decision
+      hours: 3
+      dependencies:
+      - KQ-092
+      - KQ-074
+      unsatisfied_ancestor_count_at_wave_start: 72
+      required_capability: research_and_docs
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-094
+      title: Lunge Phase-4 reconciliation
+      hours: 6
+      dependencies:
+      - KQ-002
+      - KQ-004
+      - KQ-008
+      - KQ-012
+      - KQ-027
+      unsatisfied_ancestor_count_at_wave_start: 10
+      required_capability: research_and_docs
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-095
+      title: Lunge core-claim/observability manifest
+      hours: 6
+      dependencies:
+      - KQ-094
+      - KQ-029
+      - KQ-056
+      - KQ-057
+      - KQ-073
+      unsatisfied_ancestor_count_at_wave_start: 20
+      required_capability: research_and_docs
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-097
+      title: Lunge vNext internal package
+      hours: 12
+      dependencies:
+      - KQ-095
+      - KQ-029
+      - KQ-035
+      - KQ-037
+      - KQ-039
+      unsatisfied_ancestor_count_at_wave_start: 37
+      required_capability: code_and_architecture
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-098
+      title: Lunge product integration
+      hours: 8
+      dependencies:
+      - KQ-097
+      - KQ-076
+      - KQ-077
+      - KQ-078
+      - KQ-079
+      - KQ-080
+      - KQ-081
+      - KQ-082
+      - KQ-083
+      unsatisfied_ancestor_count_at_wave_start: 51
+      required_capability: code_and_architecture
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-099
+      title: Lunge development freeze
+      hours: 6
+      dependencies:
+      - KQ-096
+      - KQ-097
+      - KQ-098
+      - KQ-066
+      - KQ-067
+      - KQ-068
+      - KQ-069
+      - KQ-070
+      - KQ-071
+      - KQ-072
+      - KQ-073
+      unsatisfied_ancestor_count_at_wave_start: 69
+      required_capability: research_and_docs
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-101
+      title: Lunge claim/release decision
+      hours: 3
+      dependencies:
+      - KQ-100
+      - KQ-074
+      unsatisfied_ancestor_count_at_wave_start: 72
+      required_capability: research_and_docs
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-102
+      title: Hinge identity/evidence lock
+      hours: 6
+      dependencies:
+      - KQ-002
+      - KQ-004
+      - KQ-008
+      - KQ-012
+      - KQ-027
+      unsatisfied_ancestor_count_at_wave_start: 10
+      required_capability: research_and_docs
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-103
+      title: Hinge core-claim/observability manifest
+      hours: 6
+      dependencies:
+      - KQ-102
+      - KQ-029
+      - KQ-056
+      - KQ-057
+      - KQ-073
+      unsatisfied_ancestor_count_at_wave_start: 20
+      required_capability: research_and_docs
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-105
+      title: Hinge internal package
+      hours: 12
+      dependencies:
+      - KQ-103
+      - KQ-029
+      - KQ-035
+      - KQ-037
+      - KQ-039
+      unsatisfied_ancestor_count_at_wave_start: 37
+      required_capability: code_and_architecture
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-106
+      title: Hinge product integration
+      hours: 8
+      dependencies:
+      - KQ-105
+      - KQ-076
+      - KQ-077
+      - KQ-078
+      - KQ-079
+      - KQ-080
+      - KQ-081
+      - KQ-082
+      - KQ-083
+      unsatisfied_ancestor_count_at_wave_start: 51
+      required_capability: code_and_architecture
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-107
+      title: Hinge development freeze
+      hours: 6
+      dependencies:
+      - KQ-104
+      - KQ-105
+      - KQ-106
+      - KQ-066
+      - KQ-067
+      - KQ-068
+      - KQ-069
+      - KQ-070
+      - KQ-071
+      - KQ-072
+      - KQ-073
+      unsatisfied_ancestor_count_at_wave_start: 69
+      required_capability: research_and_docs
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-109
+      title: Hinge claim/release decision
+      hours: 3
+      dependencies:
+      - KQ-108
+      - KQ-074
+      unsatisfied_ancestor_count_at_wave_start: 72
+      required_capability: research_and_docs
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-110
+      title: Push-up identity/evidence lock
+      hours: 6
+      dependencies:
+      - KQ-002
+      - KQ-004
+      - KQ-008
+      - KQ-012
+      - KQ-027
+      unsatisfied_ancestor_count_at_wave_start: 10
+      required_capability: research_and_docs
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-111
+      title: Push-up core-claim/observability manifest
+      hours: 6
+      dependencies:
+      - KQ-110
+      - KQ-029
+      - KQ-056
+      - KQ-057
+      - KQ-073
+      unsatisfied_ancestor_count_at_wave_start: 20
+      required_capability: research_and_docs
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-113
+      title: Push-up internal package
+      hours: 12
+      dependencies:
+      - KQ-111
+      - KQ-029
+      - KQ-035
+      - KQ-037
+      - KQ-039
+      unsatisfied_ancestor_count_at_wave_start: 37
+      required_capability: code_and_architecture
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-114
+      title: Push-up product integration
+      hours: 8
+      dependencies:
+      - KQ-113
+      - KQ-076
+      - KQ-077
+      - KQ-078
+      - KQ-079
+      - KQ-080
+      - KQ-081
+      - KQ-082
+      - KQ-083
+      unsatisfied_ancestor_count_at_wave_start: 51
+      required_capability: code_and_architecture
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-115
+      title: Push-up development freeze
+      hours: 6
+      dependencies:
+      - KQ-112
+      - KQ-113
+      - KQ-114
+      - KQ-066
+      - KQ-067
+      - KQ-068
+      - KQ-069
+      - KQ-070
+      - KQ-071
+      - KQ-072
+      - KQ-073
+      unsatisfied_ancestor_count_at_wave_start: 69
+      required_capability: research_and_docs
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-117
+      title: Push-up claim/release decision
+      hours: 3
+      dependencies:
+      - KQ-116
+      - KQ-074
+      unsatisfied_ancestor_count_at_wave_start: 72
+      required_capability: research_and_docs
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-118
+      title: Pull variant trade study and lock
+      hours: 6
+      dependencies:
+      - KQ-002
+      - KQ-004
+      - KQ-008
+      - KQ-012
+      - KQ-027
+      unsatisfied_ancestor_count_at_wave_start: 10
+      required_capability: research_and_docs
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-119
+      title: Pull core-claim/observability manifest
+      hours: 6
+      dependencies:
+      - KQ-118
+      - KQ-029
+      - KQ-056
+      - KQ-057
+      - KQ-073
+      unsatisfied_ancestor_count_at_wave_start: 20
+      required_capability: research_and_docs
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-121
+      title: Pull internal package
+      hours: 12
+      dependencies:
+      - KQ-119
+      - KQ-029
+      - KQ-035
+      - KQ-037
+      - KQ-039
+      unsatisfied_ancestor_count_at_wave_start: 37
+      required_capability: code_and_architecture
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-122
+      title: Pull product integration
+      hours: 8
+      dependencies:
+      - KQ-121
+      - KQ-076
+      - KQ-077
+      - KQ-078
+      - KQ-079
+      - KQ-080
+      - KQ-081
+      - KQ-082
+      - KQ-083
+      unsatisfied_ancestor_count_at_wave_start: 51
+      required_capability: code_and_architecture
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-123
+      title: Pull development freeze
+      hours: 6
+      dependencies:
+      - KQ-120
+      - KQ-121
+      - KQ-122
+      - KQ-066
+      - KQ-067
+      - KQ-068
+      - KQ-069
+      - KQ-070
+      - KQ-071
+      - KQ-072
+      - KQ-073
+      unsatisfied_ancestor_count_at_wave_start: 69
+      required_capability: research_and_docs
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-125
+      title: Pull claim/release decision
+      hours: 3
+      dependencies:
+      - KQ-124
+      - KQ-074
+      unsatisfied_ancestor_count_at_wave_start: 72
+      required_capability: research_and_docs
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-126
+      title: Rotation task/evidence lock
+      hours: 6
+      dependencies:
+      - KQ-002
+      - KQ-004
+      - KQ-008
+      - KQ-012
+      - KQ-027
+      unsatisfied_ancestor_count_at_wave_start: 10
+      required_capability: research_and_docs
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-127
+      title: Rotation core-claim/observability manifest
+      hours: 6
+      dependencies:
+      - KQ-126
+      - KQ-029
+      - KQ-056
+      - KQ-057
+      - KQ-073
+      unsatisfied_ancestor_count_at_wave_start: 20
+      required_capability: research_and_docs
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-129
+      title: Rotation internal package
+      hours: 12
+      dependencies:
+      - KQ-127
+      - KQ-029
+      - KQ-035
+      - KQ-037
+      - KQ-039
+      unsatisfied_ancestor_count_at_wave_start: 37
+      required_capability: code_and_architecture
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-130
+      title: Rotation product integration
+      hours: 8
+      dependencies:
+      - KQ-129
+      - KQ-076
+      - KQ-077
+      - KQ-078
+      - KQ-079
+      - KQ-080
+      - KQ-081
+      - KQ-082
+      - KQ-083
+      unsatisfied_ancestor_count_at_wave_start: 51
+      required_capability: code_and_architecture
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-131
+      title: Rotation development freeze
+      hours: 6
+      dependencies:
+      - KQ-128
+      - KQ-129
+      - KQ-130
+      - KQ-066
+      - KQ-067
+      - KQ-068
+      - KQ-069
+      - KQ-070
+      - KQ-071
+      - KQ-072
+      - KQ-073
+      unsatisfied_ancestor_count_at_wave_start: 69
+      required_capability: research_and_docs
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-133
+      title: Rotation claim/release decision
+      hours: 3
+      dependencies:
+      - KQ-132
+      - KQ-074
+      unsatisfied_ancestor_count_at_wave_start: 72
+      required_capability: research_and_docs
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-134
+      title: Gait identity/evidence lock
+      hours: 6
+      dependencies:
+      - KQ-002
+      - KQ-004
+      - KQ-008
+      - KQ-012
+      - KQ-027
+      unsatisfied_ancestor_count_at_wave_start: 10
+      required_capability: research_and_docs
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-135
+      title: Gait core-claim/observability manifest
+      hours: 6
+      dependencies:
+      - KQ-134
+      - KQ-029
+      - KQ-056
+      - KQ-057
+      - KQ-073
+      unsatisfied_ancestor_count_at_wave_start: 20
+      required_capability: research_and_docs
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-137
+      title: Gait internal package
+      hours: 12
+      dependencies:
+      - KQ-135
+      - KQ-029
+      - KQ-035
+      - KQ-037
+      - KQ-039
+      unsatisfied_ancestor_count_at_wave_start: 37
+      required_capability: code_and_architecture
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-138
+      title: Gait product integration
+      hours: 8
+      dependencies:
+      - KQ-137
+      - KQ-076
+      - KQ-077
+      - KQ-078
+      - KQ-079
+      - KQ-080
+      - KQ-081
+      - KQ-082
+      - KQ-083
+      unsatisfied_ancestor_count_at_wave_start: 51
+      required_capability: code_and_architecture
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-139
+      title: Gait development freeze
+      hours: 6
+      dependencies:
+      - KQ-136
+      - KQ-137
+      - KQ-138
+      - KQ-066
+      - KQ-067
+      - KQ-068
+      - KQ-069
+      - KQ-070
+      - KQ-071
+      - KQ-072
+      - KQ-073
+      unsatisfied_ancestor_count_at_wave_start: 69
+      required_capability: research_and_docs
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-141
+      title: Gait claim/release decision
+      hours: 3
+      dependencies:
+      - KQ-140
+      - KQ-074
+      unsatisfied_ancestor_count_at_wave_start: 72
+      required_capability: research_and_docs
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-142
+      title: Jump identity/evidence lock
+      hours: 6
+      dependencies:
+      - KQ-002
+      - KQ-004
+      - KQ-008
+      - KQ-012
+      - KQ-027
+      unsatisfied_ancestor_count_at_wave_start: 10
+      required_capability: research_and_docs
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-143
+      title: Jump core-claim/observability manifest
+      hours: 6
+      dependencies:
+      - KQ-142
+      - KQ-029
+      - KQ-056
+      - KQ-057
+      - KQ-073
+      unsatisfied_ancestor_count_at_wave_start: 20
+      required_capability: research_and_docs
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-145
+      title: Jump internal package
+      hours: 12
+      dependencies:
+      - KQ-143
+      - KQ-029
+      - KQ-035
+      - KQ-037
+      - KQ-039
+      unsatisfied_ancestor_count_at_wave_start: 37
+      required_capability: code_and_architecture
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-146
+      title: Jump product integration
+      hours: 8
+      dependencies:
+      - KQ-145
+      - KQ-076
+      - KQ-077
+      - KQ-078
+      - KQ-079
+      - KQ-080
+      - KQ-081
+      - KQ-082
+      - KQ-083
+      unsatisfied_ancestor_count_at_wave_start: 51
+      required_capability: code_and_architecture
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-147
+      title: Jump development freeze
+      hours: 6
+      dependencies:
+      - KQ-144
+      - KQ-145
+      - KQ-146
+      - KQ-066
+      - KQ-067
+      - KQ-068
+      - KQ-069
+      - KQ-070
+      - KQ-071
+      - KQ-072
+      - KQ-073
+      unsatisfied_ancestor_count_at_wave_start: 69
+      required_capability: research_and_docs
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-149
+      title: Jump claim/release decision
+      hours: 3
+      dependencies:
+      - KQ-148
+      - KQ-074
+      unsatisfied_ancestor_count_at_wave_start: 72
+      required_capability: research_and_docs
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-150
+      title: Landing identity/evidence lock
+      hours: 6
+      dependencies:
+      - KQ-002
+      - KQ-004
+      - KQ-008
+      - KQ-012
+      - KQ-027
+      unsatisfied_ancestor_count_at_wave_start: 10
+      required_capability: research_and_docs
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-151
+      title: Landing core-claim/observability manifest
+      hours: 6
+      dependencies:
+      - KQ-150
+      - KQ-029
+      - KQ-056
+      - KQ-057
+      - KQ-073
+      unsatisfied_ancestor_count_at_wave_start: 20
+      required_capability: research_and_docs
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-153
+      title: Landing internal package
+      hours: 12
+      dependencies:
+      - KQ-151
+      - KQ-029
+      - KQ-035
+      - KQ-037
+      - KQ-039
+      unsatisfied_ancestor_count_at_wave_start: 37
+      required_capability: code_and_architecture
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-154
+      title: Landing product integration
+      hours: 8
+      dependencies:
+      - KQ-153
+      - KQ-076
+      - KQ-077
+      - KQ-078
+      - KQ-079
+      - KQ-080
+      - KQ-081
+      - KQ-082
+      - KQ-083
+      unsatisfied_ancestor_count_at_wave_start: 51
+      required_capability: code_and_architecture
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-155
+      title: Landing development freeze
+      hours: 6
+      dependencies:
+      - KQ-152
+      - KQ-153
+      - KQ-154
+      - KQ-066
+      - KQ-067
+      - KQ-068
+      - KQ-069
+      - KQ-070
+      - KQ-071
+      - KQ-072
+      - KQ-073
+      unsatisfied_ancestor_count_at_wave_start: 69
+      required_capability: research_and_docs
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-157
+      title: Landing claim/release decision
+      hours: 3
+      dependencies:
+      - KQ-156
+      - KQ-074
+      unsatisfied_ancestor_count_at_wave_start: 72
+      required_capability: research_and_docs
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-158
+      title: Sprint identity/evidence lock
+      hours: 6
+      dependencies:
+      - KQ-002
+      - KQ-004
+      - KQ-008
+      - KQ-012
+      - KQ-027
+      unsatisfied_ancestor_count_at_wave_start: 10
+      required_capability: research_and_docs
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-159
+      title: Sprint core-claim/observability manifest
+      hours: 6
+      dependencies:
+      - KQ-158
+      - KQ-029
+      - KQ-056
+      - KQ-057
+      - KQ-073
+      unsatisfied_ancestor_count_at_wave_start: 20
+      required_capability: research_and_docs
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-161
+      title: Sprint internal package
+      hours: 12
+      dependencies:
+      - KQ-159
+      - KQ-029
+      - KQ-035
+      - KQ-037
+      - KQ-039
+      unsatisfied_ancestor_count_at_wave_start: 37
+      required_capability: code_and_architecture
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-162
+      title: Sprint product integration
+      hours: 8
+      dependencies:
+      - KQ-161
+      - KQ-076
+      - KQ-077
+      - KQ-078
+      - KQ-079
+      - KQ-080
+      - KQ-081
+      - KQ-082
+      - KQ-083
+      unsatisfied_ancestor_count_at_wave_start: 51
+      required_capability: code_and_architecture
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-163
+      title: Sprint development freeze
+      hours: 6
+      dependencies:
+      - KQ-160
+      - KQ-161
+      - KQ-162
+      - KQ-066
+      - KQ-067
+      - KQ-068
+      - KQ-069
+      - KQ-070
+      - KQ-071
+      - KQ-072
+      - KQ-073
+      unsatisfied_ancestor_count_at_wave_start: 69
+      required_capability: research_and_docs
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-165
+      title: Sprint claim/release decision
+      hours: 3
+      dependencies:
+      - KQ-164
+      - KQ-074
+      unsatisfied_ancestor_count_at_wave_start: 72
+      required_capability: research_and_docs
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-166
+      title: Cross-protocol confusion benchmark
+      hours: 6
+      dependencies:
+      - KQ-089
+      - KQ-097
+      - KQ-105
+      - KQ-113
+      - KQ-121
+      - KQ-129
+      - KQ-137
+      - KQ-145
+      - KQ-153
+      - KQ-161
+      unsatisfied_ancestor_count_at_wave_start: 65
+      required_capability: research_and_docs
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-167
+      title: Automatic protocol suggestion research
+      hours: 6
+      dependencies:
+      - KQ-051
+      - KQ-052
+      - KQ-166
+      unsatisfied_ancestor_count_at_wave_start: 72
+      required_capability: research_and_docs
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-168
+      title: Multi-protocol session architecture
+      hours: 6
+      dependencies:
+      - KQ-166
+      - KQ-167
+      unsatisfied_ancestor_count_at_wave_start: 73
+      required_capability: research_and_docs
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-169
+      title: Shared coach profile integration
+      hours: 6
+      dependencies:
+      - KQ-031
+      - KQ-082
+      - KQ-089
+      - KQ-097
+      - KQ-105
+      - KQ-113
+      - KQ-121
+      - KQ-129
+      - KQ-137
+      - KQ-145
+      - KQ-153
+      - KQ-161
+      unsatisfied_ancestor_count_at_wave_start: 66
+      required_capability: research_and_docs
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-170
+      title: Cross-protocol report/trend audit
+      hours: 6
+      dependencies:
+      - KQ-032
+      - KQ-073
+      - KQ-083
+      - KQ-169
+      unsatisfied_ancestor_count_at_wave_start: 69
+      required_capability: research_and_docs
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-171
+      title: Security/privacy threat-model closeout
+      hours: 6
+      dependencies:
+      - KQ-054
+      - KQ-061
+      - KQ-072
+      unsatisfied_ancestor_count_at_wave_start: 32
+      required_capability: research_and_docs
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-172
+      title: Full consumer-device and accessibility matrix
+      hours: 6
+      dependencies:
+      - KQ-046
+      - KQ-084
+      - KQ-085
+      - KQ-089
+      - KQ-097
+      - KQ-105
+      - KQ-113
+      - KQ-121
+      - KQ-129
+      - KQ-137
+      - KQ-145
+      - KQ-153
+      - KQ-161
+      unsatisfied_ancestor_count_at_wave_start: 82
+      required_capability: research_and_docs
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-173
+      title: Full reproducibility and clean-clone audit
+      hours: 6
+      dependencies:
+      - KQ-015
+      - KQ-035
+      - KQ-055
+      - KQ-075
+      - KQ-085
+      - KQ-166
+      - KQ-170
+      - KQ-171
+      - KQ-172
+      unsatisfied_ancestor_count_at_wave_start: 119
+      required_capability: research_and_docs
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-174
+      title: Expanded-10 release-candidate audit
+      hours: 6
+      dependencies:
+      - KQ-093
+      - KQ-101
+      - KQ-109
+      - KQ-117
+      - KQ-125
+      - KQ-133
+      - KQ-141
+      - KQ-149
+      - KQ-157
+      - KQ-165
+      - KQ-173
+      unsatisfied_ancestor_count_at_wave_start: 170
+      required_capability: research_and_docs
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+    - id: KQ-175
+      title: Program closeout and continuous-operations handoff
+      hours: 6
+      dependencies:
+      - KQ-011
+      - KQ-013
+      - KQ-014
+      - KQ-060
+      - KQ-074
+      - KQ-174
+      unsatisfied_ancestor_count_at_wave_start: 172
+      required_capability: research_and_docs
+      worker_id: null
+      mutation_lane: null
+      resource_dependencies: []
+      start_condition: promote in a later replan; satisfy all dependencies and resource gates before start
+      window: not_committed_or_slotted
+scope_notes:
+- KQ-001 through KQ-015 are the only committed milestone IDs.
+- Probable and stretch IDs are forecasts, not promises or capacity reservations.
+- Squat and forward-lunge full package IDs are outside committed work because their dependency closures exceed this wave's
+  capacity.
+- A direct unresolved resource dependency is external-wait; descendants remain deferred until their dependency and resource
+  closures are ready.

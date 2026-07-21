@@ -1,0 +1,14 @@
+name: dataset_license_rejection
+milestones:
+  - {id: protocol-lock, protocol_id: squat-v1, status: Passed, stage: ProtocolLocked, evidence_bearing: true}
+  - {id: dataset-review, protocol_id: squat-v1, status: Passed, result_code: DATASET_EXCLUDED}
+  - id: evidence-replan
+    protocol_id: squat-v1
+    status: Pending
+    dependencies: [{id: dataset-review}]
+protocols: [{id: squat-v1, preregistration_locked: true}]
+expected:
+  ready_queue: [evidence-replan]
+  protocols:
+    squat-v1: {lifecycle: ProtocolLocked, data_ready: false, engineering_ready: false, validation_ready: false}
+  terminal_dispositions: {}

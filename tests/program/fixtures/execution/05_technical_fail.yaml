@@ -1,0 +1,16 @@
+name: technical_failure
+milestones:
+  - {id: verifier, protocol_id: squat-v1, status: FailedTechnical, result_code: TECHNICAL_FAILURE_RECORDED}
+  - id: descendant
+    protocol_id: squat-v1
+    status: Pending
+    dependencies: [{id: verifier}]
+  - {id: diagnosis-retry, protocol_id: squat-v1, status: Pending}
+  - {id: unrelated-ready, protocol_id: lunge-v1, status: Pending}
+protocols: [{id: squat-v1}, {id: lunge-v1}]
+expected:
+  ready_queue: [diagnosis-retry, unrelated-ready]
+  protocols:
+    lunge-v1: {lifecycle: Candidate, data_ready: false, engineering_ready: false, validation_ready: false}
+    squat-v1: {lifecycle: Candidate, data_ready: false, engineering_ready: false, validation_ready: false}
+  terminal_dispositions: {}

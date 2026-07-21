@@ -1,0 +1,21 @@
+name: human_blocker
+milestones:
+  - {id: capture, protocol_id: squat-v1, status: BlockedHuman, result_code: BLOCKED_HUMAN_WITH_OWNER}
+  - id: release
+    protocol_id: squat-v1
+    status: Pending
+    kind: release_disposition
+    dependencies:
+      - {id: capture, accepted_statuses: [BlockedHuman], allow_blocked_disposition: true}
+  - {id: unrelated-engineering, protocol_id: lunge-v1, status: Pending}
+protocols:
+  - id: squat-v1
+    decisions:
+      - {kind: BlockedHuman, current: true, owner: study-lead, next_action: obtain consent}
+  - {id: lunge-v1}
+expected:
+  ready_queue: [release, unrelated-engineering]
+  protocols:
+    lunge-v1: {lifecycle: Candidate, data_ready: false, engineering_ready: false, validation_ready: false}
+    squat-v1: {lifecycle: BlockedHuman, data_ready: false, engineering_ready: false, validation_ready: false}
+  terminal_dispositions: {squat-v1: BlockedHuman}
