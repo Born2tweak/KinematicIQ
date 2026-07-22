@@ -51,6 +51,11 @@ def main() -> int:
             ["python", "tools/program/verify_milestone.py", "--structure-only"],
             ["python", "-m", "unittest", "discover", "-s", "tests/program", "-p", "test_*.py", "-v"],
             ["python", "tools/program/schedule_wave.py", "--verify", "--output", "docs/program/WAVE_1_SCHEDULE.yaml"],
+            ["python", "tools/program/compile_status.py", "--verify", "--output", "docs/status/program_status.json"],
+            ["python", "tools/program/generate_checkpoint.py", "--verify", "--output", "docs/status/program_checkpoint.json"],
+            ["python", "tools/program/verify_authority.py", "--manifest", "docs/program/artifacts/kq-011.yaml"],
+            ["python", "tools/program/verify_execution_policy.py", "--policy", "docs/program/execution_policy.yaml"],
+            ["python", "tools/program/validate_traceability.py", "--contract", "docs/program/traceability_contract.yaml"],
             [npm, "--prefix", "web", "ci"],
             [npm, "--prefix", "web", "run", "build"],
             [npm, "--prefix", "web", "test", "--", "--run", "--reporter=dot"],
@@ -70,12 +75,16 @@ def main() -> int:
                 break
         head = run(["git", "rev-parse", "HEAD"], clone)
         status = run(["git", "status", "--short", "--ignored"], clone)
+        frontier_path = clone / "docs/status/program_status.json"
+        checkpoint_path = clone / "docs/status/program_checkpoint.json"
         payload = {
             "schema_version": 1,
             "branch": args.branch,
             "repository": args.repository,
             "generated_at": datetime.now(timezone.utc).isoformat(),
             "clone_head": head["stdout"].strip(),
+            "reproduced_frontier": json.loads(frontier_path.read_text(encoding="utf-8")) if frontier_path.is_file() else None,
+            "reproduced_checkpoint": json.loads(checkpoint_path.read_text(encoding="utf-8")) if checkpoint_path.is_file() else None,
             "checks": checks,
             "ignored_status": status["stdout"].splitlines(),
             "all_required_checks_passed": all(item["accepted"] for item in checks),

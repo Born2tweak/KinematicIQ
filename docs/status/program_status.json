@@ -231,9 +231,9 @@
   },
   "schema_version": 1,
   "source_hashes": {
-    "docs/program/WAVE_1_SCHEDULE.yaml": "b1c87b1005ddd3cccbbf2c4edd72eaf953303b752ca054450386543ef4ea129a",
+    "docs/program/WAVE_1_SCHEDULE.yaml": "6484f1509e9346aec680beb2e956d62d46a621119f5a07edb395172b3e39765e",
     "docs/program/artifacts/kq-002.yaml": "0edebef1244c10ba4a716c9af3fe795ed815367cee49ba2a2488e6fb21136ff9",
-    "docs/program/milestone_registry.yaml": "7cf6df12b7f30e78042a6689f48dce33cf6bf52ca6a88677810d9eb9707af4d4",
+    "docs/program/milestone_registry.yaml": "eed0a48f5ff0909d5c4fd2bb0ace9977b5f367147c160f936b0ab6fbfdc53cd0",
     "docs/program/resource_registry.yaml": "b10c001806da017f3f0876a77eb8db34c82870bc745140f8b9b9afc0c56a4c22"
   }
 }

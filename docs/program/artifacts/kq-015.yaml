@@ -1,0 +1,26 @@
+schema_version: 1
+milestone_id: KQ-015
+verifier: tools/program/verify_clean_clone.py
+evidence: docs/status/revision-4-clean-clone.json
+branch: agent/expanded-10-revision-4
+reproduced_authorities:
+- docs/program/milestone_registry.yaml
+- docs/program/WAVE_1_SCHEDULE.yaml
+- docs/status/program_status.json
+- docs/status/program_checkpoint.json
+checks:
+- schema and semantic structure
+- full program regression
+- schedule, compiled status, and checkpoint determinism
+- authority, execution-policy, and traceability enforcement
+- clean dependency installation, production build, web regression, and evaluation commands
+- explicit unavailable-corpus disposition without fabricated participant evidence
+- no tracked diff after verification
+rules:
+- the clean clone must use the dedicated execution branch
+- no clean-clone absence may be promoted to scientific evidence or GATE_PASS
+- the verifier records the cloned head and reproduced frontier
+- production deployment and direct merge to master remain outside authority
+assertions:
+- id: KQ-015-OUTCOME
+  actual: All control artifacts reproduce the same frontier from a clean clone

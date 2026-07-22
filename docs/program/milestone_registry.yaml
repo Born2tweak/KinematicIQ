@@ -1554,7 +1554,7 @@ milestones:
     - id: targeted_contract_checks
       command: python tools/program/run_contract_checks.py --id KQ-015 --evidence-out docs/status/milestones/KQ-015.json
     - id: clean_clone_gate
-      command: python tools/program/verify_clean_clone.py --branch agent/expanded-10-revision-4
+      command: python tools/program/verify_clean_clone.py --branch agent/expanded-10-revision-4 --evidence-out docs/status/revision-4-clean-clone.json
     manual_gate: null
     clean_clone_required: true
   failure:

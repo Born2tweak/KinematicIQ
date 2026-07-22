@@ -3,7 +3,7 @@ program_id: kinematiciq-expanded-10
 wave_id: expanded-10-wave-1
 sources:
   milestone_registry: docs/program/milestone_registry.yaml
-  milestone_registry_sha256: 7cf6df12b7f30e78042a6689f48dce33cf6bf52ca6a88677810d9eb9707af4d4
+  milestone_registry_sha256: eed0a48f5ff0909d5c4fd2bb0ace9977b5f367147c160f936b0ab6fbfdc53cd0
   resource_registry: docs/program/resource_registry.yaml
   resource_registry_sha256: b10c001806da017f3f0876a77eb8db34c82870bc745140f8b9b9afc0c56a4c22
   execution_policy: docs/program/execution_policy.yaml
