@@ -1166,7 +1166,7 @@ milestones:
   title: Create research-question workflow
   phase: A
   class: blocking_kernel
-  milestone_status: Pending
+  milestone_status: Passed
   expected_work_hours: 4
   objective: 'Produce and verify one bounded outcome: Create research-question workflow.'
   user_visible_outcome: none
@@ -1205,6 +1205,10 @@ milestones:
     predicate: contract_output_assertion_passes
     contract: docs/program/artifacts/kq-012.yaml
     assertion_id: KQ-012-OUTCOME
+  - id: KQ-012-A4
+    predicate: command_exit_code_equals
+    command_id: research_workflow
+    expected: 0
   verification:
     profile: program_contract
     automated:
@@ -1213,6 +1217,8 @@ milestones:
         --id KQ-012
     - id: targeted_contract_checks
       command: python tools/program/run_contract_checks.py --id KQ-012 --evidence-out docs/status/milestones/KQ-012.json
+    - id: research_workflow
+      command: python tools/program/verify_research_workflow.py --registry docs/research/research_questions.yaml --fixture tests/program/fixtures/research_workflow/jump.yaml
     manual_gate: null
     clean_clone_required: false
   failure:

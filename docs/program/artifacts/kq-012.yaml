@@ -1,0 +1,10 @@
+schema_version: 1
+milestone_id: KQ-012
+registry: docs/research/research_questions.yaml
+fixture: tests/program/fixtures/research_workflow/jump.yaml
+source_demonstration: docs/research/RESEARCH_REPLAN_VERTICAL_SLICE.md
+workflow_fields: [decision_question, exit_criteria, source_policy, budget, synthesis, decision_impact]
+canonical_registry_state: empty_no_current_job_fabricated
+assertions:
+- id: KQ-012-OUTCOME
+  actual: Question, exit criteria, sources, synthesis, decision impact

@@ -83,6 +83,13 @@
 - Focused baseline: existing local traceability/claims/freeze behavior passed 3 files and 9 tests, establishing compatibility rather than canonical cross-registry completeness.
 - Verification: bootstrap plus four validator tests pass; full program and web/build results are recorded in KQ-010 evidence. No protocol availability or scientific gate changed.
 
+## 2026-07-21 — Expanded-10 KQ-012 research-question workflow
+
+- Registry: `docs/research/research_questions.yaml` is empty with an explicit reason; historical prose and demonstrations were not promoted to current jobs.
+- Workflow: stable question/trigger IDs, decision question, affected objects, prioritized/excluded sources, bounded budget, exit criteria, four-way synthesis, and decision impact are required.
+- Evidence boundary: the jump record is labeled orchestration-only, cannot claim scientific evidence or a completed evidence pack, and changes no completed nodes or public claims.
+- Verification: positive workflow plus negative missing-exit and fabricated-evidence tests pass within the 42-test program suite; KQ-012's four predicates pass.
+
 
 ## 2026-07-15 — Phase 4 P4-M00 reconciliation
 

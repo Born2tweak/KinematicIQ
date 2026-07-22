@@ -3,7 +3,7 @@ program_id: kinematiciq-expanded-10
 wave_id: expanded-10-wave-1
 sources:
   milestone_registry: docs/program/milestone_registry.yaml
-  milestone_registry_sha256: da3e0800f463548cef7e85258c7023604461909260f5bce4c1eb588ed26a389b
+  milestone_registry_sha256: ef0b425d494cb2efa0d05dcac8efdb9100fa23c1f606084378f8efcb871a7ce2
   resource_registry: docs/program/resource_registry.yaml
   resource_registry_sha256: b10c001806da017f3f0876a77eb8db34c82870bc745140f8b9b9afc0c56a4c22
   execution_policy: docs/program/execution_policy.yaml
@@ -52,6 +52,7 @@ imported_satisfied:
   - KQ-008
   - KQ-009
   - KQ-010
+  - KQ-012
   - KQ-014
   evidence:
   - id: KQ-001
@@ -84,17 +85,20 @@ imported_satisfied:
   - id: KQ-010
     path: docs/status/milestones/KQ-010.json
     sha256: 75ea07987461c4ab21a13afec4aaf7129c388b7bd98f2d2571936da259d465c5
+  - id: KQ-012
+    path: docs/status/milestones/KQ-012.json
+    sha256: 2b10430f27fa752361d9a414907890f339ceab2279d5a8b0aa9fa0b2760021c6
   - id: KQ-014
     path: docs/status/milestones/KQ-014.json
     sha256: 1d29dbaca182957965eb19120b54274df2cd6789a27cae790cea2245d53d3f59
   explanation: Only registry-Passed milestones with a matching passing status artifact are imported. Evidence-backed imports
     are listed above.
 capacity:
-  committed_milestone_hours: 16
+  committed_milestone_hours: 12
   review_synthesis_replan_overhead_hours: 16
-  committed_scheduled_hours: 32
+  committed_scheduled_hours: 28
   committed_capacity_hours: 134
-  uncommitted_capacity_hours: 102
+  uncommitted_capacity_hours: 106
 review_synthesis_constraints:
   reserved_worker_id: W4
   rule: W4 receives no milestone mutation assignment and remains the review/synthesis slot.
@@ -141,23 +145,8 @@ bands:
     - KQ-013
     - KQ-014
     - KQ-015
-    hours: 16
+    hours: 12
     schedule:
-    - id: KQ-012
-      title: Create research-question workflow
-      hours: 4
-      dependencies:
-      - KQ-008
-      unsatisfied_ancestor_closure_at_wave_start: []
-      required_capability: program_contracts
-      worker_id: W1
-      mutation_lane: null
-      start_condition: all dependencies have an accepted passing or controlled-skip disposition
-      window:
-        start_productive_hour: 0
-        finish_productive_hour: 4
-        earliest_start_day: 1
-        latest_finish_day: 1
     - id: KQ-011
       title: Build stale-authority detector
       hours: 3
@@ -165,8 +154,8 @@ bands:
       - KQ-009
       unsatisfied_ancestor_closure_at_wave_start: []
       required_capability: code_and_architecture
-      worker_id: W2
-      mutation_lane: B
+      worker_id: W1
+      mutation_lane: A
       start_condition: all dependencies have an accepted passing or controlled-skip disposition
       window:
         start_productive_hour: 0
@@ -204,15 +193,14 @@ bands:
       - KQ-014
       unsatisfied_ancestor_closure_at_wave_start:
       - KQ-011
-      - KQ-012
       - KQ-013
       required_capability: research_and_docs
       worker_id: W3
       mutation_lane: null
       start_condition: all dependencies have an accepted passing or controlled-skip disposition
       window:
-        start_productive_hour: 4
-        finish_productive_hour: 10
+        start_productive_hour: 3
+        finish_productive_hour: 9
         earliest_start_day: 1
         latest_finish_day: 2
   probable:
@@ -706,7 +694,7 @@ bands:
       - KQ-063
       - KQ-064
       - KQ-065
-      unsatisfied_ancestor_count_at_wave_start: 20
+      unsatisfied_ancestor_count_at_wave_start: 19
       required_capability: research_and_docs
       worker_id: null
       mutation_lane: null
@@ -724,7 +712,7 @@ bands:
       hours: 8
       dependencies:
       - KQ-091
-      unsatisfied_ancestor_count_at_wave_start: 63
+      unsatisfied_ancestor_count_at_wave_start: 62
       required_capability: research_and_docs
       worker_id: null
       mutation_lane: null
@@ -748,7 +736,7 @@ bands:
       - KQ-063
       - KQ-064
       - KQ-065
-      unsatisfied_ancestor_count_at_wave_start: 20
+      unsatisfied_ancestor_count_at_wave_start: 19
       required_capability: research_and_docs
       worker_id: null
       mutation_lane: null
@@ -766,7 +754,7 @@ bands:
       hours: 8
       dependencies:
       - KQ-099
-      unsatisfied_ancestor_count_at_wave_start: 63
+      unsatisfied_ancestor_count_at_wave_start: 62
       required_capability: research_and_docs
       worker_id: null
       mutation_lane: null
@@ -790,7 +778,7 @@ bands:
       - KQ-063
       - KQ-064
       - KQ-065
-      unsatisfied_ancestor_count_at_wave_start: 20
+      unsatisfied_ancestor_count_at_wave_start: 19
       required_capability: research_and_docs
       worker_id: null
       mutation_lane: null
@@ -808,7 +796,7 @@ bands:
       hours: 8
       dependencies:
       - KQ-107
-      unsatisfied_ancestor_count_at_wave_start: 63
+      unsatisfied_ancestor_count_at_wave_start: 62
       required_capability: research_and_docs
       worker_id: null
       mutation_lane: null
@@ -832,7 +820,7 @@ bands:
       - KQ-063
       - KQ-064
       - KQ-065
-      unsatisfied_ancestor_count_at_wave_start: 20
+      unsatisfied_ancestor_count_at_wave_start: 19
       required_capability: research_and_docs
       worker_id: null
       mutation_lane: null
@@ -850,7 +838,7 @@ bands:
       hours: 8
       dependencies:
       - KQ-115
-      unsatisfied_ancestor_count_at_wave_start: 63
+      unsatisfied_ancestor_count_at_wave_start: 62
       required_capability: research_and_docs
       worker_id: null
       mutation_lane: null
@@ -874,7 +862,7 @@ bands:
       - KQ-063
       - KQ-064
       - KQ-065
-      unsatisfied_ancestor_count_at_wave_start: 20
+      unsatisfied_ancestor_count_at_wave_start: 19
       required_capability: research_and_docs
       worker_id: null
       mutation_lane: null
@@ -892,7 +880,7 @@ bands:
       hours: 8
       dependencies:
       - KQ-123
-      unsatisfied_ancestor_count_at_wave_start: 63
+      unsatisfied_ancestor_count_at_wave_start: 62
       required_capability: research_and_docs
       worker_id: null
       mutation_lane: null
@@ -916,7 +904,7 @@ bands:
       - KQ-063
       - KQ-064
       - KQ-065
-      unsatisfied_ancestor_count_at_wave_start: 20
+      unsatisfied_ancestor_count_at_wave_start: 19
       required_capability: research_and_docs
       worker_id: null
       mutation_lane: null
@@ -934,7 +922,7 @@ bands:
       hours: 8
       dependencies:
       - KQ-131
-      unsatisfied_ancestor_count_at_wave_start: 63
+      unsatisfied_ancestor_count_at_wave_start: 62
       required_capability: research_and_docs
       worker_id: null
       mutation_lane: null
@@ -958,7 +946,7 @@ bands:
       - KQ-063
       - KQ-064
       - KQ-065
-      unsatisfied_ancestor_count_at_wave_start: 20
+      unsatisfied_ancestor_count_at_wave_start: 19
       required_capability: research_and_docs
       worker_id: null
       mutation_lane: null
@@ -976,7 +964,7 @@ bands:
       hours: 8
       dependencies:
       - KQ-139
-      unsatisfied_ancestor_count_at_wave_start: 63
+      unsatisfied_ancestor_count_at_wave_start: 62
       required_capability: research_and_docs
       worker_id: null
       mutation_lane: null
@@ -1000,7 +988,7 @@ bands:
       - KQ-063
       - KQ-064
       - KQ-065
-      unsatisfied_ancestor_count_at_wave_start: 20
+      unsatisfied_ancestor_count_at_wave_start: 19
       required_capability: research_and_docs
       worker_id: null
       mutation_lane: null
@@ -1018,7 +1006,7 @@ bands:
       hours: 8
       dependencies:
       - KQ-147
-      unsatisfied_ancestor_count_at_wave_start: 63
+      unsatisfied_ancestor_count_at_wave_start: 62
       required_capability: research_and_docs
       worker_id: null
       mutation_lane: null
@@ -1042,7 +1030,7 @@ bands:
       - KQ-063
       - KQ-064
       - KQ-065
-      unsatisfied_ancestor_count_at_wave_start: 20
+      unsatisfied_ancestor_count_at_wave_start: 19
       required_capability: research_and_docs
       worker_id: null
       mutation_lane: null
@@ -1061,7 +1049,7 @@ bands:
       hours: 8
       dependencies:
       - KQ-155
-      unsatisfied_ancestor_count_at_wave_start: 63
+      unsatisfied_ancestor_count_at_wave_start: 62
       required_capability: research_and_docs
       worker_id: null
       mutation_lane: null
@@ -1086,7 +1074,7 @@ bands:
       - KQ-063
       - KQ-064
       - KQ-065
-      unsatisfied_ancestor_count_at_wave_start: 20
+      unsatisfied_ancestor_count_at_wave_start: 19
       required_capability: research_and_docs
       worker_id: null
       mutation_lane: null
@@ -1104,7 +1092,7 @@ bands:
       hours: 8
       dependencies:
       - KQ-163
-      unsatisfied_ancestor_count_at_wave_start: 63
+      unsatisfied_ancestor_count_at_wave_start: 62
       required_capability: research_and_docs
       worker_id: null
       mutation_lane: null
@@ -1546,7 +1534,7 @@ bands:
       dependencies:
       - KQ-012
       - KQ-058
-      unsatisfied_ancestor_count_at_wave_start: 3
+      unsatisfied_ancestor_count_at_wave_start: 2
       required_capability: code_and_architecture
       worker_id: null
       mutation_lane: null
@@ -1918,7 +1906,7 @@ bands:
       - KQ-008
       - KQ-012
       - KQ-027
-      unsatisfied_ancestor_count_at_wave_start: 3
+      unsatisfied_ancestor_count_at_wave_start: 2
       required_capability: research_and_docs
       worker_id: null
       mutation_lane: null
@@ -1934,7 +1922,7 @@ bands:
       - KQ-056
       - KQ-057
       - KQ-073
-      unsatisfied_ancestor_count_at_wave_start: 13
+      unsatisfied_ancestor_count_at_wave_start: 12
       required_capability: research_and_docs
       worker_id: null
       mutation_lane: null
@@ -1950,7 +1938,7 @@ bands:
       - KQ-035
       - KQ-037
       - KQ-039
-      unsatisfied_ancestor_count_at_wave_start: 30
+      unsatisfied_ancestor_count_at_wave_start: 29
       required_capability: code_and_architecture
       worker_id: null
       mutation_lane: null
@@ -1970,7 +1958,7 @@ bands:
       - KQ-081
       - KQ-082
       - KQ-083
-      unsatisfied_ancestor_count_at_wave_start: 44
+      unsatisfied_ancestor_count_at_wave_start: 43
       required_capability: code_and_architecture
       worker_id: null
       mutation_lane: null
@@ -1992,7 +1980,7 @@ bands:
       - KQ-071
       - KQ-072
       - KQ-073
-      unsatisfied_ancestor_count_at_wave_start: 62
+      unsatisfied_ancestor_count_at_wave_start: 61
       required_capability: research_and_docs
       worker_id: null
       mutation_lane: null
@@ -2005,7 +1993,7 @@ bands:
       dependencies:
       - KQ-092
       - KQ-074
-      unsatisfied_ancestor_count_at_wave_start: 65
+      unsatisfied_ancestor_count_at_wave_start: 64
       required_capability: research_and_docs
       worker_id: null
       mutation_lane: null
@@ -2021,7 +2009,7 @@ bands:
       - KQ-008
       - KQ-012
       - KQ-027
-      unsatisfied_ancestor_count_at_wave_start: 3
+      unsatisfied_ancestor_count_at_wave_start: 2
       required_capability: research_and_docs
       worker_id: null
       mutation_lane: null
@@ -2037,7 +2025,7 @@ bands:
       - KQ-056
       - KQ-057
       - KQ-073
-      unsatisfied_ancestor_count_at_wave_start: 13
+      unsatisfied_ancestor_count_at_wave_start: 12
       required_capability: research_and_docs
       worker_id: null
       mutation_lane: null
@@ -2053,7 +2041,7 @@ bands:
       - KQ-035
       - KQ-037
       - KQ-039
-      unsatisfied_ancestor_count_at_wave_start: 30
+      unsatisfied_ancestor_count_at_wave_start: 29
       required_capability: code_and_architecture
       worker_id: null
       mutation_lane: null
@@ -2073,7 +2061,7 @@ bands:
       - KQ-081
       - KQ-082
       - KQ-083
-      unsatisfied_ancestor_count_at_wave_start: 44
+      unsatisfied_ancestor_count_at_wave_start: 43
       required_capability: code_and_architecture
       worker_id: null
       mutation_lane: null
@@ -2095,7 +2083,7 @@ bands:
       - KQ-071
       - KQ-072
       - KQ-073
-      unsatisfied_ancestor_count_at_wave_start: 62
+      unsatisfied_ancestor_count_at_wave_start: 61
       required_capability: research_and_docs
       worker_id: null
       mutation_lane: null
@@ -2108,7 +2096,7 @@ bands:
       dependencies:
       - KQ-100
       - KQ-074
-      unsatisfied_ancestor_count_at_wave_start: 65
+      unsatisfied_ancestor_count_at_wave_start: 64
       required_capability: research_and_docs
       worker_id: null
       mutation_lane: null
@@ -2124,7 +2112,7 @@ bands:
       - KQ-008
       - KQ-012
       - KQ-027
-      unsatisfied_ancestor_count_at_wave_start: 3
+      unsatisfied_ancestor_count_at_wave_start: 2
       required_capability: research_and_docs
       worker_id: null
       mutation_lane: null
@@ -2140,7 +2128,7 @@ bands:
       - KQ-056
       - KQ-057
       - KQ-073
-      unsatisfied_ancestor_count_at_wave_start: 13
+      unsatisfied_ancestor_count_at_wave_start: 12
       required_capability: research_and_docs
       worker_id: null
       mutation_lane: null
@@ -2156,7 +2144,7 @@ bands:
       - KQ-035
       - KQ-037
       - KQ-039
-      unsatisfied_ancestor_count_at_wave_start: 30
+      unsatisfied_ancestor_count_at_wave_start: 29
       required_capability: code_and_architecture
       worker_id: null
       mutation_lane: null
@@ -2176,7 +2164,7 @@ bands:
       - KQ-081
       - KQ-082
       - KQ-083
-      unsatisfied_ancestor_count_at_wave_start: 44
+      unsatisfied_ancestor_count_at_wave_start: 43
       required_capability: code_and_architecture
       worker_id: null
       mutation_lane: null
@@ -2198,7 +2186,7 @@ bands:
       - KQ-071
       - KQ-072
       - KQ-073
-      unsatisfied_ancestor_count_at_wave_start: 62
+      unsatisfied_ancestor_count_at_wave_start: 61
       required_capability: research_and_docs
       worker_id: null
       mutation_lane: null
@@ -2211,7 +2199,7 @@ bands:
       dependencies:
       - KQ-108
       - KQ-074
-      unsatisfied_ancestor_count_at_wave_start: 65
+      unsatisfied_ancestor_count_at_wave_start: 64
       required_capability: research_and_docs
       worker_id: null
       mutation_lane: null
@@ -2227,7 +2215,7 @@ bands:
       - KQ-008
       - KQ-012
       - KQ-027
-      unsatisfied_ancestor_count_at_wave_start: 3
+      unsatisfied_ancestor_count_at_wave_start: 2
       required_capability: research_and_docs
       worker_id: null
       mutation_lane: null
@@ -2243,7 +2231,7 @@ bands:
       - KQ-056
       - KQ-057
       - KQ-073
-      unsatisfied_ancestor_count_at_wave_start: 13
+      unsatisfied_ancestor_count_at_wave_start: 12
       required_capability: research_and_docs
       worker_id: null
       mutation_lane: null
@@ -2259,7 +2247,7 @@ bands:
       - KQ-035
       - KQ-037
       - KQ-039
-      unsatisfied_ancestor_count_at_wave_start: 30
+      unsatisfied_ancestor_count_at_wave_start: 29
       required_capability: code_and_architecture
       worker_id: null
       mutation_lane: null
@@ -2279,7 +2267,7 @@ bands:
       - KQ-081
       - KQ-082
       - KQ-083
-      unsatisfied_ancestor_count_at_wave_start: 44
+      unsatisfied_ancestor_count_at_wave_start: 43
       required_capability: code_and_architecture
       worker_id: null
       mutation_lane: null
@@ -2301,7 +2289,7 @@ bands:
       - KQ-071
       - KQ-072
       - KQ-073
-      unsatisfied_ancestor_count_at_wave_start: 62
+      unsatisfied_ancestor_count_at_wave_start: 61
       required_capability: research_and_docs
       worker_id: null
       mutation_lane: null
@@ -2314,7 +2302,7 @@ bands:
       dependencies:
       - KQ-116
       - KQ-074
-      unsatisfied_ancestor_count_at_wave_start: 65
+      unsatisfied_ancestor_count_at_wave_start: 64
       required_capability: research_and_docs
       worker_id: null
       mutation_lane: null
@@ -2330,7 +2318,7 @@ bands:
       - KQ-008
       - KQ-012
       - KQ-027
-      unsatisfied_ancestor_count_at_wave_start: 3
+      unsatisfied_ancestor_count_at_wave_start: 2
       required_capability: research_and_docs
       worker_id: null
       mutation_lane: null
@@ -2346,7 +2334,7 @@ bands:
       - KQ-056
       - KQ-057
       - KQ-073
-      unsatisfied_ancestor_count_at_wave_start: 13
+      unsatisfied_ancestor_count_at_wave_start: 12
       required_capability: research_and_docs
       worker_id: null
       mutation_lane: null
@@ -2362,7 +2350,7 @@ bands:
       - KQ-035
       - KQ-037
       - KQ-039
-      unsatisfied_ancestor_count_at_wave_start: 30
+      unsatisfied_ancestor_count_at_wave_start: 29
       required_capability: code_and_architecture
       worker_id: null
       mutation_lane: null
@@ -2382,7 +2370,7 @@ bands:
       - KQ-081
       - KQ-082
       - KQ-083
-      unsatisfied_ancestor_count_at_wave_start: 44
+      unsatisfied_ancestor_count_at_wave_start: 43
       required_capability: code_and_architecture
       worker_id: null
       mutation_lane: null
@@ -2404,7 +2392,7 @@ bands:
       - KQ-071
       - KQ-072
       - KQ-073
-      unsatisfied_ancestor_count_at_wave_start: 62
+      unsatisfied_ancestor_count_at_wave_start: 61
       required_capability: research_and_docs
       worker_id: null
       mutation_lane: null
@@ -2417,7 +2405,7 @@ bands:
       dependencies:
       - KQ-124
       - KQ-074
-      unsatisfied_ancestor_count_at_wave_start: 65
+      unsatisfied_ancestor_count_at_wave_start: 64
       required_capability: research_and_docs
       worker_id: null
       mutation_lane: null
@@ -2433,7 +2421,7 @@ bands:
       - KQ-008
       - KQ-012
       - KQ-027
-      unsatisfied_ancestor_count_at_wave_start: 3
+      unsatisfied_ancestor_count_at_wave_start: 2
       required_capability: research_and_docs
       worker_id: null
       mutation_lane: null
@@ -2449,7 +2437,7 @@ bands:
       - KQ-056
       - KQ-057
       - KQ-073
-      unsatisfied_ancestor_count_at_wave_start: 13
+      unsatisfied_ancestor_count_at_wave_start: 12
       required_capability: research_and_docs
       worker_id: null
       mutation_lane: null
@@ -2465,7 +2453,7 @@ bands:
       - KQ-035
       - KQ-037
       - KQ-039
-      unsatisfied_ancestor_count_at_wave_start: 30
+      unsatisfied_ancestor_count_at_wave_start: 29
       required_capability: code_and_architecture
       worker_id: null
       mutation_lane: null
@@ -2485,7 +2473,7 @@ bands:
       - KQ-081
       - KQ-082
       - KQ-083
-      unsatisfied_ancestor_count_at_wave_start: 44
+      unsatisfied_ancestor_count_at_wave_start: 43
       required_capability: code_and_architecture
       worker_id: null
       mutation_lane: null
@@ -2507,7 +2495,7 @@ bands:
       - KQ-071
       - KQ-072
       - KQ-073
-      unsatisfied_ancestor_count_at_wave_start: 62
+      unsatisfied_ancestor_count_at_wave_start: 61
       required_capability: research_and_docs
       worker_id: null
       mutation_lane: null
@@ -2520,7 +2508,7 @@ bands:
       dependencies:
       - KQ-132
       - KQ-074
-      unsatisfied_ancestor_count_at_wave_start: 65
+      unsatisfied_ancestor_count_at_wave_start: 64
       required_capability: research_and_docs
       worker_id: null
       mutation_lane: null
@@ -2536,7 +2524,7 @@ bands:
       - KQ-008
       - KQ-012
       - KQ-027
-      unsatisfied_ancestor_count_at_wave_start: 3
+      unsatisfied_ancestor_count_at_wave_start: 2
       required_capability: research_and_docs
       worker_id: null
       mutation_lane: null
@@ -2552,7 +2540,7 @@ bands:
       - KQ-056
       - KQ-057
       - KQ-073
-      unsatisfied_ancestor_count_at_wave_start: 13
+      unsatisfied_ancestor_count_at_wave_start: 12
       required_capability: research_and_docs
       worker_id: null
       mutation_lane: null
@@ -2568,7 +2556,7 @@ bands:
       - KQ-035
       - KQ-037
       - KQ-039
-      unsatisfied_ancestor_count_at_wave_start: 30
+      unsatisfied_ancestor_count_at_wave_start: 29
       required_capability: code_and_architecture
       worker_id: null
       mutation_lane: null
@@ -2588,7 +2576,7 @@ bands:
       - KQ-081
       - KQ-082
       - KQ-083
-      unsatisfied_ancestor_count_at_wave_start: 44
+      unsatisfied_ancestor_count_at_wave_start: 43
       required_capability: code_and_architecture
       worker_id: null
       mutation_lane: null
@@ -2610,7 +2598,7 @@ bands:
       - KQ-071
       - KQ-072
       - KQ-073
-      unsatisfied_ancestor_count_at_wave_start: 62
+      unsatisfied_ancestor_count_at_wave_start: 61
       required_capability: research_and_docs
       worker_id: null
       mutation_lane: null
@@ -2623,7 +2611,7 @@ bands:
       dependencies:
       - KQ-140
       - KQ-074
-      unsatisfied_ancestor_count_at_wave_start: 65
+      unsatisfied_ancestor_count_at_wave_start: 64
       required_capability: research_and_docs
       worker_id: null
       mutation_lane: null
@@ -2639,7 +2627,7 @@ bands:
       - KQ-008
       - KQ-012
       - KQ-027
-      unsatisfied_ancestor_count_at_wave_start: 3
+      unsatisfied_ancestor_count_at_wave_start: 2
       required_capability: research_and_docs
       worker_id: null
       mutation_lane: null
@@ -2655,7 +2643,7 @@ bands:
       - KQ-056
       - KQ-057
       - KQ-073
-      unsatisfied_ancestor_count_at_wave_start: 13
+      unsatisfied_ancestor_count_at_wave_start: 12
       required_capability: research_and_docs
       worker_id: null
       mutation_lane: null
@@ -2671,7 +2659,7 @@ bands:
       - KQ-035
       - KQ-037
       - KQ-039
-      unsatisfied_ancestor_count_at_wave_start: 30
+      unsatisfied_ancestor_count_at_wave_start: 29
       required_capability: code_and_architecture
       worker_id: null
       mutation_lane: null
@@ -2691,7 +2679,7 @@ bands:
       - KQ-081
       - KQ-082
       - KQ-083
-      unsatisfied_ancestor_count_at_wave_start: 44
+      unsatisfied_ancestor_count_at_wave_start: 43
       required_capability: code_and_architecture
       worker_id: null
       mutation_lane: null
@@ -2713,7 +2701,7 @@ bands:
       - KQ-071
       - KQ-072
       - KQ-073
-      unsatisfied_ancestor_count_at_wave_start: 62
+      unsatisfied_ancestor_count_at_wave_start: 61
       required_capability: research_and_docs
       worker_id: null
       mutation_lane: null
@@ -2726,7 +2714,7 @@ bands:
       dependencies:
       - KQ-148
       - KQ-074
-      unsatisfied_ancestor_count_at_wave_start: 65
+      unsatisfied_ancestor_count_at_wave_start: 64
       required_capability: research_and_docs
       worker_id: null
       mutation_lane: null
@@ -2742,7 +2730,7 @@ bands:
       - KQ-008
       - KQ-012
       - KQ-027
-      unsatisfied_ancestor_count_at_wave_start: 3
+      unsatisfied_ancestor_count_at_wave_start: 2
       required_capability: research_and_docs
       worker_id: null
       mutation_lane: null
@@ -2758,7 +2746,7 @@ bands:
       - KQ-056
       - KQ-057
       - KQ-073
-      unsatisfied_ancestor_count_at_wave_start: 13
+      unsatisfied_ancestor_count_at_wave_start: 12
       required_capability: research_and_docs
       worker_id: null
       mutation_lane: null
@@ -2774,7 +2762,7 @@ bands:
       - KQ-035
       - KQ-037
       - KQ-039
-      unsatisfied_ancestor_count_at_wave_start: 30
+      unsatisfied_ancestor_count_at_wave_start: 29
       required_capability: code_and_architecture
       worker_id: null
       mutation_lane: null
@@ -2794,7 +2782,7 @@ bands:
       - KQ-081
       - KQ-082
       - KQ-083
-      unsatisfied_ancestor_count_at_wave_start: 44
+      unsatisfied_ancestor_count_at_wave_start: 43
       required_capability: code_and_architecture
       worker_id: null
       mutation_lane: null
@@ -2816,7 +2804,7 @@ bands:
       - KQ-071
       - KQ-072
       - KQ-073
-      unsatisfied_ancestor_count_at_wave_start: 62
+      unsatisfied_ancestor_count_at_wave_start: 61
       required_capability: research_and_docs
       worker_id: null
       mutation_lane: null
@@ -2829,7 +2817,7 @@ bands:
       dependencies:
       - KQ-156
       - KQ-074
-      unsatisfied_ancestor_count_at_wave_start: 65
+      unsatisfied_ancestor_count_at_wave_start: 64
       required_capability: research_and_docs
       worker_id: null
       mutation_lane: null
@@ -2845,7 +2833,7 @@ bands:
       - KQ-008
       - KQ-012
       - KQ-027
-      unsatisfied_ancestor_count_at_wave_start: 3
+      unsatisfied_ancestor_count_at_wave_start: 2
       required_capability: research_and_docs
       worker_id: null
       mutation_lane: null
@@ -2861,7 +2849,7 @@ bands:
       - KQ-056
       - KQ-057
       - KQ-073
-      unsatisfied_ancestor_count_at_wave_start: 13
+      unsatisfied_ancestor_count_at_wave_start: 12
       required_capability: research_and_docs
       worker_id: null
       mutation_lane: null
@@ -2877,7 +2865,7 @@ bands:
       - KQ-035
       - KQ-037
       - KQ-039
-      unsatisfied_ancestor_count_at_wave_start: 30
+      unsatisfied_ancestor_count_at_wave_start: 29
       required_capability: code_and_architecture
       worker_id: null
       mutation_lane: null
@@ -2897,7 +2885,7 @@ bands:
       - KQ-081
       - KQ-082
       - KQ-083
-      unsatisfied_ancestor_count_at_wave_start: 44
+      unsatisfied_ancestor_count_at_wave_start: 43
       required_capability: code_and_architecture
       worker_id: null
       mutation_lane: null
@@ -2919,7 +2907,7 @@ bands:
       - KQ-071
       - KQ-072
       - KQ-073
-      unsatisfied_ancestor_count_at_wave_start: 62
+      unsatisfied_ancestor_count_at_wave_start: 61
       required_capability: research_and_docs
       worker_id: null
       mutation_lane: null
@@ -2932,7 +2920,7 @@ bands:
       dependencies:
       - KQ-164
       - KQ-074
-      unsatisfied_ancestor_count_at_wave_start: 65
+      unsatisfied_ancestor_count_at_wave_start: 64
       required_capability: research_and_docs
       worker_id: null
       mutation_lane: null
@@ -2953,7 +2941,7 @@ bands:
       - KQ-145
       - KQ-153
       - KQ-161
-      unsatisfied_ancestor_count_at_wave_start: 58
+      unsatisfied_ancestor_count_at_wave_start: 57
       required_capability: research_and_docs
       worker_id: null
       mutation_lane: null
@@ -2967,7 +2955,7 @@ bands:
       - KQ-051
       - KQ-052
       - KQ-166
-      unsatisfied_ancestor_count_at_wave_start: 65
+      unsatisfied_ancestor_count_at_wave_start: 64
       required_capability: research_and_docs
       worker_id: null
       mutation_lane: null
@@ -2980,7 +2968,7 @@ bands:
       dependencies:
       - KQ-166
       - KQ-167
-      unsatisfied_ancestor_count_at_wave_start: 66
+      unsatisfied_ancestor_count_at_wave_start: 65
       required_capability: research_and_docs
       worker_id: null
       mutation_lane: null
@@ -3003,7 +2991,7 @@ bands:
       - KQ-145
       - KQ-153
       - KQ-161
-      unsatisfied_ancestor_count_at_wave_start: 59
+      unsatisfied_ancestor_count_at_wave_start: 58
       required_capability: research_and_docs
       worker_id: null
       mutation_lane: null
@@ -3018,7 +3006,7 @@ bands:
       - KQ-073
       - KQ-083
       - KQ-169
-      unsatisfied_ancestor_count_at_wave_start: 62
+      unsatisfied_ancestor_count_at_wave_start: 61
       required_capability: research_and_docs
       worker_id: null
       mutation_lane: null
@@ -3056,7 +3044,7 @@ bands:
       - KQ-145
       - KQ-153
       - KQ-161
-      unsatisfied_ancestor_count_at_wave_start: 75
+      unsatisfied_ancestor_count_at_wave_start: 74
       required_capability: research_and_docs
       worker_id: null
       mutation_lane: null
@@ -3076,7 +3064,7 @@ bands:
       - KQ-170
       - KQ-171
       - KQ-172
-      unsatisfied_ancestor_count_at_wave_start: 108
+      unsatisfied_ancestor_count_at_wave_start: 107
       required_capability: research_and_docs
       worker_id: null
       mutation_lane: null
@@ -3098,7 +3086,7 @@ bands:
       - KQ-157
       - KQ-165
       - KQ-173
-      unsatisfied_ancestor_count_at_wave_start: 159
+      unsatisfied_ancestor_count_at_wave_start: 158
       required_capability: research_and_docs
       worker_id: null
       mutation_lane: null
@@ -3115,7 +3103,7 @@ bands:
       - KQ-060
       - KQ-074
       - KQ-174
-      unsatisfied_ancestor_count_at_wave_start: 161
+      unsatisfied_ancestor_count_at_wave_start: 160
       required_capability: research_and_docs
       worker_id: null
       mutation_lane: null

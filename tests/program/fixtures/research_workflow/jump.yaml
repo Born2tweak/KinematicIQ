@@ -1,0 +1,28 @@
+schema_version: 1
+question_id: RQ-FIXTURE-JUMP-001
+record_class: orchestration_fixture_only
+trigger_id: INF-TEST-001
+status: fixture
+decision_question: What evidence is required before consumer-camera flight time or derived jump height can enter the jump claim matrix?
+affected_objects: [KQ-143, KQ-144, KQ-145, KQ-147, KQ-148, jump.flight_time, jump.jump_height]
+source_policy:
+  priority: [primary_validation_studies, official_camera_timestamp_documentation]
+  excluded: [search_snippets, unsourced_blogs, GitHub_readmes_as_scientific_authority]
+budget: {max_sources: 12, max_worker_retries: 2, max_parallel_workers: 2}
+exit_criteria:
+- identify the exact reference measurement and synchronization method
+- identify frame-rate and timestamp error mechanisms relevant to event timing
+- determine whether published thresholds transfer directly to KinematicIQ
+- produce claim, algorithm, validation, and registry impacts
+synthesis:
+  confirmed: [direct criterion comparison and timestamp error reporting are required]
+  changed: [jump_height remains optional and separately withholdable]
+  invalidated: []
+  unresolved: [UNK-JUMP-001, UNK-JUMP-002]
+decision_impact:
+  affected_unresolved_nodes: [KQ-143, KQ-144, KQ-145, KQ-147, KQ-148]
+  completed_nodes_changed: []
+  public_claims_changed: []
+  human_interruption: none_until_real_instrument_consent_or_product_choice
+scientific_evidence: false
+completed_evidence_pack: false

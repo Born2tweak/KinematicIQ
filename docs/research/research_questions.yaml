@@ -1,0 +1,5 @@
+schema_version: 1
+registry_id: expanded-10-research-questions
+authority: docs/implementation/KINEMATICIQ_MASTER_EXECUTION_ROADMAP.md
+questions: []
+empty_reason: No decision-critical question has been opened under this new workflow; historical prose and fixtures are not imported as current research jobs.
