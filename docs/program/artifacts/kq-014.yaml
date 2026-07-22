@@ -1,0 +1,22 @@
+schema_version: 1
+milestone_id: KQ-014
+scheduler: tools/program/schedule_wave.py
+policy: docs/program/execution_policy.yaml
+manifest: docs/program/WAVE_1_SCHEDULE.yaml
+selection_contract:
+  readiness: dependency acceptance plus scoped resource readiness
+  leverage: longest remaining committed dependency tail then stable milestone ID
+  capacity: 134 committed worker-hours with 16 hours reserved for review, synthesis, and replan
+  concurrency: at most two code mutation lanes and three research jobs
+  human_block_scope: affected node and descendants only
+  unaffected_work: continues
+fail_closed_on:
+- stale source or evidence hash
+- dependency closure violation
+- over-capacity schedule
+- reserved review worker mutation assignment
+- unresolved direct resource promoted from external-wait
+- duplicate or missing milestone forecast classification
+assertions:
+- id: KQ-014-OUTCOME
+  actual: Select ready high-leverage work without blocking on unrelated humans

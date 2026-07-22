@@ -1342,7 +1342,7 @@ milestones:
   title: Create critical-path scheduler
   phase: A
   class: blocking_kernel
-  milestone_status: Pending
+  milestone_status: Passed
   expected_work_hours: 5
   objective: 'Produce and verify one bounded outcome: Create critical-path scheduler.'
   user_visible_outcome: none
@@ -1389,6 +1389,10 @@ milestones:
     predicate: contract_output_assertion_passes
     contract: docs/program/artifacts/kq-014.yaml
     assertion_id: KQ-014-OUTCOME
+  - id: KQ-014-A4
+    predicate: command_exit_code_equals
+    command_id: schedule_contract
+    expected: 0
   verification:
     profile: program_contract
     automated:
@@ -1397,6 +1401,8 @@ milestones:
         --id KQ-014
     - id: targeted_contract_checks
       command: python tools/program/run_contract_checks.py --id KQ-014 --evidence-out docs/status/milestones/KQ-014.json
+    - id: schedule_contract
+      command: python tools/program/schedule_wave.py --verify
     manual_gate: null
     clean_clone_required: false
   failure:

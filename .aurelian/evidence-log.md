@@ -69,6 +69,13 @@
 - Safety: Squat remains the sole available protocol, release still requires `GATE_PASS`, and automatic deployment remains false.
 - Verification: checked-in output matches a fresh compile; full program and web/build results are recorded in KQ-009 evidence.
 
+## 2026-07-21 — Expanded-10 KQ-014 critical-path scheduler
+
+- Selection: dependency-ready committed work is ordered by longest remaining dependency tail and stable ID, then assigned only to capability-compatible non-review workers.
+- Capacity: the canonical policy supplies 134 committed hours, two code mutation lanes, three research jobs, and one reserved review/synthesis worker.
+- Isolation: unresolved direct resources remain external-wait, while unrelated dependency-ready work continues.
+- Verification: KQ-014's four predicates, schedule regeneration/verification, capacity/dependency corruption tests, and status-compiler alignment passed; the next committed node is KQ-010.
+
 
 ## 2026-07-15 — Phase 4 P4-M00 reconciliation
 
