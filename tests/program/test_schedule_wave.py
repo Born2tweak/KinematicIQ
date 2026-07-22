@@ -68,7 +68,14 @@ class WaveScheduleTests(unittest.TestCase):
         with self.assertRaisesRegex(schedule_wave.ScheduleError, "exceeds 134"):
             schedule_wave.verify_manifest(over_capacity, self.registry, self.resources)
 
-        broken_dependency = deepcopy(manifest)
+        dependency_registry = deepcopy(self.registry)
+        for milestone in dependency_registry["milestones"]:
+            if milestone["id"] == "KQ-013":
+                milestone["milestone_status"] = "Pending"
+        with tempfile.TemporaryDirectory() as directory:
+            registry_path = Path(directory) / "registry.yaml"
+            registry_path.write_text(yaml.safe_dump(dependency_registry, sort_keys=False), encoding="utf-8")
+            broken_dependency = schedule_wave.build_manifest(registry_path, self.resource_path)
         scheduled = {
             item["id"]: item for item in broken_dependency["bands"]["committed"]["schedule"]
         }
@@ -78,7 +85,7 @@ class WaveScheduleTests(unittest.TestCase):
         scheduled_dependency = next(dependency for dependency in victim["dependencies"] if dependency in scheduled)
         victim["window"]["start_productive_hour"] = 0
         with self.assertRaisesRegex(schedule_wave.ScheduleError, f"starts before {scheduled_dependency}"):
-            schedule_wave.verify_manifest(broken_dependency, self.registry, self.resources)
+            schedule_wave.verify_manifest(broken_dependency, dependency_registry, self.resources)
 
     def test_cli_regenerates_and_verifies_same_manifest(self):
         with tempfile.TemporaryDirectory() as directory:

@@ -1,0 +1,21 @@
+schema_version: 1
+milestone_id: KQ-013
+generator: tools/program/generate_checkpoint.py
+output: docs/status/program_checkpoint.json
+triggers: [push, lifecycle_transition, replan, release_change, blocker_change]
+authoritative_inputs:
+- docs/status/program_status.json
+- docs/program/milestone_registry.yaml
+- docs/validation/protocol_validation_registry.yaml
+- docs/program/resource_registry.yaml
+- docs/research/research_questions.yaml
+- docs/program/inflection_log.ndjson
+rules:
+- generated summaries are deterministic and source-hashed
+- checkpoint summaries include completed IDs, evidence, verification, commits, research, roadmap changes, active work, blockers, and next range
+- a checkpoint reports current authority but never grants release or deployment authority
+- public protocol availability is inherited from the locked charter through compiled status
+- missing resources remain localized blockers and do not stop the unaffected ready queue
+assertions:
+- id: KQ-013-OUTCOME
+  actual: Per-push, lifecycle, replan, release, blocker summaries

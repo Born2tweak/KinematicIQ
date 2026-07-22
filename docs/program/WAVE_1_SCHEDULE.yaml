@@ -3,7 +3,7 @@ program_id: kinematiciq-expanded-10
 wave_id: expanded-10-wave-1
 sources:
   milestone_registry: docs/program/milestone_registry.yaml
-  milestone_registry_sha256: ef00c4e830c08435644da8ce59bf192ab018c6305853c9456fcb744d620f4a62
+  milestone_registry_sha256: 7cf6df12b7f30e78042a6689f48dce33cf6bf52ca6a88677810d9eb9707af4d4
   resource_registry: docs/program/resource_registry.yaml
   resource_registry_sha256: b10c001806da017f3f0876a77eb8db34c82870bc745140f8b9b9afc0c56a4c22
   execution_policy: docs/program/execution_policy.yaml
@@ -54,6 +54,7 @@ imported_satisfied:
   - KQ-010
   - KQ-011
   - KQ-012
+  - KQ-013
   - KQ-014
   evidence:
   - id: KQ-001
@@ -92,17 +93,20 @@ imported_satisfied:
   - id: KQ-012
     path: docs/status/milestones/KQ-012.json
     sha256: 2b10430f27fa752361d9a414907890f339ceab2279d5a8b0aa9fa0b2760021c6
+  - id: KQ-013
+    path: docs/status/milestones/KQ-013.json
+    sha256: bdf9e17c2b7d5346837f9afedc6e4e23776c184fbcb060465acab94732e8e86c
   - id: KQ-014
     path: docs/status/milestones/KQ-014.json
     sha256: 1d29dbaca182957965eb19120b54274df2cd6789a27cae790cea2245d53d3f59
   explanation: Only registry-Passed milestones with a matching passing status artifact are imported. Evidence-backed imports
     are listed above.
 capacity:
-  committed_milestone_hours: 9
+  committed_milestone_hours: 6
   review_synthesis_replan_overhead_hours: 16
-  committed_scheduled_hours: 25
+  committed_scheduled_hours: 22
   committed_capacity_hours: 134
-  uncommitted_capacity_hours: 109
+  uncommitted_capacity_hours: 112
 review_synthesis_constraints:
   reserved_worker_id: W4
   rule: W4 receives no milestone mutation assignment and remains the review/synthesis slot.
@@ -149,23 +153,8 @@ bands:
     - KQ-013
     - KQ-014
     - KQ-015
-    hours: 9
+    hours: 6
     schedule:
-    - id: KQ-013
-      title: Create automatic checkpoint generator
-      hours: 3
-      dependencies:
-      - KQ-009
-      unsatisfied_ancestor_closure_at_wave_start: []
-      required_capability: research_and_docs
-      worker_id: W3
-      mutation_lane: null
-      start_condition: all dependencies have an accepted passing or controlled-skip disposition
-      window:
-        start_productive_hour: 0
-        finish_productive_hour: 3
-        earliest_start_day: 1
-        latest_finish_day: 1
     - id: KQ-015
       title: Phase A integration gate
       hours: 6
@@ -180,17 +169,16 @@ bands:
       - KQ-012
       - KQ-013
       - KQ-014
-      unsatisfied_ancestor_closure_at_wave_start:
-      - KQ-013
+      unsatisfied_ancestor_closure_at_wave_start: []
       required_capability: research_and_docs
       worker_id: W3
       mutation_lane: null
       start_condition: all dependencies have an accepted passing or controlled-skip disposition
       window:
-        start_productive_hour: 3
-        finish_productive_hour: 9
+        start_productive_hour: 0
+        finish_productive_hour: 6
         earliest_start_day: 1
-        latest_finish_day: 2
+        latest_finish_day: 1
   probable:
     ids:
     - KQ-016
@@ -3052,7 +3040,7 @@ bands:
       - KQ-170
       - KQ-171
       - KQ-172
-      unsatisfied_ancestor_count_at_wave_start: 106
+      unsatisfied_ancestor_count_at_wave_start: 105
       required_capability: research_and_docs
       worker_id: null
       mutation_lane: null
@@ -3074,7 +3062,7 @@ bands:
       - KQ-157
       - KQ-165
       - KQ-173
-      unsatisfied_ancestor_count_at_wave_start: 157
+      unsatisfied_ancestor_count_at_wave_start: 156
       required_capability: research_and_docs
       worker_id: null
       mutation_lane: null
@@ -3091,7 +3079,7 @@ bands:
       - KQ-060
       - KQ-074
       - KQ-174
-      unsatisfied_ancestor_count_at_wave_start: 159
+      unsatisfied_ancestor_count_at_wave_start: 158
       required_capability: research_and_docs
       worker_id: null
       mutation_lane: null

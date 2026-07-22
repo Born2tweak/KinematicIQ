@@ -97,6 +97,13 @@
 - Scientific continuity: superseding scheduling authority does not erase historical blockers; Phase 4 notices preserve Forward Lunge's unavailable disposition.
 - Verification: positive plus overlap/missing-notice tests pass within the 45-test program suite; full web/build regression and all six KQ-011 predicates pass.
 
+## 2026-07-21 — Expanded-10 KQ-013 automatic checkpoint generator
+
+- Generator: `docs/status/program_checkpoint.json` is deterministically compiled from the milestone/status, validation, resource, research, inflection, and milestone-evidence authorities with normalized source hashes.
+- Coverage: reports completed IDs, objective evidence, verification failures, subject commits, actual evidence-backed lifecycle/release dispositions, research synthesis, roadmap changes, active work, all blocker classes, and the next executable range.
+- Release safety: a release-eligible protocol requires explicit passing evidence with `RELEASE_ELIGIBLE` and upstream `GATE_PASS`; milestone `Passed` alone cannot grant lifecycle, release, or deployment authority.
+- Verification: targeted generator and scheduler regression tests, the 51-test program suite, deterministic schedule/status/checkpoint verification, and all four KQ-013 predicates pass.
+
 
 ## 2026-07-15 — Phase 4 P4-M00 reconciliation
 

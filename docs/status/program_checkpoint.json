@@ -1,0 +1,176 @@
+{
+  "blocker_summary": {
+    "milestone_blockers": {
+      "BlockedExternal": [],
+      "BlockedHuman": [],
+      "FailedTechnical": []
+    },
+    "resource_blocked_milestone_count": 23,
+    "resource_blocked_milestone_ids": [
+      "KQ-051",
+      "KQ-054",
+      "KQ-061",
+      "KQ-088",
+      "KQ-092",
+      "KQ-096",
+      "KQ-100",
+      "KQ-104",
+      "KQ-108",
+      "KQ-112",
+      "KQ-116",
+      "KQ-120",
+      "KQ-124",
+      "KQ-128",
+      "KQ-132",
+      "KQ-136",
+      "KQ-140",
+      "KQ-144",
+      "KQ-148",
+      "KQ-152",
+      "KQ-156",
+      "KQ-160",
+      "KQ-164"
+    ],
+    "resource_status_counts": {
+      "PartiallyAvailable": 1,
+      "UnresolvedExternal": 8,
+      "UnresolvedHumanGate": 1
+    }
+  },
+  "lifecycle_summary": {
+    "evidence_pack_status_counts": {
+      "OpenBlocking": 10
+    },
+    "explicit_protocol_state_changes": [],
+    "public_protocols": [
+      "squat"
+    ],
+    "unavailable_protocols": [
+      "forward_lunge",
+      "hip_hinge",
+      "push_up",
+      "pull",
+      "rotation",
+      "gait",
+      "jump",
+      "landing",
+      "sprint"
+    ],
+    "validation_contract_status_counts": {
+      "PreRegistrationOpen": 10
+    }
+  },
+  "program_id": "kinematiciq-expanded-10",
+  "push_summary": {
+    "active_work_ids": [],
+    "branch": "agent/expanded-10-revision-4",
+    "completed_ids": [
+      "KQ-001",
+      "KQ-002",
+      "KQ-003",
+      "KQ-004",
+      "KQ-005",
+      "KQ-006",
+      "KQ-007",
+      "KQ-008",
+      "KQ-009",
+      "KQ-010",
+      "KQ-011",
+      "KQ-012",
+      "KQ-013",
+      "KQ-014"
+    ],
+    "next_executable_range": [
+      "KQ-015"
+    ],
+    "objective_evidence": {
+      "failed_ids": [],
+      "missing_ids": [],
+      "verified_ids": [
+        "KQ-001",
+        "KQ-002",
+        "KQ-003",
+        "KQ-004",
+        "KQ-005",
+        "KQ-006",
+        "KQ-007",
+        "KQ-008",
+        "KQ-009",
+        "KQ-010",
+        "KQ-011",
+        "KQ-012",
+        "KQ-013",
+        "KQ-014"
+      ]
+    },
+    "subject_commits": [
+      "038d4e06172468865f97fa255af9e1948dbe9551",
+      "0399a5dfb608eb23e6e08aa3ee7323e5a71fa305",
+      "0cf2b8bcbbf30368d6958193e1012d103de38bcd",
+      "2d91f6a6d86187eada5e7cada5c9a16acb6ea940",
+      "308819a799d9fcf916cb2df64d7745076a920a10",
+      "358cd556b999068d621042a8b7a321dce0a37f41",
+      "ab384a28fce851d3dbecd554b4e46578af5b9f69",
+      "b8e208cdece41ae92d45b8417d678dc4683f316a",
+      "e638ad618fa2ab3dcee0c68b0521abbe723fc161"
+    ],
+    "verification_failures": []
+  },
+  "release_summary": {
+    "automatic_production_deploy": false,
+    "blocked_protocols": {},
+    "failed_gate_protocols": [],
+    "release_eligible_protocols": [],
+    "rule": "ReleaseEligible requires GATE_PASS; no blocked, failed, skipped, or missing outcome can satisfy it"
+  },
+  "replan_summary": {
+    "committed_wave_ready_ids": [
+      "KQ-015"
+    ],
+    "dependency_ready_ids": [
+      "KQ-015",
+      "KQ-016",
+      "KQ-017",
+      "KQ-026",
+      "KQ-056"
+    ],
+    "recorded_inflection_count": 0,
+    "roadmap_changes": []
+  },
+  "research_summary": {
+    "accepted": [],
+    "conflicting": [],
+    "open_question_ids": [],
+    "unresolved": []
+  },
+  "schema_version": 1,
+  "source_hashes": {
+    "docs/program/inflection_log.ndjson": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/program/milestone_registry.yaml": "7cf6df12b7f30e78042a6689f48dce33cf6bf52ca6a88677810d9eb9707af4d4",
+    "docs/program/resource_registry.yaml": "b10c001806da017f3f0876a77eb8db34c82870bc745140f8b9b9afc0c56a4c22",
+    "docs/research/research_questions.yaml": "6a45d8c097a67775add815fcd7fe2b8ff081583e6847e62d50a41ae2d42bf228",
+    "docs/status/milestones/KQ-001.json": "7e3058ae976e5683cc3feabc41a115dedd91f66e221747469803a5f2b1d147c6",
+    "docs/status/milestones/KQ-002.json": "7f93c5d052ef6acbd35e977c800e2bb79e9e656702d626be1fc6b6c4ce6955d5",
+    "docs/status/milestones/KQ-003.json": "fa062f54317050c08b955ba310eab44bc82bb83f3f53a95104ff4695c69acc39",
+    "docs/status/milestones/KQ-004.json": "36793959182878f04135cf4c557e6eb17ec104c5128d1f858b9d9cc7d87518c6",
+    "docs/status/milestones/KQ-005.json": "207e020d1120af41cd9d87feaab7554ee85bf52e2d15a8c0a1bac05494931d3f",
+    "docs/status/milestones/KQ-006.json": "6c09fad6805ce7a42659bc01a6021fa615267efb011fc142672cfba0e5a32003",
+    "docs/status/milestones/KQ-007.json": "6b39417d144977e00e6709f2470fa496a690f65961d1155ce3581390a8b1cae3",
+    "docs/status/milestones/KQ-008.json": "9ed46821b671bb86228807529e36b5a4be4c62246d450616eef96099ae987cc9",
+    "docs/status/milestones/KQ-009.json": "f36f6149dbf3b10ab37b4b3dba703fb9918e759cc9413e4220b01c27ec6e0c4c",
+    "docs/status/milestones/KQ-010.json": "75ea07987461c4ab21a13afec4aaf7129c388b7bd98f2d2571936da259d465c5",
+    "docs/status/milestones/KQ-011.json": "c668a8cd9917c4db124f3263e347a0b5adcf9901c7aaf3f10e3b604e1ab55bca",
+    "docs/status/milestones/KQ-012.json": "2b10430f27fa752361d9a414907890f339ceab2279d5a8b0aa9fa0b2760021c6",
+    "docs/status/milestones/KQ-013.json": "bdf9e17c2b7d5346837f9afedc6e4e23776c184fbcb060465acab94732e8e86c",
+    "docs/status/milestones/KQ-014.json": "1d29dbaca182957965eb19120b54274df2cd6789a27cae790cea2245d53d3f59",
+    "docs/status/program_status.json": "da635c52aa57028ee848ff1686757191ec2928a21e6ece94fb94a19554dd146c",
+    "docs/validation/protocol_validation_registry.yaml": "b4e6b116d36b7213c7257c00df166e98a6ac02cb475c90a5b23807ece1aa8141"
+  },
+  "triggers": [
+    "push",
+    "lifecycle_transition",
+    "replan",
+    "release_change",
+    "blocker_change"
+  ]
+}
