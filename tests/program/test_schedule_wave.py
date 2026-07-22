@@ -38,10 +38,11 @@ class WaveScheduleTests(unittest.TestCase):
         )
         self.assertLessEqual(first["capacity"]["committed_scheduled_hours"], 134)
         self.assertEqual(first["imported_satisfied"]["ids"], sorted(first["imported_satisfied"]["ids"]))
-        self.assertLessEqual(
-            max(item["window"]["finish_productive_hour"] for item in first["bands"]["committed"]["schedule"]),
-            42,
-        )
+        committed_schedule = first["bands"]["committed"]["schedule"]
+        if committed_schedule:
+            self.assertLessEqual(max(item["window"]["finish_productive_hour"] for item in committed_schedule), 42)
+        else:
+            self.assertEqual(first["imported_satisfied"]["ids"], list(schedule_wave.COMMITTED_IDS))
 
     def test_every_id_is_classified_once_and_committed_is_dependency_closed(self):
         manifest = schedule_wave.build_manifest(self.registry_path, self.resource_path)

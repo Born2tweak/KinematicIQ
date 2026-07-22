@@ -1466,7 +1466,7 @@ milestones:
   title: Phase A integration gate
   phase: A
   class: parallel_enabler
-  milestone_status: Pending
+  milestone_status: Passed
   expected_work_hours: 6
   objective: 'Produce and verify one bounded outcome: Phase A integration gate.'
   user_visible_outcome: none

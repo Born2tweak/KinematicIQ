@@ -104,6 +104,13 @@
 - Release safety: a release-eligible protocol requires explicit passing evidence with `RELEASE_ELIGIBLE` and upstream `GATE_PASS`; milestone `Passed` alone cannot grant lifecycle, release, or deployment authority.
 - Verification: targeted generator and scheduler regression tests, the 51-test program suite, deterministic schedule/status/checkpoint verification, and all four KQ-013 predicates pass.
 
+## 2026-07-21 — Expanded-10 KQ-015 Phase A integration gate
+
+- Clean clone: the dedicated remote branch cloned at the recorded head and reproduced schema/semantics, the 51-test program suite, schedule, compiled status, checkpoint, authority, execution policy, and traceability checks.
+- Web verification: clean dependency installation, production build, 626 passing tests with four explicit skips, forward-lunge synthetic evaluation, and the tape evaluator's explicit unavailable-corpus disposition all passed their required handling.
+- Evidence boundary: absent participant tapes remain unavailable and are not promoted to validation evidence; no release, deployment, or master-merge authority was created.
+- Result: all four KQ-015 predicates pass; Phase A is complete and the unaffected Phase B queue advances to KQ-016 and KQ-017.
+
 
 ## 2026-07-15 — Phase 4 P4-M00 reconciliation
 

@@ -19,11 +19,14 @@ class StatusCompilerTests(unittest.TestCase):
         self.assertFalse(status["authority"]["automatic_production_deploy"])
         self.assertTrue(set(status["milestones"]["committed_wave_ready_ids"]) <= set(status["milestones"]["dependency_ready_ids"]))
 
-    def test_committed_frontier_is_nonempty_and_next_is_first(self) -> None:
+    def test_committed_frontier_next_is_first_or_phase_is_complete(self) -> None:
         status = compile_status(ROOT)
         ready = status["milestones"]["committed_wave_ready_ids"]
-        self.assertTrue(ready)
-        self.assertEqual(status["milestones"]["next_executable_id"], ready[0])
+        if ready:
+            self.assertEqual(status["milestones"]["next_executable_id"], ready[0])
+        else:
+            self.assertIsNone(status["milestones"]["next_executable_id"])
+            self.assertTrue(status["milestones"]["dependency_ready_ids"])
 
     def test_checked_in_status_matches_compiler_when_present(self) -> None:
         path = ROOT / "docs/status/program_status.json"
