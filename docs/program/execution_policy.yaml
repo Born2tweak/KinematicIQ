@@ -1,0 +1,62 @@
+schema_version: 1
+program_id: kinematiciq-expanded-10
+git:
+  work_branch: agent/expanded-10-revision-4
+  reconcile_from: master
+  commit_trigger: milestone_verification_pass
+  push_trigger: milestone_verification_pass
+  push_remote: origin
+  force_push: forbidden
+  history_rewrite: forbidden
+  direct_master_merge: separate_authority_required
+deployment:
+  automatic: false
+  production: separate_authority_required
+  public_activation: separate_authority_required
+retries:
+  default_additional_attempts: 2
+  locked_evidence_additional_attempts: 0
+  retryable: [transient_command_failure, nondeterministic_verification_failure]
+  nonretryable: [scientific_gate_result, human_gate, external_gate, legal_or_license_gate, contamination]
+  exhaustion_status: FailedTechnical
+recovery:
+  allowed: [retry_transient_command, revert_committed_code_with_new_commit, quarantine_failed_candidate, generate_replacement_unresolved_node]
+  rollback_base: last_passing_branch_state
+  rollback_scope: changed_code_only
+  preserve_negative_evidence: true
+  forbidden: [force_push, rewrite_published_history, delete_evidence, weaken_gate, retune_locked_evidence, change_public_behavior_to_pass]
+abstention:
+  insufficient_observability: metric_level
+  invalid_capture: full
+  questionable_capture: no_coaching
+  blocked_or_failed_forbids: [lifecycle_advance, claim_advance, release_eligibility]
+interruptions:
+  scope: affected_node_only
+  bundle_by: decision_owner
+  gates: [participant_consent_or_privacy, inaccessible_credentials, fee_or_payment, qualified_human_labeling, instrumented_reference_capture, legal_or_license_acceptance, materially_conflicting_product_choice, failed_preregistered_gate_product_decision, production_deployment_authority]
+continuation:
+  replan_after: [pass, block, failure, estimate_change, checkpoint]
+  block_scope: affected_node_and_descendants
+  continue_unaffected_ready_queue: true
+  global_pause: false
+  completed_valid_evidence: immutable
+scheduling:
+  capacity:
+    worker_count: 4
+    productive_hours_per_worker_day: 6
+    wave_days: 7
+    gross_capacity_hours: 168
+    planning_utilization_percent: 80
+    committed_capacity_hours: 134
+    maximum_concurrent_code_mutations: 2
+    maximum_concurrent_research_jobs: 3
+    reserved_review_synthesis_workers: 1
+  workers:
+  - {id: W1, capabilities: [code_and_architecture, program_contracts], mutation_lane: A}
+  - {id: W2, capabilities: [code_and_architecture, verification_and_fixtures], mutation_lane: B}
+  - {id: W3, capabilities: [program_contracts, research_and_docs], mutation_lane: null}
+  - {id: W4, capabilities: [review, synthesis, replanning], mutation_lane: null}
+  overhead:
+  - {id: OH-REVIEW, hours: 7, worker_id: W4, window: distributed_across_days_1_7, start_condition: each review follows a coherent milestone diff, purpose: Daily diff and unsupported-claim review}
+  - {id: OH-SYNTHESIS, hours: 5, worker_id: W4, window: at_integration_boundaries_days_3_7, start_condition: two or more research, fixture, or integration outputs require synthesis, purpose: Fixture and integration synthesis}
+  - {id: OH-REPLAN, hours: 4, worker_id: W4, window: at_checkpoint_or_state_transition, start_condition: a pass, block, failure, estimate change, or checkpoint produces new evidence, purpose: Checkpoint evidence and dependency replan}

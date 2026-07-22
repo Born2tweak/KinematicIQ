@@ -1,0 +1,8 @@
+schema_version: 1
+milestone_id: KQ-007
+policy: docs/program/execution_policy.yaml
+authority: docs/implementation/KINEMATICIQ_MASTER_EXECUTION_ROADMAP.md
+policy_effect: dedicated-branch autonomy with bounded reversible recovery and affected-node-only human interruptions
+assertions:
+- id: KQ-007-OUTCOME
+  actual: Dedicated branch, auto-push, rollback, interruptions, retry budgets

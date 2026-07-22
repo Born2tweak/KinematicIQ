@@ -609,7 +609,7 @@ milestones:
   title: Encode execution policy
   phase: A
   class: blocking_kernel
-  milestone_status: Pending
+  milestone_status: Passed
   expected_work_hours: 3
   objective: 'Produce and verify one bounded outcome: Encode execution policy.'
   user_visible_outcome: none
@@ -652,6 +652,10 @@ milestones:
     predicate: contract_output_assertion_passes
     contract: docs/program/artifacts/kq-007.yaml
     assertion_id: KQ-007-OUTCOME
+  - id: KQ-007-A4
+    predicate: command_exit_code_equals
+    command_id: execution_policy_contract
+    expected: 0
   verification:
     profile: program_contract
     automated:
@@ -660,6 +664,8 @@ milestones:
         --id KQ-007
     - id: targeted_contract_checks
       command: python tools/program/run_contract_checks.py --id KQ-007 --evidence-out docs/status/milestones/KQ-007.json
+    - id: execution_policy_contract
+      command: python tools/program/verify_execution_policy.py --policy docs/program/execution_policy.yaml --check-worktree
     manual_gate: null
     clean_clone_required: false
   failure:

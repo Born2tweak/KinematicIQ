@@ -22,28 +22,14 @@ STRETCH_IDS = (
     "KQ-020", "KQ-021", "KQ-023", "KQ-024", "KQ-027",
     "KQ-028", "KQ-031", "KQ-032", "KQ-033", "KQ-034", "KQ-035",
 )
-WORKERS = (
-    {"id": "W1", "capabilities": ["code_and_architecture", "program_contracts"], "mutation_lane": "A"},
-    {"id": "W2", "capabilities": ["code_and_architecture", "verification_and_fixtures"], "mutation_lane": "B"},
-    {"id": "W3", "capabilities": ["program_contracts", "research_and_docs"], "mutation_lane": None},
-    {"id": "W4", "capabilities": ["review", "synthesis", "replanning"], "mutation_lane": None},
-)
-OVERHEAD = (
-    {"id": "OH-REVIEW", "hours": 7, "worker_id": "W4", "window": "distributed_across_days_1_7", "start_condition": "each review follows a coherent milestone diff", "purpose": "Daily diff and unsupported-claim review"},
-    {"id": "OH-SYNTHESIS", "hours": 5, "worker_id": "W4", "window": "at_integration_boundaries_days_3_7", "start_condition": "two or more research, fixture, or integration outputs require synthesis", "purpose": "Fixture and integration synthesis"},
-    {"id": "OH-REPLAN", "hours": 4, "worker_id": "W4", "window": "at_checkpoint_or_state_transition", "start_condition": "a pass, block, failure, estimate change, or checkpoint produces new evidence", "purpose": "Checkpoint evidence and dependency replan"},
-)
-POLICY = {
-    "worker_count": 4,
-    "productive_hours_per_worker_day": 6,
-    "wave_days": 7,
-    "gross_capacity_hours": 168,
-    "planning_utilization_percent": 80,
-    "committed_capacity_hours": 134,
-    "maximum_concurrent_code_mutations": 2,
-    "maximum_concurrent_research_jobs": 3,
-    "reserved_review_synthesis_workers": 1,
-}
+ROOT = Path(__file__).resolve().parents[2]
+EXECUTION_POLICY_PATH = ROOT / "docs/program/execution_policy.yaml"
+with EXECUTION_POLICY_PATH.open(encoding="utf-8") as policy_stream:
+    EXECUTION_POLICY = yaml.safe_load(policy_stream)
+SCHEDULING = EXECUTION_POLICY["scheduling"]
+WORKERS = tuple(SCHEDULING["workers"])
+OVERHEAD = tuple(SCHEDULING["overhead"])
+POLICY = SCHEDULING["capacity"]
 
 
 class ScheduleError(ValueError):
@@ -261,6 +247,8 @@ def build_manifest(registry_path: Path, resource_path: Path) -> dict[str, Any]:
             "milestone_registry_sha256": _sha256(registry_path),
             "resource_registry": resource_path.as_posix(),
             "resource_registry_sha256": _sha256(resource_path),
+            "execution_policy": EXECUTION_POLICY_PATH.relative_to(ROOT).as_posix(),
+            "execution_policy_sha256": _sha256(EXECUTION_POLICY_PATH),
         },
         "policy": POLICY,
         "workers": list(WORKERS),

@@ -41,6 +41,13 @@
 - Claims boundary: no historical test count, private-tape result, device result, or participant evidence was treated as current proof, and no historical record can satisfy a KQ dependency.
 - Verification: the positive import and three negative mutations passed within the 22-test program suite; the repository-bound import command passed.
 
+## 2026-07-21 — Expanded-10 KQ-007 execution policy
+
+- Policy: `docs/program/execution_policy.yaml` is the canonical source for dedicated-branch commit/push, separate master/deployment authority, bounded retries, reversible recovery, abstention, exact human interruptions, continuation, and Wave 1 worker/capacity rules.
+- Scheduler integration: `schedule_wave.py` now loads workers, overhead, and capacity from the canonical policy and records its hash in the generated schedule instead of duplicating those values in code.
+- Fail-closed checks: branch/deployment authority, interruption expansion, locked-evidence retries, destructive recovery, and global-pause mutations are rejected.
+- Verification: the policy/worktree check, regenerated schedule, and 26 program tests passed. No release, merge, deployment, or protocol availability changed.
+
 
 ## 2026-07-15 — Phase 4 P4-M00 reconciliation
 
