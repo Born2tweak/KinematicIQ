@@ -62,6 +62,13 @@
 - Evidence boundary: the canonical append-only log is intentionally empty because no real trigger was fabricated; labeled fixtures prove selection, invalid-trigger rejection, and unknown-seed rejection.
 - Verification: the corrected capacity corruption test and replan tests pass; the full program and web/build results are recorded in KQ-008 evidence.
 
+## 2026-07-21 — Expanded-10 KQ-009 status compiler
+
+- Compiler: milestone statuses and accepted result codes, resource readiness, committed-wave order, locked charter availability, and source hashes produce `docs/status/program_status.json` deterministically.
+- Frontier separation: all dependency-ready nodes are reported separately from committed Wave 1 ready nodes; resource blockers remain scoped to milestones that cite them.
+- Safety: Squat remains the sole available protocol, release still requires `GATE_PASS`, and automatic deployment remains false.
+- Verification: checked-in output matches a fresh compile; full program and web/build results are recorded in KQ-009 evidence.
+
 
 ## 2026-07-15 — Phase 4 P4-M00 reconciliation
 

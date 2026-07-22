@@ -1,0 +1,18 @@
+schema_version: 1
+milestone_id: KQ-009
+compiler: tools/program/compile_status.py
+output: docs/status/program_status.json
+authoritative_inputs:
+- docs/program/milestone_registry.yaml
+- docs/program/resource_registry.yaml
+- docs/program/WAVE_1_SCHEDULE.yaml
+- docs/program/artifacts/kq-002.yaml
+rules:
+- dependency-ready and committed-wave-ready are separate lists
+- accepted result codes require matching evidence and are never inferred from status alone
+- unresolved resources block only milestones that cite them
+- protocol availability starts from the locked charter and changes only through actual release dispositions
+- generated output must match current registries byte-for-byte
+assertions:
+- id: KQ-009-OUTCOME
+  actual: Registries generate one concise current frontier

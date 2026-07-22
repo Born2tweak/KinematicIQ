@@ -51,7 +51,7 @@
 
 ## Active milestone and gates
 
-- Completed Expanded-10 milestones: KQ-001 through KQ-008. Immediate dependency-ready Phase A frontier: KQ-009 status compiler, KQ-010 traceability validation, and KQ-012 research-question workflow; bounded Phase B corpus freezes KQ-016 and KQ-017 are also ready.
+- Completed Expanded-10 milestones: KQ-001 through KQ-009. Dependency-ready Phase A frontier: KQ-010 through KQ-014; the capacity schedule selects KQ-014 critical-path scheduling next. Bounded Phase B corpus freezes KQ-016 and KQ-017 are also ready.
 - Phase A scheduler authority is still withheld until KQ-002 through KQ-015 pass; the clean-clone integration mechanism itself is now executable and passing.
 - Completed milestone: P4-M00 documentation and authority reconciliation. Its acceptance evidence is recorded in `docs/implementation/progress/P4-M00-phase4-documentation-reconciliation.md`.
 - Completed milestone: P4-M01 additive naming migration with legacy-read compatibility.

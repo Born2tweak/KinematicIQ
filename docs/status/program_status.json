@@ -1,0 +1,247 @@
+{
+  "authority": {
+    "automatic_production_deploy": false,
+    "branch": "agent/expanded-10-revision-4",
+    "committed_wave_ids": [
+      "KQ-001",
+      "KQ-002",
+      "KQ-003",
+      "KQ-004",
+      "KQ-005",
+      "KQ-006",
+      "KQ-007",
+      "KQ-008",
+      "KQ-009",
+      "KQ-010",
+      "KQ-011",
+      "KQ-012",
+      "KQ-013",
+      "KQ-014",
+      "KQ-015"
+    ]
+  },
+  "milestones": {
+    "committed_wave_ready_ids": [
+      "KQ-014",
+      "KQ-010",
+      "KQ-012",
+      "KQ-011",
+      "KQ-013"
+    ],
+    "dependency_ready_ids": [
+      "KQ-010",
+      "KQ-011",
+      "KQ-012",
+      "KQ-013",
+      "KQ-014",
+      "KQ-016",
+      "KQ-017",
+      "KQ-026",
+      "KQ-056"
+    ],
+    "next_executable_id": "KQ-014",
+    "resource_blocked": {
+      "KQ-051": [
+        "RES-RATER"
+      ],
+      "KQ-054": [
+        "RES-PRIVACY"
+      ],
+      "KQ-061": [
+        "RES-PRIVACY"
+      ],
+      "KQ-088": [
+        "RES-DEVICES",
+        "RES-KINEMATICS",
+        "RES-PARTICIPANTS",
+        "RES-PRIVACY",
+        "RES-RATER",
+        "RES-REPEAT"
+      ],
+      "KQ-092": [
+        "RES-DEVICES",
+        "RES-KINEMATICS",
+        "RES-PARTICIPANTS",
+        "RES-PRIVACY",
+        "RES-RATER",
+        "RES-REPEAT"
+      ],
+      "KQ-096": [
+        "RES-DEVICES",
+        "RES-KINEMATICS",
+        "RES-PARTICIPANTS",
+        "RES-PRIVACY",
+        "RES-RATER",
+        "RES-REPEAT"
+      ],
+      "KQ-100": [
+        "RES-DEVICES",
+        "RES-KINEMATICS",
+        "RES-PARTICIPANTS",
+        "RES-PRIVACY",
+        "RES-RATER",
+        "RES-REPEAT"
+      ],
+      "KQ-104": [
+        "RES-DEVICES",
+        "RES-KINEMATICS",
+        "RES-PARTICIPANTS",
+        "RES-PRIVACY",
+        "RES-RATER",
+        "RES-REPEAT"
+      ],
+      "KQ-108": [
+        "RES-DEVICES",
+        "RES-KINEMATICS",
+        "RES-PARTICIPANTS",
+        "RES-PRIVACY",
+        "RES-RATER",
+        "RES-REPEAT"
+      ],
+      "KQ-112": [
+        "RES-DEVICES",
+        "RES-KINEMATICS",
+        "RES-PARTICIPANTS",
+        "RES-PRIVACY",
+        "RES-RATER",
+        "RES-REPEAT"
+      ],
+      "KQ-116": [
+        "RES-DEVICES",
+        "RES-KINEMATICS",
+        "RES-PARTICIPANTS",
+        "RES-PRIVACY",
+        "RES-RATER",
+        "RES-REPEAT"
+      ],
+      "KQ-120": [
+        "RES-DEVICES",
+        "RES-KINEMATICS",
+        "RES-PARTICIPANTS",
+        "RES-PRIVACY",
+        "RES-RATER",
+        "RES-REPEAT"
+      ],
+      "KQ-124": [
+        "RES-DEVICES",
+        "RES-KINEMATICS",
+        "RES-PARTICIPANTS",
+        "RES-PRIVACY",
+        "RES-RATER",
+        "RES-REPEAT"
+      ],
+      "KQ-128": [
+        "RES-DEVICES",
+        "RES-KINEMATICS",
+        "RES-PARTICIPANTS",
+        "RES-PRIVACY",
+        "RES-RATER",
+        "RES-REPEAT"
+      ],
+      "KQ-132": [
+        "RES-DEVICES",
+        "RES-KINEMATICS",
+        "RES-PARTICIPANTS",
+        "RES-PRIVACY",
+        "RES-RATER",
+        "RES-REPEAT"
+      ],
+      "KQ-136": [
+        "RES-DEVICES",
+        "RES-PARTICIPANTS",
+        "RES-PRIVACY",
+        "RES-RATER",
+        "RES-REPEAT",
+        "RES-TIMING"
+      ],
+      "KQ-140": [
+        "RES-DEVICES",
+        "RES-PARTICIPANTS",
+        "RES-PRIVACY",
+        "RES-RATER",
+        "RES-REPEAT",
+        "RES-TIMING"
+      ],
+      "KQ-144": [
+        "RES-DEVICES",
+        "RES-FORCE_CONTACT",
+        "RES-PARTICIPANTS",
+        "RES-PRIVACY",
+        "RES-RATER",
+        "RES-REPEAT"
+      ],
+      "KQ-148": [
+        "RES-DEVICES",
+        "RES-FORCE_CONTACT",
+        "RES-PARTICIPANTS",
+        "RES-PRIVACY",
+        "RES-RATER",
+        "RES-REPEAT"
+      ],
+      "KQ-152": [
+        "RES-CALIBRATED_PLATFORM",
+        "RES-DEVICES",
+        "RES-FORCE_CONTACT",
+        "RES-PARTICIPANTS",
+        "RES-PRIVACY",
+        "RES-RATER",
+        "RES-REPEAT"
+      ],
+      "KQ-156": [
+        "RES-CALIBRATED_PLATFORM",
+        "RES-DEVICES",
+        "RES-FORCE_CONTACT",
+        "RES-PARTICIPANTS",
+        "RES-PRIVACY",
+        "RES-RATER",
+        "RES-REPEAT"
+      ],
+      "KQ-160": [
+        "RES-DEVICES",
+        "RES-PARTICIPANTS",
+        "RES-PRIVACY",
+        "RES-RATER",
+        "RES-REPEAT",
+        "RES-TIMING"
+      ],
+      "KQ-164": [
+        "RES-DEVICES",
+        "RES-PARTICIPANTS",
+        "RES-PRIVACY",
+        "RES-RATER",
+        "RES-REPEAT",
+        "RES-TIMING"
+      ]
+    },
+    "status_counts": {
+      "Passed": 9,
+      "Pending": 166
+    },
+    "total": 175
+  },
+  "program_id": "kinematiciq-expanded-10",
+  "protocols": {
+    "available": [
+      "squat"
+    ],
+    "release_rule": "ReleaseEligible requires GATE_PASS; no blocked, failed, skipped, or missing outcome can satisfy it",
+    "unavailable": [
+      "forward_lunge",
+      "hip_hinge",
+      "push_up",
+      "pull",
+      "rotation",
+      "gait",
+      "jump",
+      "landing",
+      "sprint"
+    ]
+  },
+  "schema_version": 1,
+  "source_hashes": {
+    "docs/program/WAVE_1_SCHEDULE.yaml": "7318a8a5fb53b93c032d7f8ba1b0129700202f977efb719865749f494b26113c",
+    "docs/program/artifacts/kq-002.yaml": "0edebef1244c10ba4a716c9af3fe795ed815367cee49ba2a2488e6fb21136ff9",
+    "docs/program/milestone_registry.yaml": "607fd08cd927e94fa2c55cc3da41e92c480175991b0f37e1fd98a89547229c51",
+    "docs/program/resource_registry.yaml": "b10c001806da017f3f0876a77eb8db34c82870bc745140f8b9b9afc0c56a4c22"
+  }
+}

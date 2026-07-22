@@ -3,7 +3,7 @@ program_id: kinematiciq-expanded-10
 wave_id: expanded-10-wave-1
 sources:
   milestone_registry: docs/program/milestone_registry.yaml
-  milestone_registry_sha256: ccd9acf90ec240110bea307e0da6c19c4f50d15dc532dfe6b553b3d0c7405bf1
+  milestone_registry_sha256: 607fd08cd927e94fa2c55cc3da41e92c480175991b0f37e1fd98a89547229c51
   resource_registry: docs/program/resource_registry.yaml
   resource_registry_sha256: b10c001806da017f3f0876a77eb8db34c82870bc745140f8b9b9afc0c56a4c22
   execution_policy: docs/program/execution_policy.yaml
@@ -50,6 +50,7 @@ imported_satisfied:
   - KQ-006
   - KQ-007
   - KQ-008
+  - KQ-009
   evidence:
   - id: KQ-001
     path: docs/status/milestones/KQ-001.json
@@ -74,15 +75,18 @@ imported_satisfied:
     sha256: 6b39417d144977e00e6709f2470fa496a690f65961d1155ce3581390a8b1cae3
   - id: KQ-008
     path: docs/status/milestones/KQ-008.json
-    sha256: 65384f9f04ebfe6d31d254747e0b3baa7e733a81fa3bd5c98a7c18c19945dafe
+    sha256: 9ed46821b671bb86228807529e36b5a4be4c62246d450616eef96099ae987cc9
+  - id: KQ-009
+    path: docs/status/milestones/KQ-009.json
+    sha256: f36f6149dbf3b10ab37b4b3dba703fb9918e759cc9413e4220b01c27ec6e0c4c
   explanation: Only registry-Passed milestones with a matching passing status artifact are imported. Evidence-backed imports
     are listed above.
 capacity:
-  committed_milestone_hours: 30
+  committed_milestone_hours: 25
   review_synthesis_replan_overhead_hours: 16
-  committed_scheduled_hours: 46
+  committed_scheduled_hours: 41
   committed_capacity_hours: 134
-  uncommitted_capacity_hours: 88
+  uncommitted_capacity_hours: 93
 review_synthesis_constraints:
   reserved_worker_id: W4
   rule: W4 receives no milestone mutation assignment and remains the review/synthesis slot.
@@ -129,25 +133,8 @@ bands:
     - KQ-013
     - KQ-014
     - KQ-015
-    hours: 30
+    hours: 25
     schedule:
-    - id: KQ-009
-      title: Build status compiler
-      hours: 5
-      dependencies:
-      - KQ-004
-      - KQ-007
-      - KQ-008
-      unsatisfied_ancestor_closure_at_wave_start: []
-      required_capability: code_and_architecture
-      worker_id: W1
-      mutation_lane: A
-      start_condition: all dependencies have an accepted passing or controlled-skip disposition
-      window:
-        start_productive_hour: 0
-        finish_productive_hour: 5
-        earliest_start_day: 1
-        latest_finish_day: 1
     - id: KQ-014
       title: Create critical-path scheduler
       hours: 5
@@ -155,17 +142,16 @@ bands:
       - KQ-004
       - KQ-008
       - KQ-009
-      unsatisfied_ancestor_closure_at_wave_start:
-      - KQ-009
+      unsatisfied_ancestor_closure_at_wave_start: []
       required_capability: program_contracts
       worker_id: W1
       mutation_lane: null
       start_condition: all dependencies have an accepted passing or controlled-skip disposition
       window:
-        start_productive_hour: 5
-        finish_productive_hour: 10
+        start_productive_hour: 0
+        finish_productive_hour: 5
         earliest_start_day: 1
-        latest_finish_day: 2
+        latest_finish_day: 1
     - id: KQ-010
       title: Build traceability link validator
       hours: 4
@@ -202,15 +188,14 @@ bands:
       hours: 3
       dependencies:
       - KQ-009
-      unsatisfied_ancestor_closure_at_wave_start:
-      - KQ-009
+      unsatisfied_ancestor_closure_at_wave_start: []
       required_capability: code_and_architecture
       worker_id: W2
       mutation_lane: B
       start_condition: all dependencies have an accepted passing or controlled-skip disposition
       window:
-        start_productive_hour: 5
-        finish_productive_hour: 8
+        start_productive_hour: 4
+        finish_productive_hour: 7
         earliest_start_day: 1
         latest_finish_day: 2
     - id: KQ-013
@@ -218,15 +203,14 @@ bands:
       hours: 3
       dependencies:
       - KQ-009
-      unsatisfied_ancestor_closure_at_wave_start:
-      - KQ-009
+      unsatisfied_ancestor_closure_at_wave_start: []
       required_capability: research_and_docs
       worker_id: W3
       mutation_lane: null
       start_condition: all dependencies have an accepted passing or controlled-skip disposition
       window:
-        start_productive_hour: 5
-        finish_productive_hour: 8
+        start_productive_hour: 4
+        finish_productive_hour: 7
         earliest_start_day: 1
         latest_finish_day: 2
     - id: KQ-015
@@ -244,7 +228,6 @@ bands:
       - KQ-013
       - KQ-014
       unsatisfied_ancestor_closure_at_wave_start:
-      - KQ-009
       - KQ-010
       - KQ-011
       - KQ-012
@@ -255,8 +238,8 @@ bands:
       mutation_lane: null
       start_condition: all dependencies have an accepted passing or controlled-skip disposition
       window:
-        start_productive_hour: 10
-        finish_productive_hour: 16
+        start_productive_hour: 7
+        finish_productive_hour: 13
         earliest_start_day: 2
         latest_finish_day: 3
   probable:
@@ -3120,7 +3103,7 @@ bands:
       - KQ-170
       - KQ-171
       - KQ-172
-      unsatisfied_ancestor_count_at_wave_start: 111
+      unsatisfied_ancestor_count_at_wave_start: 110
       required_capability: research_and_docs
       worker_id: null
       mutation_lane: null
@@ -3142,7 +3125,7 @@ bands:
       - KQ-157
       - KQ-165
       - KQ-173
-      unsatisfied_ancestor_count_at_wave_start: 162
+      unsatisfied_ancestor_count_at_wave_start: 161
       required_capability: research_and_docs
       worker_id: null
       mutation_lane: null
@@ -3159,7 +3142,7 @@ bands:
       - KQ-060
       - KQ-074
       - KQ-174
-      unsatisfied_ancestor_count_at_wave_start: 164
+      unsatisfied_ancestor_count_at_wave_start: 163
       required_capability: research_and_docs
       worker_id: null
       mutation_lane: null

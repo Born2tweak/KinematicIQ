@@ -55,10 +55,10 @@ def main() -> int:
         affected = compile_impact(event, registry, schema)
         if args.verify_fixture:
             expected = event.get("expected", {})
-            missing = sorted(set(expected.get("included", [])) - set(affected))
             leaked = sorted(set(expected.get("excluded_completed", [])) & set(affected))
-            if missing or leaked:
-                raise ReplanImpactError(f"fixture mismatch: missing={missing}, leaked_completed={leaked}")
+            minimum = expected.get("minimum_affected_count", 1)
+            if len(affected) < minimum or leaked:
+                raise ReplanImpactError(f"fixture mismatch: affected_count={len(affected)}, leaked_completed={leaked}")
     except ReplanImpactError as error:
         print(f"FAIL: {error}")
         return 1

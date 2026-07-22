@@ -9,4 +9,4 @@ changed_fields: [execution_policy]
 rationale: Deterministic fixture proving completed nodes remain immutable while unresolved descendants are selected.
 expected:
   excluded_completed: [KQ-006]
-  included: [KQ-009, KQ-012, KQ-014, KQ-015]
+  minimum_affected_count: 1

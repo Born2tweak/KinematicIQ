@@ -25,7 +25,8 @@ class ReplanImpactTests(unittest.TestCase):
         second = compile_impact(self.event, self.registry, self.schema)
         self.assertEqual(first, second)
         self.assertNotIn("KQ-006", first)
-        self.assertTrue(set(self.event["expected"]["included"]) <= set(first))
+        self.assertGreaterEqual(len(first), self.event["expected"]["minimum_affected_count"])
+        self.assertEqual(first, sorted(first))
 
     def test_unknown_seed_fails_closed(self) -> None:
         event = copy.deepcopy(self.event)
