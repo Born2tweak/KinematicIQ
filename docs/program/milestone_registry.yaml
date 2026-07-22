@@ -507,7 +507,7 @@ milestones:
   title: Build decision/evidence ID migration
   phase: A
   class: parallel_enabler
-  milestone_status: Pending
+  milestone_status: Passed
   expected_work_hours: 4
   objective: 'Produce and verify one bounded outcome: Build decision/evidence ID migration.'
   user_visible_outcome: none
@@ -558,6 +558,10 @@ milestones:
     expected:
       failed_tests: 0
       build_exit_code: 0
+  - id: KQ-006-A6
+    predicate: command_exit_code_equals
+    command_id: id_migration
+    expected: 0
   verification:
     profile: web_and_program_regression
     automated:
@@ -570,6 +574,8 @@ milestones:
       command: npm --prefix web test -- --run --reporter=dot
     - id: web_production_build
       command: npm --prefix web run build
+    - id: id_migration
+      command: python tools/program/verify_id_migration.py --manifest docs/program/artifacts/kq-006.yaml
     manual_gate: null
     clean_clone_required: false
   failure:

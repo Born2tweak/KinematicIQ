@@ -1,0 +1,36 @@
+schema_version: 1
+milestone_id: KQ-006
+migration_id: legacy-decision-evidence-crosslinks-v1
+rules:
+  decisions:
+    legacy_id_format: ADR-{number:03d}
+    stable_id_format: DEC-ADR-{number:03d}
+    source_glob: docs/adr/ADR-{number:03d}-*.md
+    expected_numbers: {start: 1, end: 16}
+  evidence:
+    legacy_id_format: P4-M{number:02d}
+    stable_id_format: EVD-P4-M{number:02d}
+    source_glob: docs/implementation/progress/P4-M{number:02d}-*.md
+    expected_numbers: {start: 0, end: 14}
+  source_records_are_immutable: true
+  central_mapping_is_additive: true
+cross_links:
+- decision_id: DEC-ADR-011
+  evidence_ids: [EVD-P4-M00, EVD-P4-M01, EVD-P4-M02]
+- decision_id: DEC-ADR-012
+  evidence_ids: [EVD-P4-M01]
+- decision_id: DEC-ADR-013
+  evidence_ids: [EVD-P4-M03, EVD-P4-M04, EVD-P4-M05, EVD-P4-M08, EVD-P4-M10, EVD-P4-M11]
+- decision_id: DEC-ADR-014
+  evidence_ids: [EVD-P4-M05, EVD-P4-M07, EVD-P4-M10]
+- decision_id: DEC-ADR-015
+  evidence_ids: [EVD-P4-M00, EVD-P4-M14]
+- decision_id: DEC-ADR-016
+  evidence_ids: [EVD-P4-M06, EVD-P4-M09, EVD-P4-M10, EVD-P4-M11, EVD-P4-M12, EVD-P4-M13, EVD-P4-M14]
+historical_disposition_authority: docs/program/artifacts/kq-005.yaml
+claims:
+  cross_link_means_current_validation: false
+  cross_link_changes_protocol_availability: false
+assertions:
+- id: KQ-006-OUTCOME
+  actual: Existing ADRs and Phase 4 artifacts receive stable cross-links

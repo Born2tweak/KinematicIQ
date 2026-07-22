@@ -51,7 +51,7 @@
 
 ## Active milestone and gates
 
-- Completed Expanded-10 milestones: KQ-001 through KQ-005 and KQ-007. Immediate dependency-ready Phase A frontier: KQ-006 stable ID migration, KQ-008 inflection/replan schema, and KQ-010 traceability validation; bounded Phase B corpus freezes KQ-016 and KQ-017 are also ready.
+- Completed Expanded-10 milestones: KQ-001 through KQ-007. Immediate dependency-ready Phase A frontier: KQ-008 inflection/replan schema and KQ-010 traceability validation; bounded Phase B corpus freezes KQ-016 and KQ-017 are also ready.
 - Phase A scheduler authority is still withheld until KQ-002 through KQ-015 pass; the clean-clone integration mechanism itself is now executable and passing.
 - Completed milestone: P4-M00 documentation and authority reconciliation. Its acceptance evidence is recorded in `docs/implementation/progress/P4-M00-phase4-documentation-reconciliation.md`.
 - Completed milestone: P4-M01 additive naming migration with legacy-read compatibility.

@@ -48,6 +48,13 @@
 - Fail-closed checks: branch/deployment authority, interruption expansion, locked-evidence retries, destructive recovery, and global-pause mutations are rejected.
 - Verification: the policy/worktree check, regenerated schedule, and 26 program tests passed. No release, merge, deployment, or protocol availability changed.
 
+## 2026-07-21 — Expanded-10 KQ-006 stable ID migration
+
+- Migration: deterministic rules assign `DEC-ADR-001` through `DEC-ADR-016` and `EVD-P4-M00` through `EVD-P4-M14` to the existing tracked records.
+- Cross-links: Phase 4 decisions ADR-011 through ADR-016 cover all 15 Phase 4 evidence records; unknown, duplicate, missing, or untracked targets fail closed.
+- Historical boundary: the mapping is additive, source records remain immutable, and a cross-link does not mean current validation or alter availability.
+- Verification: the positive migration and two negative mutations passed within the 29-test program suite; full web regression and production build are recorded in KQ-006 evidence.
+
 
 ## 2026-07-15 — Phase 4 P4-M00 reconciliation
 
