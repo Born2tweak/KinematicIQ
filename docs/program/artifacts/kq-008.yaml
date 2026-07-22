@@ -1,0 +1,15 @@
+schema_version: 1
+milestone_id: KQ-008
+event_schema: docs/program/inflection_schema.yaml
+append_only_log: docs/program/inflection_log.ndjson
+initial_log_state: empty_no_trigger_fabricated
+compiler: tools/program/replan_impact.py
+rules:
+- identical registry and event inputs produce identical affected node IDs
+- only unresolved or explicitly invalidated nodes can be affected
+- Passed, SkippedByDecision, Retired, and other completed evidence remain immutable
+- descendant propagation follows authoritative dependency edges, not prose unlock claims
+- an unknown seed or invalid event fails closed
+assertions:
+- id: KQ-008-OUTCOME
+  actual: Trigger events deterministically identify affected unresolved nodes

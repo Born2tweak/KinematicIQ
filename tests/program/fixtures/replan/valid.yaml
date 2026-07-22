@@ -1,0 +1,12 @@
+schema_version: 1
+event_id: INF-FIXTURE-KQ006-DESCENDANTS
+trigger_type: dependency_change
+observed_at: '2026-07-21T12:00:00Z'
+source_ids: [KQ-006-FIXTURE]
+affected_seeds: [KQ-006]
+propagation: descendants
+changed_fields: [execution_policy]
+rationale: Deterministic fixture proving completed nodes remain immutable while unresolved descendants are selected.
+expected:
+  excluded_completed: [KQ-006]
+  included: [KQ-009, KQ-012, KQ-014, KQ-015]

@@ -711,7 +711,7 @@ milestones:
   title: Encode inflection/replan schema
   phase: A
   class: blocking_kernel
-  milestone_status: Pending
+  milestone_status: Passed
   expected_work_hours: 4
   objective: 'Produce and verify one bounded outcome: Encode inflection/replan schema.'
   user_visible_outcome: none
@@ -766,6 +766,10 @@ milestones:
     expected:
       failed_tests: 0
       build_exit_code: 0
+  - id: KQ-008-A6
+    predicate: command_exit_code_equals
+    command_id: replan_schema
+    expected: 0
   verification:
     profile: web_and_program_regression
     automated:
@@ -778,6 +782,8 @@ milestones:
       command: npm --prefix web test -- --run --reporter=dot
     - id: web_production_build
       command: npm --prefix web run build
+    - id: replan_schema
+      command: python tools/program/replan_impact.py --event tests/program/fixtures/replan/valid.yaml --verify-fixture
     manual_gate: null
     clean_clone_required: false
   failure:

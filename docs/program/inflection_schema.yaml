@@ -1,0 +1,15 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://kinematiciq.local/schemas/inflection-event-v1.schema.yaml
+type: object
+additionalProperties: false
+required: [schema_version, event_id, trigger_type, observed_at, source_ids, affected_seeds, propagation, changed_fields, rationale]
+properties:
+  schema_version: {const: 1}
+  event_id: {type: string, pattern: '^INF-[A-Z0-9-]+$'}
+  trigger_type: {enum: [evidence_change, resource_change, verification_failure, estimate_change, dependency_change, scientific_disposition, product_decision]}
+  observed_at: {type: string, format: date-time}
+  source_ids: {type: array, minItems: 1, uniqueItems: true, items: {type: string}}
+  affected_seeds: {type: array, minItems: 1, uniqueItems: true, items: {type: string, pattern: '^KQ-[0-9]{3}$'}}
+  propagation: {enum: [seed_only, descendants]}
+  changed_fields: {type: array, minItems: 1, uniqueItems: true, items: {type: string}}
+  rationale: {type: string, minLength: 12}

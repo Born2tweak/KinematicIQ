@@ -56,9 +56,14 @@ class WaveScheduleTests(unittest.TestCase):
     def test_verifier_rejects_capacity_and_dependency_corruption(self):
         manifest = schedule_wave.build_manifest(self.registry_path, self.resource_path)
         over_capacity = deepcopy(manifest)
-        over_capacity["capacity"]["review_synthesis_replan_overhead_hours"] = 100
+        forced_overhead = (
+            over_capacity["policy"]["committed_capacity_hours"]
+            - over_capacity["capacity"]["committed_milestone_hours"]
+            + 1
+        )
+        over_capacity["capacity"]["review_synthesis_replan_overhead_hours"] = forced_overhead
         over_capacity["capacity"]["committed_scheduled_hours"] = (
-            over_capacity["capacity"]["committed_milestone_hours"] + 100
+            over_capacity["capacity"]["committed_milestone_hours"] + forced_overhead
         )
         with self.assertRaisesRegex(schedule_wave.ScheduleError, "exceeds 134"):
             schedule_wave.verify_manifest(over_capacity, self.registry, self.resources)

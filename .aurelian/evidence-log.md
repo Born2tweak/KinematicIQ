@@ -55,6 +55,13 @@
 - Historical boundary: the mapping is additive, source records remain immutable, and a cross-link does not mean current validation or alter availability.
 - Verification: the positive migration and two negative mutations passed within the 29-test program suite; full web regression and production build are recorded in KQ-006 evidence.
 
+## 2026-07-21 — Expanded-10 KQ-008 inflection/replan schema
+
+- Schema: typed evidence, resource, verification, estimate, dependency, scientific, and product-decision triggers carry stable IDs, sources, seed nodes, propagation, changed fields, and rationale.
+- Compiler: impact follows authoritative dependency edges and filters Passed, SkippedByDecision, and Retired nodes; identical inputs yield sorted deterministic affected IDs.
+- Evidence boundary: the canonical append-only log is intentionally empty because no real trigger was fabricated; labeled fixtures prove selection, invalid-trigger rejection, and unknown-seed rejection.
+- Verification: the corrected capacity corruption test and replan tests pass; the full program and web/build results are recorded in KQ-008 evidence.
+
 
 ## 2026-07-15 — Phase 4 P4-M00 reconciliation
 
