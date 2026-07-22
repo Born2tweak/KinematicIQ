@@ -51,7 +51,7 @@
 
 ## Active milestone and gates
 
-- Completed Expanded-10 milestones: KQ-001 repository frontier reconciliation, KQ-002 locked product charter, and KQ-003 canonical program artifact structure. Next dependency-ready milestone: KQ-004 milestone schema and executable acceptance contract.
+- Completed Expanded-10 milestones: KQ-001 through KQ-004. Immediate dependency-ready Phase A frontier: KQ-005 history import, KQ-007 execution policy, and KQ-010 traceability validation; bounded Phase B corpus freezes KQ-016 and KQ-017 are also ready.
 - Phase A scheduler authority is still withheld until KQ-002 through KQ-015 pass; the clean-clone integration mechanism itself is now executable and passing.
 - Completed milestone: P4-M00 documentation and authority reconciliation. Its acceptance evidence is recorded in `docs/implementation/progress/P4-M00-phase4-documentation-reconciliation.md`.
 - Completed milestone: P4-M01 additive naming migration with legacy-read compatibility.

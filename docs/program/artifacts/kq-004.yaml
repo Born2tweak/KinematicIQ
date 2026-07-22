@@ -1,0 +1,44 @@
+schema_version: 1
+milestone_id: KQ-004
+contract_id: expanded-10-milestone-schema-v4.1
+authority:
+  registry: docs/program/milestone_registry.yaml
+  schema: docs/program/milestone_schema.yaml
+  predicate_catalog: docs/program/predicate_catalog.yaml
+validated_dimensions:
+  dependencies:
+  - exactly_175_unique_milestone_ids
+  - sole_root_KQ-001
+  - dependency_targets_exist
+  - dependency_graph_is_acyclic
+  - reverse_unlocks_match_edges
+  - mandatory_edges_do_not_accept_skip
+  - conditional_skip_edges_require_typed_policy_and_outcome
+  gates:
+  - acceptance_predicates_are_closed_and_typed
+  - acceptance_command_references_are_declared
+  - release_eligibility_requires_GATE_PASS
+  - artifacts_bind_contract_and_status_evidence_in_order
+  retries:
+  - retry_budget_is_integer_between_zero_and_five
+  - failure_class_and_abstention_policy_are_required
+  evidence:
+  - current_run_provenance_is_required
+  - milestone_contract_hash_is_scoped_to_the_immutable_record
+  - schema_catalog_artifact_and_verifier_hashes_fail_stale
+  - targeted_checks_and_regressions_record_exit_codes
+  commits:
+  - commit_and_push_on_pass_match_program_policy
+  - production_deployment_remains_disabled
+negative_test_coverage:
+- unknown_predicate
+- illegal_mandatory_skip
+- incomplete_skip_policy
+- release_without_GATE_PASS_dependency
+- undeclared_acceptance_command
+- misbound_status_evidence
+- duplicate_verification_id
+- competing_program_authority
+assertions:
+- id: KQ-004-OUTCOME
+  actual: Dependencies, gates, retries, evidence, commits are validated

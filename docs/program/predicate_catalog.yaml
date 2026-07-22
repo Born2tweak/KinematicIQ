@@ -1,4 +1,4 @@
-schema_version: 1
+schema_version: 2
 catalog_id: kinematiciq-expanded-10-predicates
 authority: docs/program/milestone_registry.yaml
 expected_value_rule: A produced artifact is never its own authority. Contract outcome assertions are compared with the milestone registry's first in_scope entry.
@@ -11,6 +11,7 @@ evidence_provenance:
     - verifier_version
     - verifier_hashes
     - predicate_catalog_version
+    - milestone_contract_sha256
     - command_hashes
     - input_hashes
     - checks

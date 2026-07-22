@@ -60,6 +60,26 @@ class ProgramContractTests(unittest.TestCase):
         errors = validate_semantics(program)
         self.assertTrue(any("has no GATE_PASS dependency" in item for item in errors))
 
+    def test_acceptance_cannot_reference_undeclared_command(self) -> None:
+        program = self.mutated()
+        acceptance = program.by_id["KQ-004"]["acceptance"][3]
+        acceptance["command_id"] = "imaginary_check"
+        errors = validate_semantics(program)
+        self.assertTrue(any("references undeclared command imaginary_check" in item for item in errors))
+
+    def test_artifact_and_evidence_bindings_fail_closed(self) -> None:
+        program = self.mutated()
+        program.by_id["KQ-004"]["acceptance"][1]["evidence"] = "docs/status/wrong.json"
+        errors = validate_semantics(program)
+        self.assertTrue(any("evidence predicate must bind its status artifact" in item for item in errors))
+
+    def test_duplicate_verification_ids_fail_closed(self) -> None:
+        program = self.mutated()
+        checks = program.by_id["KQ-004"]["verification"]["automated"]
+        checks[2]["id"] = "targeted_contract_checks"
+        errors = validate_semantics(program)
+        self.assertTrue(any("duplicate automated verification IDs" in item for item in errors))
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -297,7 +297,7 @@ milestones:
   title: Create milestone registry schema
   phase: A
   class: blocking_kernel
-  milestone_status: Pending
+  milestone_status: Passed
   expected_work_hours: 4
   objective: 'Produce and verify one bounded outcome: Create milestone registry schema.'
   user_visible_outcome: none

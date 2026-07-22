@@ -70,6 +70,18 @@ def main() -> int:
                 "detail": f"exit_code={result.returncode}",
             })
 
+    targeted_passed = all(item["passed"] for item in checks)
+    commands["targeted_contract_checks"] = {
+        "exit_code": 0 if targeted_passed else 1,
+        "stdout": "repository-bound schema, semantics, artifact, and declared checks completed",
+        "stderr": "" if targeted_passed else "one or more internal checks failed",
+    }
+    checks.append({
+        "id": "targeted_contract_checks",
+        "passed": targeted_passed,
+        "detail": f"exit_code={commands['targeted_contract_checks']['exit_code']}",
+    })
+
     evidence = evidence_record(program, milestone, checks, commands)
     output_path = (program.root / Path(args.evidence_out)).resolve()
     write_json(output_path, evidence)

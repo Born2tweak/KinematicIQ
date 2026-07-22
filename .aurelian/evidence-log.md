@@ -26,6 +26,14 @@
 - Governance: future durable artifact families remain planned work and were not represented as complete or evidence-bearing.
 - Boundaries: no public availability, validation disposition, scientific threshold, merge authority, or deployment state changed.
 
+## 2026-07-21 — Expanded-10 KQ-004 milestone schema
+
+- Contract: schema v4.1 and semantic checks validate the 175-node DAG, reverse unlocks, typed skip/release gates, retry bounds, artifact/evidence bindings, declared acceptance commands, and automatic commit/push policy with production deployment disabled.
+- Provenance correction: evidence now binds the canonical hash of its own milestone contract instead of the mutable whole-registry file; KQ-001 through KQ-003 evidence was regenerated under verifier 1.1 and all four milestones re-verified.
+- Negative coverage: unknown predicates, illegal skip edges, incomplete skip policy, missing gate dependency, undeclared commands, misbound evidence, duplicate check IDs, and competing authorities fail closed.
+- Regression: 17 program tests passed; the web suite passed 626 tests with 4 skipped across 104 passing files and 1 skipped file; the production build exited zero with only the pre-existing chunk-size warning.
+- Boundaries: no scientific result, protocol availability, participant evidence, master merge, or deployment state changed.
+
 
 ## 2026-07-15 — Phase 4 P4-M00 reconciliation
 

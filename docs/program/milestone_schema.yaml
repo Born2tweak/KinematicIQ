@@ -95,7 +95,8 @@ $defs:
         items: {type: string}
       artifacts:
         type: array
-        minItems: 1
+        minItems: 2
+        maxItems: 2
         items: {type: string}
       acceptance:
         type: array

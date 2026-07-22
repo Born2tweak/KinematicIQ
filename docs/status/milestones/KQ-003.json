@@ -23,6 +23,11 @@
       "detail": "exit_code=0",
       "id": "artifact_structure",
       "passed": true
+    },
+    {
+      "detail": "exit_code=0",
+      "id": "targeted_contract_checks",
+      "passed": true
     }
   ],
   "command_hashes": {
@@ -35,6 +40,11 @@
       "exit_code": 0,
       "stderr": "",
       "stdout": "PASS: verified docs/program/artifacts/kq-003.yaml\n"
+    },
+    "targeted_contract_checks": {
+      "exit_code": 0,
+      "stderr": "",
+      "stdout": "repository-bound schema, semantics, artifact, and declared checks completed"
     }
   },
   "environment": {
@@ -42,21 +52,21 @@
     "platform": "Windows-11-10.0.26200-SP0",
     "python": "3.14.0"
   },
-  "generated_at": "2026-07-22T03:01:00.437160+00:00",
+  "generated_at": "2026-07-22T03:05:21.490133+00:00",
   "input_hashes": {
     "docs/program/artifacts/kq-003.yaml": "06cc244f2a99940765ec910b0e4678633c5ae18e760bc8ff2005b5e89449e127",
-    "docs/program/milestone_registry.yaml": "b3b849a27e0bf7109caa61630897bd581844f4051172670731642e8671f2c715",
-    "docs/program/milestone_schema.yaml": "27a8b24035ca27b25c24486b1f8eb045998085dff65344e2d5d95cdecafb0b19",
-    "docs/program/predicate_catalog.yaml": "8240ee44bdaf64dd730cfb5bd7ed5a6c507eecb158f42d7e2c7a5a15a23c2f9d"
+    "docs/program/milestone_schema.yaml": "02d52e6d3b14f550547dba3b4fcea81e4b34c26f4f9dfb7b475a75eaaf0cb903",
+    "docs/program/predicate_catalog.yaml": "33bbb5548dbbd00aedfa65b04aa6a79fb4877159ab148afcda15ccd2bea721b4"
   },
+  "milestone_contract_sha256": "0d744a484b1991743254dbf94407cdf66644aa64ba4311cd760794c3ff3e5df1",
   "milestone_id": "KQ-003",
-  "predicate_catalog_version": 1,
+  "predicate_catalog_version": 2,
   "schema_version": 1,
-  "subject_commit": "ceede0cff86bf8374b0cc3442e743e17749ebb61",
+  "subject_commit": "42053074c0254f09b0c65073601b947b14b0faa3",
   "verifier_hashes": {
-    "tools/program/program_contract.py": "f8abdcbc8e260b07623e47eb58f544503f24a5cfc9ada9dc59edec317cbdfbe3",
-    "tools/program/run_contract_checks.py": "d727d993e7052406de493f1283a78b784244cf9e12678b0eff1223fd3d16d200",
+    "tools/program/program_contract.py": "2d65351742c3845173072df86e8531ec4c03e386b4cc29fb84f11c11fa7d2742",
+    "tools/program/run_contract_checks.py": "9e57a3b4ce840f462efad1b9883f422933ec33f9124a68ac5335656083f36a2b",
     "tools/program/verify_milestone.py": "0c8d70aff4ffcc6bc235b6eebed1a0929a0c9b0f9b9447780b5cefc1d75005e8"
   },
-  "verifier_version": "1.0.0"
+  "verifier_version": "1.1.0"
 }

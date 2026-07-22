@@ -16,8 +16,8 @@ import jsonschema
 import yaml
 
 
-VERIFIER_VERSION = "1.0.0"
-PREDICATE_CATALOG_VERSION = 1
+VERIFIER_VERSION = "1.1.0"
+PREDICATE_CATALOG_VERSION = 2
 ALLOWED_PREDICATES = {
     "all_artifacts_exist_and_nonempty",
     "current_run_evidence_matches_head",
@@ -96,6 +96,11 @@ def sha256_bytes(value: bytes) -> str:
 
 def sha256_file(path: Path) -> str:
     return sha256_bytes(path.read_bytes())
+
+
+def canonical_object_hash(value: Any) -> str:
+    payload = json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
+    return sha256_bytes(payload.encode("utf-8"))
 
 
 def git_output(root: Path, *args: str) -> str:
@@ -222,6 +227,47 @@ def validate_semantics(program: LoadedProgram) -> list[str]:
             if acceptance["predicate"] not in ALLOWED_PREDICATES:
                 errors.append(f"{milestone['id']} uses unknown predicate {acceptance['predicate']}")
 
+        if len(milestone["artifacts"]) != 2:
+            errors.append(f"{milestone['id']} must declare exactly contract and evidence artifacts")
+        else:
+            artifact_inputs = [
+                item for item in milestone["acceptance"]
+                if item["predicate"] == "all_artifacts_exist_and_nonempty"
+            ]
+            evidence_predicates = [
+                item for item in milestone["acceptance"]
+                if item["predicate"] == "current_run_evidence_matches_head"
+            ]
+            contract_predicates = [
+                item for item in milestone["acceptance"]
+                if item["predicate"] == "contract_output_assertion_passes"
+            ]
+            if len(artifact_inputs) != 1 or artifact_inputs[0]["inputs"] != milestone["artifacts"]:
+                errors.append(f"{milestone['id']} artifact predicate must cover its declared artifacts in order")
+            if len(evidence_predicates) != 1 or evidence_predicates[0]["evidence"] != milestone["artifacts"][1]:
+                errors.append(f"{milestone['id']} evidence predicate must bind its status artifact")
+            if len(contract_predicates) != 1 or contract_predicates[0]["contract"] != milestone["artifacts"][0]:
+                errors.append(f"{milestone['id']} outcome predicate must bind its contract artifact")
+
+        automated_ids = [item["id"] for item in milestone["verification"]["automated"]]
+        if len(automated_ids) != len(set(automated_ids)):
+            errors.append(f"{milestone['id']} has duplicate automated verification IDs")
+        for required_id in ("registry_contract", "targeted_contract_checks"):
+            if required_id not in automated_ids:
+                errors.append(f"{milestone['id']} is missing required verification {required_id}")
+        for acceptance in milestone["acceptance"]:
+            referenced_commands: list[str] = []
+            if acceptance["predicate"] == "command_exit_code_equals":
+                referenced_commands = [acceptance["command_id"]]
+            elif acceptance["predicate"] == "regression_floor_passes":
+                referenced_commands = acceptance["command_ids"]
+            for command_id in referenced_commands:
+                if command_id not in automated_ids:
+                    errors.append(f"{milestone['id']} acceptance references undeclared command {command_id}")
+
+        if not milestone["commit_policy"]["commit_on_pass"] or not milestone["commit_policy"]["push_on_pass"]:
+            errors.append(f"{milestone['id']} commit policy conflicts with automatic program policy")
+
         pass_outcome = milestone["outcomes"]["pass"]
         if pass_outcome.get("result_code") == RELEASE_RESULT:
             gate_predicates = [
@@ -275,6 +321,7 @@ def verify_evidence_provenance(
         "verifier_version",
         "verifier_hashes",
         "predicate_catalog_version",
+        "milestone_contract_sha256",
         "command_hashes",
         "input_hashes",
         "checks",
@@ -293,6 +340,8 @@ def verify_evidence_provenance(
             raise ContractError(f"evidence verifier is missing or stale: {relative}")
     if evidence["predicate_catalog_version"] != PREDICATE_CATALOG_VERSION:
         raise ContractError("evidence predicate catalog is stale")
+    if evidence["milestone_contract_sha256"] != canonical_object_hash(milestone):
+        raise ContractError("evidence milestone contract is stale")
     if not is_ancestor(program.root, evidence["subject_commit"]):
         raise ContractError("evidence subject_commit is not current HEAD or an ancestor")
     expected_commands = {
@@ -377,7 +426,6 @@ def evidence_record(
     commands: dict[str, dict[str, Any]] | None = None,
 ) -> dict[str, Any]:
     input_paths = [
-        program.registry_path,
         program.schema_path,
         program.root / "docs/program/predicate_catalog.yaml",
         program.root / milestone["artifacts"][0],
@@ -403,6 +451,7 @@ def evidence_record(
             for path in verifier_paths
         },
         "predicate_catalog_version": PREDICATE_CATALOG_VERSION,
+        "milestone_contract_sha256": canonical_object_hash(milestone),
         "command_hashes": {
             item["id"]: sha256_bytes(item["command"].encode("utf-8"))
             for item in milestone["verification"]["automated"]
