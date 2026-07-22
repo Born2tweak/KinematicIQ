@@ -64,9 +64,15 @@ class WaveScheduleTests(unittest.TestCase):
             schedule_wave.verify_manifest(over_capacity, self.registry, self.resources)
 
         broken_dependency = deepcopy(manifest)
-        kq003 = next(item for item in broken_dependency["bands"]["committed"]["schedule"] if item["id"] == "KQ-003")
-        kq003["window"]["start_productive_hour"] = 0
-        with self.assertRaisesRegex(schedule_wave.ScheduleError, "starts before KQ-002"):
+        scheduled = {
+            item["id"]: item for item in broken_dependency["bands"]["committed"]["schedule"]
+        }
+        victim = next(
+            item for item in scheduled.values() if any(dependency in scheduled for dependency in item["dependencies"])
+        )
+        scheduled_dependency = next(dependency for dependency in victim["dependencies"] if dependency in scheduled)
+        victim["window"]["start_productive_hour"] = 0
+        with self.assertRaisesRegex(schedule_wave.ScheduleError, f"starts before {scheduled_dependency}"):
             schedule_wave.verify_manifest(broken_dependency, self.registry, self.resources)
 
     def test_cli_regenerates_and_verifies_same_manifest(self):

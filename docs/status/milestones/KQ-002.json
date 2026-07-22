@@ -1,0 +1,50 @@
+{
+  "all_required_checks_passed": true,
+  "checks": [
+    {
+      "detail": [],
+      "id": "schema",
+      "passed": true
+    },
+    {
+      "detail": [],
+      "id": "semantics",
+      "passed": true
+    },
+    {
+      "detail": {
+        "actual": "Expanded-10 scope and non-goals are machine-readable",
+        "expected": "Expanded-10 scope and non-goals are machine-readable"
+      },
+      "id": "registry_owned_outcome",
+      "passed": true
+    }
+  ],
+  "command_hashes": {
+    "registry_contract": "6788cd34553989f06ca7fce5e7410c1f358416f383d7adfdf1735a7855795c37",
+    "targeted_contract_checks": "4d338106d1a9e8591f0ac8f6e2434ae06c0d1a48789595b58be12f977d2171de"
+  },
+  "commands": {},
+  "environment": {
+    "cwd": "C:\\Users\\acetu\\Documents\\Codex\\2026-07-21\\open-born2tweak-kinematiciq-and-operate-autonomously\\work\\KinematicIQ",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.14.0"
+  },
+  "generated_at": "2026-07-22T02:54:15.921737+00:00",
+  "input_hashes": {
+    "docs/program/artifacts/kq-002.yaml": "0edebef1244c10ba4a716c9af3fe795ed815367cee49ba2a2488e6fb21136ff9",
+    "docs/program/milestone_registry.yaml": "50e7ca49e76e5be03bf48e3da5013bc0c577adc8d27fa360839cd4aa48f816b1",
+    "docs/program/milestone_schema.yaml": "27a8b24035ca27b25c24486b1f8eb045998085dff65344e2d5d95cdecafb0b19",
+    "docs/program/predicate_catalog.yaml": "8240ee44bdaf64dd730cfb5bd7ed5a6c507eecb158f42d7e2c7a5a15a23c2f9d"
+  },
+  "milestone_id": "KQ-002",
+  "predicate_catalog_version": 1,
+  "schema_version": 1,
+  "subject_commit": "229cd8dbef1181adaeddd794519108762b1fc96f",
+  "verifier_hashes": {
+    "tools/program/program_contract.py": "f8abdcbc8e260b07623e47eb58f544503f24a5cfc9ada9dc59edec317cbdfbe3",
+    "tools/program/run_contract_checks.py": "d727d993e7052406de493f1283a78b784244cf9e12678b0eff1223fd3d16d200",
+    "tools/program/verify_milestone.py": "0c8d70aff4ffcc6bc235b6eebed1a0929a0c9b0f9b9447780b5cefc1d75005e8"
+  },
+  "verifier_version": "1.0.0"
+}

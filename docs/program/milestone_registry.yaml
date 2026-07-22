@@ -104,7 +104,7 @@ milestones:
   title: Approve locked product charter
   phase: A
   class: blocking_kernel
-  milestone_status: Pending
+  milestone_status: Passed
   expected_work_hours: 3
   objective: 'Produce and verify one bounded outcome: Approve locked product charter.'
   user_visible_outcome: none

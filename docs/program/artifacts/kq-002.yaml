@@ -1,0 +1,62 @@
+schema_version: 1
+milestone_id: KQ-002
+charter_id: expanded-10-product-charter-v1
+authority:
+  source: docs/implementation/KINEMATICIQ_MASTER_EXECUTION_ROADMAP.md
+  branch: agent/expanded-10-revision-4
+  production_deployment: separate_authority_required
+  master_merge: separate_authority_required
+population:
+  initial: healthy_adults_and_athletes
+  excluded:
+  - clinical_populations
+  - youth
+  - older_adults
+  - adaptive_populations
+protocols:
+- squat
+- forward_lunge
+- hip_hinge
+- push_up
+- pull
+- rotation
+- gait
+- jump
+- landing
+- sprint
+product_contract:
+  inputs: [consumer_phone_camera, consumer_laptop_camera, uploaded_video]
+  processing_default: browser_local_first
+  pose_baseline: MediaPipe
+  public_experimental_route: forbidden
+  release_rule: every public protocol requires its own actual GATE_PASS across U1-U12 and core claims
+  observability_rule: withhold each unsupported metric and provide a reason; invalid capture fully abstains
+  availability_at_lock:
+    available: [squat]
+    unavailable: [forward_lunge, hip_hinge, push_up, pull, rotation, gait, jump, landing, sprint]
+non_goals:
+- diagnosis
+- injury_prediction
+- pathology_or_return_to_play
+- force_torque_or_kinetics_from_ordinary_single_camera_rgb
+- muscle_activation_claims
+- composite_movement_quality_score
+- normative_population_ranking
+- silent_cloud_retention
+- wearable_required_operation
+- automatic_production_deployment
+invariants:
+- Equal validation discipline applies to all ten movements with metric-appropriate direct references.
+- MediaPipe remains baseline until a registered measured failure cluster justifies one challenger.
+- Hybrid processing remains closed until a validated local capability gap and privacy/product-value trigger pass.
+- Completed evidence is immutable; failed locked gates open a new preregistered version rather than weaker thresholds.
+- Restricted data, participant-identifying media, fabricated evidence, and unsupported release claims are prohibited.
+assertions:
+- id: KQ-002-OUTCOME
+  actual: Expanded-10 scope and non-goals are machine-readable
+evidence_sources:
+- docs/implementation/KINEMATICIQ_MASTER_EXECUTION_ROADMAP.md
+- docs/doctrine/claims-policy.md
+- docs/doctrine/deferred-scope.md
+- docs/program/EXECUTION_SEMANTICS_AND_FIXTURES.md
+- docs/validation/protocol_validation_registry.yaml

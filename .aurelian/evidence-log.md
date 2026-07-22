@@ -12,6 +12,13 @@
 - Clean clone: remote commit `0702e84` passed install, schema/semantics, program tests, schedule verification, build, full tests, lunge evaluation, and logical tracked-diff check.
 - Replay limitation: clean clones contain no eligible private `.posetape.json` files; `eval:tapes` produced the explicit `UNAVAILABLE_CLEAN_CLONE_CORPUS_EXPLICIT` disposition. No replay or human evidence was fabricated.
 
+## 2026-07-21 — Expanded-10 KQ-002 locked product charter
+
+- Artifact: `docs/program/artifacts/kq-002.yaml` encodes the ten protocols, initial population, consumer-camera/local-first default, MediaPipe baseline, equal scientific release rule, metric-level abstention, non-goals, and separate merge/deployment authority.
+- Acceptance: all three typed KQ-002 predicates passed against current registry-owned expectations and provenance hashes.
+- Schedule: KQ-001 and KQ-002 are evidence-backed imports; 51 milestone hours plus 16 overhead hours remain committed (67/134).
+- Boundaries: no protocol availability, scientific threshold, dataset, participant, model route, hybrid path, master branch, or production state changed.
+
 
 ## 2026-07-15 — Phase 4 P4-M00 reconciliation
 
