@@ -9,7 +9,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "tools" / "program"))
 
-from program_contract import LoadedProgram, validate_schema, validate_semantics  # noqa: E402
+from program_contract import LoadedProgram, evidence_record, validate_schema, validate_semantics  # noqa: E402
 
 
 class ProgramContractTests(unittest.TestCase):
@@ -79,6 +79,11 @@ class ProgramContractTests(unittest.TestCase):
         checks[2]["id"] = "targeted_contract_checks"
         errors = validate_semantics(program)
         self.assertTrue(any("duplicate automated verification IDs" in item for item in errors))
+
+    def test_declared_python_verifier_is_hashed_into_evidence(self) -> None:
+        milestone = self.program.by_id["KQ-005"]
+        evidence = evidence_record(self.program, milestone, [{"id": "test", "passed": True}])
+        self.assertIn("tools/program/verify_history_import.py", evidence["verifier_hashes"])
 
 
 if __name__ == "__main__":

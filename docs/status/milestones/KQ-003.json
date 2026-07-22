@@ -52,7 +52,7 @@
     "platform": "Windows-11-10.0.26200-SP0",
     "python": "3.14.0"
   },
-  "generated_at": "2026-07-22T03:05:21.490133+00:00",
+  "generated_at": "2026-07-22T03:21:39.578796+00:00",
   "input_hashes": {
     "docs/program/artifacts/kq-003.yaml": "06cc244f2a99940765ec910b0e4678633c5ae18e760bc8ff2005b5e89449e127",
     "docs/program/milestone_schema.yaml": "02d52e6d3b14f550547dba3b4fcea81e4b34c26f4f9dfb7b475a75eaaf0cb903",
@@ -62,11 +62,12 @@
   "milestone_id": "KQ-003",
   "predicate_catalog_version": 2,
   "schema_version": 1,
-  "subject_commit": "42053074c0254f09b0c65073601b947b14b0faa3",
+  "subject_commit": "b8e208cdece41ae92d45b8417d678dc4683f316a",
   "verifier_hashes": {
-    "tools/program/program_contract.py": "2d65351742c3845173072df86e8531ec4c03e386b4cc29fb84f11c11fa7d2742",
+    "tools/program/program_contract.py": "bd3d3c0b226e700025e3d1e0e3a0e771c197e3ab4d6be07111d9f35400cee142",
     "tools/program/run_contract_checks.py": "9e57a3b4ce840f462efad1b9883f422933ec33f9124a68ac5335656083f36a2b",
+    "tools/program/verify_artifact_structure.py": "27675a082fe463f97ddd4a5f83910f6470713a356fbed5b5c349f1094e1e7185",
     "tools/program/verify_milestone.py": "0c8d70aff4ffcc6bc235b6eebed1a0929a0c9b0f9b9447780b5cefc1d75005e8"
   },
-  "verifier_version": "1.1.0"
+  "verifier_version": "1.2.0"
 }

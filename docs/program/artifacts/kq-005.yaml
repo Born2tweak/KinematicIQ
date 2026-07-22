@@ -1,0 +1,43 @@
+schema_version: 1
+milestone_id: KQ-005
+history_mode: retained_historical_evidence
+reexecution_performed: false
+current_behavior_proven: false
+dependency_effect: historical records cannot satisfy KQ dependencies or current-run acceptance predicates
+source_sets:
+- id: progress_records
+  globs: [docs/implementation/progress/*.md]
+- id: legacy_gap_records
+  paths: [docs/implementation/NEXT_20_MILESTONES.md]
+- id: phase3_records
+  paths: [docs/implementation/KINEMATICIQ_PHASE3_EXECUTION_ROADMAP.md, docs/implementation/KINEMATICIQ_PHASE3_HANDOFF.md]
+records:
+- {prefix: M, start: 0, end: 26, disposition: historical_scope_complete, source_sets: [progress_records], commits: [e183e10, 5481490], open_gates: []}
+- {prefix: M, start: 27, end: 30, disposition: historical_not_executed, source_sets: [legacy_gap_records], commits: [898d7c4], open_gates: [carried_forward_and_blocked]}
+- {prefix: M, start: 31, end: 75, disposition: historical_scope_complete, source_sets: [progress_records, legacy_gap_records], commits: [ad5e09a, 8d8a77d], open_gates: []}
+- {prefix: M, start: 76, end: 76, disposition: historical_engineering_complete_with_human_gate_open, source_sets: [progress_records], commits: [2fcf768], open_gates: [physical_device_and_screen_reader_evidence]}
+- {prefix: M, start: 77, end: 77, disposition: historical_engineering_complete_with_human_gate_open, source_sets: [progress_records], commits: [2fcf768], open_gates: [physical_iphone_performance_decision]}
+- {prefix: M, start: 78, end: 78, disposition: historical_partial, source_sets: [progress_records], commits: [2fcf768], open_gates: [independent_labels]}
+- {prefix: M, start: 79, end: 88, disposition: historical_scope_complete, source_sets: [progress_records], commits: [2fcf768, 67e1b4e, 8f545e2], open_gates: []}
+- {ids: [M83W], disposition: historical_scope_complete, source_sets: [progress_records], commits: [67e1b4e], open_gates: []}
+- {prefix: M, start: 89, end: 89, disposition: historical_engineering_complete_with_human_gate_open, source_sets: [progress_records], commits: [8f545e2], open_gates: [in_app_screenshot_capture]}
+- {prefix: M, start: 90, end: 91, disposition: historical_scope_complete, source_sets: [progress_records], commits: [8f545e2, 974d552], open_gates: []}
+- {prefix: M, start: 92, end: 92, disposition: historical_engineering_complete_with_human_gate_open, source_sets: [progress_records], commits: [974d552], open_gates: [fresh_visual_scroll_measurement]}
+- {prefix: M, start: 93, end: 95, disposition: historical_scope_complete, source_sets: [progress_records], commits: [974d552], open_gates: []}
+- {prefix: M, start: 96, end: 96, disposition: historical_scope_complete_with_external_gate_open, source_sets: [progress_records], commits: [974d552], open_gates: [real_study_data]}
+- {prefix: M, start: 97, end: 98, disposition: historical_engineering_complete_with_human_gate_open, source_sets: [progress_records], commits: [974d552], open_gates: [human_device_expert_validation]}
+- {prefix: M, start: 99, end: 115, disposition: historical_scope_complete_with_external_gate_open, source_sets: [progress_records, phase3_records], commits: [f49558e], open_gates: [external_validation_and_activation]}
+- {prefix: P4-M, start: 0, end: 2, disposition: historical_scope_complete, source_sets: [progress_records], commits: [53392cb, fb9ec10, 6c65480], open_gates: []}
+- {prefix: P4-M, start: 3, end: 5, disposition: historical_engineering_complete_with_human_gate_open, source_sets: [progress_records], commits: [f081c65, 008731e, e28bf96], open_gates: [owner_signoff_or_human_review]}
+- {prefix: P4-M, start: 6, end: 13, disposition: historical_blocked, source_sets: [progress_records], commits: [6671996, 3e5a094, cfe3535, 408a3c3, fe683d3, cfae3b9, 1f302a5, 37b47ac], open_gates: [human_or_scientific_execution_gate]}
+- {prefix: P4-M, start: 14, end: 14, disposition: historical_fail_closed_disposition, source_sets: [progress_records], commits: [44daa7b], open_gates: [G_AVAIL_blocked_forward_lunge_unavailable]}
+retained_claim_policy:
+  historical_test_counts_are_current_proof: false
+  historical_private_tape_results_are_clean_clone_reproducible: false
+  historical_device_or_participant_evidence_is_current_proof: false
+availability_preserved:
+  available: [squat]
+  unavailable: [forward_lunge, hip_hinge, push_up, pull, rotation, gait, jump, landing, sprint]
+assertions:
+- id: KQ-005-OUTCOME
+  actual: M00–P4-M14 retained as historical evidence, not re-executed

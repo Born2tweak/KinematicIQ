@@ -16,7 +16,7 @@ import jsonschema
 import yaml
 
 
-VERIFIER_VERSION = "1.1.0"
+VERIFIER_VERSION = "1.2.0"
 PREDICATE_CATALOG_VERSION = 2
 ALLOWED_PREDICATES = {
     "all_artifacts_exist_and_nonempty",
@@ -173,6 +173,14 @@ def _command_target_exists(root: Path, command: str) -> bool:
             package_path.read_text(encoding="utf-8")
         ).get("scripts", {})
     return False
+
+
+def _python_command_target(root: Path, command: str) -> Path | None:
+    match = re.match(r"^python\s+([^\s]+\.py)(?:\s|$)", command)
+    if not match:
+        return None
+    target = (root / match.group(1)).resolve()
+    return target if target.is_file() else None
 
 
 def validate_semantics(program: LoadedProgram) -> list[str]:
@@ -435,6 +443,12 @@ def evidence_record(
         program.root / "tools/program/run_contract_checks.py",
         program.root / "tools/program/verify_milestone.py",
     ]
+    verifier_paths.extend(
+        target
+        for item in milestone["verification"]["automated"]
+        if (target := _python_command_target(program.root, item["command"])) is not None
+    )
+    verifier_paths = sorted(set(verifier_paths))
     return {
         "schema_version": 1,
         "milestone_id": milestone["id"],

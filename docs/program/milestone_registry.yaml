@@ -415,7 +415,7 @@ milestones:
   title: Import completed milestone history
   phase: A
   class: parallel_enabler
-  milestone_status: Pending
+  milestone_status: Passed
   expected_work_hours: 4
   objective: 'Produce and verify one bounded outcome: Import completed milestone history.'
   user_visible_outcome: none
@@ -454,6 +454,10 @@ milestones:
     predicate: contract_output_assertion_passes
     contract: docs/program/artifacts/kq-005.yaml
     assertion_id: KQ-005-OUTCOME
+  - id: KQ-005-A4
+    predicate: command_exit_code_equals
+    command_id: history_import
+    expected: 0
   verification:
     profile: program_contract
     automated:
@@ -462,6 +466,8 @@ milestones:
         --id KQ-005
     - id: targeted_contract_checks
       command: python tools/program/run_contract_checks.py --id KQ-005 --evidence-out docs/status/milestones/KQ-005.json
+    - id: history_import
+      command: python tools/program/verify_history_import.py --manifest docs/program/artifacts/kq-005.yaml
     manual_gate: null
     clean_clone_required: false
   failure:

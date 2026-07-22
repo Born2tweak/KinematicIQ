@@ -41,7 +41,7 @@
     "platform": "Windows-11-10.0.26200-SP0",
     "python": "3.14.0"
   },
-  "generated_at": "2026-07-22T03:05:16.008322+00:00",
+  "generated_at": "2026-07-22T03:21:34.223090+00:00",
   "input_hashes": {
     "docs/program/artifacts/kq-001.yaml": "82c0f9853fdcbc8fd7e3b7f5ae63088878d3c370f6bcd8ac425e774656ddf950",
     "docs/program/milestone_schema.yaml": "02d52e6d3b14f550547dba3b4fcea81e4b34c26f4f9dfb7b475a75eaaf0cb903",
@@ -51,11 +51,11 @@
   "milestone_id": "KQ-001",
   "predicate_catalog_version": 2,
   "schema_version": 1,
-  "subject_commit": "42053074c0254f09b0c65073601b947b14b0faa3",
+  "subject_commit": "b8e208cdece41ae92d45b8417d678dc4683f316a",
   "verifier_hashes": {
-    "tools/program/program_contract.py": "2d65351742c3845173072df86e8531ec4c03e386b4cc29fb84f11c11fa7d2742",
+    "tools/program/program_contract.py": "bd3d3c0b226e700025e3d1e0e3a0e771c197e3ab4d6be07111d9f35400cee142",
     "tools/program/run_contract_checks.py": "9e57a3b4ce840f462efad1b9883f422933ec33f9124a68ac5335656083f36a2b",
     "tools/program/verify_milestone.py": "0c8d70aff4ffcc6bc235b6eebed1a0929a0c9b0f9b9447780b5cefc1d75005e8"
   },
-  "verifier_version": "1.1.0"
+  "verifier_version": "1.2.0"
 }
