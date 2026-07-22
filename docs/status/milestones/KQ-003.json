@@ -1,0 +1,62 @@
+{
+  "all_required_checks_passed": true,
+  "checks": [
+    {
+      "detail": [],
+      "id": "schema",
+      "passed": true
+    },
+    {
+      "detail": [],
+      "id": "semantics",
+      "passed": true
+    },
+    {
+      "detail": {
+        "actual": "Required control/research/validation/status paths exist",
+        "expected": "Required control/research/validation/status paths exist"
+      },
+      "id": "registry_owned_outcome",
+      "passed": true
+    },
+    {
+      "detail": "exit_code=0",
+      "id": "artifact_structure",
+      "passed": true
+    }
+  ],
+  "command_hashes": {
+    "artifact_structure": "99373ddad7e8299ba87f13432bf2ad2294457a46ec7ec043ecb516618b88e783",
+    "registry_contract": "8ae114ed9fb9a2e2afff9f3ccf70e9b3d22525bf6b745de0b96494d99c09ea75",
+    "targeted_contract_checks": "9de7854707d47510b4a2983bf9f62ea7e3daf4a019fc1467aafc861ff6ebb565"
+  },
+  "commands": {
+    "artifact_structure": {
+      "exit_code": 0,
+      "stderr": "",
+      "stdout": "PASS: verified docs/program/artifacts/kq-003.yaml\n"
+    }
+  },
+  "environment": {
+    "cwd": "C:\\Users\\acetu\\Documents\\Codex\\2026-07-21\\open-born2tweak-kinematiciq-and-operate-autonomously\\work\\KinematicIQ",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.14.0"
+  },
+  "generated_at": "2026-07-22T03:01:00.437160+00:00",
+  "input_hashes": {
+    "docs/program/artifacts/kq-003.yaml": "06cc244f2a99940765ec910b0e4678633c5ae18e760bc8ff2005b5e89449e127",
+    "docs/program/milestone_registry.yaml": "b3b849a27e0bf7109caa61630897bd581844f4051172670731642e8671f2c715",
+    "docs/program/milestone_schema.yaml": "27a8b24035ca27b25c24486b1f8eb045998085dff65344e2d5d95cdecafb0b19",
+    "docs/program/predicate_catalog.yaml": "8240ee44bdaf64dd730cfb5bd7ed5a6c507eecb158f42d7e2c7a5a15a23c2f9d"
+  },
+  "milestone_id": "KQ-003",
+  "predicate_catalog_version": 1,
+  "schema_version": 1,
+  "subject_commit": "ceede0cff86bf8374b0cc3442e743e17749ebb61",
+  "verifier_hashes": {
+    "tools/program/program_contract.py": "f8abdcbc8e260b07623e47eb58f544503f24a5cfc9ada9dc59edec317cbdfbe3",
+    "tools/program/run_contract_checks.py": "d727d993e7052406de493f1283a78b784244cf9e12678b0eff1223fd3d16d200",
+    "tools/program/verify_milestone.py": "0c8d70aff4ffcc6bc235b6eebed1a0929a0c9b0f9b9447780b5cefc1d75005e8"
+  },
+  "verifier_version": "1.0.0"
+}

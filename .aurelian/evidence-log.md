@@ -19,6 +19,13 @@
 - Schedule: KQ-001 and KQ-002 are evidence-backed imports; 51 milestone hours plus 16 overhead hours remain committed (67/134).
 - Boundaries: no protocol availability, scientific threshold, dataset, participant, model route, hybrid path, master branch, or production state changed.
 
+## 2026-07-21 — Expanded-10 KQ-003 canonical artifact structure
+
+- Artifact: `docs/program/artifacts/kq-003.yaml` maps the required control, research, validation, and status paths to existing repository authorities.
+- Verification: the repository-bound layout verifier checks required roles and entries, unique canonical authorities, and the absence of competing roadmap/project-bible paths; its negative test fails closed.
+- Governance: future durable artifact families remain planned work and were not represented as complete or evidence-bearing.
+- Boundaries: no public availability, validation disposition, scientific threshold, merge authority, or deployment state changed.
+
 
 ## 2026-07-15 — Phase 4 P4-M00 reconciliation
 

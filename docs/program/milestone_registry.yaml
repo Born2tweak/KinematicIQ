@@ -203,7 +203,7 @@ milestones:
   title: Install canonical program artifact structure
   phase: A
   class: blocking_kernel
-  milestone_status: Pending
+  milestone_status: Passed
   expected_work_hours: 2
   objective: 'Produce and verify one bounded outcome: Install canonical program artifact structure.'
   user_visible_outcome: none
@@ -254,6 +254,8 @@ milestones:
         --id KQ-003
     - id: targeted_contract_checks
       command: python tools/program/run_contract_checks.py --id KQ-003 --evidence-out docs/status/milestones/KQ-003.json
+    - id: artifact_structure
+      command: python tools/program/verify_artifact_structure.py --manifest docs/program/artifacts/kq-003.yaml
     manual_gate: null
     clean_clone_required: false
   failure:

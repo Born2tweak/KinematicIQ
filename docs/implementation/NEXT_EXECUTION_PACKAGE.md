@@ -1,6 +1,6 @@
 # Next Execution Package — M75-M78
 
-> **Expanded-10 Revision 4 authority (2026-07-21):** KQ-001 and KQ-002 are complete with repository-bound evidence; KQ-003 is the next dependency-ready milestone in `KINEMATICIQ_MASTER_EXECUTION_ROADMAP.md`. The machine-readable product charter locks the ten-movement scope, non-goals, local-first baseline, equal release rigor, and separate deployment authority. KQ-003 through KQ-015 remain the committed Phase A queue before scheduler authority is granted. Squat remains the only available protocol; Forward Lunge and every additional movement remain unavailable until their preregistered release gates produce `GATE_PASS`.
+> **Expanded-10 Revision 4 authority (2026-07-21):** KQ-001 through KQ-003 are complete with repository-bound evidence; KQ-004 is the next dependency-ready milestone in `KINEMATICIQ_MASTER_EXECUTION_ROADMAP.md`. The canonical artifact layout now binds control, research, validation, and status work to existing repository authorities and explicitly forbids a competing roadmap or project bible. KQ-004 through KQ-015 remain the committed Phase A queue before scheduler authority is granted. Squat remains the only available protocol; Forward Lunge and every additional movement remain unavailable until their preregistered release gates produce `GATE_PASS`.
 
 > The M75-M78 and Phase 4 material below is preserved as historical execution context. It no longer defines the immediate engineering queue, but its scientific and human gates remain binding inputs to the Expanded-10 program.
 

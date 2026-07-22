@@ -1,0 +1,59 @@
+schema_version: 1
+milestone_id: KQ-003
+layout_id: expanded-10-canonical-artifact-layout-v1
+authority:
+  source: docs/implementation/KINEMATICIQ_MASTER_EXECUTION_ROADMAP.md
+  registry: docs/program/milestone_registry.yaml
+  rule: Existing canonical artifacts are extended in place; parallel roadmaps and project bibles are forbidden.
+required_paths:
+- path: .aurelian
+  kind: directory
+  role: control
+  required_entries: [project-state.md, decision-log.md, evidence-log.md]
+- path: docs/research
+  kind: directory
+  role: research
+  required_entries: [RESEARCH_REPLAN_VERTICAL_SLICE.md]
+- path: docs/validation
+  kind: directory
+  role: validation
+  required_entries: [protocol_validation_registry.yaml]
+- path: docs/status
+  kind: directory
+  role: status
+  required_entries: [milestones]
+canonical_authorities:
+- id: master_execution_roadmap
+  path: docs/implementation/KINEMATICIQ_MASTER_EXECUTION_ROADMAP.md
+- id: next_execution_package
+  path: docs/implementation/NEXT_EXECUTION_PACKAGE.md
+- id: milestone_registry
+  path: docs/program/milestone_registry.yaml
+- id: milestone_schema
+  path: docs/program/milestone_schema.yaml
+- id: resource_registry
+  path: docs/program/resource_registry.yaml
+- id: protocol_validation_registry
+  path: docs/validation/protocol_validation_registry.yaml
+- id: project_state
+  path: .aurelian/project-state.md
+- id: decision_log
+  path: .aurelian/decision-log.md
+- id: evidence_log
+  path: .aurelian/evidence-log.md
+prohibited_competing_paths:
+- docs/program/EXPANDED_10_MASTER_ROADMAP.md
+- docs/program/PROJECT_BIBLE.md
+planned_artifact_families:
+- docs/research/evidence_registry.yaml
+- docs/datasets/dataset_registry.yaml
+- docs/models/model_registry.yaml
+- docs/claims/claim_registry.yaml
+- docs/traceability/metric_traceability.yaml
+- docs/protocols/<id>/protocol_spec.yaml
+- docs/protocols/<id>/validation_manifest.yaml
+- docs/protocols/<id>/release_manifest.yaml
+- docs/status/program_status.json
+assertions:
+- id: KQ-003-OUTCOME
+  actual: Required control/research/validation/status paths exist
