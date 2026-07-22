@@ -3,7 +3,7 @@ program_id: kinematiciq-expanded-10
 wave_id: expanded-10-wave-1
 sources:
   milestone_registry: docs/program/milestone_registry.yaml
-  milestone_registry_sha256: 932f0bed9ef2bfa3bf2084b3bbee612728956d26ca1badff9b8445bd7814e1ef
+  milestone_registry_sha256: da3e0800f463548cef7e85258c7023604461909260f5bce4c1eb588ed26a389b
   resource_registry: docs/program/resource_registry.yaml
   resource_registry_sha256: b10c001806da017f3f0876a77eb8db34c82870bc745140f8b9b9afc0c56a4c22
   execution_policy: docs/program/execution_policy.yaml
@@ -51,6 +51,7 @@ imported_satisfied:
   - KQ-007
   - KQ-008
   - KQ-009
+  - KQ-010
   - KQ-014
   evidence:
   - id: KQ-001
@@ -80,17 +81,20 @@ imported_satisfied:
   - id: KQ-009
     path: docs/status/milestones/KQ-009.json
     sha256: f36f6149dbf3b10ab37b4b3dba703fb9918e759cc9413e4220b01c27ec6e0c4c
+  - id: KQ-010
+    path: docs/status/milestones/KQ-010.json
+    sha256: 75ea07987461c4ab21a13afec4aaf7129c388b7bd98f2d2571936da259d465c5
   - id: KQ-014
     path: docs/status/milestones/KQ-014.json
     sha256: 1d29dbaca182957965eb19120b54274df2cd6789a27cae790cea2245d53d3f59
   explanation: Only registry-Passed milestones with a matching passing status artifact are imported. Evidence-backed imports
     are listed above.
 capacity:
-  committed_milestone_hours: 20
+  committed_milestone_hours: 16
   review_synthesis_replan_overhead_hours: 16
-  committed_scheduled_hours: 36
+  committed_scheduled_hours: 32
   committed_capacity_hours: 134
-  uncommitted_capacity_hours: 98
+  uncommitted_capacity_hours: 102
 review_synthesis_constraints:
   reserved_worker_id: W4
   rule: W4 receives no milestone mutation assignment and remains the review/synthesis slot.
@@ -137,24 +141,8 @@ bands:
     - KQ-013
     - KQ-014
     - KQ-015
-    hours: 20
+    hours: 16
     schedule:
-    - id: KQ-010
-      title: Build traceability link validator
-      hours: 4
-      dependencies:
-      - KQ-003
-      - KQ-004
-      unsatisfied_ancestor_closure_at_wave_start: []
-      required_capability: code_and_architecture
-      worker_id: W1
-      mutation_lane: A
-      start_condition: all dependencies have an accepted passing or controlled-skip disposition
-      window:
-        start_productive_hour: 0
-        finish_productive_hour: 4
-        earliest_start_day: 1
-        latest_finish_day: 1
     - id: KQ-012
       title: Create research-question workflow
       hours: 4
@@ -162,7 +150,7 @@ bands:
       - KQ-008
       unsatisfied_ancestor_closure_at_wave_start: []
       required_capability: program_contracts
-      worker_id: W3
+      worker_id: W1
       mutation_lane: null
       start_condition: all dependencies have an accepted passing or controlled-skip disposition
       window:
@@ -196,10 +184,10 @@ bands:
       mutation_lane: null
       start_condition: all dependencies have an accepted passing or controlled-skip disposition
       window:
-        start_productive_hour: 4
-        finish_productive_hour: 7
+        start_productive_hour: 0
+        finish_productive_hour: 3
         earliest_start_day: 1
-        latest_finish_day: 2
+        latest_finish_day: 1
     - id: KQ-015
       title: Phase A integration gate
       hours: 6
@@ -215,7 +203,6 @@ bands:
       - KQ-013
       - KQ-014
       unsatisfied_ancestor_closure_at_wave_start:
-      - KQ-010
       - KQ-011
       - KQ-012
       - KQ-013
@@ -224,10 +211,10 @@ bands:
       mutation_lane: null
       start_condition: all dependencies have an accepted passing or controlled-skip disposition
       window:
-        start_productive_hour: 7
-        finish_productive_hour: 13
-        earliest_start_day: 2
-        latest_finish_day: 3
+        start_productive_hour: 4
+        finish_productive_hour: 10
+        earliest_start_day: 1
+        latest_finish_day: 2
   probable:
     ids:
     - KQ-016
@@ -3089,7 +3076,7 @@ bands:
       - KQ-170
       - KQ-171
       - KQ-172
-      unsatisfied_ancestor_count_at_wave_start: 109
+      unsatisfied_ancestor_count_at_wave_start: 108
       required_capability: research_and_docs
       worker_id: null
       mutation_lane: null
@@ -3111,7 +3098,7 @@ bands:
       - KQ-157
       - KQ-165
       - KQ-173
-      unsatisfied_ancestor_count_at_wave_start: 160
+      unsatisfied_ancestor_count_at_wave_start: 159
       required_capability: research_and_docs
       worker_id: null
       mutation_lane: null
@@ -3128,7 +3115,7 @@ bands:
       - KQ-060
       - KQ-074
       - KQ-174
-      unsatisfied_ancestor_count_at_wave_start: 162
+      unsatisfied_ancestor_count_at_wave_start: 161
       required_capability: research_and_docs
       worker_id: null
       mutation_lane: null

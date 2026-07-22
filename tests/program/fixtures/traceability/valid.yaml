@@ -1,0 +1,13 @@
+schema_version: 1
+bundle_id: TRACE-FIXTURE-MINIMAL
+nodes:
+- {id: EVD-FIXTURE-001, type: evidence, status: active, path: docs/program/EXECUTION_SEMANTICS_AND_FIXTURES.md}
+- {id: CLM-FIXTURE-001, type: claim, status: active}
+- {id: MET-FIXTURE-001, type: metric, status: active}
+- {id: GAT-FIXTURE-001, type: gate, status: active}
+- {id: PRT-FIXTURE-001, type: protocol, status: active}
+links:
+- {type: claim_evidence, from: CLM-FIXTURE-001, to: EVD-FIXTURE-001}
+- {type: metric_claim, from: MET-FIXTURE-001, to: CLM-FIXTURE-001}
+- {type: gate_metric, from: GAT-FIXTURE-001, to: MET-FIXTURE-001}
+- {type: protocol_gate, from: PRT-FIXTURE-001, to: GAT-FIXTURE-001}

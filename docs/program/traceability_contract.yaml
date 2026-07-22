@@ -1,0 +1,25 @@
+schema_version: 1
+contract_id: expanded-10-traceability-bootstrap-v1
+coverage: bootstrap_partial
+coverage_claim: Validator and fixtures are executable; canonical Expanded-10 scientific node migration is not complete.
+canonical_sources:
+- {node_type: evidence, path: docs/research/evidence_registry.yaml, status: planned, owner_milestone: KQ-012}
+- {node_type: claim, path: docs/claims/claim_registry.yaml, status: planned, owner_milestone: KQ-012}
+- {node_type: metric, path: docs/traceability/metric_traceability.yaml, status: planned, owner_milestone: KQ-029}
+- {node_type: gate, path: docs/validation/gate_registry.yaml, status: planned, owner_milestone: KQ-036}
+- {node_type: protocol, path: docs/protocols, status: planned, owner_milestone: KQ-026}
+bootstrap_bundle: tests/program/fixtures/traceability/valid.yaml
+node_types: [evidence, claim, metric, gate, protocol]
+active_statuses: [active, accepted, public]
+inactive_statuses: [planned, blocked, rejected, retired]
+typed_links:
+  claim_evidence: {from: claim, to: evidence}
+  metric_claim: {from: metric, to: claim}
+  gate_metric: {from: gate, to: metric}
+  protocol_gate: {from: protocol, to: gate}
+rules:
+- IDs are unique across the complete bundle.
+- Active nodes cannot be orphaned from their required typed links.
+- Unknown targets, wrong namespaces, duplicate links, and missing referenced paths fail closed.
+- Planned canonical sources may be absent; if present they must validate before coverage can advance.
+- GATE_PASS is a result code and is forbidden as a gate node ID.

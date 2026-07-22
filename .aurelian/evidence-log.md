@@ -76,6 +76,13 @@
 - Isolation: unresolved direct resources remain external-wait, while unrelated dependency-ready work continues.
 - Verification: KQ-014's four predicates, schedule regeneration/verification, capacity/dependency corruption tests, and status-compiler alignment passed; the next committed node is KQ-010.
 
+## 2026-07-21 — Expanded-10 KQ-010 traceability validator
+
+- Contract: typed evidence, claim, metric, gate, and protocol nodes use closed link namespaces; unknown endpoints, wrong namespaces, duplicate IDs/links, missing paths, `GATE_PASS` as a node, and active orphans fail closed.
+- Coverage boundary: canonical Expanded-10 coverage remains `bootstrap_partial`; planned registries may be absent and no nodes were inferred from Markdown or fabricated.
+- Focused baseline: existing local traceability/claims/freeze behavior passed 3 files and 9 tests, establishing compatibility rather than canonical cross-registry completeness.
+- Verification: bootstrap plus four validator tests pass; full program and web/build results are recorded in KQ-010 evidence. No protocol availability or scientific gate changed.
+
 
 ## 2026-07-15 — Phase 4 P4-M00 reconciliation
 

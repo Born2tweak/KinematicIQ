@@ -1,0 +1,10 @@
+schema_version: 1
+milestone_id: KQ-010
+contract: docs/program/traceability_contract.yaml
+validator: tools/program/validate_traceability.py
+coverage: bootstrap_partial
+canonical_migration_complete: false
+reason: Canonical evidence, claim, metric-traceability, gate, and protocol package registries are still owned by later milestones.
+assertions:
+- id: KQ-010-OUTCOME
+  actual: Broken or orphan evidence/claim/metric/gate links fail CI

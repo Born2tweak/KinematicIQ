@@ -953,7 +953,7 @@ milestones:
   title: Build traceability link validator
   phase: A
   class: parallel_enabler
-  milestone_status: Pending
+  milestone_status: Passed
   expected_work_hours: 4
   objective: 'Produce and verify one bounded outcome: Build traceability link validator.'
   user_visible_outcome: none
@@ -1008,6 +1008,10 @@ milestones:
     expected:
       failed_tests: 0
       build_exit_code: 0
+  - id: KQ-010-A6
+    predicate: command_exit_code_equals
+    command_id: traceability_links
+    expected: 0
   verification:
     profile: web_and_program_regression
     automated:
@@ -1020,6 +1024,8 @@ milestones:
       command: npm --prefix web test -- --run --reporter=dot
     - id: web_production_build
       command: npm --prefix web run build
+    - id: traceability_links
+      command: python tools/program/validate_traceability.py --contract docs/program/traceability_contract.yaml
     manual_gate: null
     clean_clone_required: false
   failure:
