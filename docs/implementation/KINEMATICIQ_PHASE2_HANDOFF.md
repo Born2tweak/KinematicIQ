@@ -1,5 +1,7 @@
 # KinematicIQ Phase 2 Living Handoff
 
+> **HISTORICAL AUTHORITY NOTICE:** Retained as Phase 2 evidence only. Current execution authority is `KINEMATICIQ_MASTER_EXECUTION_ROADMAP.md`, `docs/program/milestone_registry.yaml`, and `docs/status/program_status.json`.
+
 **Range:** M79-M98
 **Current milestone:** Phase 2 autonomous work complete; external validation pending
 **Protocol availability:** squat only

@@ -90,6 +90,13 @@
 - Evidence boundary: the jump record is labeled orchestration-only, cannot claim scientific evidence or a completed evidence pack, and changes no completed nodes or public claims.
 - Verification: positive workflow plus negative missing-exit and fabricated-evidence tests pass within the 42-test program suite; KQ-012's four predicates pass.
 
+## 2026-07-21 — Expanded-10 KQ-011 stale-authority detector
+
+- Notices: Phase 2, Phase 3, and Phase 4 roadmaps/handoffs are explicitly retained as historical evidence and point to the current master roadmap, milestone registry, and compiled status.
+- Detector: current/historical overlap, missing current authorities, missing opening notices, or notices lacking any required target fail closed.
+- Scientific continuity: superseding scheduling authority does not erase historical blockers; Phase 4 notices preserve Forward Lunge's unavailable disposition.
+- Verification: positive plus overlap/missing-notice tests pass within the 45-test program suite; full web/build regression and all six KQ-011 predicates pass.
+
 
 ## 2026-07-15 — Phase 4 P4-M00 reconciliation
 

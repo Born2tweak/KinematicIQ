@@ -1,0 +1,25 @@
+schema_version: 1
+milestone_id: KQ-011
+notice: HISTORICAL AUTHORITY NOTICE
+notice_scan_lines: 12
+current_authorities:
+- docs/implementation/KINEMATICIQ_MASTER_EXECUTION_ROADMAP.md
+- docs/implementation/NEXT_EXECUTION_PACKAGE.md
+- docs/program/milestone_registry.yaml
+- docs/status/program_status.json
+historical_documents:
+- docs/implementation/KINEMATICIQ_PHASE2_EXECUTION_ROADMAP.md
+- docs/implementation/KINEMATICIQ_PHASE2_HANDOFF.md
+- docs/implementation/KINEMATICIQ_PHASE3_EXECUTION_ROADMAP.md
+- docs/implementation/KINEMATICIQ_PHASE3_HANDOFF.md
+- docs/implementation/PHASE_4_EVIDENCE_CLOSURE_ROADMAP.md
+- docs/implementation/PHASE_4_HANDOFF.md
+rules:
+- current and historical authority sets are disjoint
+- every current authority exists and is nonempty
+- every historical document carries the notice in its opening lines
+- historical notices point to the master roadmap, milestone registry, and compiled status
+- historical scientific blockers remain binding despite superseded scheduling authority
+assertions:
+- id: KQ-011-OUTCOME
+  actual: Older roadmaps cannot masquerade as current status

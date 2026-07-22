@@ -1,5 +1,7 @@
 # Phase 4 evidence-closure handoff
 
+> **HISTORICAL AUTHORITY NOTICE:** Retained as Phase 4 evidence only. Current execution authority is `KINEMATICIQ_MASTER_EXECUTION_ROADMAP.md`, `docs/program/milestone_registry.yaml`, and `docs/status/program_status.json`; this handoff cannot authorize Forward Lunge availability.
+
 Phase 4 autonomous engineering work is complete through P4-M14. Scientific and human gates are not complete. The binding availability disposition is ADR-016: Forward Lunge remains unavailable; Squat remains the only available protocol.
 
 ## Delivered engineering substrate

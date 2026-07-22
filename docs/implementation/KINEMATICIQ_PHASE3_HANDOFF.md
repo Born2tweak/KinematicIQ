@@ -2,6 +2,8 @@
 
 > **Superseded for current authority (2026-07-15):** Phase 3 remains the authoritative implementation evidence at `f49558e`, but Phase 4 P4-M00 supersedes the movement name and next-step framing. The runtime is an unavailable experimental seam for **Forward lunge with stride and return**. `inlineLunge` is deprecated historical terminology pending the additive P4-M01 migration. Squat remains the only available protocol. The 2026-07-15 reproduction found 576 passed and 4 skipped tests (580 total) and 86.15% statement coverage; the earlier session figures below remain historical evidence, not current reproduced results.
 
+> **HISTORICAL AUTHORITY NOTICE:** Retained as Phase 3 evidence only. Current execution authority is `KINEMATICIQ_MASTER_EXECUTION_ROADMAP.md`, `docs/program/milestone_registry.yaml`, and `docs/status/program_status.json`.
+
 **Range:** M99-M115
 **Current milestone:** M115 autonomous work complete; external validation pending
 **Protocol availability:** squat only; inline lunge is planned/research-only

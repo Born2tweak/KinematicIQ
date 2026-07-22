@@ -3,7 +3,7 @@ program_id: kinematiciq-expanded-10
 wave_id: expanded-10-wave-1
 sources:
   milestone_registry: docs/program/milestone_registry.yaml
-  milestone_registry_sha256: ef0b425d494cb2efa0d05dcac8efdb9100fa23c1f606084378f8efcb871a7ce2
+  milestone_registry_sha256: ef00c4e830c08435644da8ce59bf192ab018c6305853c9456fcb744d620f4a62
   resource_registry: docs/program/resource_registry.yaml
   resource_registry_sha256: b10c001806da017f3f0876a77eb8db34c82870bc745140f8b9b9afc0c56a4c22
   execution_policy: docs/program/execution_policy.yaml
@@ -52,6 +52,7 @@ imported_satisfied:
   - KQ-008
   - KQ-009
   - KQ-010
+  - KQ-011
   - KQ-012
   - KQ-014
   evidence:
@@ -85,6 +86,9 @@ imported_satisfied:
   - id: KQ-010
     path: docs/status/milestones/KQ-010.json
     sha256: 75ea07987461c4ab21a13afec4aaf7129c388b7bd98f2d2571936da259d465c5
+  - id: KQ-011
+    path: docs/status/milestones/KQ-011.json
+    sha256: c668a8cd9917c4db124f3263e347a0b5adcf9901c7aaf3f10e3b604e1ab55bca
   - id: KQ-012
     path: docs/status/milestones/KQ-012.json
     sha256: 2b10430f27fa752361d9a414907890f339ceab2279d5a8b0aa9fa0b2760021c6
@@ -94,11 +98,11 @@ imported_satisfied:
   explanation: Only registry-Passed milestones with a matching passing status artifact are imported. Evidence-backed imports
     are listed above.
 capacity:
-  committed_milestone_hours: 12
+  committed_milestone_hours: 9
   review_synthesis_replan_overhead_hours: 16
-  committed_scheduled_hours: 28
+  committed_scheduled_hours: 25
   committed_capacity_hours: 134
-  uncommitted_capacity_hours: 106
+  uncommitted_capacity_hours: 109
 review_synthesis_constraints:
   reserved_worker_id: W4
   rule: W4 receives no milestone mutation assignment and remains the review/synthesis slot.
@@ -145,23 +149,8 @@ bands:
     - KQ-013
     - KQ-014
     - KQ-015
-    hours: 12
+    hours: 9
     schedule:
-    - id: KQ-011
-      title: Build stale-authority detector
-      hours: 3
-      dependencies:
-      - KQ-009
-      unsatisfied_ancestor_closure_at_wave_start: []
-      required_capability: code_and_architecture
-      worker_id: W1
-      mutation_lane: A
-      start_condition: all dependencies have an accepted passing or controlled-skip disposition
-      window:
-        start_productive_hour: 0
-        finish_productive_hour: 3
-        earliest_start_day: 1
-        latest_finish_day: 1
     - id: KQ-013
       title: Create automatic checkpoint generator
       hours: 3
@@ -192,7 +181,6 @@ bands:
       - KQ-013
       - KQ-014
       unsatisfied_ancestor_closure_at_wave_start:
-      - KQ-011
       - KQ-013
       required_capability: research_and_docs
       worker_id: W3
@@ -3064,7 +3052,7 @@ bands:
       - KQ-170
       - KQ-171
       - KQ-172
-      unsatisfied_ancestor_count_at_wave_start: 107
+      unsatisfied_ancestor_count_at_wave_start: 106
       required_capability: research_and_docs
       worker_id: null
       mutation_lane: null
@@ -3086,7 +3074,7 @@ bands:
       - KQ-157
       - KQ-165
       - KQ-173
-      unsatisfied_ancestor_count_at_wave_start: 158
+      unsatisfied_ancestor_count_at_wave_start: 157
       required_capability: research_and_docs
       worker_id: null
       mutation_lane: null
@@ -3103,7 +3091,7 @@ bands:
       - KQ-060
       - KQ-074
       - KQ-174
-      unsatisfied_ancestor_count_at_wave_start: 160
+      unsatisfied_ancestor_count_at_wave_start: 159
       required_capability: research_and_docs
       worker_id: null
       mutation_lane: null

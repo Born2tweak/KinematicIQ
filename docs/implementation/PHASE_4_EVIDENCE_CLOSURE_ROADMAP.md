@@ -1,6 +1,8 @@
 # Phase 4 Evidence-Closure Execution Roadmap
 
 > **Repository-status reconciliation (2026-07-15):** The `8d8a77d` observations below were historically correct. `master` has now been fast-forwarded without conflict through the five pushed Phase 2/3 commits to the authoritative implementation frontier `f49558e`. That commit contains the unavailable experimental six-state seam in `web/src/protocols/inlineLunge/`; it does not provide participant validity, synchronized evidence, live/upload/session/results integration, coaching authority, or availability. Squat remains the only available protocol. Current naming and milestone authority comes from ADR-011 through ADR-015 and the canonical Phase 4 package index.
+> **HISTORICAL AUTHORITY NOTICE:** Retained as evidence of the P4-M00-P4-M14 closure plan. Current execution authority is `KINEMATICIQ_MASTER_EXECUTION_ROADMAP.md`, `docs/program/milestone_registry.yaml`, and `docs/status/program_status.json`; the recorded Forward Lunge blocker remains binding.
+
 **Status:** proposed execution sequence; no milestone in this document is implemented or authorized by the document itself
 **Repository baselines reconciled:** fetched `master`/`origin/master` remain at `8d8a77d`; the current-repository audit verifies the unavailable prototype five commits ahead at `f49558e` on `agent/phase2-runtime-and-validation`. The Phase 4 research package is basis-correct for `8d8a77d` and must not be used to erase the later branch evidence.
 **Protocol availability at baseline:** `squat` only; the `inlineLunge` research seam is executable offline but is not a public `ProtocolRuntime`

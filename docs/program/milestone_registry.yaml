@@ -1064,7 +1064,7 @@ milestones:
   title: Build stale-authority detector
   phase: A
   class: deferred_hardening
-  milestone_status: Pending
+  milestone_status: Passed
   expected_work_hours: 3
   objective: 'Produce and verify one bounded outcome: Build stale-authority detector.'
   user_visible_outcome: none
@@ -1115,6 +1115,10 @@ milestones:
     expected:
       failed_tests: 0
       build_exit_code: 0
+  - id: KQ-011-A6
+    predicate: command_exit_code_equals
+    command_id: stale_authority
+    expected: 0
   verification:
     profile: web_and_program_regression
     automated:
@@ -1127,6 +1131,8 @@ milestones:
       command: npm --prefix web test -- --run --reporter=dot
     - id: web_production_build
       command: npm --prefix web run build
+    - id: stale_authority
+      command: python tools/program/verify_authority.py --manifest docs/program/artifacts/kq-011.yaml
     manual_gate: null
     clean_clone_required: false
   failure:

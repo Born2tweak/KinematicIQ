@@ -1,5 +1,7 @@
 # KinematicIQ Phase 3 Execution Roadmap
 
+> **HISTORICAL AUTHORITY NOTICE:** Retained as evidence of the M99-M115 plan. Current execution authority is `KINEMATICIQ_MASTER_EXECUTION_ROADMAP.md`, `docs/program/milestone_registry.yaml`, and `docs/status/program_status.json`; do not derive new work from this file.
+
 **Range:** M99-M115
 **Objective:** implement inline lunge as the first executable non-squat research protocol without making it available.
 **Availability invariant:** `squat` is the only available protocol until every external gate passes and the owner explicitly authorizes activation.

@@ -1,5 +1,7 @@
 # KinematicIQ Phase 2 Execution Roadmap — M79-M98
 
+> **HISTORICAL AUTHORITY NOTICE:** Retained as evidence of the M79-M98 plan. Current execution authority is `KINEMATICIQ_MASTER_EXECUTION_ROADMAP.md`, `docs/program/milestone_registry.yaml`, and `docs/status/program_status.json`; do not derive new work from this file.
+
 **Issued:** 2026-07-12
 **Authority:** Phase 2 Universal Movement Intelligence brief; ADR-001 through
 ADR-010; M61-M78 evidence package

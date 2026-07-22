@@ -22,18 +22,16 @@
   },
   "milestones": {
     "committed_wave_ready_ids": [
-      "KQ-011",
       "KQ-013"
     ],
     "dependency_ready_ids": [
-      "KQ-011",
       "KQ-013",
       "KQ-016",
       "KQ-017",
       "KQ-026",
       "KQ-056"
     ],
-    "next_executable_id": "KQ-011",
+    "next_executable_id": "KQ-013",
     "resource_blocked": {
       "KQ-051": [
         "RES-RATER"
@@ -208,8 +206,8 @@
       ]
     },
     "status_counts": {
-      "Passed": 12,
-      "Pending": 163
+      "Passed": 13,
+      "Pending": 162
     },
     "total": 175
   },
@@ -233,9 +231,9 @@
   },
   "schema_version": 1,
   "source_hashes": {
-    "docs/program/WAVE_1_SCHEDULE.yaml": "fd1c23c577378fccd509572c5381d699c848f4da1bdeb0e026506aa334b4f73e",
+    "docs/program/WAVE_1_SCHEDULE.yaml": "695dd48313a8efe999457eb74d1b75650103d0f9ce4e63fcd5b2e6ac5b1331de",
     "docs/program/artifacts/kq-002.yaml": "0edebef1244c10ba4a716c9af3fe795ed815367cee49ba2a2488e6fb21136ff9",
-    "docs/program/milestone_registry.yaml": "ef0b425d494cb2efa0d05dcac8efdb9100fa23c1f606084378f8efcb871a7ce2",
+    "docs/program/milestone_registry.yaml": "ef00c4e830c08435644da8ce59bf192ab018c6305853c9456fcb744d620f4a62",
     "docs/program/resource_registry.yaml": "b10c001806da017f3f0876a77eb8db34c82870bc745140f8b9b9afc0c56a4c22"
   }
 }
