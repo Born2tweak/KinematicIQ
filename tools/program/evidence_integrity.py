@@ -4,6 +4,7 @@ import hashlib
 import json
 import platform
 import re
+import shutil
 import subprocess
 from datetime import datetime, timezone
 from pathlib import Path
@@ -36,8 +37,11 @@ class EvidenceIntegrityError(ValueError):
 
 
 def _run(root: Path, *args: str) -> str:
+    command = list(args)
+    if command and command[0] == "npm":
+        command[0] = shutil.which("npm.cmd") or shutil.which("npm") or "npm"
     result = subprocess.run(
-        [*args], cwd=root, check=True, capture_output=True, text=True
+        command, cwd=root, check=True, capture_output=True, text=True
     )
     return result.stdout.strip()
 
