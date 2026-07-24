@@ -1426,7 +1426,7 @@ milestones:
     - id: targeted_contract_checks
       command: python tools/program/run_contract_checks.py --id KQ-014 --evidence-out docs/status/milestones/KQ-014.json
     - id: schedule_contract
-      command: python tools/program/schedule_wave.py --verify
+      command: python tools/program/transition_wave.py --verify
     manual_gate: null
     clean_clone_required: false
   failure:

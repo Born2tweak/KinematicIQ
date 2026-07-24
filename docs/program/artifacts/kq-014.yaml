@@ -1,8 +1,8 @@
 schema_version: 1
 milestone_id: KQ-014
-scheduler: tools/program/schedule_wave.py
+scheduler: tools/program/transition_wave.py
 policy: docs/program/execution_policy.yaml
-manifest: docs/program/WAVE_1_SCHEDULE.yaml
+manifest: docs/program/ACTIVE_WAVE.yaml
 selection_contract:
   readiness: dependency acceptance plus scoped resource readiness
   leverage: longest remaining committed dependency tail then stable milestone ID

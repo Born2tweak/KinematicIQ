@@ -54,7 +54,7 @@ def main() -> int:
             ["python", "-m", "pip", "install", "-r", "requirements-program.txt"],
             ["python", "tools/program/verify_milestone.py", "--structure-only"],
             ["python", "-m", "unittest", "discover", "-s", "tests/program", "-p", "test_*.py", "-v"],
-            ["python", "tools/program/schedule_wave.py", "--verify", "--output", "docs/program/WAVE_1_SCHEDULE.yaml"],
+            ["python", "tools/program/transition_wave.py", "--verify"],
             ["python", "tools/program/transition_wave.py", "--verify", "--output", "docs/program/ACTIVE_WAVE.yaml"],
             ["python", "tools/program/compile_evidence_validity.py", "--verify"],
             evidence_command,

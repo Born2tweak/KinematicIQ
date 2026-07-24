@@ -9,17 +9,29 @@
     ]
   },
   "milestones": {
-    "allowed_executable_ids": [],
-    "committed_wave_ready_ids": [],
-    "dependency_ready_ids": [],
+    "allowed_executable_ids": [
+      "KQ-016",
+      "KQ-017"
+    ],
+    "committed_wave_ready_ids": [
+      "KQ-016",
+      "KQ-017",
+      "KQ-026"
+    ],
+    "dependency_ready_ids": [
+      "KQ-016",
+      "KQ-017",
+      "KQ-026",
+      "KQ-056"
+    ],
     "evidence_validity_counts": {
-      "Current": 0,
+      "Current": 13,
       "Invalidated": 0,
       "Retired": 0,
-      "ReverificationRequired": 15,
+      "ReverificationRequired": 2,
       "Superseded": 0
     },
-    "next_executable_id": null,
+    "next_executable_id": "KQ-016",
     "resource_blocked": {
       "KQ-051": [
         "RES-RATER"
@@ -221,8 +233,8 @@
   "source_hashes": {
     "docs/program/ACTIVE_WAVE.yaml": "3c1e633f0274a4496cebfbc72174e21d9e637c23533ec2ed914df0b2ee82cd08",
     "docs/program/artifacts/kq-002.yaml": "636f533ffca7bf54503819e76ed9ed844c75c76be4c5bd653252a2c74018f0b1",
-    "docs/program/milestone_registry.yaml": "8a3f2d26b2fefedd71b0f5942bd8e4b4edc2e34b5709910afe14cdfb41c0ded7",
+    "docs/program/milestone_registry.yaml": "e7a9675d08fc4554b4e6fc37fe4626ce6b35a86ddf4c398317a3803a6d8f21d2",
     "docs/program/resource_registry.yaml": "b10c001806da017f3f0876a77eb8db34c82870bc745140f8b9b9afc0c56a4c22",
-    "docs/status/evidence_validity.json": "f54af8748402c68692d6585513a0efeaaeb518b3dc0905b7b9676070b4f50446"
+    "docs/status/evidence_validity.json": "971b702a85ef7db0f367d270e00b2a7a1d57396408ceef3f23b5899b24bf476b"
   }
 }
