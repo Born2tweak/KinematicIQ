@@ -1,12 +1,15 @@
 from __future__ import annotations
 
 import hashlib
+import io
 import json
 import platform
 import re
 import shutil
 import subprocess
+import tarfile
 from datetime import datetime, timezone
+from functools import lru_cache
 from pathlib import Path
 from typing import Any, Iterable
 
@@ -65,16 +68,39 @@ def canonical_hash(path: Path) -> str:
     return hashlib.sha256(canonical_bytes(path)).hexdigest()
 
 
-def git_blob_hash(root: Path, commit: str, path: str) -> str:
+@lru_cache(maxsize=None)
+def _git_tree_hashes(root: Path, commit: str) -> dict[str, str]:
+    """Read and canonically hash a committed tree with one Git process."""
     result = subprocess.run(
-        ["git", "show", f"{commit}:{path}"],
+        ["git", "archive", "--format=tar", commit],
         cwd=root,
         check=True,
         capture_output=True,
     )
-    return hashlib.sha256(
-        canonical_content(result.stdout, Path(path).suffix)
-    ).hexdigest()
+    hashes: dict[str, str] = {}
+    with tarfile.open(fileobj=io.BytesIO(result.stdout), mode="r:") as archive:
+        for member in archive.getmembers():
+            if not member.isfile():
+                continue
+            stream = archive.extractfile(member)
+            if stream is None:
+                continue
+            hashes[member.name] = hashlib.sha256(
+                canonical_content(stream.read(), Path(member.name).suffix)
+            ).hexdigest()
+    return hashes
+
+
+def git_blob_hash(root: Path, commit: str, path: str) -> str:
+    """Hash one committed path from the process-cached tree.
+
+    Milestone scopes intentionally overlap. Loading one archive per subject
+    commit avoids thousands of identical Git subprocesses on Windows.
+    """
+    hashes = _git_tree_hashes(root.resolve(), commit)
+    if path not in hashes:
+        raise subprocess.CalledProcessError(128, ["git", "archive", commit, path])
+    return hashes[path]
 
 
 def canonical_json_hash(value: Any) -> str:
@@ -269,9 +295,13 @@ def verify_record(
         errors.append("milestone ID mismatch")
     if record["milestone_contract_sha256"] != canonical_json_hash(milestone):
         errors.append("milestone contract is stale")
-    expected_tree = git_output(root, "rev-parse", f"{record['subject_commit']}^{{tree}}")
-    if record["subject_tree"] != expected_tree:
-        errors.append("subject tree does not match subject commit")
+    try:
+        expected_tree = git_output(root, "rev-parse", f"{record['subject_commit']}^{{tree}}")
+    except subprocess.CalledProcessError:
+        errors.append("subject commit is missing or invalid")
+    else:
+        if record["subject_tree"] != expected_tree:
+            errors.append("subject tree does not match subject commit")
     scope = record["scope"]
     if scope.get("kind") not in {"whole_tree", "affected_paths", "control_only"}:
         errors.append("unknown validity scope")

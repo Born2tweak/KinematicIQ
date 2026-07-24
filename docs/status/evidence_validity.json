@@ -3,51 +3,51 @@
   "schema_version": 1,
   "states": {
     "KQ-001": {
-      "event_id": null,
-      "evidence_id": "legacy:KQ-001",
-      "reason": "Legacy evidence has not been migrated to evidence schema v2.",
+      "event_id": "VAL-KQ-001-V2-CURRENT",
+      "evidence_id": "KQ-001-5993a6d48a3f",
+      "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
       "validity": "ReverificationRequired"
     },
     "KQ-002": {
-      "event_id": null,
-      "evidence_id": "legacy:KQ-002",
-      "reason": "Legacy evidence has not been migrated to evidence schema v2.",
+      "event_id": "VAL-KQ-002-V2-CURRENT",
+      "evidence_id": "KQ-002-5993a6d48a3f",
+      "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
       "validity": "ReverificationRequired"
     },
     "KQ-003": {
-      "event_id": null,
-      "evidence_id": "legacy:KQ-003",
-      "reason": "Legacy evidence has not been migrated to evidence schema v2.",
+      "event_id": "VAL-KQ-003-V2-CURRENT",
+      "evidence_id": "KQ-003-5993a6d48a3f",
+      "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
       "validity": "ReverificationRequired"
     },
     "KQ-004": {
-      "event_id": null,
-      "evidence_id": "legacy:KQ-004",
-      "reason": "Legacy evidence has not been migrated to evidence schema v2.",
+      "event_id": "VAL-KQ-004-V2-CURRENT",
+      "evidence_id": "KQ-004-5993a6d48a3f",
+      "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
       "validity": "ReverificationRequired"
     },
     "KQ-005": {
-      "event_id": null,
-      "evidence_id": "legacy:KQ-005",
-      "reason": "Legacy evidence has not been migrated to evidence schema v2.",
+      "event_id": "VAL-KQ-005-V2-CURRENT",
+      "evidence_id": "KQ-005-5993a6d48a3f",
+      "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
       "validity": "ReverificationRequired"
     },
     "KQ-006": {
-      "event_id": null,
-      "evidence_id": "legacy:KQ-006",
-      "reason": "Legacy evidence has not been migrated to evidence schema v2.",
+      "event_id": "VAL-KQ-006-V2-CURRENT",
+      "evidence_id": "KQ-006-5993a6d48a3f",
+      "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
       "validity": "ReverificationRequired"
     },
     "KQ-007": {
-      "event_id": null,
-      "evidence_id": "legacy:KQ-007",
-      "reason": "Legacy evidence has not been migrated to evidence schema v2.",
+      "event_id": "VAL-KQ-007-V2-CURRENT",
+      "evidence_id": "KQ-007-5993a6d48a3f",
+      "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
       "validity": "ReverificationRequired"
     },
     "KQ-008": {
-      "event_id": null,
-      "evidence_id": "legacy:KQ-008",
-      "reason": "Legacy evidence has not been migrated to evidence schema v2.",
+      "event_id": "VAL-KQ-008-V2-CURRENT",
+      "evidence_id": "KQ-008-5993a6d48a3f",
+      "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
       "validity": "ReverificationRequired"
     },
     "KQ-009": {
@@ -116,5 +116,38 @@
     ],
     "Superseded": []
   },
-  "verification_errors": {}
+  "verification_errors": {
+    "KQ-001": [
+      "input is missing or stale: tools/program/evidence_integrity.py",
+      "input is missing or stale: tools/program/run_contract_checks.py"
+    ],
+    "KQ-002": [
+      "input is missing or stale: tools/program/evidence_integrity.py",
+      "input is missing or stale: tools/program/run_contract_checks.py"
+    ],
+    "KQ-003": [
+      "input is missing or stale: tools/program/evidence_integrity.py",
+      "input is missing or stale: tools/program/run_contract_checks.py"
+    ],
+    "KQ-004": [
+      "input is missing or stale: tools/program/evidence_integrity.py",
+      "input is missing or stale: tools/program/run_contract_checks.py"
+    ],
+    "KQ-005": [
+      "input is missing or stale: tools/program/evidence_integrity.py",
+      "input is missing or stale: tools/program/run_contract_checks.py"
+    ],
+    "KQ-006": [
+      "input is missing or stale: tools/program/evidence_integrity.py",
+      "input is missing or stale: tools/program/run_contract_checks.py"
+    ],
+    "KQ-007": [
+      "input is missing or stale: tools/program/evidence_integrity.py",
+      "input is missing or stale: tools/program/run_contract_checks.py"
+    ],
+    "KQ-008": [
+      "input is missing or stale: tools/program/evidence_integrity.py",
+      "input is missing or stale: tools/program/run_contract_checks.py"
+    ]
+  }
 }

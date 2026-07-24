@@ -15,7 +15,10 @@ from program_contract import (
 from evidence_integrity import (
     build_record,
     evidence_path,
+    git_output,
     latest_records_by_milestone,
+    load_records,
+    verify_record,
     write_json,
 )
 from execution_authority import ExecutionAuthorityError, assert_executable
@@ -43,6 +46,29 @@ def main() -> int:
         except ExecutionAuthorityError as error:
             print_errors([str(error)])
             return 1
+    subject_commit = git_output(program.root, "rev-parse", "HEAD")
+    existing_path = evidence_path(
+        program.root,
+        milestone["id"],
+        f"{milestone['id']}-{subject_commit[:12]}",
+    )
+    if existing_path.is_file():
+        existing = json.loads(existing_path.read_text(encoding="utf-8"))
+        existing_errors = verify_record(
+            program.root,
+            milestone,
+            existing,
+            load_records(program.root),
+        )
+        if existing_errors:
+            print_errors([
+                f"{existing_path.relative_to(program.root)} is immutable but invalid; "
+                "commit the changed scope before producing replacement evidence.",
+                *existing_errors,
+            ])
+            return 1
+        print(existing_path.relative_to(program.root))
+        return 0
 
     schema_errors = validate_schema(program)
     semantic_errors = validate_semantics(program)

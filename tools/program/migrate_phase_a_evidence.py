@@ -9,9 +9,11 @@ from pathlib import Path
 
 from evidence_integrity import (
     VALIDITY_LOG,
+    compile_projection,
     latest_records_by_milestone,
     load_events,
 )
+from program_contract import load_program
 
 
 def _append_event(path: Path, event: dict) -> None:
@@ -29,13 +31,55 @@ def main() -> int:
     args = parser.parse_args()
     root = Path(__file__).resolve().parents[2]
     log_path = root / VALIDITY_LOG
-    existing_events = {event["event_id"] for event in load_events(root)}
+    events = load_events(root)
+    existing_events = {event["event_id"] for event in events}
+    event_states: dict[str, str | None] = {}
+    for event in events:
+        event_states[event["milestone_id"]] = event["to"]
+    program = load_program(
+        "docs/program/milestone_registry.yaml",
+        "docs/program/milestone_schema.yaml",
+        root,
+    )
+    projection = compile_projection(root, program.milestones)
     for number in range(1, args.through + 1):
         milestone_id = f"KQ-{number:03d}"
         migration_event = f"VAL-{milestone_id}-LEGACY-MIGRATION"
-        current_event = f"VAL-{milestone_id}-V2-CURRENT"
-        if current_event in existing_events:
+        if projection["states"].get(milestone_id, {}).get("validity") == "Current":
             continue
+        prior_state = event_states.get(milestone_id)
+        if prior_state != "ReverificationRequired":
+            now = datetime.now(timezone.utc).isoformat()
+            reverify_event = (
+                migration_event if prior_state is None
+                else f"VAL-{milestone_id}-REVERIFY-{now.replace(':', '').replace('+', '-')}"
+            )
+            if reverify_event not in existing_events:
+                _append_event(log_path, {
+                    "event_id": reverify_event,
+                    "milestone_id": milestone_id,
+                    "evidence_id": (
+                        f"legacy:{milestone_id}"
+                        if prior_state is None
+                        else projection["states"][milestone_id]["evidence_id"]
+                    ),
+                    "from": prior_state,
+                    "to": "ReverificationRequired",
+                    "trigger": (
+                        "evidence_schema_v2_migration"
+                        if prior_state is None
+                        else "live_provenance_validation_failed"
+                    ),
+                    "rationale": (
+                        "Legacy evidence is preserved as history but cannot satisfy current dependencies."
+                        if prior_state is None
+                        else "Previously current evidence no longer matches the live controller scope."
+                    ),
+                    "affected_scope": ["milestone_evidence", "downstream_dependencies"],
+                    "recorded_at": now,
+                })
+                existing_events.add(reverify_event)
+                event_states[milestone_id] = "ReverificationRequired"
         command = [
             sys.executable,
             "tools/program/run_contract_checks.py",
@@ -53,25 +97,15 @@ def main() -> int:
             return result.returncode
         record = latest_records_by_milestone(root)[milestone_id]
         now = datetime.now(timezone.utc).isoformat()
-        if migration_event not in existing_events:
-            _append_event(log_path, {
-                "event_id": migration_event,
-                "milestone_id": milestone_id,
-                "evidence_id": f"legacy:{milestone_id}",
-                "from": None,
-                "to": "ReverificationRequired",
-                "trigger": "evidence_schema_v2_migration",
-                "rationale": (
-                    "Legacy evidence is preserved as history but cannot satisfy current dependencies."
-                ),
-                "affected_scope": ["milestone_evidence", "downstream_dependencies"],
-                "recorded_at": now,
-            })
-            existing_events.add(migration_event)
+        current_event = f"VAL-{record['evidence_id']}-CURRENT"
         _append_event(log_path, {
             "event_id": current_event,
             "milestone_id": milestone_id,
-            "evidence_id": f"legacy:{milestone_id}",
+            "evidence_id": (
+                f"legacy:{milestone_id}"
+                if prior_state is None
+                else projection["states"][milestone_id]["evidence_id"]
+            ),
             "replacement_evidence_id": record["evidence_id"],
             "from": "ReverificationRequired",
             "to": "Current",
@@ -83,6 +117,7 @@ def main() -> int:
             "recorded_at": now,
         })
         existing_events.add(current_event)
+        event_states[milestone_id] = "Current"
         print(f"PASS: migrated {milestone_id} -> {record['evidence_id']}")
     return 0
 

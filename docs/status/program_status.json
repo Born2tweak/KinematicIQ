@@ -1,33 +1,24 @@
 {
   "authority": {
     "automatic_production_deploy": false,
-    "branch": "agent/expanded-10-revision-4",
+    "branch": "agent/evidence-integrity-wave-2",
     "committed_wave_ids": [
-      "KQ-001",
-      "KQ-002",
-      "KQ-003",
-      "KQ-004",
-      "KQ-005",
-      "KQ-006",
-      "KQ-007",
-      "KQ-008",
-      "KQ-009",
-      "KQ-010",
-      "KQ-011",
-      "KQ-012",
-      "KQ-013",
-      "KQ-014",
-      "KQ-015"
+      "KQ-016",
+      "KQ-017",
+      "KQ-026"
     ]
   },
   "milestones": {
+    "allowed_executable_ids": [],
     "committed_wave_ready_ids": [],
-    "dependency_ready_ids": [
-      "KQ-016",
-      "KQ-017",
-      "KQ-026",
-      "KQ-056"
-    ],
+    "dependency_ready_ids": [],
+    "evidence_validity_counts": {
+      "Current": 0,
+      "Invalidated": 0,
+      "Retired": 0,
+      "ReverificationRequired": 15,
+      "Superseded": 0
+    },
     "next_executable_id": null,
     "resource_blocked": {
       "KQ-051": [
@@ -228,9 +219,10 @@
   },
   "schema_version": 1,
   "source_hashes": {
-    "docs/program/WAVE_1_SCHEDULE.yaml": "041849699867efbfbe5f4f238715856d8ed0285a94a204b3ca0bc42dc9a8ba9e",
-    "docs/program/artifacts/kq-002.yaml": "0edebef1244c10ba4a716c9af3fe795ed815367cee49ba2a2488e6fb21136ff9",
-    "docs/program/milestone_registry.yaml": "7d240aaa9e84af69d178130929cb6da377aaeefa8de9597bccbba9a414aab2c2",
-    "docs/program/resource_registry.yaml": "b10c001806da017f3f0876a77eb8db34c82870bc745140f8b9b9afc0c56a4c22"
+    "docs/program/ACTIVE_WAVE.yaml": "3c1e633f0274a4496cebfbc72174e21d9e637c23533ec2ed914df0b2ee82cd08",
+    "docs/program/artifacts/kq-002.yaml": "636f533ffca7bf54503819e76ed9ed844c75c76be4c5bd653252a2c74018f0b1",
+    "docs/program/milestone_registry.yaml": "8a3f2d26b2fefedd71b0f5942bd8e4b4edc2e34b5709910afe14cdfb41c0ded7",
+    "docs/program/resource_registry.yaml": "b10c001806da017f3f0876a77eb8db34c82870bc745140f8b9b9afc0c56a4c22",
+    "docs/status/evidence_validity.json": "de8db5aad004f2559fb1faa4b548642bf403830dac2875a2b47f0228ff0b1bed"
   }
 }
