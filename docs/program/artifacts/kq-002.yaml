@@ -3,7 +3,7 @@ milestone_id: KQ-002
 charter_id: expanded-10-product-charter-v1
 authority:
   source: docs/implementation/KINEMATICIQ_MASTER_EXECUTION_ROADMAP.md
-  branch: agent/expanded-10-revision-4
+  branch: agent/evidence-integrity-wave-2
   production_deployment: separate_authority_required
   master_merge: separate_authority_required
 population:

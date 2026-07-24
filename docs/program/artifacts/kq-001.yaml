@@ -1,7 +1,7 @@
 schema_version: 1
 milestone_id: KQ-001
 subject_frontier:
-  branch: agent/expanded-10-revision-4
+  branch: agent/evidence-integrity-wave-2
   imported_head: 4c0dbad67720adef7b610d49126d63aa4b95dc30
   roadmap_status: canonical_candidate_repository_verification_pending
   application:

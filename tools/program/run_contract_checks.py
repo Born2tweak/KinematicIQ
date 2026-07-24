@@ -1,18 +1,24 @@
 from __future__ import annotations
 
 import argparse
+import json
 import subprocess
 from pathlib import Path
 
 from program_contract import (
-    evidence_record,
     load_program,
     milestone_artifact,
     print_errors,
     validate_schema,
     validate_semantics,
+)
+from evidence_integrity import (
+    build_record,
+    evidence_path,
+    latest_records_by_milestone,
     write_json,
 )
+from execution_authority import ExecutionAuthorityError, assert_executable
 
 
 def main() -> int:
@@ -22,6 +28,8 @@ def main() -> int:
     parser.add_argument("--schema", default="docs/program/milestone_schema.yaml")
     parser.add_argument("--evidence-out", required=True)
     parser.add_argument("--execute-declared", action="store_true")
+    parser.add_argument("--bootstrap-repair", action="store_true")
+    parser.add_argument("--command-cache")
     args = parser.parse_args()
 
     program = load_program(args.registry, args.schema)
@@ -29,6 +37,12 @@ def main() -> int:
     if milestone is None:
         print_errors([f"unknown milestone {args.milestone_id}"])
         return 1
+    if not args.bootstrap_repair:
+        try:
+            assert_executable(program.root, milestone["id"])
+        except ExecutionAuthorityError as error:
+            print_errors([str(error)])
+            return 1
 
     schema_errors = validate_schema(program)
     semantic_errors = validate_semantics(program)
@@ -51,23 +65,33 @@ def main() -> int:
     except (OSError, StopIteration, TypeError, ValueError) as error:
         checks.append({"id": "registry_owned_outcome", "passed": False, "detail": str(error)})
 
+    cache_path = Path(args.command_cache).resolve() if args.command_cache else None
+    command_cache = (
+        json.loads(cache_path.read_text(encoding="utf-8"))
+        if cache_path and cache_path.is_file()
+        else {}
+    )
     commands: dict[str, dict[str, object]] = {}
     if args.execute_declared:
         for item in milestone["verification"]["automated"]:
             if item["id"] in {"registry_contract", "targeted_contract_checks"}:
                 continue
-            result = subprocess.run(
-                item["command"], cwd=program.root, shell=True, capture_output=True, text=True
-            )
-            commands[item["id"]] = {
-                "exit_code": result.returncode,
-                "stdout": result.stdout,
-                "stderr": result.stderr,
-            }
+            if item["command"] not in command_cache:
+                result = subprocess.run(
+                    item["command"], cwd=program.root, shell=True, capture_output=True, text=True
+                )
+                command_cache[item["command"]] = {
+                    "exit_code": result.returncode,
+                    "stdout": result.stdout,
+                    "stderr": result.stderr,
+                }
+                if cache_path:
+                    write_json(cache_path, command_cache)
+            commands[item["id"]] = command_cache[item["command"]]
             checks.append({
                 "id": item["id"],
-                "passed": result.returncode == 0,
-                "detail": f"exit_code={result.returncode}",
+                "passed": commands[item["id"]]["exit_code"] == 0,
+                "detail": f"exit_code={commands[item['id']]['exit_code']}",
             })
 
     targeted_passed = all(item["passed"] for item in checks)
@@ -82,8 +106,20 @@ def main() -> int:
         "detail": f"exit_code={commands['targeted_contract_checks']['exit_code']}",
     })
 
-    evidence = evidence_record(program, milestone, checks, commands)
-    output_path = (program.root / Path(args.evidence_out)).resolve()
+    try:
+        evidence = build_record(
+            program.root,
+            milestone,
+            checks,
+            commands,
+            latest_records_by_milestone(program.root),
+        )
+    except ValueError as error:
+        print_errors([str(error)])
+        return 1
+    output_path = evidence_path(
+        program.root, milestone["id"], evidence["evidence_id"]
+    )
     write_json(output_path, evidence)
     if not evidence["all_required_checks_passed"]:
         print_errors(["one or more contract checks failed"])

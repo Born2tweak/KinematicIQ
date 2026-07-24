@@ -1,7 +1,7 @@
 schema_version: 1
 program_id: kinematiciq-expanded-10
 git:
-  work_branch: agent/expanded-10-revision-4
+  work_branch: agent/evidence-integrity-wave-2
   reconcile_from: master
   commit_trigger: milestone_verification_pass
   push_trigger: milestone_verification_pass

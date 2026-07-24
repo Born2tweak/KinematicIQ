@@ -20,11 +20,11 @@ class ReplanImpactTests(unittest.TestCase):
         cls.registry = yaml.safe_load((ROOT / "docs/program/milestone_registry.yaml").read_text(encoding="utf-8"))
         cls.schema = yaml.safe_load((ROOT / "docs/program/inflection_schema.yaml").read_text(encoding="utf-8"))
 
-    def test_fixture_is_deterministic_and_excludes_completed_seed(self) -> None:
+    def test_fixture_is_deterministic_and_reopens_completed_seed(self) -> None:
         first = compile_impact(self.event, self.registry, self.schema)
         second = compile_impact(self.event, self.registry, self.schema)
         self.assertEqual(first, second)
-        self.assertNotIn("KQ-006", first)
+        self.assertIn("KQ-006", first)
         self.assertGreaterEqual(len(first), self.event["expected"]["minimum_affected_count"])
         self.assertEqual(first, sorted(first))
 

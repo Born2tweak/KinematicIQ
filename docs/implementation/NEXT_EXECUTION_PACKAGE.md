@@ -1,5 +1,12 @@
 # Next Execution Package — M75-M78
 
+> **Evidence-integrity repair (2026-07-24):** Phase B mutation is paused until
+> all 15 Phase A milestones have live-valid schema-v2 evidence. Wave 1 remains
+> archived history. `docs/program/ACTIVE_WAVE.yaml` commits KQ-016, KQ-017, and
+> KQ-026 for Wave 2, but execution authority remains fail-closed until the live
+> validity projection exposes a non-null executable frontier. KQ-056 is
+> intentionally deferred. Squat remains the only available protocol.
+
 > **Expanded-10 Revision 4 authority (2026-07-21):** Phase A (KQ-001 through KQ-015) is complete with repository-bound evidence, including the clean-clone integration gate. The dependency-ready queue now advances to the bounded Phase B corpus freezes KQ-016 (squat) and KQ-017 (forward lunge), with KQ-016 selected first to preserve the existing public squat baseline. The deterministic checkpoint reports completed IDs, evidence and verification, subject commits, protocol-state changes, research, replans, release dispositions, blockers, active work, and the next executable range without granting release or deployment authority. Squat remains the only available protocol; Forward Lunge and every additional movement remain unavailable until their preregistered release gates produce `GATE_PASS`.
 
 > The M75-M78 and Phase 4 material below is preserved as historical execution context. It no longer defines the immediate engineering queue, but its scientific and human gates remain binding inputs to the Expanded-10 program.

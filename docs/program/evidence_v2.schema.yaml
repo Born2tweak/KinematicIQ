@@ -1,0 +1,45 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://kinematiciq.local/schemas/evidence-v2.schema.yaml
+type: object
+additionalProperties: false
+required:
+  - schema_version
+  - evidence_id
+  - milestone_id
+  - subject_commit
+  - subject_tree
+  - generated_at
+  - milestone_contract_sha256
+  - dependency_evidence
+  - input_hashes
+  - output_hashes
+  - scope
+  - toolchain
+  - checks
+  - commands
+  - all_required_checks_passed
+properties:
+  schema_version: {const: 2}
+  evidence_id: {type: string, pattern: '^KQ-[0-9]{3}-[0-9a-f]{12}$'}
+  milestone_id: {type: string, pattern: '^KQ-[0-9]{3}$'}
+  subject_commit: {type: string, pattern: '^[0-9a-f]{40}$'}
+  subject_tree: {type: string, pattern: '^[0-9a-f]{40}$'}
+  generated_at: {type: string, format: date-time}
+  milestone_contract_sha256: {type: string, pattern: '^[0-9a-f]{64}$'}
+  dependency_evidence: {type: object}
+  input_hashes: {type: object}
+  output_hashes: {type: object}
+  scope:
+    type: object
+    additionalProperties: false
+    required: [kind, paths, justification]
+    properties:
+      kind: {enum: [whole_tree, affected_paths, control_only]}
+      paths: {type: array, uniqueItems: true, items: {type: string}}
+      justification: {type: string, minLength: 20}
+  toolchain:
+    type: object
+    required: [python, node, npm]
+  checks: {type: array}
+  commands: {type: object}
+  all_required_checks_passed: {const: true}

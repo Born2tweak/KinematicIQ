@@ -73,7 +73,7 @@ Run the repository implementation with:
 python tools/program/verify_milestone.py --structure-only
 python -m unittest discover -s tests/program -p "test_*.py" -v
 python tools/program/schedule_wave.py --verify --output docs/program/WAVE_1_SCHEDULE.yaml
-python tools/program/verify_clean_clone.py --branch agent/expanded-10-revision-4
+python tools/program/verify_clean_clone.py --branch agent/evidence-integrity-wave-2
 ```
 
 Until then, the bundle is the canonical candidate specification—not evidence that the scheduler, validation, or release machinery has run.

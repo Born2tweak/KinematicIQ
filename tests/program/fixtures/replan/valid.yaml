@@ -8,5 +8,5 @@ propagation: descendants
 changed_fields: [execution_policy]
 rationale: Deterministic fixture proving completed nodes remain immutable while unresolved descendants are selected.
 expected:
-  excluded_completed: [KQ-006]
+  reopened_completed: [KQ-006]
   minimum_affected_count: 1

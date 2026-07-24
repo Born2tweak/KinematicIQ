@@ -8,6 +8,9 @@ from pathlib import Path
 
 import yaml
 
+from evidence_integrity import VALIDITY_PROJECTION, compile_projection
+from execution_authority import ACTIVE_WAVE, executable_frontier
+
 
 class StatusCompilerError(ValueError):
     pass
@@ -25,43 +28,18 @@ def compile_status(root: Path) -> dict:
     paths = {
         "milestones": root / "docs/program/milestone_registry.yaml",
         "resources": root / "docs/program/resource_registry.yaml",
-        "schedule": root / "docs/program/WAVE_1_SCHEDULE.yaml",
+        "schedule": root / ACTIVE_WAVE,
         "charter": root / "docs/program/artifacts/kq-002.yaml",
+        "validity": root / VALIDITY_PROJECTION,
     }
     registry = _yaml(paths["milestones"])
     resources = _yaml(paths["resources"])
     schedule = _yaml(paths["schedule"])
     charter = _yaml(paths["charter"])
     milestones = {item["id"]: item for item in registry["milestones"]}
-    resource_status = {item["id"]: item["status"] for item in resources["resources"]}
-
-    ready: list[str] = []
-    blocked_resources: dict[str, list[str]] = {}
-    for milestone in registry["milestones"]:
-        if milestone["milestone_status"] not in {"Pending", "Ready", "FailedTechnical"}:
-            continue
-        unresolved = sorted(item for item in milestone["resource_dependencies"] if resource_status.get(item) != "READY")
-        if unresolved:
-            blocked_resources[milestone["id"]] = unresolved
-            continue
-        dependencies_ok = True
-        for dependency in milestone["dependencies"]:
-            upstream = milestones[dependency["id"]]
-            if upstream["milestone_status"] not in dependency["accepted_milestone_statuses"]:
-                dependencies_ok = False
-                break
-            accepted_codes = dependency.get("accepted_result_codes")
-            if accepted_codes:
-                evidence_path = root / f"docs/status/milestones/{upstream['id']}.json"
-                if not evidence_path.is_file() or json.loads(evidence_path.read_text(encoding="utf-8")).get("result_code") not in accepted_codes:
-                    dependencies_ok = False
-                    break
-        if dependencies_ok:
-            ready.append(milestone["id"])
-
-    committed_ids = schedule["bands"]["committed"]["ids"]
-    committed_order = [item["id"] for item in schedule["bands"]["committed"]["schedule"]]
-    wave_ready = [item for item in committed_order if item in ready]
+    projection = compile_projection(root, registry["milestones"])
+    frontier = executable_frontier(root)
+    committed_ids = [item["id"] for item in schedule["committed"]]
     status_counts = dict(sorted(Counter(item["milestone_status"] for item in registry["milestones"]).items()))
     availability = charter["product_contract"]["availability_at_lock"]
     return {
@@ -71,10 +49,10 @@ def compile_status(root: Path) -> dict:
         "milestones": {
             "total": len(milestones),
             "status_counts": status_counts,
-            "dependency_ready_ids": sorted(ready),
-            "committed_wave_ready_ids": wave_ready,
-            "next_executable_id": wave_ready[0] if wave_ready else None,
-            "resource_blocked": blocked_resources,
+            **frontier,
+            "evidence_validity_counts": {
+                key: len(value) for key, value in projection["summary"].items()
+            },
         },
         "protocols": {
             "available": availability["available"],

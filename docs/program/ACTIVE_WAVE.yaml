@@ -1,0 +1,28 @@
+schema_version: 2
+program_id: kinematiciq-expanded-10
+wave_id: expanded-10-wave-2
+previous_wave: docs/program/WAVE_1_SCHEDULE.yaml
+capacity_hours: 134
+committed:
+- id: KQ-016
+  hours: 6
+  worker_id: W1
+  mutation_lane: A
+  sequence: 1
+- id: KQ-017
+  hours: 6
+  worker_id: W2
+  mutation_lane: B
+  sequence: 1
+- id: KQ-026
+  hours: 6
+  worker_id: W1
+  mutation_lane: A
+  sequence: 2
+reserved_roles:
+  W3: corpus and provenance review
+  W4: evidence review, synthesis, and replanning
+deferred_ready_ids:
+- KQ-056
+promotion_rule: Only committed, assigned, dependency-valid, resource-ready IDs may
+  mutate; KQ-056 remains deferred until Phase B data and observability contracts exist.

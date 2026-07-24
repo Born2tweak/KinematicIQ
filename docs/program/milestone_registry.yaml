@@ -3,7 +3,7 @@ program_id: kinematiciq-expanded-10
 status: candidate_execution_contract_repository_verification_pending
 registry_generated_from: docs/implementation/KINEMATICIQ_MASTER_EXECUTION_ROADMAP.md
 registry_policy:
-  default_branch: agent/expanded-10-revision-4
+  default_branch: agent/evidence-integrity-wave-2
   automatic_commit: true
   automatic_push: true
   automatic_production_deploy: false
@@ -1554,7 +1554,7 @@ milestones:
     - id: targeted_contract_checks
       command: python tools/program/run_contract_checks.py --id KQ-015 --evidence-out docs/status/milestones/KQ-015.json
     - id: clean_clone_gate
-      command: python tools/program/verify_clean_clone.py --branch agent/expanded-10-revision-4 --evidence-out docs/status/revision-4-clean-clone.json
+      command: python tools/program/verify_clean_clone.py --branch agent/evidence-integrity-wave-2 --pending-evidence-id KQ-015 --evidence-out docs/status/revision-4-clean-clone.json
     manual_gate: null
     clean_clone_required: true
   failure:

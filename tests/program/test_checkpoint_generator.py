@@ -40,7 +40,20 @@ class CheckpointGeneratorTests(unittest.TestCase):
     def test_push_summary_contains_required_checkpoint_fields(self) -> None:
         summary = compile_checkpoint(ROOT)["push_summary"]
         self.assertTrue({"completed_ids", "objective_evidence", "verification_failures", "subject_commits", "active_work_ids", "next_executable_range"} <= set(summary))
-        self.assertEqual(summary["objective_evidence"]["missing_ids"], [])
+        evidence = summary["objective_evidence"]
+        self.assertEqual(
+            set(evidence),
+            {
+                "historically_passed_ids",
+                "currently_valid_ids",
+                "reverification_required_ids",
+                "invalidated_ids",
+            },
+        )
+        self.assertEqual(
+            evidence["historically_passed_ids"],
+            summary["completed_ids"],
+        )
 
     def test_release_requires_explicit_gate_pass_evidence(self) -> None:
         unsupported = [{"milestone_id": "KQ-999", "protocol_id": "lunge", "result_code": "RELEASE_ELIGIBLE", "all_required_checks_passed": True}]

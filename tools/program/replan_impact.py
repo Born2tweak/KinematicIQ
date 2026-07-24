@@ -8,9 +8,6 @@ import jsonschema
 import yaml
 
 
-IMMUTABLE_STATUSES = {"Passed", "SkippedByDecision", "Retired"}
-
-
 class ReplanImpactError(ValueError):
     pass
 
@@ -37,7 +34,7 @@ def compile_impact(event: dict, registry: dict, schema: dict) -> list[str]:
                 if child not in selected:
                     selected.add(child)
                     pending.append(child)
-    return sorted(item for item in selected if milestones[item]["milestone_status"] not in IMMUTABLE_STATUSES)
+    return sorted(selected)
 
 
 def main() -> int:
@@ -55,10 +52,14 @@ def main() -> int:
         affected = compile_impact(event, registry, schema)
         if args.verify_fixture:
             expected = event.get("expected", {})
-            leaked = sorted(set(expected.get("excluded_completed", [])) & set(affected))
             minimum = expected.get("minimum_affected_count", 1)
-            if len(affected) < minimum or leaked:
-                raise ReplanImpactError(f"fixture mismatch: affected_count={len(affected)}, leaked_completed={leaked}")
+            required_reopened = set(expected.get("reopened_completed", []))
+            missing_reopened = sorted(required_reopened - set(affected))
+            if len(affected) < minimum or missing_reopened:
+                raise ReplanImpactError(
+                    f"fixture mismatch: affected_count={len(affected)}, "
+                    f"missing_reopened={missing_reopened}"
+                )
     except ReplanImpactError as error:
         print(f"FAIL: {error}")
         return 1

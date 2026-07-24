@@ -33,9 +33,10 @@ def run(command: list[str], cwd: Path) -> dict[str, Any]:
 def main() -> int:
     parser = argparse.ArgumentParser(description="Verify Expanded-10 from a clean single-branch clone.")
     parser.add_argument("--repository", default="https://github.com/Born2tweak/KinematicIQ.git")
-    parser.add_argument("--branch", default="agent/expanded-10-revision-4")
+    parser.add_argument("--branch", default="agent/evidence-integrity-wave-2")
     parser.add_argument("--evidence-out")
     parser.add_argument("--keep-clone", action="store_true")
+    parser.add_argument("--pending-evidence-id", action="append", default=[])
     args = parser.parse_args()
 
     temp_root = Path(tempfile.mkdtemp(prefix="kinematiciq-clean-clone-"))
@@ -46,11 +47,17 @@ def main() -> int:
         checks.append(run(["git", "clone", "--branch", args.branch, "--single-branch", args.repository, str(clone)], temp_root))
         if not checks[-1]["accepted"]:
             raise RuntimeError("clone failed")
+        evidence_command = ["python", "tools/program/verify_evidence.py", "--all"]
+        for milestone_id in args.pending_evidence_id:
+            evidence_command.extend(["--exclude", milestone_id])
         commands = [
             ["python", "-m", "pip", "install", "-r", "requirements-program.txt"],
             ["python", "tools/program/verify_milestone.py", "--structure-only"],
             ["python", "-m", "unittest", "discover", "-s", "tests/program", "-p", "test_*.py", "-v"],
             ["python", "tools/program/schedule_wave.py", "--verify", "--output", "docs/program/WAVE_1_SCHEDULE.yaml"],
+            ["python", "tools/program/transition_wave.py", "--verify", "--output", "docs/program/ACTIVE_WAVE.yaml"],
+            ["python", "tools/program/compile_evidence_validity.py", "--verify"],
+            evidence_command,
             ["python", "tools/program/compile_status.py", "--verify", "--output", "docs/status/program_status.json"],
             ["python", "tools/program/generate_checkpoint.py", "--verify", "--output", "docs/status/program_checkpoint.json"],
             ["python", "tools/program/verify_authority.py", "--manifest", "docs/program/artifacts/kq-011.yaml"],
@@ -59,17 +66,13 @@ def main() -> int:
             [npm, "--prefix", "web", "ci"],
             [npm, "--prefix", "web", "run", "build"],
             [npm, "--prefix", "web", "test", "--", "--run", "--reporter=dot"],
-            [npm, "--prefix", "web", "run", "eval:forward-lunge"],
-            [npm, "--prefix", "web", "run", "eval:tapes"],
             ["git", "diff", "--exit-code"],
+            ["git", "status", "--porcelain", "--untracked-files=all"],
         ]
         for command in commands:
             record = run(command, clone)
-            if command[-1] == "eval:tapes" and record["exit_code"] == 1:
-                combined = f"{record['stdout']}\n{record['stderr']}"
-                if "no .posetape.json files" in combined:
-                    record["accepted"] = True
-                    record["disposition"] = "UNAVAILABLE_CLEAN_CLONE_CORPUS_EXPLICIT"
+            if command[:3] == ["git", "status", "--porcelain"]:
+                record["accepted"] = record["exit_code"] == 0 and not record["stdout"].strip()
             checks.append(record)
             if not record["accepted"]:
                 break
@@ -88,7 +91,7 @@ def main() -> int:
             "checks": checks,
             "ignored_status": status["stdout"].splitlines(),
             "all_required_checks_passed": all(item["accepted"] for item in checks),
-            "replay_policy": "eval:tapes must either evaluate checked-in eligible tapes or explicitly report the clean-clone corpus absence without fabricating participant evidence",
+            "replay_policy": "Corpus evaluation is deferred to KQ-016/KQ-017; this gate verifies controller, build, tests, evidence validity, and worktree integrity.",
         }
         rendered = json.dumps(payload, indent=2, sort_keys=True) + "\n"
         if args.evidence_out:

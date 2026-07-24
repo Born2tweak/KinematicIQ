@@ -16,7 +16,7 @@ import jsonschema
 import yaml
 
 
-VERIFIER_VERSION = "1.2.0"
+VERIFIER_VERSION = "2.0.0"
 PREDICATE_CATALOG_VERSION = 2
 ALLOWED_PREDICATES = {
     "all_artifacts_exist_and_nonempty",
@@ -95,7 +95,9 @@ def sha256_bytes(value: bytes) -> str:
 
 
 def sha256_file(path: Path) -> str:
-    return sha256_bytes(path.read_bytes())
+    from evidence_integrity import canonical_hash
+
+    return canonical_hash(path)
 
 
 def canonical_object_hash(value: Any) -> str:
@@ -364,6 +366,25 @@ def verify_evidence_provenance(
             raise ContractError(f"evidence input is missing or stale: {relative}")
 
 
+def current_v2_evidence(
+    program: LoadedProgram, milestone: dict[str, Any]
+) -> dict[str, Any] | None:
+    from evidence_integrity import compile_projection, load_records, verify_record
+
+    projection = compile_projection(program.root, program.milestones)
+    state = projection["states"].get(milestone["id"])
+    if not state or state["validity"] != "Current":
+        return None
+    records = load_records(program.root)
+    record = records.get(state["evidence_id"])
+    if record is None:
+        return None
+    errors = verify_record(program.root, milestone, record, records)
+    if errors:
+        raise ContractError("; ".join(errors))
+    return record
+
+
 def evaluate_acceptance(program: LoadedProgram, milestone: dict[str, Any]) -> list[dict[str, Any]]:
     results: list[dict[str, Any]] = []
     artifact: dict[str, Any] | None = None
@@ -375,15 +396,26 @@ def evaluate_acceptance(program: LoadedProgram, milestone: dict[str, Any]) -> li
         detail = ""
         try:
             if predicate == "all_artifacts_exist_and_nonempty":
+                current = current_v2_evidence(program, milestone)
                 bad = [
                     item for item in acceptance["inputs"]
-                    if not (program.root / item).is_file() or (program.root / item).stat().st_size == 0
+                    if (
+                        item != milestone["artifacts"][1] or current is None
+                    )
+                    and (
+                        not (program.root / item).is_file()
+                        or (program.root / item).stat().st_size == 0
+                    )
                 ]
                 passed = not bad
                 detail = "all artifacts exist and are nonempty" if passed else f"missing/empty: {bad}"
             elif predicate == "current_run_evidence_matches_head":
-                evidence = json.loads((program.root / acceptance["evidence"]).read_text(encoding="utf-8"))
-                verify_evidence_provenance(program, milestone, evidence)
+                evidence = current_v2_evidence(program, milestone)
+                if evidence is None:
+                    evidence = json.loads(
+                        (program.root / acceptance["evidence"]).read_text(encoding="utf-8")
+                    )
+                    verify_evidence_provenance(program, milestone, evidence)
                 passed = all(evidence.get(key) == value for key, value in acceptance["expected"].items())
                 detail = "provenance and expected evidence fields match"
             elif predicate == "contract_output_assertion_passes":
@@ -393,16 +425,14 @@ def evaluate_acceptance(program: LoadedProgram, milestone: dict[str, Any]) -> li
                 passed = actual == expected
                 detail = "artifact assertion matches registry-owned expected outcome"
             elif predicate == "command_exit_code_equals":
-                evidence = evidence or json.loads(
-                    (program.root / milestone["artifacts"][1]).read_text(encoding="utf-8")
-                )
+                evidence = evidence or current_v2_evidence(program, milestone)
+                evidence = evidence or json.loads((program.root / milestone["artifacts"][1]).read_text(encoding="utf-8"))
                 actual = evidence["commands"][acceptance["command_id"]]["exit_code"]
                 passed = actual == acceptance["expected"]
                 detail = f"exit code {actual}"
             elif predicate == "regression_floor_passes":
-                evidence = evidence or json.loads(
-                    (program.root / milestone["artifacts"][1]).read_text(encoding="utf-8")
-                )
+                evidence = evidence or current_v2_evidence(program, milestone)
+                evidence = evidence or json.loads((program.root / milestone["artifacts"][1]).read_text(encoding="utf-8"))
                 passed = all(evidence["commands"][item]["exit_code"] == 0 for item in acceptance["command_ids"])
                 detail = "all declared regression commands exited zero"
             elif predicate == "validation_disposition_is_signed_and_allowed":

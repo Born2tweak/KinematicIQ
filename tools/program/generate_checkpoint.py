@@ -8,6 +8,14 @@ from pathlib import Path
 
 import yaml
 
+from evidence_integrity import (
+    EVIDENCE_ROOT,
+    VALIDITY_LOG,
+    VALIDITY_PROJECTION,
+    compile_projection,
+    load_records,
+)
+
 
 TRIGGERS = ["push", "lifecycle_transition", "replan", "release_change", "blocker_change"]
 COMPLETED_STATUSES = {"Passed", "SkippedByDecision", "Retired"}
@@ -70,7 +78,8 @@ def compile_checkpoint(root: Path) -> dict:
     inflections = [json.loads(line) for line in paths["inflections"].read_text(encoding="utf-8").splitlines() if line.strip()]
     evidence_paths = sorted((root / "docs/status/milestones").glob("KQ-*.json"))
     evidence = [json.loads(path.read_text(encoding="utf-8")) for path in evidence_paths]
-    evidence_by_id = {item.get("milestone_id"): item for item in evidence if item.get("milestone_id")}
+    v2_records = load_records(root)
+    validity = compile_projection(root, registry["milestones"])
 
     milestones = registry["milestones"]
     completed = sorted(item["id"] for item in milestones if item["milestone_status"] in COMPLETED_STATUSES)
@@ -79,14 +88,14 @@ def compile_checkpoint(root: Path) -> dict:
         state: sorted(item["id"] for item in milestones if item["milestone_status"] == state)
         for state in sorted(BLOCKED_STATUSES)
     }
-    missing_evidence = sorted(item for item in completed if item not in evidence_by_id)
-    failed_evidence = sorted(
-        item for item, record in evidence_by_id.items() if not record.get("all_required_checks_passed", False)
+    current_evidence = sorted(set(completed) & set(validity["summary"]["Current"]))
+    reverification_required = sorted(
+        set(completed) & set(validity["summary"]["ReverificationRequired"])
     )
-    verified_evidence = sorted(
-        item for item, record in evidence_by_id.items() if record.get("all_required_checks_passed", False)
+    invalidated = sorted(set(completed) & set(validity["summary"]["Invalidated"]))
+    subject_commits = sorted(
+        {record["subject_commit"] for record in v2_records.values()}
     )
-    subject_commits = sorted({record["subject_commit"] for record in evidence if record.get("subject_commit")})
 
     contracts = Counter(item["contract_status"] for item in validation["protocols"].values())
     evidence_packs = Counter(item["evidence_pack_status"] for item in validation["protocols"].values())
@@ -103,8 +112,14 @@ def compile_checkpoint(root: Path) -> dict:
         conflicting_research.extend({"question_id": question["question_id"], "finding": value} for value in synthesis.get("invalidated", []))
         unresolved_research.extend({"question_id": question["question_id"], "finding": value} for value in synthesis.get("unresolved", []))
 
-    source_paths = list(paths.values()) + evidence_paths
-    next_range = status["milestones"]["committed_wave_ready_ids"] or status["milestones"]["dependency_ready_ids"]
+    v2_paths = sorted((root / EVIDENCE_ROOT).glob("KQ-*/*.json"))
+    source_paths = (
+        list(paths.values())
+        + evidence_paths
+        + v2_paths
+        + [root / VALIDITY_LOG, root / VALIDITY_PROJECTION]
+    )
+    next_range = status["milestones"]["allowed_executable_ids"]
     return {
         "schema_version": 1,
         "program_id": status["program_id"],
@@ -114,11 +129,12 @@ def compile_checkpoint(root: Path) -> dict:
             "branch": status["authority"]["branch"],
             "completed_ids": completed,
             "objective_evidence": {
-                "verified_ids": verified_evidence,
-                "missing_ids": missing_evidence,
-                "failed_ids": failed_evidence,
+                "historically_passed_ids": completed,
+                "currently_valid_ids": current_evidence,
+                "reverification_required_ids": reverification_required,
+                "invalidated_ids": invalidated,
             },
-            "verification_failures": failed_evidence,
+            "verification_failures": validity["verification_errors"],
             "subject_commits": subject_commits,
             "active_work_ids": active,
             "next_executable_range": next_range,

@@ -13,7 +13,7 @@ properties:
     additionalProperties: false
     required: [default_branch, automatic_commit, automatic_push, automatic_production_deploy, fail_closed, status_model, ready_rule, blocked_rule, release_rule, dependency_authority]
     properties:
-      default_branch: {const: agent/expanded-10-revision-4}
+      default_branch: {const: agent/evidence-integrity-wave-2}
       automatic_commit: {const: true}
       automatic_push: {const: true}
       automatic_production_deploy: {const: false}

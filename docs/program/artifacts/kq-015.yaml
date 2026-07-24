@@ -2,7 +2,7 @@ schema_version: 1
 milestone_id: KQ-015
 verifier: tools/program/verify_clean_clone.py
 evidence: docs/status/revision-4-clean-clone.json
-branch: agent/expanded-10-revision-4
+branch: agent/evidence-integrity-wave-2
 reproduced_authorities:
 - docs/program/milestone_registry.yaml
 - docs/program/WAVE_1_SCHEDULE.yaml
