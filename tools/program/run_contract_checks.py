@@ -103,7 +103,8 @@ def main() -> int:
             if item["id"] in {"registry_contract", "targeted_contract_checks"}:
                 continue
             cache_key = f"{subject_commit}:{item['command']}"
-            if cache_key not in command_cache:
+            cached = command_cache.get(cache_key)
+            if cached is None or cached.get("exit_code") != 0:
                 result = subprocess.run(
                     item["command"], cwd=program.root, shell=True, capture_output=True, text=True
                 )

@@ -1,0 +1,92 @@
+{
+  "all_required_checks_passed": true,
+  "checks": [
+    {
+      "detail": [],
+      "id": "schema",
+      "passed": true
+    },
+    {
+      "detail": [],
+      "id": "semantics",
+      "passed": true
+    },
+    {
+      "detail": {
+        "actual": "Question, exit criteria, sources, synthesis, decision impact",
+        "expected": "Question, exit criteria, sources, synthesis, decision impact"
+      },
+      "id": "registry_owned_outcome",
+      "passed": true
+    },
+    {
+      "detail": "exit_code=0",
+      "id": "research_workflow",
+      "passed": true
+    },
+    {
+      "detail": "exit_code=0",
+      "id": "targeted_contract_checks",
+      "passed": true
+    }
+  ],
+  "commands": {
+    "research_workflow": {
+      "exit_code": 0,
+      "stderr": "",
+      "stdout": "PASS: research registry and orchestration-only fixture satisfy the bounded workflow\n"
+    },
+    "targeted_contract_checks": {
+      "exit_code": 0,
+      "stderr": "",
+      "stdout": "repository-bound schema, semantics, artifact, and declared checks completed"
+    }
+  },
+  "dependency_evidence": {
+    "KQ-008": {
+      "evidence_id": "KQ-008-ffa390745683",
+      "sha256": "c0e9dce934e6613a099c25a13bdf20e1b0780f919e04155863fc93cf83b75dc0"
+    }
+  },
+  "evidence_id": "KQ-012-ffa390745683",
+  "generated_at": "2026-07-24T16:42:56.832337+00:00",
+  "input_hashes": {
+    "docs/program/artifacts/kq-012.yaml": "819d1897bf8e7c47957c2b8fd9219170da23724fd5254e8a8faf93c2f7b08dca",
+    "docs/program/milestone_schema.yaml": "cbf99ad5d5138782e47b8603d88392ecbe5094478699769a9030ac59df202ff6",
+    "docs/program/predicate_catalog.yaml": "33bbb5548dbbd00aedfa65b04aa6a79fb4877159ab148afcda15ccd2bea721b4",
+    "docs/status/milestones/KQ-008.json": "9ed46821b671bb86228807529e36b5a4be4c62246d450616eef96099ae987cc9",
+    "tools/program/evidence_integrity.py": "c2a0f380040940d47a0a143b862a4f5a5af823d32b829623b06bc9428e0b4423",
+    "tools/program/program_contract.py": "750d8a7fe053525428a92d9b8e71b456f1c68cdc99b7c42c587f5c3bac1782ea",
+    "tools/program/run_contract_checks.py": "045441425b5864a2224e8a22825fa728b067d8f2d6de5dc805052930373419e9",
+    "tools/program/verify_milestone.py": "0c8d70aff4ffcc6bc235b6eebed1a0929a0c9b0f9b9447780b5cefc1d75005e8",
+    "tools/program/verify_research_workflow.py": "97e77578bad640528961b3f0c908411fa96340422431af67ffa6345337abe2b8"
+  },
+  "milestone_contract_sha256": "eefa7236c54b7558a153972b2eb46d38fddbdf10985bbd1b3f623dbb88d964f2",
+  "milestone_id": "KQ-012",
+  "output_hashes": {
+    "docs/program/artifacts/kq-012.yaml": "819d1897bf8e7c47957c2b8fd9219170da23724fd5254e8a8faf93c2f7b08dca"
+  },
+  "schema_version": 2,
+  "scope": {
+    "justification": "The milestone is valid only while its declared inputs, verifier closure, contract artifact, and exercised web surface remain unchanged.",
+    "kind": "affected_paths",
+    "paths": [
+      "docs/program/artifacts/kq-012.yaml",
+      "docs/program/milestone_schema.yaml",
+      "docs/program/predicate_catalog.yaml",
+      "docs/status/milestones/KQ-008.json",
+      "tools/program/evidence_integrity.py",
+      "tools/program/program_contract.py",
+      "tools/program/run_contract_checks.py",
+      "tools/program/verify_milestone.py",
+      "tools/program/verify_research_workflow.py"
+    ]
+  },
+  "subject_commit": "ffa3907456833d37c06b74bc937a595c9fb6dd3f",
+  "subject_tree": "5d23dcdb5034b3a8c081ed67218b4750d1ee351f",
+  "toolchain": {
+    "node": "v24.12.0",
+    "npm": "11.7.0",
+    "python": "3.14.0"
+  }
+}

@@ -54,8 +54,6 @@ def main() -> int:
     projection = compile_projection(root, program.milestones)
     for number in range(1, args.through + 1):
         milestone_id = f"KQ-{number:03d}"
-        if milestone_id in {"KQ-009", "KQ-013"}:
-            _refresh_generated_state(root, program.milestones)
         migration_event = f"VAL-{milestone_id}-LEGACY-MIGRATION"
         if projection["states"].get(milestone_id, {}).get("validity") == "Current":
             continue
@@ -64,7 +62,10 @@ def main() -> int:
             now = datetime.now(timezone.utc).isoformat()
             reverify_event = (
                 migration_event if prior_state is None
-                else f"VAL-{milestone_id}-REVERIFY-{now.replace(':', '').replace('+', '-')}"
+                else (
+                    f"VAL-{milestone_id}-REVERIFY-"
+                    f"{datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S%fZ')}"
+                )
             )
             if reverify_event not in existing_events:
                 _append_event(log_path, {
@@ -92,6 +93,8 @@ def main() -> int:
                 })
                 existing_events.add(reverify_event)
                 event_states[milestone_id] = "ReverificationRequired"
+        if milestone_id in {"KQ-009", "KQ-013"}:
+            _refresh_generated_state(root, program.milestones)
         command = [
             sys.executable,
             "tools/program/run_contract_checks.py",
@@ -109,7 +112,7 @@ def main() -> int:
             return result.returncode
         record = latest_records_by_milestone(root)[milestone_id]
         now = datetime.now(timezone.utc).isoformat()
-        current_event = f"VAL-{record['evidence_id']}-CURRENT"
+        current_event = f"VAL-{record['evidence_id'].upper()}-CURRENT"
         _append_event(log_path, {
             "event_id": current_event,
             "milestone_id": milestone_id,

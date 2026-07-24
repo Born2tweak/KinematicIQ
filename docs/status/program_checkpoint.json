@@ -121,39 +121,44 @@
       ]
     },
     "subject_commits": [
-      "5993a6d48a3fda2e2f24201cdb60f91ba731c056"
+      "5993a6d48a3fda2e2f24201cdb60f91ba731c056",
+      "ffa3907456833d37c06b74bc937a595c9fb6dd3f"
     ],
     "verification_failures": {
       "KQ-001": [
-        "input is missing or stale: tools/program/evidence_integrity.py",
         "input is missing or stale: tools/program/run_contract_checks.py"
       ],
       "KQ-002": [
-        "input is missing or stale: tools/program/evidence_integrity.py",
         "input is missing or stale: tools/program/run_contract_checks.py"
       ],
       "KQ-003": [
-        "input is missing or stale: tools/program/evidence_integrity.py",
         "input is missing or stale: tools/program/run_contract_checks.py"
       ],
       "KQ-004": [
-        "input is missing or stale: tools/program/evidence_integrity.py",
         "input is missing or stale: tools/program/run_contract_checks.py"
       ],
       "KQ-005": [
-        "input is missing or stale: tools/program/evidence_integrity.py",
         "input is missing or stale: tools/program/run_contract_checks.py"
       ],
       "KQ-006": [
-        "input is missing or stale: tools/program/evidence_integrity.py",
         "input is missing or stale: tools/program/run_contract_checks.py"
       ],
       "KQ-007": [
-        "input is missing or stale: tools/program/evidence_integrity.py",
         "input is missing or stale: tools/program/run_contract_checks.py"
       ],
       "KQ-008": [
-        "input is missing or stale: tools/program/evidence_integrity.py",
+        "input is missing or stale: tools/program/run_contract_checks.py"
+      ],
+      "KQ-009": [
+        "input is missing or stale: tools/program/run_contract_checks.py"
+      ],
+      "KQ-010": [
+        "input is missing or stale: tools/program/run_contract_checks.py"
+      ],
+      "KQ-011": [
+        "input is missing or stale: tools/program/run_contract_checks.py"
+      ],
+      "KQ-012": [
         "input is missing or stale: tools/program/run_contract_checks.py"
       ]
     }
@@ -184,15 +189,28 @@
     "docs/program/resource_registry.yaml": "b10c001806da017f3f0876a77eb8db34c82870bc745140f8b9b9afc0c56a4c22",
     "docs/research/research_questions.yaml": "6a45d8c097a67775add815fcd7fe2b8ff081583e6847e62d50a41ae2d42bf228",
     "docs/status/evidence/KQ-001/KQ-001-5993a6d48a3f.json": "d2209d4e7d2075796e23194e0c0af0702533c589e2357ced43d7dce8e5edd760",
+    "docs/status/evidence/KQ-001/KQ-001-ffa390745683.json": "fadee24c99547e212898a5edd933487eb019b5c15c6976d488910f89c7246da3",
     "docs/status/evidence/KQ-002/KQ-002-5993a6d48a3f.json": "c11253a7295bfec11b0ae5d14e52b9310b31a92d069e139664f8304b5c82a418",
+    "docs/status/evidence/KQ-002/KQ-002-ffa390745683.json": "a602ad43d36900458c65fd5a980eb0055d7668e4a8a1fffac9104fb5d6c8ed51",
     "docs/status/evidence/KQ-003/KQ-003-5993a6d48a3f.json": "6d7d39d2ee7265f272787248da904ea87a837bb15e9423c951a3fdf7eba94a43",
+    "docs/status/evidence/KQ-003/KQ-003-ffa390745683.json": "5d87cb520c714ddb064ffbe54f89c082ecdb400e771e5a697a03da9590ba4c2f",
     "docs/status/evidence/KQ-004/KQ-004-5993a6d48a3f.json": "1737abae6d8f25496d35921113f57cca4a2915af52c23583c3e3060bc4681171",
+    "docs/status/evidence/KQ-004/KQ-004-ffa390745683.json": "ed7f9d9b130b9399b4e6af0a5fbe290bbbf7bb8ffb066ac34234abd2c8d7618a",
     "docs/status/evidence/KQ-005/KQ-005-5993a6d48a3f.json": "8be13608678a382d423bf2dca628f116f91aba96923da8ef094086f6532b4d76",
+    "docs/status/evidence/KQ-005/KQ-005-ffa390745683.json": "dc727955b8077ab19c276c4e19d0a5239e3ea1c8057531baad9a8f21d4232c8e",
     "docs/status/evidence/KQ-006/KQ-006-5993a6d48a3f.json": "6b55c3c914f4208072fb986398c9e91dfa5c39d69035700bdb196a380bbe58a1",
+    "docs/status/evidence/KQ-006/KQ-006-ffa390745683.json": "78524730538041cbfe9d55310dc1596389424afef63407a695dda90db29417dc",
     "docs/status/evidence/KQ-007/KQ-007-5993a6d48a3f.json": "5291c548fd1963816ed267a5382391f79eff37cdd11bddfb1a05b5d328d6d9cc",
+    "docs/status/evidence/KQ-007/KQ-007-ffa390745683.json": "ab9ddacbe672b22afa85b2c0950bc1dac1521dc9a32d3afc041858e64e752437",
     "docs/status/evidence/KQ-008/KQ-008-5993a6d48a3f.json": "4835bf2b18bd0a3fc68452468d3326d74e185d3e5c70d3527872129bf9734513",
-    "docs/status/evidence_validity.json": "de8db5aad004f2559fb1faa4b548642bf403830dac2875a2b47f0228ff0b1bed",
-    "docs/status/evidence_validity_events.ndjson": "a9558519851911d2241bb95b81dd70b63790d05b790b95ecc2b75f9890a06e2f",
+    "docs/status/evidence/KQ-008/KQ-008-ffa390745683.json": "7897167b4cdfc80db3f78c8563759a8610d8e3552e9445d240797c8d59a9b9c6",
+    "docs/status/evidence/KQ-009/KQ-009-ffa390745683.json": "9c78a372c4ac65ed34fd79c643c832738d88b227c4350440906ab5cca2e09cf2",
+    "docs/status/evidence/KQ-010/KQ-010-ffa390745683.json": "687b1e8a08588a687615ba629f6110d551704f85e1b70ada9886303803ed827b",
+    "docs/status/evidence/KQ-011/KQ-011-ffa390745683.json": "31ecb57d936a280ff4a9924b36f3bba4397903e85149966d31c6d4fd83d74895",
+    "docs/status/evidence/KQ-012/KQ-012-ffa390745683.json": "dc0b6760b5e5e56cdda86b5301829bce7b4aa27ba252a74f2c17561413b23c16",
+    "docs/status/evidence/KQ-013/KQ-013-ffa390745683.json": "11315dced985f2cbd953bdfb2b5f6cacaccb968d843992cf66a384ea37edca2e",
+    "docs/status/evidence_validity.json": "f54af8748402c68692d6585513a0efeaaeb518b3dc0905b7b9676070b4f50446",
+    "docs/status/evidence_validity_events.ndjson": "f25455ec09031877d1525e181e1a6aae1a3b0b2d039d6938b88b94e9070f1621",
     "docs/status/milestones/KQ-001.json": "7e3058ae976e5683cc3feabc41a115dedd91f66e221747469803a5f2b1d147c6",
     "docs/status/milestones/KQ-002.json": "7f93c5d052ef6acbd35e977c800e2bb79e9e656702d626be1fc6b6c4ce6955d5",
     "docs/status/milestones/KQ-003.json": "fa062f54317050c08b955ba310eab44bc82bb83f3f53a95104ff4695c69acc39",
@@ -208,7 +226,7 @@
     "docs/status/milestones/KQ-013.json": "bdf9e17c2b7d5346837f9afedc6e4e23776c184fbcb060465acab94732e8e86c",
     "docs/status/milestones/KQ-014.json": "1d29dbaca182957965eb19120b54274df2cd6789a27cae790cea2245d53d3f59",
     "docs/status/milestones/KQ-015.json": "8b73d40dfcca7e0ebc617cde3164dbb9a05ffd03bd58e55c35662ca33ce75764",
-    "docs/status/program_status.json": "c706f64412384c7e4d2dbfc7999bae7a7158afa5d241acf1a14b6fae91bd4fc9",
+    "docs/status/program_status.json": "05dd0856cddb790fedb1c15ed12f54b0854d563edaba36fad71aef2cd96ebd13",
     "docs/validation/protocol_validation_registry.yaml": "b4e6b116d36b7213c7257c00df166e98a6ac02cb475c90a5b23807ece1aa8141"
   },
   "triggers": [
