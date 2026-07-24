@@ -102,18 +102,19 @@ def main() -> int:
         for item in milestone["verification"]["automated"]:
             if item["id"] in {"registry_contract", "targeted_contract_checks"}:
                 continue
-            if item["command"] not in command_cache:
+            cache_key = f"{subject_commit}:{item['command']}"
+            if cache_key not in command_cache:
                 result = subprocess.run(
                     item["command"], cwd=program.root, shell=True, capture_output=True, text=True
                 )
-                command_cache[item["command"]] = {
+                command_cache[cache_key] = {
                     "exit_code": result.returncode,
                     "stdout": result.stdout,
                     "stderr": result.stderr,
                 }
                 if cache_path:
                     write_json(cache_path, command_cache)
-            commands[item["id"]] = command_cache[item["command"]]
+            commands[item["id"]] = command_cache[cache_key]
             checks.append({
                 "id": item["id"],
                 "passed": commands[item["id"]]["exit_code"] == 0,
