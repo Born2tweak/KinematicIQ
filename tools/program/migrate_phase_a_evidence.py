@@ -9,10 +9,14 @@ from pathlib import Path
 
 from evidence_integrity import (
     VALIDITY_LOG,
+    VALIDITY_PROJECTION,
     compile_projection,
     latest_records_by_milestone,
     load_events,
+    write_json,
 )
+from compile_status import compile_status
+from generate_checkpoint import compile_checkpoint
 from program_contract import load_program
 
 
@@ -20,6 +24,12 @@ def _append_event(path: Path, event: dict) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("a", encoding="utf-8", newline="\n") as handle:
         handle.write(json.dumps(event, sort_keys=True) + "\n")
+
+
+def _refresh_generated_state(root: Path, milestones: list[dict]) -> None:
+    write_json(root / VALIDITY_PROJECTION, compile_projection(root, milestones))
+    write_json(root / "docs/status/program_status.json", compile_status(root))
+    write_json(root / "docs/status/program_checkpoint.json", compile_checkpoint(root))
 
 
 def main() -> int:
@@ -44,6 +54,8 @@ def main() -> int:
     projection = compile_projection(root, program.milestones)
     for number in range(1, args.through + 1):
         milestone_id = f"KQ-{number:03d}"
+        if milestone_id in {"KQ-009", "KQ-013"}:
+            _refresh_generated_state(root, program.milestones)
         migration_event = f"VAL-{milestone_id}-LEGACY-MIGRATION"
         if projection["states"].get(milestone_id, {}).get("validity") == "Current":
             continue
@@ -119,6 +131,7 @@ def main() -> int:
         existing_events.add(current_event)
         event_states[milestone_id] = "Current"
         print(f"PASS: migrated {milestone_id} -> {record['evidence_id']}")
+    _refresh_generated_state(root, program.milestones)
     return 0
 
 
