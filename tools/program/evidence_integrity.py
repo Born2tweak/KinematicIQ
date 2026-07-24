@@ -133,12 +133,18 @@ def scope_paths(root: Path, milestone: dict[str, Any]) -> list[Path]:
     declared = {
         "docs/program/milestone_schema.yaml",
         "docs/program/predicate_catalog.yaml",
+        "docs/program/evidence_v2.schema.yaml",
+        "docs/program/evidence_validity_event.schema.yaml",
         milestone["artifacts"][0],
         *milestone.get("evidence_inputs", []),
         "tools/program/program_contract.py",
         "tools/program/run_contract_checks.py",
         "tools/program/verify_milestone.py",
         "tools/program/evidence_integrity.py",
+        "tools/program/execution_authority.py",
+        "tools/program/compile_evidence_validity.py",
+        "tools/program/compile_status.py",
+        "tools/program/generate_checkpoint.py",
     }
     commands = [item["command"] for item in milestone["verification"]["automated"]]
     for command in commands:

@@ -25,6 +25,13 @@ def dependency_ready_ids(root: Path) -> tuple[list[str], dict[str, list[str]]]:
     resources = _yaml(root / "docs/program/resource_registry.yaml")
     projection = compile_projection(root, registry["milestones"])
     milestones = {item["id"]: item for item in registry["milestones"]}
+    completed = {
+        item["id"]
+        for item in registry["milestones"]
+        if item["milestone_status"] in {"Passed", "SkippedByDecision", "Retired"}
+    }
+    if completed - set(projection["summary"]["Current"]):
+        return [], {}
     resource_status = {item["id"]: item["status"] for item in resources["resources"]}
     ready: list[str] = []
     blocked: dict[str, list[str]] = {}

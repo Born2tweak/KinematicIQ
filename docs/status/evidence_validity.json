@@ -6,84 +6,84 @@
       "event_id": "VAL-KQ-001-1FD94B292102-CURRENT",
       "evidence_id": "KQ-001-1fd94b292102",
       "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
-      "validity": "Current"
+      "validity": "ReverificationRequired"
     },
     "KQ-002": {
       "event_id": "VAL-KQ-002-1FD94B292102-CURRENT",
       "evidence_id": "KQ-002-1fd94b292102",
       "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
-      "validity": "Current"
+      "validity": "ReverificationRequired"
     },
     "KQ-003": {
       "event_id": "VAL-KQ-003-1FD94B292102-CURRENT",
       "evidence_id": "KQ-003-1fd94b292102",
       "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
-      "validity": "Current"
+      "validity": "ReverificationRequired"
     },
     "KQ-004": {
       "event_id": "VAL-KQ-004-1FD94B292102-CURRENT",
       "evidence_id": "KQ-004-1fd94b292102",
       "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
-      "validity": "Current"
+      "validity": "ReverificationRequired"
     },
     "KQ-005": {
       "event_id": "VAL-KQ-005-1FD94B292102-CURRENT",
       "evidence_id": "KQ-005-1fd94b292102",
       "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
-      "validity": "Current"
+      "validity": "ReverificationRequired"
     },
     "KQ-006": {
       "event_id": "VAL-KQ-006-1FD94B292102-CURRENT",
       "evidence_id": "KQ-006-1fd94b292102",
       "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
-      "validity": "Current"
+      "validity": "ReverificationRequired"
     },
     "KQ-007": {
       "event_id": "VAL-KQ-007-1FD94B292102-CURRENT",
       "evidence_id": "KQ-007-1fd94b292102",
       "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
-      "validity": "Current"
+      "validity": "ReverificationRequired"
     },
     "KQ-008": {
       "event_id": "VAL-KQ-008-1FD94B292102-CURRENT",
       "evidence_id": "KQ-008-1fd94b292102",
       "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
-      "validity": "Current"
+      "validity": "ReverificationRequired"
     },
     "KQ-009": {
       "event_id": "VAL-KQ-009-1FD94B292102-CURRENT",
       "evidence_id": "KQ-009-1fd94b292102",
       "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
-      "validity": "Current"
+      "validity": "ReverificationRequired"
     },
     "KQ-010": {
       "event_id": "VAL-KQ-010-1FD94B292102-CURRENT",
       "evidence_id": "KQ-010-1fd94b292102",
       "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
-      "validity": "Current"
+      "validity": "ReverificationRequired"
     },
     "KQ-011": {
       "event_id": "VAL-KQ-011-1FD94B292102-CURRENT",
       "evidence_id": "KQ-011-1fd94b292102",
       "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
-      "validity": "Current"
+      "validity": "ReverificationRequired"
     },
     "KQ-012": {
       "event_id": "VAL-KQ-012-1FD94B292102-CURRENT",
       "evidence_id": "KQ-012-1fd94b292102",
       "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
-      "validity": "Current"
+      "validity": "ReverificationRequired"
     },
     "KQ-013": {
       "event_id": "VAL-KQ-013-1FD94B292102-CURRENT",
       "evidence_id": "KQ-013-1fd94b292102",
       "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
-      "validity": "Current"
+      "validity": "ReverificationRequired"
     },
     "KQ-014": {
-      "event_id": "VAL-KQ-014-LEGACY-MIGRATION",
-      "evidence_id": "legacy:KQ-014",
-      "reason": "Legacy evidence is preserved as history but cannot satisfy current dependencies.",
+      "event_id": "VAL-KQ-014-D3E25E38B5AE-CURRENT",
+      "evidence_id": "KQ-014-d3e25e38b5ae",
+      "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
       "validity": "ReverificationRequired"
     },
     "KQ-015": {
@@ -94,7 +94,10 @@
     }
   },
   "summary": {
-    "Current": [
+    "Current": [],
+    "Invalidated": [],
+    "Retired": [],
+    "ReverificationRequired": [
       "KQ-001",
       "KQ-002",
       "KQ-003",
@@ -107,15 +110,54 @@
       "KQ-010",
       "KQ-011",
       "KQ-012",
-      "KQ-013"
-    ],
-    "Invalidated": [],
-    "Retired": [],
-    "ReverificationRequired": [
+      "KQ-013",
       "KQ-014",
       "KQ-015"
     ],
     "Superseded": []
   },
-  "verification_errors": {}
+  "verification_errors": {
+    "KQ-001": [
+      "input is missing or stale: tools/program/evidence_integrity.py"
+    ],
+    "KQ-002": [
+      "input is missing or stale: tools/program/evidence_integrity.py"
+    ],
+    "KQ-003": [
+      "input is missing or stale: tools/program/evidence_integrity.py"
+    ],
+    "KQ-004": [
+      "input is missing or stale: tools/program/evidence_integrity.py"
+    ],
+    "KQ-005": [
+      "input is missing or stale: tools/program/evidence_integrity.py"
+    ],
+    "KQ-006": [
+      "input is missing or stale: tools/program/evidence_integrity.py"
+    ],
+    "KQ-007": [
+      "input is missing or stale: tools/program/evidence_integrity.py"
+    ],
+    "KQ-008": [
+      "input is missing or stale: tools/program/evidence_integrity.py"
+    ],
+    "KQ-009": [
+      "input is missing or stale: tools/program/evidence_integrity.py"
+    ],
+    "KQ-010": [
+      "input is missing or stale: tools/program/evidence_integrity.py"
+    ],
+    "KQ-011": [
+      "input is missing or stale: tools/program/evidence_integrity.py"
+    ],
+    "KQ-012": [
+      "input is missing or stale: tools/program/evidence_integrity.py"
+    ],
+    "KQ-013": [
+      "input is missing or stale: tools/program/evidence_integrity.py"
+    ],
+    "KQ-014": [
+      "input is missing or stale: tools/program/evidence_integrity.py"
+    ]
+  }
 }
