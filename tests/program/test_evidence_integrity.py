@@ -57,11 +57,23 @@ class EvidenceIntegrityTests(unittest.TestCase):
         self.assertTrue(any("declared evidence inputs are unhashed" in item for item in errors))
 
     def test_historical_true_flag_does_not_create_current_validity(self) -> None:
-        projection = compile_projection(ROOT, self.program.milestones)
-        self.assertEqual(
-            projection["states"]["KQ-001"]["validity"],
-            "ReverificationRequired",
-        )
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            legacy = root / "docs/status/milestones/KQ-001.json"
+            legacy.parent.mkdir(parents=True)
+            legacy.write_text(
+                json.dumps({
+                    "milestone_id": "KQ-001",
+                    "all_required_checks_passed": True,
+                }),
+                encoding="utf-8",
+            )
+            milestone = copy.deepcopy(self.program.by_id["KQ-001"])
+            projection = compile_projection(root, [milestone])
+            self.assertEqual(
+                projection["states"]["KQ-001"]["validity"],
+                "ReverificationRequired",
+            )
 
     def test_invalid_current_record_is_demoted(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

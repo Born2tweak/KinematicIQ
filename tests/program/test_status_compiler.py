@@ -26,7 +26,10 @@ class StatusCompilerTests(unittest.TestCase):
             self.assertEqual(status["milestones"]["next_executable_id"], ready[0])
         else:
             self.assertIsNone(status["milestones"]["next_executable_id"])
-            self.assertTrue(status["milestones"]["dependency_ready_ids"])
+            self.assertLess(
+                status["milestones"]["evidence_validity_counts"]["Current"],
+                status["milestones"]["status_counts"].get("Passed", 0),
+            )
 
     def test_checked_in_status_matches_compiler_when_present(self) -> None:
         path = ROOT / "docs/status/program_status.json"
