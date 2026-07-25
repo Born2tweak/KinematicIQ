@@ -6,95 +6,98 @@
       "event_id": "VAL-KQ-001-A11F42DE082E-CURRENT",
       "evidence_id": "KQ-001-a11f42de082e",
       "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
-      "validity": "Current"
+      "validity": "ReverificationRequired"
     },
     "KQ-002": {
       "event_id": "VAL-KQ-002-A11F42DE082E-CURRENT",
       "evidence_id": "KQ-002-a11f42de082e",
       "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
-      "validity": "Current"
+      "validity": "ReverificationRequired"
     },
     "KQ-003": {
       "event_id": "VAL-KQ-003-A11F42DE082E-CURRENT",
       "evidence_id": "KQ-003-a11f42de082e",
       "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
-      "validity": "Current"
+      "validity": "ReverificationRequired"
     },
     "KQ-004": {
       "event_id": "VAL-KQ-004-A11F42DE082E-CURRENT",
       "evidence_id": "KQ-004-a11f42de082e",
       "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
-      "validity": "Current"
+      "validity": "ReverificationRequired"
     },
     "KQ-005": {
       "event_id": "VAL-KQ-005-A11F42DE082E-CURRENT",
       "evidence_id": "KQ-005-a11f42de082e",
       "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
-      "validity": "Current"
+      "validity": "ReverificationRequired"
     },
     "KQ-006": {
       "event_id": "VAL-KQ-006-A11F42DE082E-CURRENT",
       "evidence_id": "KQ-006-a11f42de082e",
       "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
-      "validity": "Current"
+      "validity": "ReverificationRequired"
     },
     "KQ-007": {
       "event_id": "VAL-KQ-007-A11F42DE082E-CURRENT",
       "evidence_id": "KQ-007-a11f42de082e",
       "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
-      "validity": "Current"
+      "validity": "ReverificationRequired"
     },
     "KQ-008": {
       "event_id": "VAL-KQ-008-A11F42DE082E-CURRENT",
       "evidence_id": "KQ-008-a11f42de082e",
       "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
-      "validity": "Current"
+      "validity": "ReverificationRequired"
     },
     "KQ-009": {
       "event_id": "VAL-KQ-009-A11F42DE082E-CURRENT",
       "evidence_id": "KQ-009-a11f42de082e",
       "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
-      "validity": "Current"
+      "validity": "ReverificationRequired"
     },
     "KQ-010": {
       "event_id": "VAL-KQ-010-A11F42DE082E-CURRENT",
       "evidence_id": "KQ-010-a11f42de082e",
       "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
-      "validity": "Current"
+      "validity": "ReverificationRequired"
     },
     "KQ-011": {
       "event_id": "VAL-KQ-011-A11F42DE082E-CURRENT",
       "evidence_id": "KQ-011-a11f42de082e",
       "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
-      "validity": "Current"
+      "validity": "ReverificationRequired"
     },
     "KQ-012": {
       "event_id": "VAL-KQ-012-A11F42DE082E-CURRENT",
       "evidence_id": "KQ-012-a11f42de082e",
       "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
-      "validity": "Current"
+      "validity": "ReverificationRequired"
     },
     "KQ-013": {
       "event_id": "VAL-KQ-013-A11F42DE082E-CURRENT",
       "evidence_id": "KQ-013-a11f42de082e",
       "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
-      "validity": "Current"
+      "validity": "ReverificationRequired"
     },
     "KQ-014": {
       "event_id": "VAL-KQ-014-A11F42DE082E-CURRENT",
       "evidence_id": "KQ-014-a11f42de082e",
       "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
-      "validity": "Current"
+      "validity": "ReverificationRequired"
     },
     "KQ-015": {
-      "event_id": null,
-      "evidence_id": "legacy:KQ-015",
-      "reason": "Legacy evidence has not been migrated to evidence schema v2.",
+      "event_id": "VAL-KQ-015-8C5BC6E76A19-CURRENT",
+      "evidence_id": "KQ-015-8c5bc6e76a19",
+      "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
       "validity": "ReverificationRequired"
     }
   },
   "summary": {
-    "Current": [
+    "Current": [],
+    "Invalidated": [],
+    "Retired": [],
+    "ReverificationRequired": [
       "KQ-001",
       "KQ-002",
       "KQ-003",
@@ -108,14 +111,95 @@
       "KQ-011",
       "KQ-012",
       "KQ-013",
-      "KQ-014"
-    ],
-    "Invalidated": [],
-    "Retired": [],
-    "ReverificationRequired": [
+      "KQ-014",
       "KQ-015"
     ],
     "Superseded": []
   },
-  "verification_errors": {}
+  "verification_errors": {
+    "KQ-001": [
+      "input is missing or stale: tools/program/evidence_integrity.py"
+    ],
+    "KQ-002": [
+      "input is missing or stale: tools/program/evidence_integrity.py"
+    ],
+    "KQ-003": [
+      "input is missing or stale: tools/program/evidence_integrity.py"
+    ],
+    "KQ-004": [
+      "input is missing or stale: tools/program/evidence_integrity.py"
+    ],
+    "KQ-005": [
+      "input is missing or stale: tools/program/evidence_integrity.py"
+    ],
+    "KQ-006": [
+      "input is missing or stale: tools/program/evidence_integrity.py"
+    ],
+    "KQ-007": [
+      "input is missing or stale: tools/program/evidence_integrity.py"
+    ],
+    "KQ-008": [
+      "input is missing or stale: tools/program/evidence_integrity.py"
+    ],
+    "KQ-009": [
+      "input is missing or stale: tools/program/evidence_integrity.py"
+    ],
+    "KQ-010": [
+      "input is missing or stale: tools/program/evidence_integrity.py"
+    ],
+    "KQ-011": [
+      "input is missing or stale: tools/program/evidence_integrity.py"
+    ],
+    "KQ-012": [
+      "input is missing or stale: tools/program/evidence_integrity.py"
+    ],
+    "KQ-013": [
+      "input is missing or stale: tools/program/evidence_integrity.py"
+    ],
+    "KQ-014": [
+      "input is missing or stale: tools/program/evidence_integrity.py"
+    ],
+    "KQ-015": [
+      "input is absent from subject commit: tests/program/__pycache__/test_artifact_structure.cpython-314.pyc",
+      "input is absent from subject commit: tests/program/__pycache__/test_authority.cpython-314.pyc",
+      "input is absent from subject commit: tests/program/__pycache__/test_checkpoint_generator.cpython-314.pyc",
+      "input is missing or stale: tests/program/__pycache__/test_evidence_integrity.cpython-314.pyc",
+      "input is absent from subject commit: tests/program/__pycache__/test_execution_authority.cpython-314.pyc",
+      "input is absent from subject commit: tests/program/__pycache__/test_execution_fixtures.cpython-314.pyc",
+      "input is absent from subject commit: tests/program/__pycache__/test_execution_policy.cpython-314.pyc",
+      "input is absent from subject commit: tests/program/__pycache__/test_history_import.cpython-314.pyc",
+      "input is absent from subject commit: tests/program/__pycache__/test_id_migration.cpython-314.pyc",
+      "input is absent from subject commit: tests/program/__pycache__/test_program_contract.cpython-314.pyc",
+      "input is absent from subject commit: tests/program/__pycache__/test_replan_impact.cpython-314.pyc",
+      "input is absent from subject commit: tests/program/__pycache__/test_research_workflow.cpython-314.pyc",
+      "input is absent from subject commit: tests/program/__pycache__/test_schedule_wave.cpython-314.pyc",
+      "input is absent from subject commit: tests/program/__pycache__/test_status_compiler.cpython-314.pyc",
+      "input is absent from subject commit: tests/program/__pycache__/test_traceability_validator.cpython-314.pyc",
+      "input is missing or stale: tests/program/test_evidence_integrity.py",
+      "input is absent from subject commit: tools/program/__pycache__/__init__.cpython-314.pyc",
+      "input is absent from subject commit: tools/program/__pycache__/compile_evidence_validity.cpython-314.pyc",
+      "input is absent from subject commit: tools/program/__pycache__/compile_status.cpython-314.pyc",
+      "input is missing or stale: tools/program/__pycache__/evidence_integrity.cpython-314.pyc",
+      "input is absent from subject commit: tools/program/__pycache__/execution_authority.cpython-314.pyc",
+      "input is absent from subject commit: tools/program/__pycache__/execution_semantics.cpython-314.pyc",
+      "input is absent from subject commit: tools/program/__pycache__/generate_checkpoint.cpython-314.pyc",
+      "input is absent from subject commit: tools/program/__pycache__/migrate_phase_a_evidence.cpython-314.pyc",
+      "input is absent from subject commit: tools/program/__pycache__/program_contract.cpython-314.pyc",
+      "input is absent from subject commit: tools/program/__pycache__/replan_impact.cpython-314.pyc",
+      "input is absent from subject commit: tools/program/__pycache__/run_contract_checks.cpython-314.pyc",
+      "input is absent from subject commit: tools/program/__pycache__/schedule_wave.cpython-314.pyc",
+      "input is absent from subject commit: tools/program/__pycache__/transition_wave.cpython-314.pyc",
+      "input is absent from subject commit: tools/program/__pycache__/validate_traceability.cpython-314.pyc",
+      "input is absent from subject commit: tools/program/__pycache__/verify_artifact_structure.cpython-314.pyc",
+      "input is absent from subject commit: tools/program/__pycache__/verify_authority.cpython-314.pyc",
+      "input is absent from subject commit: tools/program/__pycache__/verify_clean_clone.cpython-314.pyc",
+      "input is absent from subject commit: tools/program/__pycache__/verify_evidence.cpython-314.pyc",
+      "input is absent from subject commit: tools/program/__pycache__/verify_execution_policy.cpython-314.pyc",
+      "input is absent from subject commit: tools/program/__pycache__/verify_history_import.cpython-314.pyc",
+      "input is absent from subject commit: tools/program/__pycache__/verify_id_migration.cpython-314.pyc",
+      "input is absent from subject commit: tools/program/__pycache__/verify_milestone.cpython-314.pyc",
+      "input is absent from subject commit: tools/program/__pycache__/verify_research_workflow.cpython-314.pyc",
+      "input is missing or stale: tools/program/evidence_integrity.py"
+    ]
+  }
 }

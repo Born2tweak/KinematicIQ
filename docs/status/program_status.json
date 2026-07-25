@@ -13,10 +13,10 @@
     "committed_wave_ready_ids": [],
     "dependency_ready_ids": [],
     "evidence_validity_counts": {
-      "Current": 14,
+      "Current": 0,
       "Invalidated": 0,
       "Retired": 0,
-      "ReverificationRequired": 1,
+      "ReverificationRequired": 15,
       "Superseded": 0
     },
     "next_executable_id": null,
@@ -51,6 +51,6 @@
     "docs/program/artifacts/kq-002.yaml": "636f533ffca7bf54503819e76ed9ed844c75c76be4c5bd653252a2c74018f0b1",
     "docs/program/milestone_registry.yaml": "e7a9675d08fc4554b4e6fc37fe4626ce6b35a86ddf4c398317a3803a6d8f21d2",
     "docs/program/resource_registry.yaml": "b10c001806da017f3f0876a77eb8db34c82870bc745140f8b9b9afc0c56a4c22",
-    "docs/status/evidence_validity.json": "be2037ff09f0a50cf203841bb1e182b8ec8afba2f99e55c6eb914d09497d2d8e"
+    "docs/status/evidence_validity.json": "cae498da380486df1214beab27e7b2384290edb549c2148870dc0878a77a5dfc"
   }
 }

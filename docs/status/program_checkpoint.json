@@ -59,22 +59,7 @@
     ],
     "next_executable_range": [],
     "objective_evidence": {
-      "currently_valid_ids": [
-        "KQ-001",
-        "KQ-002",
-        "KQ-003",
-        "KQ-004",
-        "KQ-005",
-        "KQ-006",
-        "KQ-007",
-        "KQ-008",
-        "KQ-009",
-        "KQ-010",
-        "KQ-011",
-        "KQ-012",
-        "KQ-013",
-        "KQ-014"
-      ],
+      "currently_valid_ids": [],
       "historically_passed_ids": [
         "KQ-001",
         "KQ-002",
@@ -94,17 +79,117 @@
       ],
       "invalidated_ids": [],
       "reverification_required_ids": [
+        "KQ-001",
+        "KQ-002",
+        "KQ-003",
+        "KQ-004",
+        "KQ-005",
+        "KQ-006",
+        "KQ-007",
+        "KQ-008",
+        "KQ-009",
+        "KQ-010",
+        "KQ-011",
+        "KQ-012",
+        "KQ-013",
+        "KQ-014",
         "KQ-015"
       ]
     },
     "subject_commits": [
       "1fd94b2921021a762f4b4dbf98e426c9d073a354",
       "5993a6d48a3fda2e2f24201cdb60f91ba731c056",
+      "8c5bc6e76a1990ae6a31c07a37567b6f83fe579d",
       "a11f42de082eeb73a99ab66b87ded7f1375c9c3c",
       "d3e25e38b5ae08b7ba359a482ad7449eb1f9b318",
       "ffa3907456833d37c06b74bc937a595c9fb6dd3f"
     ],
-    "verification_failures": {}
+    "verification_failures": {
+      "KQ-001": [
+        "input is missing or stale: tools/program/evidence_integrity.py"
+      ],
+      "KQ-002": [
+        "input is missing or stale: tools/program/evidence_integrity.py"
+      ],
+      "KQ-003": [
+        "input is missing or stale: tools/program/evidence_integrity.py"
+      ],
+      "KQ-004": [
+        "input is missing or stale: tools/program/evidence_integrity.py"
+      ],
+      "KQ-005": [
+        "input is missing or stale: tools/program/evidence_integrity.py"
+      ],
+      "KQ-006": [
+        "input is missing or stale: tools/program/evidence_integrity.py"
+      ],
+      "KQ-007": [
+        "input is missing or stale: tools/program/evidence_integrity.py"
+      ],
+      "KQ-008": [
+        "input is missing or stale: tools/program/evidence_integrity.py"
+      ],
+      "KQ-009": [
+        "input is missing or stale: tools/program/evidence_integrity.py"
+      ],
+      "KQ-010": [
+        "input is missing or stale: tools/program/evidence_integrity.py"
+      ],
+      "KQ-011": [
+        "input is missing or stale: tools/program/evidence_integrity.py"
+      ],
+      "KQ-012": [
+        "input is missing or stale: tools/program/evidence_integrity.py"
+      ],
+      "KQ-013": [
+        "input is missing or stale: tools/program/evidence_integrity.py"
+      ],
+      "KQ-014": [
+        "input is missing or stale: tools/program/evidence_integrity.py"
+      ],
+      "KQ-015": [
+        "input is absent from subject commit: tests/program/__pycache__/test_artifact_structure.cpython-314.pyc",
+        "input is absent from subject commit: tests/program/__pycache__/test_authority.cpython-314.pyc",
+        "input is absent from subject commit: tests/program/__pycache__/test_checkpoint_generator.cpython-314.pyc",
+        "input is missing or stale: tests/program/__pycache__/test_evidence_integrity.cpython-314.pyc",
+        "input is absent from subject commit: tests/program/__pycache__/test_execution_authority.cpython-314.pyc",
+        "input is absent from subject commit: tests/program/__pycache__/test_execution_fixtures.cpython-314.pyc",
+        "input is absent from subject commit: tests/program/__pycache__/test_execution_policy.cpython-314.pyc",
+        "input is absent from subject commit: tests/program/__pycache__/test_history_import.cpython-314.pyc",
+        "input is absent from subject commit: tests/program/__pycache__/test_id_migration.cpython-314.pyc",
+        "input is absent from subject commit: tests/program/__pycache__/test_program_contract.cpython-314.pyc",
+        "input is absent from subject commit: tests/program/__pycache__/test_replan_impact.cpython-314.pyc",
+        "input is absent from subject commit: tests/program/__pycache__/test_research_workflow.cpython-314.pyc",
+        "input is absent from subject commit: tests/program/__pycache__/test_schedule_wave.cpython-314.pyc",
+        "input is absent from subject commit: tests/program/__pycache__/test_status_compiler.cpython-314.pyc",
+        "input is absent from subject commit: tests/program/__pycache__/test_traceability_validator.cpython-314.pyc",
+        "input is missing or stale: tests/program/test_evidence_integrity.py",
+        "input is absent from subject commit: tools/program/__pycache__/__init__.cpython-314.pyc",
+        "input is absent from subject commit: tools/program/__pycache__/compile_evidence_validity.cpython-314.pyc",
+        "input is absent from subject commit: tools/program/__pycache__/compile_status.cpython-314.pyc",
+        "input is missing or stale: tools/program/__pycache__/evidence_integrity.cpython-314.pyc",
+        "input is absent from subject commit: tools/program/__pycache__/execution_authority.cpython-314.pyc",
+        "input is absent from subject commit: tools/program/__pycache__/execution_semantics.cpython-314.pyc",
+        "input is absent from subject commit: tools/program/__pycache__/generate_checkpoint.cpython-314.pyc",
+        "input is absent from subject commit: tools/program/__pycache__/migrate_phase_a_evidence.cpython-314.pyc",
+        "input is absent from subject commit: tools/program/__pycache__/program_contract.cpython-314.pyc",
+        "input is absent from subject commit: tools/program/__pycache__/replan_impact.cpython-314.pyc",
+        "input is absent from subject commit: tools/program/__pycache__/run_contract_checks.cpython-314.pyc",
+        "input is absent from subject commit: tools/program/__pycache__/schedule_wave.cpython-314.pyc",
+        "input is absent from subject commit: tools/program/__pycache__/transition_wave.cpython-314.pyc",
+        "input is absent from subject commit: tools/program/__pycache__/validate_traceability.cpython-314.pyc",
+        "input is absent from subject commit: tools/program/__pycache__/verify_artifact_structure.cpython-314.pyc",
+        "input is absent from subject commit: tools/program/__pycache__/verify_authority.cpython-314.pyc",
+        "input is absent from subject commit: tools/program/__pycache__/verify_clean_clone.cpython-314.pyc",
+        "input is absent from subject commit: tools/program/__pycache__/verify_evidence.cpython-314.pyc",
+        "input is absent from subject commit: tools/program/__pycache__/verify_execution_policy.cpython-314.pyc",
+        "input is absent from subject commit: tools/program/__pycache__/verify_history_import.cpython-314.pyc",
+        "input is absent from subject commit: tools/program/__pycache__/verify_id_migration.cpython-314.pyc",
+        "input is absent from subject commit: tools/program/__pycache__/verify_milestone.cpython-314.pyc",
+        "input is absent from subject commit: tools/program/__pycache__/verify_research_workflow.cpython-314.pyc",
+        "input is missing or stale: tools/program/evidence_integrity.py"
+      ]
+    }
   },
   "release_summary": {
     "automatic_production_deploy": false,
@@ -181,8 +266,9 @@
     "docs/status/evidence/KQ-014/KQ-014-1fd94b292102.json": "6c90852a1c8ebdf83c42cb0f549b326e0319c7302661e858dddf8e02f6f3ca3d",
     "docs/status/evidence/KQ-014/KQ-014-a11f42de082e.json": "ad845242855fa822a7ba944258d21d1367d9ceb9dd1ffed5f855f22bdf9048df",
     "docs/status/evidence/KQ-014/KQ-014-d3e25e38b5ae.json": "4102d7d0bff38fbb9c3bad3b3efdd43f9f5068ad2acf22064ca39d8539236da7",
-    "docs/status/evidence_validity.json": "be2037ff09f0a50cf203841bb1e182b8ec8afba2f99e55c6eb914d09497d2d8e",
-    "docs/status/evidence_validity_events.ndjson": "a08491138113f932f2290f19f1cceef1605e4bed3c4ddd310fb851583c307334",
+    "docs/status/evidence/KQ-015/KQ-015-8c5bc6e76a19.json": "df2778835cac9b61dc2aa459fccc46133baecb67f50bd5918942b8519621c8fd",
+    "docs/status/evidence_validity.json": "cae498da380486df1214beab27e7b2384290edb549c2148870dc0878a77a5dfc",
+    "docs/status/evidence_validity_events.ndjson": "07921bfd2212383ea23cd752866c5e011353ffe530f3b0a6d73fd9618e1bbdea",
     "docs/status/milestones/KQ-001.json": "7e3058ae976e5683cc3feabc41a115dedd91f66e221747469803a5f2b1d147c6",
     "docs/status/milestones/KQ-002.json": "7f93c5d052ef6acbd35e977c800e2bb79e9e656702d626be1fc6b6c4ce6955d5",
     "docs/status/milestones/KQ-003.json": "fa062f54317050c08b955ba310eab44bc82bb83f3f53a95104ff4695c69acc39",
@@ -198,7 +284,7 @@
     "docs/status/milestones/KQ-013.json": "bdf9e17c2b7d5346837f9afedc6e4e23776c184fbcb060465acab94732e8e86c",
     "docs/status/milestones/KQ-014.json": "1d29dbaca182957965eb19120b54274df2cd6789a27cae790cea2245d53d3f59",
     "docs/status/milestones/KQ-015.json": "8b73d40dfcca7e0ebc617cde3164dbb9a05ffd03bd58e55c35662ca33ce75764",
-    "docs/status/program_status.json": "07ee862642923ec044c35901a99b473ab012d0f715b3d0c48e06e446d8b5be85",
+    "docs/status/program_status.json": "85431dac3ed4244e14be021ab0caee8cdc9c15099fa94df0f7a92f4f226eb76c",
     "docs/validation/protocol_validation_registry.yaml": "b4e6b116d36b7213c7257c00df166e98a6ac02cb475c90a5b23807ece1aa8141"
   },
   "triggers": [

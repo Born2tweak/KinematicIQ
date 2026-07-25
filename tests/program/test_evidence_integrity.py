@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import copy
 import json
+import subprocess
 import sys
 import tempfile
 import unittest
@@ -15,6 +16,7 @@ from evidence_integrity import (  # noqa: E402
     canonical_content,
     canonical_json_hash,
     compile_projection,
+    scope_paths,
     verify_record,
 )
 from program_contract import load_program  # noqa: E402
@@ -33,6 +35,27 @@ class EvidenceIntegrityTests(unittest.TestCase):
         lf = canonical_content(b"one\ntwo\n", ".py")
         crlf = canonical_content(b"one\r\ntwo\r\n", ".py")
         self.assertEqual(lf, crlf)
+
+    def test_directory_scope_contains_only_tracked_content(self) -> None:
+        paths = scope_paths(ROOT, self.program.by_id["KQ-015"])
+        relative_paths = {
+            path.relative_to(ROOT).as_posix()
+            for path in paths
+        }
+        self.assertTrue(relative_paths)
+        self.assertFalse(any("__pycache__" in item for item in relative_paths))
+        tracked = {
+            item
+            for item in subprocess.run(
+                ["git", "ls-files"],
+                cwd=ROOT,
+                check=True,
+                capture_output=True,
+                text=True,
+            ).stdout.splitlines()
+            if item
+        }
+        self.assertLessEqual(relative_paths, tracked)
 
     def test_declared_input_is_required(self) -> None:
         milestone = self.program.by_id["KQ-002"]

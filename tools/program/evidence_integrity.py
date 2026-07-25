@@ -120,13 +120,27 @@ def _python_target(root: Path, command: str) -> Path | None:
     return target if target.is_file() else None
 
 
+@lru_cache(maxsize=None)
+def tracked_paths(root: Path) -> frozenset[str]:
+    return frozenset(
+        item
+        for item in git_output(root, "ls-files").splitlines()
+        if item
+    )
+
+
 def _expand_scope_path(root: Path, value: str) -> list[Path]:
-    path = root / value
-    if path.is_file():
-        return [path]
-    if path.is_dir():
-        return sorted(item for item in path.rglob("*") if item.is_file())
-    return []
+    normalized = Path(value).as_posix().rstrip("/")
+    tracked = tracked_paths(root.resolve())
+    if normalized in tracked:
+        path = root / normalized
+        return [path] if path.is_file() else []
+    prefix = f"{normalized}/"
+    return [
+        root / item
+        for item in sorted(tracked)
+        if item.startswith(prefix) and (root / item).is_file()
+    ]
 
 
 def scope_paths(root: Path, milestone: dict[str, Any]) -> list[Path]:
