@@ -9,18 +9,202 @@
     ]
   },
   "milestones": {
-    "allowed_executable_ids": [],
-    "committed_wave_ready_ids": [],
-    "dependency_ready_ids": [],
+    "allowed_executable_ids": [
+      "KQ-016",
+      "KQ-017"
+    ],
+    "committed_wave_ready_ids": [
+      "KQ-016",
+      "KQ-017",
+      "KQ-026"
+    ],
+    "dependency_ready_ids": [
+      "KQ-016",
+      "KQ-017",
+      "KQ-026",
+      "KQ-056"
+    ],
     "evidence_validity_counts": {
-      "Current": 14,
+      "Current": 15,
       "Invalidated": 0,
       "Retired": 0,
-      "ReverificationRequired": 1,
+      "ReverificationRequired": 0,
       "Superseded": 0
     },
-    "next_executable_id": null,
-    "resource_blocked": {},
+    "next_executable_id": "KQ-016",
+    "resource_blocked": {
+      "KQ-051": [
+        "RES-RATER"
+      ],
+      "KQ-054": [
+        "RES-PRIVACY"
+      ],
+      "KQ-061": [
+        "RES-PRIVACY"
+      ],
+      "KQ-088": [
+        "RES-DEVICES",
+        "RES-KINEMATICS",
+        "RES-PARTICIPANTS",
+        "RES-PRIVACY",
+        "RES-RATER",
+        "RES-REPEAT"
+      ],
+      "KQ-092": [
+        "RES-DEVICES",
+        "RES-KINEMATICS",
+        "RES-PARTICIPANTS",
+        "RES-PRIVACY",
+        "RES-RATER",
+        "RES-REPEAT"
+      ],
+      "KQ-096": [
+        "RES-DEVICES",
+        "RES-KINEMATICS",
+        "RES-PARTICIPANTS",
+        "RES-PRIVACY",
+        "RES-RATER",
+        "RES-REPEAT"
+      ],
+      "KQ-100": [
+        "RES-DEVICES",
+        "RES-KINEMATICS",
+        "RES-PARTICIPANTS",
+        "RES-PRIVACY",
+        "RES-RATER",
+        "RES-REPEAT"
+      ],
+      "KQ-104": [
+        "RES-DEVICES",
+        "RES-KINEMATICS",
+        "RES-PARTICIPANTS",
+        "RES-PRIVACY",
+        "RES-RATER",
+        "RES-REPEAT"
+      ],
+      "KQ-108": [
+        "RES-DEVICES",
+        "RES-KINEMATICS",
+        "RES-PARTICIPANTS",
+        "RES-PRIVACY",
+        "RES-RATER",
+        "RES-REPEAT"
+      ],
+      "KQ-112": [
+        "RES-DEVICES",
+        "RES-KINEMATICS",
+        "RES-PARTICIPANTS",
+        "RES-PRIVACY",
+        "RES-RATER",
+        "RES-REPEAT"
+      ],
+      "KQ-116": [
+        "RES-DEVICES",
+        "RES-KINEMATICS",
+        "RES-PARTICIPANTS",
+        "RES-PRIVACY",
+        "RES-RATER",
+        "RES-REPEAT"
+      ],
+      "KQ-120": [
+        "RES-DEVICES",
+        "RES-KINEMATICS",
+        "RES-PARTICIPANTS",
+        "RES-PRIVACY",
+        "RES-RATER",
+        "RES-REPEAT"
+      ],
+      "KQ-124": [
+        "RES-DEVICES",
+        "RES-KINEMATICS",
+        "RES-PARTICIPANTS",
+        "RES-PRIVACY",
+        "RES-RATER",
+        "RES-REPEAT"
+      ],
+      "KQ-128": [
+        "RES-DEVICES",
+        "RES-KINEMATICS",
+        "RES-PARTICIPANTS",
+        "RES-PRIVACY",
+        "RES-RATER",
+        "RES-REPEAT"
+      ],
+      "KQ-132": [
+        "RES-DEVICES",
+        "RES-KINEMATICS",
+        "RES-PARTICIPANTS",
+        "RES-PRIVACY",
+        "RES-RATER",
+        "RES-REPEAT"
+      ],
+      "KQ-136": [
+        "RES-DEVICES",
+        "RES-PARTICIPANTS",
+        "RES-PRIVACY",
+        "RES-RATER",
+        "RES-REPEAT",
+        "RES-TIMING"
+      ],
+      "KQ-140": [
+        "RES-DEVICES",
+        "RES-PARTICIPANTS",
+        "RES-PRIVACY",
+        "RES-RATER",
+        "RES-REPEAT",
+        "RES-TIMING"
+      ],
+      "KQ-144": [
+        "RES-DEVICES",
+        "RES-FORCE_CONTACT",
+        "RES-PARTICIPANTS",
+        "RES-PRIVACY",
+        "RES-RATER",
+        "RES-REPEAT"
+      ],
+      "KQ-148": [
+        "RES-DEVICES",
+        "RES-FORCE_CONTACT",
+        "RES-PARTICIPANTS",
+        "RES-PRIVACY",
+        "RES-RATER",
+        "RES-REPEAT"
+      ],
+      "KQ-152": [
+        "RES-CALIBRATED_PLATFORM",
+        "RES-DEVICES",
+        "RES-FORCE_CONTACT",
+        "RES-PARTICIPANTS",
+        "RES-PRIVACY",
+        "RES-RATER",
+        "RES-REPEAT"
+      ],
+      "KQ-156": [
+        "RES-CALIBRATED_PLATFORM",
+        "RES-DEVICES",
+        "RES-FORCE_CONTACT",
+        "RES-PARTICIPANTS",
+        "RES-PRIVACY",
+        "RES-RATER",
+        "RES-REPEAT"
+      ],
+      "KQ-160": [
+        "RES-DEVICES",
+        "RES-PARTICIPANTS",
+        "RES-PRIVACY",
+        "RES-RATER",
+        "RES-REPEAT",
+        "RES-TIMING"
+      ],
+      "KQ-164": [
+        "RES-DEVICES",
+        "RES-PARTICIPANTS",
+        "RES-PRIVACY",
+        "RES-RATER",
+        "RES-REPEAT",
+        "RES-TIMING"
+      ]
+    },
     "status_counts": {
       "Passed": 15,
       "Pending": 160
@@ -51,6 +235,6 @@
     "docs/program/artifacts/kq-002.yaml": "636f533ffca7bf54503819e76ed9ed844c75c76be4c5bd653252a2c74018f0b1",
     "docs/program/milestone_registry.yaml": "e7a9675d08fc4554b4e6fc37fe4626ce6b35a86ddf4c398317a3803a6d8f21d2",
     "docs/program/resource_registry.yaml": "b10c001806da017f3f0876a77eb8db34c82870bc745140f8b9b9afc0c56a4c22",
-    "docs/status/evidence_validity.json": "7c8551e055e5310008a462854030208e525fe0c35b2036373e9f073447fd6858"
+    "docs/status/evidence_validity.json": "8763d561a8f32d06e2ac12ebf51b8e0408bb6cf83f865634b6b6f15360f6a36b"
   }
 }
