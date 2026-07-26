@@ -19,6 +19,10 @@ jobs:
         with:
           python-version: '3.14'
           cache: pip
+          # The program dependencies live in requirements-program.txt, which the
+          # action's default glob (requirements.txt / pyproject.toml) never matched,
+          # so every run failed during setup before any verification step executed.
+          cache-dependency-path: requirements-program.txt
       - uses: actions/setup-node@v4
         with:
           node-version: '24.12.0'

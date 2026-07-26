@@ -8,10 +8,11 @@ import re
 import shutil
 import subprocess
 import tarfile
+from contextlib import contextmanager
 from datetime import datetime, timezone
 from functools import lru_cache
 from pathlib import Path
-from typing import Any, Iterable
+from typing import Any, Iterable, Iterator
 
 import jsonschema
 import yaml
@@ -64,8 +65,74 @@ def canonical_content(raw: bytes, suffix: str) -> bytes:
     return raw
 
 
+_WORKTREE_HASHES: dict[Path, str] | None = None
+
+
+@contextmanager
+def _stable_worktree() -> Iterator[None]:
+    """Reuse working-tree hashes for the duration of one read-only pass.
+
+    Milestone scopes overlap by design, so a single projection otherwise hashes
+    the same file once per record. The cache exists only inside this block,
+    which never writes to the tree, so it cannot mask a later mutation.
+    """
+    global _WORKTREE_HASHES
+    if _WORKTREE_HASHES is not None:
+        yield
+        return
+    _WORKTREE_HASHES = {}
+    try:
+        yield
+    finally:
+        _WORKTREE_HASHES = None
+
+
 def canonical_hash(path: Path) -> str:
-    return hashlib.sha256(canonical_bytes(path)).hexdigest()
+    cache = _WORKTREE_HASHES
+    if cache is None:
+        return hashlib.sha256(canonical_bytes(path)).hexdigest()
+    key = path.resolve()
+    if key not in cache:
+        cache[key] = hashlib.sha256(canonical_bytes(path)).hexdigest()
+    return cache[key]
+
+
+_SCHEMA_VALIDATORS: dict[str, jsonschema.Draft202012Validator] = {}
+
+
+def schema_validator(path: Path) -> jsonschema.Draft202012Validator | None:
+    """Compile a JSON Schema once per distinct schema content.
+
+    Every validity event is validated against the same schema file, so keying
+    on the file's canonical content rather than its path or mtime makes repeat
+    validation free while making a rewritten schema impossible to miss.
+    """
+    if not path.is_file():
+        return None
+    raw = canonical_bytes(path)
+    key = hashlib.sha256(raw).hexdigest()
+    validator = _SCHEMA_VALIDATORS.get(key)
+    if validator is None:
+        validator = jsonschema.Draft202012Validator(yaml.safe_load(raw.decode("utf-8")))
+        _SCHEMA_VALIDATORS[key] = validator
+    return validator
+
+
+_COMMIT_TREES: dict[tuple[Path, str], str] = {}
+
+
+def commit_tree(root: Path, commit: str) -> str:
+    """Resolve a commit's tree, caching only immutable full object names.
+
+    A 40-hex commit names fixed content, so its tree can never change. Anything
+    else may be a moving ref and is resolved fresh every time.
+    """
+    if not re.fullmatch(r"[0-9a-f]{40}", commit):
+        return git_output(root, "rev-parse", f"{commit}^{{tree}}")
+    key = (root.resolve(), commit)
+    if key not in _COMMIT_TREES:
+        _COMMIT_TREES[key] = git_output(root, "rev-parse", f"{commit}^{{tree}}")
+    return _COMMIT_TREES[key]
 
 
 @lru_cache(maxsize=None)
@@ -290,11 +357,10 @@ def verify_record(
     records: dict[str, dict[str, Any]] | None = None,
 ) -> list[str]:
     errors: list[str] = []
-    schema_path = root / "docs/program/evidence_v2.schema.yaml"
-    if schema_path.is_file():
-        schema = yaml.safe_load(schema_path.read_text(encoding="utf-8"))
+    validator = schema_validator(root / "docs/program/evidence_v2.schema.yaml")
+    if validator is not None:
         schema_errors = sorted(
-            jsonschema.Draft202012Validator(schema).iter_errors(record),
+            validator.iter_errors(record),
             key=lambda item: list(item.path),
         )
         errors.extend(
@@ -317,7 +383,7 @@ def verify_record(
     if record["milestone_contract_sha256"] != canonical_json_hash(milestone):
         errors.append("milestone contract is stale")
     try:
-        expected_tree = git_output(root, "rev-parse", f"{record['subject_commit']}^{{tree}}")
+        expected_tree = commit_tree(root, record["subject_commit"])
     except subprocess.CalledProcessError:
         errors.append("subject commit is missing or invalid")
     else:
@@ -369,14 +435,24 @@ def compile_projection(
     root: Path,
     milestones: Iterable[dict[str, Any]],
 ) -> dict[str, Any]:
+    """Project live validity, hashing each scoped file once for the whole pass."""
+    with _stable_worktree():
+        return _compile_projection(root, milestones)
+
+
+def _compile_projection(
+    root: Path,
+    milestones: Iterable[dict[str, Any]],
+) -> dict[str, Any]:
     milestone_map = {item["id"]: item for item in milestones}
     records = load_records(root)
     states: dict[str, dict[str, Any]] = {}
+    event_validator = schema_validator(
+        root / "docs/program/evidence_validity_event.schema.yaml"
+    )
     for event in load_events(root):
-        event_schema_path = root / "docs/program/evidence_validity_event.schema.yaml"
-        if event_schema_path.is_file():
-            schema = yaml.safe_load(event_schema_path.read_text(encoding="utf-8"))
-            errors = list(jsonschema.Draft202012Validator(schema).iter_errors(event))
+        if event_validator is not None:
+            errors = list(event_validator.iter_errors(event))
             if errors:
                 raise EvidenceIntegrityError(
                     f"{event.get('event_id', '<unknown>')}: "

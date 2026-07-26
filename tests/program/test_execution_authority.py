@@ -90,6 +90,45 @@ class ExecutionAuthorityTests(unittest.TestCase):
         with self.assertRaisesRegex(ExecutionAuthorityError, "not an allowed"):
             assert_executable(ROOT, "KQ-056")
 
+    @patch("execution_authority.active_wave")
+    @patch("execution_authority.dependency_ready_ids")
+    def test_every_exclusion_carries_a_machine_readable_reason(
+        self, ready_mock, wave_mock
+    ) -> None:
+        """A milestone left out of the frontier must say which rule excluded it."""
+        ready_mock.return_value = (["KQ-016", "KQ-017", "KQ-026", "KQ-056"], {})
+        wave_mock.return_value = build_active_wave()
+        frontier = executable_frontier(ROOT)
+        reasons = frontier["scheduling_reasons"]
+        self.assertEqual(
+            sorted(reasons), ["KQ-016", "KQ-017", "KQ-026", "KQ-056"]
+        )
+        allowed = set(frontier["allowed_executable_ids"])
+        for milestone_id, reason in reasons.items():
+            self.assertIn(reason["state"], {"allowed", "eligible_but_not_scheduled", "blocked"})
+            self.assertTrue(reason["reason"])
+            self.assertEqual(reason["state"] == "allowed", milestone_id in allowed)
+        self.assertEqual(reasons["KQ-026"]["reason"], "worker_slot_occupied")
+        self.assertEqual(reasons["KQ-026"]["detail"]["worker_id"], "W1")
+        self.assertEqual(reasons["KQ-026"]["detail"]["occupied_by"], "KQ-016")
+        self.assertEqual(
+            reasons["KQ-056"]["reason"], "not_committed_to_active_wave"
+        )
+
+    @patch("execution_authority.active_wave")
+    @patch("execution_authority.dependency_ready_ids")
+    def test_freed_worker_slot_promotes_the_next_committed_id(
+        self, ready_mock, wave_mock
+    ) -> None:
+        """Serialisation is per worker: KQ-026 waits for W1, not forever."""
+        ready_mock.return_value = (["KQ-017", "KQ-026"], {})
+        wave_mock.return_value = build_active_wave()
+        frontier = executable_frontier(ROOT)
+        self.assertIn("KQ-026", frontier["allowed_executable_ids"])
+        self.assertEqual(
+            frontier["scheduling_reasons"]["KQ-026"]["reason"], "scheduled"
+        )
+
     @patch("execution_authority.executable_frontier")
     def test_null_frontier_rejects_all_execution(self, frontier_mock) -> None:
         frontier_mock.return_value = {

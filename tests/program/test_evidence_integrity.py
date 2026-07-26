@@ -14,11 +14,15 @@ sys.path.insert(0, str(ROOT / "tools" / "program"))
 
 from evidence_integrity import (  # noqa: E402
     canonical_content,
+    canonical_hash,
     canonical_json_hash,
+    commit_tree,
     compile_projection,
+    schema_validator,
     scope_paths,
     tracked_paths,
     verify_record,
+    _stable_worktree,
 )
 from program_contract import load_program  # noqa: E402
 
@@ -168,6 +172,73 @@ class EvidenceIntegrityTests(unittest.TestCase):
                 "ReverificationRequired",
             )
             self.assertIn("KQ-001", projection["verification_errors"])
+
+
+class VerificationCacheTests(unittest.TestCase):
+    """Memoisation must never outlive the state it was computed from."""
+
+    def test_repeated_hash_inside_one_pass_reads_the_file_once(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            target = Path(directory) / "scoped.py"
+            target.write_text("one\n", encoding="utf-8")
+            with _stable_worktree():
+                first = canonical_hash(target)
+                target.write_text("two\n", encoding="utf-8")
+                self.assertEqual(canonical_hash(target), first)
+
+    def test_mutated_input_invalidates_the_hash_between_passes(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            target = Path(directory) / "scoped.py"
+            target.write_text("one\n", encoding="utf-8")
+            with _stable_worktree():
+                first = canonical_hash(target)
+            target.write_text("two\n", encoding="utf-8")
+            with _stable_worktree():
+                self.assertNotEqual(canonical_hash(target), first)
+
+    def test_changed_verifier_schema_compiles_a_new_validator(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            schema = Path(directory) / "evidence.schema.yaml"
+            schema.write_text("type: object\nrequired: [a]\n", encoding="utf-8")
+            first = schema_validator(schema)
+            self.assertIs(schema_validator(schema), first)
+            schema.write_text("type: object\nrequired: [b]\n", encoding="utf-8")
+            second = schema_validator(schema)
+            self.assertIsNot(second, first)
+            self.assertTrue(list(second.iter_errors({"a": 1})))
+
+    def test_commit_tree_caches_immutable_names_only(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "seed.txt").write_text("one\n", encoding="utf-8")
+            for command in (
+                ["git", "init"],
+                ["git", "config", "user.email", "test@example.com"],
+                ["git", "config", "user.name", "test"],
+                ["git", "add", "-A"],
+                ["git", "commit", "-m", "seed"],
+            ):
+                subprocess.run(command, cwd=root, check=True, capture_output=True)
+
+            def rev(*args: str) -> str:
+                return subprocess.run(
+                    ["git", "rev-parse", *args],
+                    cwd=root,
+                    check=True,
+                    capture_output=True,
+                    text=True,
+                ).stdout.strip()
+
+            first_commit = rev("HEAD")
+            first_tree = commit_tree(root, first_commit)
+            self.assertEqual(first_tree, rev("HEAD^{tree}"))
+            (root / "seed.txt").write_text("two\n", encoding="utf-8")
+            for command in (["git", "add", "-A"], ["git", "commit", "-m", "second"]):
+                subprocess.run(command, cwd=root, check=True, capture_output=True)
+            self.assertEqual(commit_tree(root, first_commit), first_tree)
+            second_tree = commit_tree(root, rev("HEAD"))
+            self.assertNotEqual(second_tree, first_tree)
+            self.assertEqual(commit_tree(root, "HEAD"), second_tree)
 
 
 if __name__ == "__main__":

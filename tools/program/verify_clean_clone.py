@@ -30,6 +30,44 @@ def run(command: list[str], cwd: Path) -> dict[str, Any]:
     }
 
 
+def unpushed_subject(root: Path, repository: str, branch: str) -> str | None:
+    """Report an ordering error before the clone reproduces the wrong tree.
+
+    The gate proves the published remote, so running it before the local subject
+    commit is pushed makes every milestone look unverified. That is an operator
+    ordering failure, not a repository defect, and it must be named as one
+    instead of surfacing as fifteen misleading verification failures.
+    """
+    try:
+        local = subprocess.run(
+            ["git", "rev-parse", "HEAD"],
+            cwd=root, capture_output=True, text=True, check=True,
+        ).stdout.strip()
+        remote = subprocess.run(
+            ["git", "ls-remote", repository, f"refs/heads/{branch}"],
+            cwd=root, capture_output=True, text=True, check=True,
+        ).stdout.strip()
+    except (OSError, subprocess.CalledProcessError) as error:
+        return f"cannot compare local HEAD with {repository}: {error}"
+    if not remote:
+        return f"{repository} has no branch {branch}; push it before running this gate"
+    remote_commit = remote.split()[0]
+    if remote_commit == local:
+        return None
+    try:
+        subprocess.run(
+            ["git", "merge-base", "--is-ancestor", local, remote_commit],
+            cwd=root, capture_output=True, text=True, check=True,
+        )
+    except (OSError, subprocess.CalledProcessError):
+        return (
+            f"operator ordering failure: local subject {local[:12]} is absent from "
+            f"{branch} on {repository} (remote is at {remote_commit[:12]}); "
+            "commit and push the subject before running the clean-clone gate"
+        )
+    return None
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="Verify Expanded-10 from a clean single-branch clone.")
     parser.add_argument("--repository", default="https://github.com/Born2tweak/KinematicIQ.git")
@@ -38,6 +76,12 @@ def main() -> int:
     parser.add_argument("--keep-clone", action="store_true")
     parser.add_argument("--pending-evidence-id", action="append", default=[])
     args = parser.parse_args()
+
+    local_root = Path(__file__).resolve().parents[2]
+    ordering_error = unpushed_subject(local_root, args.repository, args.branch)
+    if ordering_error:
+        print("FAIL: " + ordering_error)
+        return 1
 
     temp_root = Path(tempfile.mkdtemp(prefix="kinematiciq-clean-clone-"))
     clone = temp_root / "KinematicIQ"
