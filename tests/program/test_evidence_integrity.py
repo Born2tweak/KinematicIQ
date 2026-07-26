@@ -17,6 +17,7 @@ from evidence_integrity import (  # noqa: E402
     canonical_json_hash,
     compile_projection,
     scope_paths,
+    tracked_paths,
     verify_record,
 )
 from program_contract import load_program  # noqa: E402
@@ -35,6 +36,32 @@ class EvidenceIntegrityTests(unittest.TestCase):
         lf = canonical_content(b"one\ntwo\n", ".py")
         crlf = canonical_content(b"one\r\ntwo\r\n", ".py")
         self.assertEqual(lf, crlf)
+
+    def test_tracked_paths_follow_subject_commit_not_index(self) -> None:
+        """Scope must attest the subject commit, not whatever the index holds."""
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "kept.txt").write_text("kept\n", encoding="utf-8")
+            for command in (
+                ["git", "init"],
+                ["git", "config", "user.email", "test@example.com"],
+                ["git", "config", "user.name", "test"],
+                ["git", "add", "-A"],
+                ["git", "commit", "-m", "seed"],
+            ):
+                subprocess.run(command, cwd=root, check=True, capture_output=True)
+            subject = subprocess.run(
+                ["git", "rev-parse", "HEAD"],
+                cwd=root,
+                check=True,
+                capture_output=True,
+                text=True,
+            ).stdout.strip()
+            (root / "staged.txt").write_text("staged\n", encoding="utf-8")
+            subprocess.run(["git", "add", "staged.txt"], cwd=root, check=True, capture_output=True)
+            paths = tracked_paths(root, subject)
+            self.assertIn("kept.txt", paths)
+            self.assertNotIn("staged.txt", paths)
 
     def test_directory_scope_contains_only_tracked_content(self) -> None:
         paths = scope_paths(ROOT, self.program.by_id["KQ-015"])

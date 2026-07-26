@@ -21,7 +21,11 @@ from evidence_integrity import (
     verify_record,
     write_json,
 )
-from execution_authority import ExecutionAuthorityError, assert_executable
+from execution_authority import (
+    ExecutionAuthorityError,
+    assert_declared_branch,
+    assert_executable,
+)
 
 
 def main() -> int:
@@ -39,6 +43,11 @@ def main() -> int:
     milestone = program.by_id.get(args.milestone_id)
     if milestone is None:
         print_errors([f"unknown milestone {args.milestone_id}"])
+        return 1
+    try:
+        assert_declared_branch(program.root)
+    except ExecutionAuthorityError as error:
+        print_errors([str(error)])
         return 1
     if not args.bootstrap_repair:
         try:

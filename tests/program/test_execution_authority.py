@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+import subprocess
 import sys
+import tempfile
 import unittest
 from pathlib import Path
 from unittest.mock import patch
@@ -11,11 +13,45 @@ sys.path.insert(0, str(ROOT / "tools" / "program"))
 
 from execution_authority import (  # noqa: E402
     ExecutionAuthorityError,
+    assert_declared_branch,
     assert_executable,
     executable_frontier,
     verify_active_wave,
 )
 from transition_wave import build_active_wave  # noqa: E402
+
+
+class DeclaredBranchPreconditionTests(unittest.TestCase):
+    """Branch binding must gate evidence generation, not just KQ-007."""
+
+    def _repository(self, tmp: str, branch: str) -> Path:
+        root = Path(tmp)
+        (root / "docs/program").mkdir(parents=True)
+        (root / "docs/program/execution_policy.yaml").write_text(
+            "git:\n  work_branch: agent/evidence-integrity-wave-2\n",
+            encoding="utf-8",
+        )
+        for command in (
+            ["git", "init", "--initial-branch", branch],
+            ["git", "config", "user.email", "test@example.com"],
+            ["git", "config", "user.name", "test"],
+            ["git", "add", "-A"],
+            ["git", "commit", "-m", "seed"],
+        ):
+            subprocess.run(command, cwd=root, check=True, capture_output=True)
+        return root
+
+    def test_declared_branch_is_accepted(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = self._repository(tmp, "agent/evidence-integrity-wave-2")
+            assert_declared_branch(root)
+
+    def test_other_branch_is_refused(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = self._repository(tmp, "wave2-reverify")
+            with self.assertRaises(ExecutionAuthorityError) as caught:
+                assert_declared_branch(root)
+            self.assertIn("differs from declared work branch", str(caught.exception))
 
 
 class ExecutionAuthorityTests(unittest.TestCase):

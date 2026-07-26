@@ -6,10 +6,11 @@ from typing import Any
 
 import yaml
 
-from evidence_integrity import compile_projection
+from evidence_integrity import compile_projection, git_output
 
 
 ACTIVE_WAVE = Path("docs/program/ACTIVE_WAVE.yaml")
+EXECUTION_POLICY = Path("docs/program/execution_policy.yaml")
 
 
 class ExecutionAuthorityError(ValueError):
@@ -18,6 +19,26 @@ class ExecutionAuthorityError(ValueError):
 
 def _yaml(path: Path) -> dict[str, Any]:
     return yaml.safe_load(path.read_text(encoding="utf-8"))
+
+
+def assert_declared_branch(root: Path) -> None:
+    """Refuse to produce evidence outside the declared work branch.
+
+    Branch binding used to be enforced only by KQ-007's declared execution
+    policy check, so any milestone that did not declare that check could be
+    attested from a branch the policy forbids. Making it a precondition of
+    evidence generation closes that gap for every milestone.
+    """
+    policy = _yaml(root / EXECUTION_POLICY)
+    declared = policy.get("git", {}).get("work_branch")
+    if not declared:
+        raise ExecutionAuthorityError("execution policy declares no work branch")
+    active = git_output(root, "rev-parse", "--abbrev-ref", "HEAD")
+    if active != declared:
+        raise ExecutionAuthorityError(
+            f"active branch {active} differs from declared work branch {declared}; "
+            "evidence cannot be generated off the declared branch"
+        )
 
 
 def dependency_ready_ids(root: Path) -> tuple[list[str], dict[str, list[str]]]:

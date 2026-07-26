@@ -120,18 +120,19 @@ def _python_target(root: Path, command: str) -> Path | None:
     return target if target.is_file() else None
 
 
-@lru_cache(maxsize=None)
-def tracked_paths(root: Path) -> frozenset[str]:
-    return frozenset(
-        item
-        for item in git_output(root, "ls-files").splitlines()
-        if item
-    )
+def tracked_paths(root: Path, commit: str = "HEAD") -> frozenset[str]:
+    """Paths tracked by the commit under attestation.
+
+    Scope must follow the subject commit rather than the index: an evidence
+    record attests a commit, so a staged or stale index must not be able to
+    widen or narrow what that record claims to cover.
+    """
+    return frozenset(_git_tree_hashes(root.resolve(), commit))
 
 
-def _expand_scope_path(root: Path, value: str) -> list[Path]:
+def _expand_scope_path(root: Path, value: str, commit: str = "HEAD") -> list[Path]:
     normalized = Path(value).as_posix().rstrip("/")
-    tracked = tracked_paths(root.resolve())
+    tracked = tracked_paths(root.resolve(), commit)
     if normalized in tracked:
         path = root / normalized
         return [path] if path.is_file() else []
@@ -143,7 +144,7 @@ def _expand_scope_path(root: Path, value: str) -> list[Path]:
     ]
 
 
-def scope_paths(root: Path, milestone: dict[str, Any]) -> list[Path]:
+def scope_paths(root: Path, milestone: dict[str, Any], commit: str = "HEAD") -> list[Path]:
     declared = {
         "docs/program/milestone_schema.yaml",
         "docs/program/predicate_catalog.yaml",
@@ -172,7 +173,7 @@ def scope_paths(root: Path, milestone: dict[str, Any]) -> list[Path]:
     paths = {
         item.resolve()
         for value in declared
-        for item in _expand_scope_path(root, value)
+        for item in _expand_scope_path(root, value, commit)
         if EVIDENCE_ROOT.as_posix() not in relative(root, item)
         and relative(root, item) not in {VALIDITY_LOG.as_posix(), VALIDITY_PROJECTION.as_posix()}
     }
@@ -225,7 +226,7 @@ def build_record(
 ) -> dict[str, Any]:
     subject_commit = git_output(root, "rev-parse", "HEAD")
     subject_tree = git_output(root, "rev-parse", f"{subject_commit}^{{tree}}")
-    paths = scope_paths(root, milestone)
+    paths = scope_paths(root, milestone, subject_commit)
     inputs = {
         relative(root, path): canonical_hash(path)
         for path in paths
