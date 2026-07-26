@@ -3,9 +3,39 @@
 Known costs accepted deliberately. Each entry records what is wrong, why it was
 accepted rather than fixed, and what fixing it would require. Entries are
 removed only when the underlying condition is gone, not when they stop being
-convenient to look at.
+convenient to look at. Resolved entries are kept and marked, because the
+reasoning that accepted them is the record of why the fix was worth its cost.
 
 ## DEBT-001 — Program test suite runtime grew from ~178s to ~3949s
+
+**Status: RESOLVED at subject `505c751`.** Verification is memoised inside a
+single read-only projection pass: working-tree hashes are reused for the
+duration of one `compile_projection`, JSON Schema validators are compiled once
+per distinct canonical schema content, and commit trees are cached only for
+full 40-hex object names. No binding was weakened to buy this — every input is
+still hashed against both the working tree and the record's subject commit on
+every pass, and a mutation between passes still revokes.
+
+Measured on the same machine, Windows, Python 3.14.0, best of three warm calls
+with the projection compiled over the full Phase A record set:
+
+| | subject `833f65d` (15 Current) | subject `505c751` (14 Current) |
+|---|---|---|
+| `compile_projection`, cold | 4.98s | 2.97s |
+| `compile_projection`, warm | 3.30s | 1.43s |
+| `executable_frontier` | 7.91s | 5.39s |
+
+The suite that named this entry, `python -m unittest discover -s tests/program`,
+ran 72 tests in 126.9s at `505c751` against the 3948.9s / 63 tests recorded at
+`ff41350`. The two runs are not the same test count — this branch adds nine
+regression tests for the memoisation and scheduler work — and the later run has
+fourteen `Current` milestones rather than fifteen, so read the figure as roughly
+a thirty-fold reduction, not a precise ratio.
+
+See [DEBT-001 original entry](#debt-001-original-entry) below for the accepted
+reasoning at the time.
+
+## DEBT-001 original entry
 
 **Observed:** 2026-07-25, subject `ff41350`, Windows, Python 3.14.0.
 `python -m unittest discover -s tests/program` ran 63 tests in 3948.9s. The same
@@ -60,3 +90,40 @@ honest correction.
 clean-clone milestone fail fast with an explicit message when the local subject
 commit is not present on the configured remote, so the ordering error is reported
 as a precondition rather than as fifteen misleading verification failures.
+
+**Recurrence closed at subject `505c751`.** `verify_clean_clone.py` now compares
+local `HEAD` against the configured remote branch before cloning and exits with
+`operator ordering failure: local subject <sha> is absent from <branch> on
+<repository>`. Covered by `tests/program/test_clean_clone_gate.py`, including the
+negative cases of an unpushed subject and a missing remote branch. The failed
+record itself remains, as designed.
+
+## DEBT-003 — Reverification order is enforced by procedure, not by the tools
+
+**Observed:** 2026-07-26, during the reverification of subject `505c751`.
+
+**Cause:** `tools/program/run_contract_checks.py` accepts any milestone ID at any
+time. Called per milestone in numeric order it produces two failures that the
+supported driver, `tools/program/migrate_phase_a_evidence.py`, avoids by
+construction: KQ-009 and KQ-013 fail their `--verify` status and checkpoint
+checks against a projection that has not yet been refreshed, and records written
+for KQ-011, KQ-012 and KQ-014 bind `dependency_evidence` to superseded upstream
+evidence IDs. Because records are immutable per `(milestone, subject_commit)`,
+each such record must be deleted before the pass can be redone — recoverable
+only because none had been committed.
+
+**Impact:** an operator who reaches for the obvious tool gets four records that
+are simultaneously immutable and invalid, and no message explains why. The
+controller is correct at every step; the sequence is what is unenforced.
+
+**Accepted because:** the enforcement would live in `run_contract_checks.py`,
+which is a declared evidence input for all fifteen milestones. Adding it costs a
+further full reverification pass and a push. `docs/program/REVERIFICATION_RUNBOOK.md`
+records the required order at zero controller cost, and no evidence produced
+under the correct order is affected.
+
+**Fix direction:** have `run_contract_checks.py` refuse to write a record whose
+`dependency_evidence` does not bind to the currently adopted upstream evidence
+ID, and have it refresh generated state before any milestone whose declared
+checks include a `--verify` compiler. Batch that change with the next unavoidable
+controller edit rather than paying a dedicated pass for it.

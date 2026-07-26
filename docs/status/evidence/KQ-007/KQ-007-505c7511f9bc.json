@@ -1,0 +1,110 @@
+{
+  "all_required_checks_passed": true,
+  "checks": [
+    {
+      "detail": [],
+      "id": "schema",
+      "passed": true
+    },
+    {
+      "detail": [],
+      "id": "semantics",
+      "passed": true
+    },
+    {
+      "detail": {
+        "actual": "Dedicated branch, auto-push, rollback, interruptions, retry budgets",
+        "expected": "Dedicated branch, auto-push, rollback, interruptions, retry budgets"
+      },
+      "id": "registry_owned_outcome",
+      "passed": true
+    },
+    {
+      "detail": "exit_code=0",
+      "id": "execution_policy_contract",
+      "passed": true
+    },
+    {
+      "detail": "exit_code=0",
+      "id": "targeted_contract_checks",
+      "passed": true
+    }
+  ],
+  "commands": {
+    "execution_policy_contract": {
+      "exit_code": 0,
+      "stderr": "",
+      "stdout": "PASS: verified docs/program/execution_policy.yaml\n"
+    },
+    "targeted_contract_checks": {
+      "exit_code": 0,
+      "stderr": "",
+      "stdout": "repository-bound schema, semantics, artifact, and declared checks completed"
+    }
+  },
+  "dependency_evidence": {
+    "KQ-002": {
+      "evidence_id": "KQ-002-505c7511f9bc",
+      "sha256": "89b9dc0dc7e930f6c84138644577da89eea6e85c519af1ade2afdb37715a55f2"
+    },
+    "KQ-004": {
+      "evidence_id": "KQ-004-505c7511f9bc",
+      "sha256": "04e6e8da0d0144b77935a57320136bf7f4aec5908228059116d8162a02f58d86"
+    }
+  },
+  "evidence_id": "KQ-007-505c7511f9bc",
+  "generated_at": "2026-07-26T17:03:53.907707+00:00",
+  "input_hashes": {
+    "docs/program/artifacts/kq-007.yaml": "3a7afea4a78ad89d124d080ec4c624caeacd89242804b5f3245e76c5294e1879",
+    "docs/program/evidence_v2.schema.yaml": "8df93a98ccf22313d473994b3a3ad285f0dfd0b7c8c55eaa5cd43b098a77e445",
+    "docs/program/evidence_validity_event.schema.yaml": "2183f50ebfb112e4826175181080eb1ca721ea85515ae82ee28f031357be113e",
+    "docs/program/milestone_schema.yaml": "cbf99ad5d5138782e47b8603d88392ecbe5094478699769a9030ac59df202ff6",
+    "docs/program/predicate_catalog.yaml": "33bbb5548dbbd00aedfa65b04aa6a79fb4877159ab148afcda15ccd2bea721b4",
+    "docs/status/milestones/KQ-002.json": "7f93c5d052ef6acbd35e977c800e2bb79e9e656702d626be1fc6b6c4ce6955d5",
+    "docs/status/milestones/KQ-004.json": "36793959182878f04135cf4c557e6eb17ec104c5128d1f858b9d9cc7d87518c6",
+    "tools/program/compile_evidence_validity.py": "9f5301b8452978462bd8e669f29d907eeabcba9255a009411222ad1cd4ec8cff",
+    "tools/program/compile_status.py": "36d1fc7a57ae893772bf9c9319e13e096809d0c991622b8b0090351305cf2f22",
+    "tools/program/evidence_integrity.py": "3d479cc7e66012a9befffb8dbc27af58d787d060283fb8b316f2f760224e9099",
+    "tools/program/execution_authority.py": "278091cdb578ea5d2b1601fd4711aeb50439e5b4a38c8051b4dd718ec7ee5618",
+    "tools/program/generate_checkpoint.py": "af044c3b3e333dc604bd83f9695838fe71fda7c19049e98660abd8a34cbc3483",
+    "tools/program/program_contract.py": "750d8a7fe053525428a92d9b8e71b456f1c68cdc99b7c42c587f5c3bac1782ea",
+    "tools/program/run_contract_checks.py": "d7c6e40e242d5d657e387adf1cb01a4250ccd24201468d65dfeb1c1128ccd1de",
+    "tools/program/verify_execution_policy.py": "ea0e0b7ce9f18047abaf880f3385539a0760974c529b0788f78c27e94884b996",
+    "tools/program/verify_milestone.py": "0c8d70aff4ffcc6bc235b6eebed1a0929a0c9b0f9b9447780b5cefc1d75005e8"
+  },
+  "milestone_contract_sha256": "2c39f4eac1ee5dc5a0f04d0e6d36e73dc0feeae1f875b16ee56927c3ce20cecf",
+  "milestone_id": "KQ-007",
+  "output_hashes": {
+    "docs/program/artifacts/kq-007.yaml": "3a7afea4a78ad89d124d080ec4c624caeacd89242804b5f3245e76c5294e1879"
+  },
+  "schema_version": 2,
+  "scope": {
+    "justification": "The milestone is valid only while its declared inputs, verifier closure, contract artifact, and exercised web surface remain unchanged.",
+    "kind": "affected_paths",
+    "paths": [
+      "docs/program/artifacts/kq-007.yaml",
+      "docs/program/evidence_v2.schema.yaml",
+      "docs/program/evidence_validity_event.schema.yaml",
+      "docs/program/milestone_schema.yaml",
+      "docs/program/predicate_catalog.yaml",
+      "docs/status/milestones/KQ-002.json",
+      "docs/status/milestones/KQ-004.json",
+      "tools/program/compile_evidence_validity.py",
+      "tools/program/compile_status.py",
+      "tools/program/evidence_integrity.py",
+      "tools/program/execution_authority.py",
+      "tools/program/generate_checkpoint.py",
+      "tools/program/program_contract.py",
+      "tools/program/run_contract_checks.py",
+      "tools/program/verify_execution_policy.py",
+      "tools/program/verify_milestone.py"
+    ]
+  },
+  "subject_commit": "505c7511f9bcda47a3e2d0df8f8966c11f450315",
+  "subject_tree": "3f722fb4c6d87cc08938fcfecf319c0731782b5a",
+  "toolchain": {
+    "node": "v24.12.0",
+    "npm": "11.7.0",
+    "python": "3.14.0"
+  }
+}
