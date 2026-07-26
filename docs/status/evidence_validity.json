@@ -3,93 +3,93 @@
   "schema_version": 1,
   "states": {
     "KQ-001": {
-      "event_id": "VAL-KQ-001-197C931FD0F4-CURRENT",
-      "evidence_id": "KQ-001-197c931fd0f4",
+      "event_id": "VAL-KQ-001-04DA1D5FA31A-CURRENT",
+      "evidence_id": "KQ-001-04da1d5fa31a",
       "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
       "validity": "Current"
     },
     "KQ-002": {
-      "event_id": "VAL-KQ-002-197C931FD0F4-CURRENT",
-      "evidence_id": "KQ-002-197c931fd0f4",
+      "event_id": "VAL-KQ-002-04DA1D5FA31A-CURRENT",
+      "evidence_id": "KQ-002-04da1d5fa31a",
       "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
       "validity": "Current"
     },
     "KQ-003": {
-      "event_id": "VAL-KQ-003-197C931FD0F4-CURRENT",
-      "evidence_id": "KQ-003-197c931fd0f4",
+      "event_id": "VAL-KQ-003-04DA1D5FA31A-CURRENT",
+      "evidence_id": "KQ-003-04da1d5fa31a",
       "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
       "validity": "Current"
     },
     "KQ-004": {
-      "event_id": "VAL-KQ-004-197C931FD0F4-CURRENT",
-      "evidence_id": "KQ-004-197c931fd0f4",
+      "event_id": "VAL-KQ-004-04DA1D5FA31A-CURRENT",
+      "evidence_id": "KQ-004-04da1d5fa31a",
       "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
       "validity": "Current"
     },
     "KQ-005": {
-      "event_id": "VAL-KQ-005-197C931FD0F4-CURRENT",
-      "evidence_id": "KQ-005-197c931fd0f4",
+      "event_id": "VAL-KQ-005-04DA1D5FA31A-CURRENT",
+      "evidence_id": "KQ-005-04da1d5fa31a",
       "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
       "validity": "Current"
     },
     "KQ-006": {
-      "event_id": "VAL-KQ-006-197C931FD0F4-CURRENT",
-      "evidence_id": "KQ-006-197c931fd0f4",
+      "event_id": "VAL-KQ-006-04DA1D5FA31A-CURRENT",
+      "evidence_id": "KQ-006-04da1d5fa31a",
       "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
       "validity": "Current"
     },
     "KQ-007": {
-      "event_id": "VAL-KQ-007-197C931FD0F4-CURRENT",
-      "evidence_id": "KQ-007-197c931fd0f4",
+      "event_id": "VAL-KQ-007-04DA1D5FA31A-CURRENT",
+      "evidence_id": "KQ-007-04da1d5fa31a",
       "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
       "validity": "Current"
     },
     "KQ-008": {
-      "event_id": "VAL-KQ-008-197C931FD0F4-CURRENT",
-      "evidence_id": "KQ-008-197c931fd0f4",
+      "event_id": "VAL-KQ-008-04DA1D5FA31A-CURRENT",
+      "evidence_id": "KQ-008-04da1d5fa31a",
       "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
       "validity": "Current"
     },
     "KQ-009": {
-      "event_id": "VAL-KQ-009-197C931FD0F4-CURRENT",
-      "evidence_id": "KQ-009-197c931fd0f4",
+      "event_id": "VAL-KQ-009-04DA1D5FA31A-CURRENT",
+      "evidence_id": "KQ-009-04da1d5fa31a",
       "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
       "validity": "Current"
     },
     "KQ-010": {
-      "event_id": "VAL-KQ-010-197C931FD0F4-CURRENT",
-      "evidence_id": "KQ-010-197c931fd0f4",
+      "event_id": "VAL-KQ-010-04DA1D5FA31A-CURRENT",
+      "evidence_id": "KQ-010-04da1d5fa31a",
       "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
       "validity": "Current"
     },
     "KQ-011": {
-      "event_id": "VAL-KQ-011-197C931FD0F4-CURRENT",
-      "evidence_id": "KQ-011-197c931fd0f4",
+      "event_id": "VAL-KQ-011-04DA1D5FA31A-CURRENT",
+      "evidence_id": "KQ-011-04da1d5fa31a",
       "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
       "validity": "Current"
     },
     "KQ-012": {
-      "event_id": "VAL-KQ-012-197C931FD0F4-CURRENT",
-      "evidence_id": "KQ-012-197c931fd0f4",
+      "event_id": "VAL-KQ-012-04DA1D5FA31A-CURRENT",
+      "evidence_id": "KQ-012-04da1d5fa31a",
       "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
       "validity": "Current"
     },
     "KQ-013": {
-      "event_id": "VAL-KQ-013-197C931FD0F4-CURRENT",
-      "evidence_id": "KQ-013-197c931fd0f4",
+      "event_id": "VAL-KQ-013-04DA1D5FA31A-CURRENT",
+      "evidence_id": "KQ-013-04da1d5fa31a",
       "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
       "validity": "Current"
     },
     "KQ-014": {
-      "event_id": "VAL-KQ-014-197C931FD0F4-CURRENT",
-      "evidence_id": "KQ-014-197c931fd0f4",
+      "event_id": "VAL-KQ-014-04DA1D5FA31A-CURRENT",
+      "evidence_id": "KQ-014-04da1d5fa31a",
       "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
       "validity": "Current"
     },
     "KQ-015": {
-      "event_id": "VAL-KQ-015-8C5BC6E76A19-CURRENT",
+      "event_id": "VAL-KQ-015-REVERIFY-20260725T142659729660Z",
       "evidence_id": "KQ-015-8c5bc6e76a19",
-      "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
+      "reason": "Previously current evidence no longer matches the live controller scope.",
       "validity": "ReverificationRequired"
     }
   },
@@ -117,48 +117,5 @@
     ],
     "Superseded": []
   },
-  "verification_errors": {
-    "KQ-015": [
-      "input is missing or stale: tests/program/__pycache__/test_artifact_structure.cpython-314.pyc",
-      "input is missing or stale: tests/program/__pycache__/test_authority.cpython-314.pyc",
-      "input is missing or stale: tests/program/__pycache__/test_checkpoint_generator.cpython-314.pyc",
-      "input is missing or stale: tests/program/__pycache__/test_evidence_integrity.cpython-314.pyc",
-      "input is missing or stale: tests/program/__pycache__/test_execution_authority.cpython-314.pyc",
-      "input is missing or stale: tests/program/__pycache__/test_execution_fixtures.cpython-314.pyc",
-      "input is missing or stale: tests/program/__pycache__/test_execution_policy.cpython-314.pyc",
-      "input is missing or stale: tests/program/__pycache__/test_history_import.cpython-314.pyc",
-      "input is missing or stale: tests/program/__pycache__/test_id_migration.cpython-314.pyc",
-      "input is missing or stale: tests/program/__pycache__/test_program_contract.cpython-314.pyc",
-      "input is missing or stale: tests/program/__pycache__/test_replan_impact.cpython-314.pyc",
-      "input is missing or stale: tests/program/__pycache__/test_research_workflow.cpython-314.pyc",
-      "input is missing or stale: tests/program/__pycache__/test_schedule_wave.cpython-314.pyc",
-      "input is missing or stale: tests/program/__pycache__/test_status_compiler.cpython-314.pyc",
-      "input is missing or stale: tests/program/__pycache__/test_traceability_validator.cpython-314.pyc",
-      "input is missing or stale: tests/program/test_evidence_integrity.py",
-      "input is missing or stale: tools/program/__pycache__/__init__.cpython-314.pyc",
-      "input is missing or stale: tools/program/__pycache__/compile_evidence_validity.cpython-314.pyc",
-      "input is missing or stale: tools/program/__pycache__/compile_status.cpython-314.pyc",
-      "input is missing or stale: tools/program/__pycache__/evidence_integrity.cpython-314.pyc",
-      "input is missing or stale: tools/program/__pycache__/execution_authority.cpython-314.pyc",
-      "input is missing or stale: tools/program/__pycache__/execution_semantics.cpython-314.pyc",
-      "input is missing or stale: tools/program/__pycache__/generate_checkpoint.cpython-314.pyc",
-      "input is missing or stale: tools/program/__pycache__/migrate_phase_a_evidence.cpython-314.pyc",
-      "input is missing or stale: tools/program/__pycache__/program_contract.cpython-314.pyc",
-      "input is missing or stale: tools/program/__pycache__/replan_impact.cpython-314.pyc",
-      "input is missing or stale: tools/program/__pycache__/run_contract_checks.cpython-314.pyc",
-      "input is missing or stale: tools/program/__pycache__/schedule_wave.cpython-314.pyc",
-      "input is missing or stale: tools/program/__pycache__/transition_wave.cpython-314.pyc",
-      "input is missing or stale: tools/program/__pycache__/validate_traceability.cpython-314.pyc",
-      "input is missing or stale: tools/program/__pycache__/verify_artifact_structure.cpython-314.pyc",
-      "input is missing or stale: tools/program/__pycache__/verify_authority.cpython-314.pyc",
-      "input is missing or stale: tools/program/__pycache__/verify_clean_clone.cpython-314.pyc",
-      "input is missing or stale: tools/program/__pycache__/verify_evidence.cpython-314.pyc",
-      "input is missing or stale: tools/program/__pycache__/verify_execution_policy.cpython-314.pyc",
-      "input is missing or stale: tools/program/__pycache__/verify_history_import.cpython-314.pyc",
-      "input is missing or stale: tools/program/__pycache__/verify_id_migration.cpython-314.pyc",
-      "input is missing or stale: tools/program/__pycache__/verify_milestone.cpython-314.pyc",
-      "input is missing or stale: tools/program/__pycache__/verify_research_workflow.cpython-314.pyc",
-      "input is missing or stale: tools/program/evidence_integrity.py"
-    ]
-  }
+  "verification_errors": {}
 }
