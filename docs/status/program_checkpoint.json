@@ -5,8 +5,32 @@
       "BlockedHuman": [],
       "FailedTechnical": []
     },
-    "resource_blocked_milestone_count": 0,
-    "resource_blocked_milestone_ids": [],
+    "resource_blocked_milestone_count": 23,
+    "resource_blocked_milestone_ids": [
+      "KQ-051",
+      "KQ-054",
+      "KQ-061",
+      "KQ-088",
+      "KQ-092",
+      "KQ-096",
+      "KQ-100",
+      "KQ-104",
+      "KQ-108",
+      "KQ-112",
+      "KQ-116",
+      "KQ-120",
+      "KQ-124",
+      "KQ-128",
+      "KQ-132",
+      "KQ-136",
+      "KQ-140",
+      "KQ-144",
+      "KQ-148",
+      "KQ-152",
+      "KQ-156",
+      "KQ-160",
+      "KQ-164"
+    ],
     "resource_status_counts": {
       "PartiallyAvailable": 1,
       "UnresolvedExternal": 8,
@@ -57,7 +81,10 @@
       "KQ-014",
       "KQ-015"
     ],
-    "next_executable_range": [],
+    "next_executable_range": [
+      "KQ-016",
+      "KQ-017"
+    ],
     "objective_evidence": {
       "currently_valid_ids": [
         "KQ-001",
@@ -73,7 +100,8 @@
         "KQ-011",
         "KQ-012",
         "KQ-013",
-        "KQ-014"
+        "KQ-014",
+        "KQ-015"
       ],
       "historically_passed_ids": [
         "KQ-001",
@@ -93,14 +121,13 @@
         "KQ-015"
       ],
       "invalidated_ids": [],
-      "reverification_required_ids": [
-        "KQ-015"
-      ]
+      "reverification_required_ids": []
     },
     "subject_commits": [
       "04da1d5fa31a6ac5c8f1ff6626cfb2155f568c87",
       "197c931fd0f4616e7804fc38b5fe74d9cab48683",
       "1fd94b2921021a762f4b4dbf98e426c9d073a354",
+      "24bec2e1a634afb0c4dc6a4bf81c46ac74aee602",
       "505c7511f9bcda47a3e2d0df8f8966c11f450315",
       "5993a6d48a3fda2e2f24201cdb60f91ba731c056",
       "865c5a49931d2c6a91d7479b363a721fb5e0ba93",
@@ -110,15 +137,7 @@
       "ff41350e93de753bdb06ece9759716298ca6d35a",
       "ffa3907456833d37c06b74bc937a595c9fb6dd3f"
     ],
-    "verification_failures": {
-      "KQ-015": [
-        "input is missing or stale: tests/program/test_evidence_integrity.py",
-        "input is missing or stale: tests/program/test_execution_authority.py",
-        "input is missing or stale: tools/program/evidence_integrity.py",
-        "input is missing or stale: tools/program/execution_authority.py",
-        "input is missing or stale: tools/program/verify_clean_clone.py"
-      ]
-    }
+    "verification_failures": {}
   },
   "release_summary": {
     "automatic_production_deploy": false,
@@ -128,8 +147,17 @@
     "rule": "ReleaseEligible requires GATE_PASS; no blocked, failed, skipped, or missing outcome can satisfy it"
   },
   "replan_summary": {
-    "committed_wave_ready_ids": [],
-    "dependency_ready_ids": [],
+    "committed_wave_ready_ids": [
+      "KQ-016",
+      "KQ-017",
+      "KQ-026"
+    ],
+    "dependency_ready_ids": [
+      "KQ-016",
+      "KQ-017",
+      "KQ-026",
+      "KQ-056"
+    ],
     "recorded_inflection_count": 0,
     "roadmap_changes": []
   },
@@ -237,11 +265,12 @@
     "docs/status/evidence/KQ-014/KQ-014-505c7511f9bc.json": "7cd2c60bb321d0e74ff0416683e490b9a2394869cd446147421dbcabec746c34",
     "docs/status/evidence/KQ-014/KQ-014-a11f42de082e.json": "ad845242855fa822a7ba944258d21d1367d9ceb9dd1ffed5f855f22bdf9048df",
     "docs/status/evidence/KQ-014/KQ-014-d3e25e38b5ae.json": "4102d7d0bff38fbb9c3bad3b3efdd43f9f5068ad2acf22064ca39d8539236da7",
+    "docs/status/evidence/KQ-015/KQ-015-24bec2e1a634.json": "43cefeb67297b485214b94d7ed52cdb7bf16bf4c148b5b8b67f4129eea1d06dd",
     "docs/status/evidence/KQ-015/KQ-015-865c5a49931d.json": "369bd90365102655f08ce4104756eb4038d97963b8e62d4b1a558a7849687ce1",
     "docs/status/evidence/KQ-015/KQ-015-8c5bc6e76a19.json": "df2778835cac9b61dc2aa459fccc46133baecb67f50bd5918942b8519621c8fd",
     "docs/status/evidence/KQ-015/KQ-015-ff41350e93de.json": "1252cee6083cead25ca2ddd64a5fcf1f5b83c71bc338e76675d858764389e363",
-    "docs/status/evidence_validity.json": "12043a4096f304682820a0b55be2fab6bd0dbeb43f760646f5161f3de04f3e4a",
-    "docs/status/evidence_validity_events.ndjson": "4db83bf4beccc50c8571b0be559e1e5d95a762de17ed694e35a4d1def45aa753",
+    "docs/status/evidence_validity.json": "dd48359ff9ed5dd733a8a789656ca1ec20ba448cd8ab76daa6fcf9e7f8069e74",
+    "docs/status/evidence_validity_events.ndjson": "c264e43f1a2c549055b0be0c72e3dd617b3db987c1c243747564c8b96745e1cb",
     "docs/status/milestones/KQ-001.json": "7e3058ae976e5683cc3feabc41a115dedd91f66e221747469803a5f2b1d147c6",
     "docs/status/milestones/KQ-002.json": "7f93c5d052ef6acbd35e977c800e2bb79e9e656702d626be1fc6b6c4ce6955d5",
     "docs/status/milestones/KQ-003.json": "fa062f54317050c08b955ba310eab44bc82bb83f3f53a95104ff4695c69acc39",
@@ -257,7 +286,7 @@
     "docs/status/milestones/KQ-013.json": "bdf9e17c2b7d5346837f9afedc6e4e23776c184fbcb060465acab94732e8e86c",
     "docs/status/milestones/KQ-014.json": "1d29dbaca182957965eb19120b54274df2cd6789a27cae790cea2245d53d3f59",
     "docs/status/milestones/KQ-015.json": "8b73d40dfcca7e0ebc617cde3164dbb9a05ffd03bd58e55c35662ca33ce75764",
-    "docs/status/program_status.json": "b0e960a177214a9fec5f6c70819190eb63b39154ea746fce197ed4c3f364ca28",
+    "docs/status/program_status.json": "828994a84059356d68d45ad686a1139c9b718e71e584d51d1f82cfe33957fd0c",
     "docs/validation/protocol_validation_registry.yaml": "b4e6b116d36b7213c7257c00df166e98a6ac02cb475c90a5b23807ece1aa8141"
   },
   "triggers": [

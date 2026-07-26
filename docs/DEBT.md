@@ -19,18 +19,21 @@ every pass, and a mutation between passes still revokes.
 Measured on the same machine, Windows, Python 3.14.0, best of three warm calls
 with the projection compiled over the full Phase A record set:
 
-| | subject `833f65d` (15 Current) | subject `505c751` (14 Current) |
+| | subject `833f65d` | subject `24bec2e` |
 |---|---|---|
-| `compile_projection`, cold | 4.98s | 2.97s |
-| `compile_projection`, warm | 3.30s | 1.43s |
+| milestones `Current` | 15 | 15 |
+| `compile_projection`, cold | 4.98s | 3.03s |
+| `compile_projection`, warm | 3.30s | 1.57s |
 | `executable_frontier` | 7.91s | 5.39s |
 
 The suite that named this entry, `python -m unittest discover -s tests/program`,
-ran 72 tests in 126.9s at `505c751` against the 3948.9s / 63 tests recorded at
-`ff41350`. The two runs are not the same test count — this branch adds nine
-regression tests for the memoisation and scheduler work — and the later run has
-fourteen `Current` milestones rather than fifteen, so read the figure as roughly
-a thirty-fold reduction, not a precise ratio.
+ran 72 tests in 140.1s at `24bec2e` with all fifteen milestones `Current`,
+against the 3948.9s / 63 tests recorded at `ff41350` under the same condition.
+The two runs are not the same test count — this branch adds nine regression
+tests for the memoisation and scheduler work — so read the figure as roughly a
+twenty-eight-fold reduction, not a precise ratio. The same suite completed
+inside a 1m00s `ubuntu-latest` CI job on run 30212213983, which also
+reproduced the projection from a clean checkout in 1.8s.
 
 See [DEBT-001 original entry](#debt-001-original-entry) below for the accepted
 reasoning at the time.

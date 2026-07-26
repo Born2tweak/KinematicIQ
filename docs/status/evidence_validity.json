@@ -87,10 +87,10 @@
       "validity": "Current"
     },
     "KQ-015": {
-      "event_id": "VAL-KQ-015-FF41350E93DE-CURRENT",
-      "evidence_id": "KQ-015-ff41350e93de",
+      "event_id": "VAL-KQ-015-24BEC2E1A634-CURRENT",
+      "evidence_id": "KQ-015-24bec2e1a634",
       "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
-      "validity": "ReverificationRequired"
+      "validity": "Current"
     }
   },
   "summary": {
@@ -108,22 +108,13 @@
       "KQ-011",
       "KQ-012",
       "KQ-013",
-      "KQ-014"
+      "KQ-014",
+      "KQ-015"
     ],
     "Invalidated": [],
     "Retired": [],
-    "ReverificationRequired": [
-      "KQ-015"
-    ],
+    "ReverificationRequired": [],
     "Superseded": []
   },
-  "verification_errors": {
-    "KQ-015": [
-      "input is missing or stale: tests/program/test_evidence_integrity.py",
-      "input is missing or stale: tests/program/test_execution_authority.py",
-      "input is missing or stale: tools/program/evidence_integrity.py",
-      "input is missing or stale: tools/program/execution_authority.py",
-      "input is missing or stale: tools/program/verify_clean_clone.py"
-    ]
-  }
+  "verification_errors": {}
 }
