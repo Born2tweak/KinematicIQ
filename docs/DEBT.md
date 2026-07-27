@@ -156,3 +156,34 @@ milestone's own `requirements` all name RES-CORPUS explicitly.
 **Fix direction:** merge the resource check into the status branch so
 `not_open_for_execution` carries an `unresolved_resources` list when one exists.
 Batch with DEBT-003's `run_contract_checks.py` change, which needs the same pass.
+
+## DEBT-005 — A cleanup fix briefly turned a passing clean-clone gate into a failure
+
+**Status: RESOLVED at subject `22335f5`+1. Recorded because the failed evidence
+record it produced is preserved.**
+
+**Observed:** `docs/status/evidence/KQ-015/KQ-015-22335f5fdcf9.json` has
+`all_required_checks_passed: false` with `clean_clone_gate` at exit 1, while
+`docs/status/revision-4-clean-clone.json` from the same run reports every check
+accepted.
+
+**Cause:** the temp-clone cleanup added at `22335f5` retried `shutil.rmtree`
+with `ignore_errors=False` on its final attempt. On Windows a git pack index was
+still held open, so the retry raised `PermissionError` out of the gate's
+`finally` block after the verification itself had already succeeded. The gate
+proved the repository correctly and then failed on its own housekeeping.
+
+**Impact:** one false-negative evidence record for KQ-015 at `22335f5`. No
+verification result was wrong; the repository reproduced from a clean clone
+exactly as the report shows.
+
+**Accepted because:** nothing is accepted — the defect is fixed. The record is
+preserved rather than deleted because it was produced by a genuine failure at
+that subject, not by an out-of-order run, and `docs/program/REVERIFICATION_RUNBOOK.md`
+rule 3 permits deleting only the latter.
+
+**Fix:** `_remove_tree` now retries with `ignore_errors=True` throughout and
+reports an undeleted directory instead of raising. Covered by
+`test_undeletable_clone_warns_and_never_raises`, which asserts the function
+never lets `rmtree` raise. An undeleted temp directory is untidy; a false
+negative on the clean-clone gate is a lie.

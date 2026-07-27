@@ -7,12 +7,14 @@ import tempfile
 import time
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "tools" / "program"))
 
 from verify_clean_clone import (  # noqa: E402
+    CLEANUP_ATTEMPTS,
     STALE_CLONE_SECONDS,
     _remove_tree,
     _sweep_stale_clones,
@@ -105,3 +107,21 @@ class CloneCleanupTests(unittest.TestCase):
             self.assertTrue(current.exists())
             self.assertTrue(fresh.exists())
             self.assertTrue(unrelated.exists())
+
+    def test_undeletable_clone_warns_and_never_raises(self) -> None:
+        """Cleanup runs in the gate's finally; raising would fail a passing gate."""
+        with tempfile.TemporaryDirectory() as tmp:
+            target = Path(tmp) / "kinematiciq-clean-clone-locked"
+            target.mkdir()
+            calls = []
+
+            def refuse(path, ignore_errors=False, **kwargs):
+                calls.append(ignore_errors)
+                if not ignore_errors:
+                    raise PermissionError(5, "Access is denied")
+
+            with patch("verify_clean_clone.shutil.rmtree", refuse):
+                with patch("verify_clean_clone.time.sleep", lambda _: None):
+                    self.assertFalse(_remove_tree(target))
+            self.assertEqual(len(calls), CLEANUP_ATTEMPTS)
+            self.assertTrue(all(calls), "cleanup must never let rmtree raise")

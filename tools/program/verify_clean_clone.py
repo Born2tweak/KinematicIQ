@@ -71,27 +71,26 @@ def unpushed_subject(root: Path, repository: str, branch: str) -> str | None:
 
 CLONE_PREFIX = "kinematiciq-clean-clone-"
 STALE_CLONE_SECONDS = 6 * 60 * 60
+CLEANUP_ATTEMPTS = 3
 
 
 def _remove_tree(path: Path) -> bool:
-    """Delete a clone, retrying once because npm can still hold handles on Windows.
+    """Delete a clone, retrying because npm and git can still hold handles on Windows.
 
-    Reports the leak instead of swallowing it. Each abandoned clone is ~180 MB,
+    Reports the leak instead of swallowing it — each abandoned clone is ~180 MB,
     and silent `ignore_errors` is how 177 MB accumulated in %TEMP% unnoticed.
+    This must never raise: it runs in the gate's `finally`, where an exception
+    would turn a passing verification into a failure. An undeleted temp
+    directory is untidy; a false negative on the clean-clone gate is a lie.
     """
-    for attempt in range(2):
-        shutil.rmtree(path, ignore_errors=attempt == 0)
+    for attempt in range(CLEANUP_ATTEMPTS):
+        shutil.rmtree(path, ignore_errors=True)
         if not path.exists():
             return True
-        if attempt == 0:
+        if attempt < CLEANUP_ATTEMPTS - 1:
             time.sleep(2)
-            continue
-        try:
-            shutil.rmtree(path)
-        except OSError as error:
-            print(f"WARN: could not remove {path}: {error}")
-            return False
-    return not path.exists()
+    print(f"WARN: could not remove {path}; delete it manually")
+    return False
 
 
 def _sweep_stale_clones(current: Path) -> None:
