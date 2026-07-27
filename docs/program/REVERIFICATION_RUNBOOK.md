@@ -74,6 +74,13 @@ leaves the clone with a stale checkpoint, and KQ-015 fails on the mismatch
 rather than on anything about the repository. If a pass fails partway, refresh
 the projections and push before re-running the gate.
 
+Refresh the projections **last**, after every other file is in its final state.
+`program_checkpoint.json` hashes each evidence file present in the tree and
+lists each record's subject commit, so regenerating it and *then* deleting a
+failed record leaves a checkpoint naming a file that no longer exists. That
+mismatch is invisible locally — `--verify` passed while the file was still
+there — and only surfaces inside the clone.
+
 ## Rule 4a — regenerated status does not re-invalidate its own attestation
 
 `docs/status/program_status.json`, `program_checkpoint.json`, and
