@@ -65,6 +65,15 @@ instead, but the ordering requirement itself is unchanged:
 5. Run KQ-015.
 6. Commit KQ-015's record plus the refreshed projections, and push again.
 
+The projections in step 3 are not optional bookkeeping. The clean-clone gate
+clones the remote and runs `python -m unittest discover -s tests/program`
+inside it, and that suite compares the *checked-in* `program_status.json` and
+`program_checkpoint.json` against a freshly compiled pair. Any pass that
+appends a validity event without regenerating and pushing those two files
+leaves the clone with a stale checkpoint, and KQ-015 fails on the mismatch
+rather than on anything about the repository. If a pass fails partway, refresh
+the projections and push before re-running the gate.
+
 ## Rule 4a — regenerated status does not re-invalidate its own attestation
 
 `docs/status/program_status.json`, `program_checkpoint.json`, and

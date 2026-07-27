@@ -87,9 +87,9 @@
       "validity": "Current"
     },
     "KQ-015": {
-      "event_id": "VAL-KQ-015-24BEC2E1A634-CURRENT",
+      "event_id": "VAL-KQ-015-REVERIFY-20260727T004713216881Z",
       "evidence_id": "KQ-015-24bec2e1a634",
-      "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
+      "reason": "Previously current evidence no longer matches the live controller scope.",
       "validity": "ReverificationRequired"
     }
   },
@@ -117,13 +117,5 @@
     ],
     "Superseded": []
   },
-  "verification_errors": {
-    "KQ-015": [
-      "input is missing or stale: docs/program/milestone_registry.yaml",
-      "input is missing or stale: docs/program/resource_registry.yaml",
-      "input is missing or stale: tests/program/test_clean_clone_gate.py",
-      "input is missing or stale: tools/program/schedule_wave.py",
-      "input is missing or stale: tools/program/verify_clean_clone.py"
-    ]
-  }
+  "verification_errors": {}
 }
