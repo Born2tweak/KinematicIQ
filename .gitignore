@@ -66,3 +66,7 @@ web/eval/datasets/*
 # claude-flow / ruflo local orchestration state
 .claude-flow/
 .swarm/
+
+# Local test and coverage output
+web/coverage/
+web/test-results/
