@@ -1593,7 +1593,7 @@ milestones:
   title: Freeze squat golden corpus
   phase: B
   class: parallel_enabler
-  milestone_status: Pending
+  milestone_status: BlockedExternal
   expected_work_hours: 6
   objective: 'Produce and verify one bounded outcome: Freeze squat golden corpus.'
   user_visible_outcome: none
@@ -1605,9 +1605,15 @@ milestones:
     accepted_milestone_statuses:
     - Passed
   soft_dependencies: []
-  resource_dependencies: []
+  resource_dependencies:
+  - RES-CORPUS
   requirements:
   - required dependencies are PASS or conditionally skipped by an explicit negative decision
+  - RES-CORPUS is resolved and eval-tapes/CORPUS_FREEZE.squat.json declares at least one real
+    recording whose checksum, byte length, license, consent, capture metadata, subject key and
+    split all verify against the asset on disk
+  - corpus governance declares an accountable owner, retention policy, privacy review, and
+    explicit allowed and forbidden claims
   evidence_inputs:
   - docs/status/milestones/KQ-001.json
   - docs/status/milestones/KQ-003.json
@@ -1648,6 +1654,10 @@ milestones:
     expected:
       failed_tests: 0
       build_exit_code: 0
+  - id: KQ-016-A6
+    predicate: command_exit_code_equals
+    command_id: corpus_freeze_gate
+    expected: 0
   verification:
     profile: web_and_program_regression
     automated:
@@ -1660,6 +1670,9 @@ milestones:
       command: npm --prefix web test -- --run --reporter=dot
     - id: web_production_build
       command: npm --prefix web run build
+    - id: corpus_freeze_gate
+      command: python tools/program/verify_corpus_freeze.py --protocol squat --manifest eval-tapes/CORPUS_FREEZE.squat.json
+        --evidence-out docs/status/corpus-freeze-squat.json
     manual_gate: null
     clean_clone_required: false
   failure:
@@ -1701,7 +1714,7 @@ milestones:
   title: Freeze forward-lunge research corpus
   phase: B
   class: parallel_enabler
-  milestone_status: Pending
+  milestone_status: BlockedExternal
   expected_work_hours: 6
   objective: 'Produce and verify one bounded outcome: Freeze forward-lunge research corpus.'
   user_visible_outcome: none
@@ -1713,9 +1726,15 @@ milestones:
     accepted_milestone_statuses:
     - Passed
   soft_dependencies: []
-  resource_dependencies: []
+  resource_dependencies:
+  - RES-CORPUS
   requirements:
   - required dependencies are PASS or conditionally skipped by an explicit negative decision
+  - RES-CORPUS is resolved and eval-tapes/CORPUS_FREEZE.forward_lunge.json declares at least one
+    real recording whose checksum, byte length, license, consent, capture metadata, subject key
+    and split all verify against the asset on disk
+  - corpus governance declares an accountable owner, retention policy, privacy review, and
+    explicit allowed and forbidden claims
   evidence_inputs:
   - docs/status/milestones/KQ-001.json
   - docs/status/milestones/KQ-003.json
@@ -1756,6 +1775,10 @@ milestones:
     expected:
       failed_tests: 0
       build_exit_code: 0
+  - id: KQ-017-A6
+    predicate: command_exit_code_equals
+    command_id: corpus_freeze_gate
+    expected: 0
   verification:
     profile: web_and_program_regression
     automated:
@@ -1768,6 +1791,9 @@ milestones:
       command: npm --prefix web test -- --run --reporter=dot
     - id: web_production_build
       command: npm --prefix web run build
+    - id: corpus_freeze_gate
+      command: python tools/program/verify_corpus_freeze.py --protocol forward_lunge --manifest eval-tapes/CORPUS_FREEZE.forward_lunge.json
+        --evidence-out docs/status/corpus-freeze-forward-lunge.json
     manual_gate: null
     clean_clone_required: false
   failure:

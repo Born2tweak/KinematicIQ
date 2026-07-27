@@ -45,6 +45,40 @@ resources:
     escalation: If no scientifically valid no-cost path is confirmed by target_lead_time_days, present cost, scope-narrowing, and partnership
       options for owner decision.
     contact_log_artifact: docs/program/resources/res-participants-contact-log.yaml
+- id: RES-CORPUS
+  name: Frozen movement recordings with provenance, license, and consent
+  status: UnresolvedExternal
+  required_for:
+  - squat
+  - forward_lunge
+  minimum_path: At least one consent-cleared recording per frozen protocol, each with a
+    checksum, byte length, license, capture metadata, subject key, and split assignment, listed
+    in a versioned freeze manifest under eval-tapes/.
+  candidate_sources:
+  - owner-recorded sessions with recorded consent
+  - permissively licensed stock movement footage with retained license text
+  - partner-captured sessions under a written data agreement
+  target_lead_time_days: 7
+  cost_ceiling_usd: 0
+  unresolved_reason: No recordings exist in the working tree or in any tracked location. eval-tapes/
+    contains only committed example manifests, and real tapes are gitignored by design, so a
+    corpus freeze currently has nothing to freeze.
+  start_trigger: Protocol identity is locked and a consent-cleared recording path is confirmed.
+  cutoff_action: Keep KQ-016 and KQ-017 BlockedExternal and continue all data-free Phase B
+    engineering work.
+  accountable_owner: Andrian Kolliegbo
+  execution_owner: study_operations_agent
+  acquisition:
+    outreach_status: NotStarted
+    named_contact: null
+    first_action: Record or license the first squat and forward-lunge sessions and produce
+      eval-tapes/CORPUS_FREEZE.<protocol>.json with per-entry checksums.
+    next_action_due: within 2 execution days of start_trigger
+    approval_route: Andrian Kolliegbo for consent, licensing, and retention commitments
+    escalation: If no consent-cleared or permissively licensed recording path is confirmed by
+      target_lead_time_days, present the options for owner decision rather than narrowing the
+      freeze to synthetic or unlabelled data.
+    contact_log_artifact: docs/program/resources/res-corpus-contact-log.yaml
 - id: RES-RATER
   name: Two qualified independent movement raters plus adjudicator
   status: UnresolvedExternal

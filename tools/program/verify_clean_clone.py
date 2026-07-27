@@ -5,6 +5,7 @@ import json
 import shutil
 import subprocess
 import tempfile
+import time
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -66,6 +67,47 @@ def unpushed_subject(root: Path, repository: str, branch: str) -> str | None:
             "commit and push the subject before running the clean-clone gate"
         )
     return None
+
+
+CLONE_PREFIX = "kinematiciq-clean-clone-"
+STALE_CLONE_SECONDS = 6 * 60 * 60
+
+
+def _remove_tree(path: Path) -> bool:
+    """Delete a clone, retrying once because npm can still hold handles on Windows.
+
+    Reports the leak instead of swallowing it. Each abandoned clone is ~180 MB,
+    and silent `ignore_errors` is how 177 MB accumulated in %TEMP% unnoticed.
+    """
+    for attempt in range(2):
+        shutil.rmtree(path, ignore_errors=attempt == 0)
+        if not path.exists():
+            return True
+        if attempt == 0:
+            time.sleep(2)
+            continue
+        try:
+            shutil.rmtree(path)
+        except OSError as error:
+            print(f"WARN: could not remove {path}: {error}")
+            return False
+    return not path.exists()
+
+
+def _sweep_stale_clones(current: Path) -> None:
+    """Remove clones abandoned by earlier runs, leaving concurrent runs alone."""
+    parent = current.parent
+    cutoff = time.time() - STALE_CLONE_SECONDS
+    for candidate in parent.glob(f"{CLONE_PREFIX}*"):
+        if candidate == current or not candidate.is_dir():
+            continue
+        try:
+            if candidate.stat().st_mtime > cutoff:
+                continue
+        except OSError:
+            continue
+        if _remove_tree(candidate):
+            print(f"removed stale clone {candidate.name}")
 
 
 def main() -> int:
@@ -151,7 +193,8 @@ def main() -> int:
         if args.keep_clone:
             print(f"clone retained at {clone}")
         else:
-            shutil.rmtree(temp_root, ignore_errors=True)
+            _remove_tree(temp_root)
+            _sweep_stale_clones(temp_root)
 
 
 if __name__ == "__main__":

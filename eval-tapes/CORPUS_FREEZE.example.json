@@ -1,0 +1,69 @@
+{
+  "_comment": [
+    "Committed, athlete-free example of the freeze manifest that KQ-016 and KQ-017 require.",
+    "A real freeze lives at eval-tapes/CORPUS_FREEZE.<protocol_id>.json and stays gitignored",
+    "alongside the tapes it describes. Validate with:",
+    "  python tools/program/verify_corpus_freeze.py --protocol squat --manifest eval-tapes/CORPUS_FREEZE.squat.json",
+    "The gate fails closed: a missing manifest, or one with no entries, is reported as a",
+    "RES-CORPUS blocker rather than a pass. Every entry's sha256 and bytes are checked against",
+    "the asset on disk, and no subject_key may appear in two different splits."
+  ],
+  "freeze_id": "squat-golden-v1",
+  "protocol_id": "squat",
+  "frozen_at": "2026-07-26T00:00:00+00:00",
+  "license": "Recorded by the project owner; internal validation use only, not redistributable.",
+  "governance": {
+    "accountable_owner": "Andrian Kolliegbo",
+    "retention_policy": "Retained locally until this freeze is superseded, then deleted with the superseding freeze recorded.",
+    "privacy_review": "pending",
+    "allowed_claims": [
+      "regression stability of squat metrics across releases",
+      "relative comparison between pose adapters on identical frames"
+    ],
+    "forbidden_claims": [
+      "absolute joint-angle accuracy",
+      "clinical or diagnostic validity",
+      "generalisation to populations not represented in this freeze"
+    ]
+  },
+  "entries": [
+    {
+      "id": "squat-s01-front-01",
+      "file": "eval-tapes/squat-s01-front-01.tape.json",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+      "bytes": 0,
+      "source": "live",
+      "consent": "participant-consented",
+      "license": "participant consent on file; internal validation use only",
+      "capture": {
+        "device": "iPhone 13",
+        "fps": 60,
+        "resolution": "1920x1080",
+        "view": "front",
+        "distance_m": 2.5
+      },
+      "split": "development",
+      "subject_key": "S01",
+      "validation_use": "regression"
+    },
+    {
+      "id": "squat-s02-front-01",
+      "file": "eval-tapes/squat-s02-front-01.tape.json",
+      "sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+      "bytes": 0,
+      "source": "live",
+      "consent": "participant-consented",
+      "license": "participant consent on file; internal validation use only",
+      "capture": {
+        "device": "Pixel 7",
+        "fps": 30,
+        "resolution": "1280x720",
+        "view": "front",
+        "distance_m": 3.0
+      },
+      "split": "validation",
+      "subject_key": "S02",
+      "validation_use": "benchmark"
+    }
+  ]
+}

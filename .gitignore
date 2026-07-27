@@ -36,6 +36,8 @@ eval-tapes/*
 # Redacted example manifest only — a real MANIFEST.json stays local (M44).
 !eval-tapes/MANIFEST.example.json
 !eval-tapes/PROTOCOL_STUDY_MANIFEST.example.json
+# Corpus freeze example only — a real CORPUS_FREEZE.<protocol>.json stays local (KQ-016/017).
+!eval-tapes/CORPUS_FREEZE.example.json
 
 # Public-dataset raw bytes are LOCAL-ONLY (M61, ADR-006/ADR-010). Git tracks
 # the metadata registry (web/eval/datasets/registry.json) and never the data:

@@ -1,8 +1,10 @@
 from __future__ import annotations
 
+import os
 import subprocess
 import sys
 import tempfile
+import time
 import unittest
 from pathlib import Path
 
@@ -10,7 +12,12 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "tools" / "program"))
 
-from verify_clean_clone import unpushed_subject  # noqa: E402
+from verify_clean_clone import (  # noqa: E402
+    STALE_CLONE_SECONDS,
+    _remove_tree,
+    _sweep_stale_clones,
+    unpushed_subject,
+)
 
 
 def _git(root: Path, *args: str) -> str:
@@ -69,3 +76,32 @@ class CleanCloneOrderingTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class CloneCleanupTests(unittest.TestCase):
+    """Abandoned clones are ~180 MB each; silent leaks must be reported or swept."""
+
+    def test_remove_tree_deletes_and_reports_success(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            target = Path(tmp) / "kinematiciq-clean-clone-alpha"
+            (target / "nested").mkdir(parents=True)
+            (target / "nested" / "file.txt").write_text("x", encoding="utf-8")
+            self.assertTrue(_remove_tree(target))
+            self.assertFalse(target.exists())
+
+    def test_sweep_removes_stale_siblings_only(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            current = root / "kinematiciq-clean-clone-current"
+            stale = root / "kinematiciq-clean-clone-stale"
+            fresh = root / "kinematiciq-clean-clone-fresh"
+            unrelated = root / "some-other-tempdir"
+            for path in (current, stale, fresh, unrelated):
+                path.mkdir()
+            old = time.time() - (STALE_CLONE_SECONDS + 600)
+            os.utime(stale, (old, old))
+            _sweep_stale_clones(current)
+            self.assertFalse(stale.exists())
+            self.assertTrue(current.exists())
+            self.assertTrue(fresh.exists())
+            self.assertTrue(unrelated.exists())

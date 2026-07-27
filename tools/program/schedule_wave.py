@@ -14,8 +14,12 @@ import yaml
 
 
 COMMITTED_IDS = tuple(f"KQ-{number:03d}" for number in range(1, 16))
+# KQ-016 and KQ-017 were forecast here while they looked resource-free. They now
+# declare RES-CORPUS, so the external-wait band classifies them and listing them
+# here as well would double-classify them. A forecast band is not the place to
+# assert that a corpus exists.
 PROBABLE_IDS = (
-    "KQ-016", "KQ-017", "KQ-018", "KQ-019", "KQ-022",
+    "KQ-018", "KQ-019", "KQ-022",
     "KQ-025", "KQ-026", "KQ-029", "KQ-030",
 )
 STRETCH_IDS = (

@@ -130,3 +130,29 @@ under the correct order is affected.
 ID, and have it refresh generated state before any milestone whose declared
 checks include a `--verify` compiler. Batch that change with the next unavoidable
 controller edit rather than paying a dedicated pass for it.
+
+## DEBT-004 — BlockedExternal masks the resource that caused the block
+
+**Observed:** 2026-07-26, after moving KQ-016 and KQ-017 to `BlockedExternal`
+with `resource_dependencies: [RES-CORPUS]`.
+
+**Cause:** `dependency_ready_ids` in `tools/program/execution_authority.py`
+checks `milestone_status` before it checks resource readiness, so a milestone
+that is both `BlockedExternal` and resource-blocked reports only
+`{"reason": "not_open_for_execution", "detail": {"milestone_status":
+"BlockedExternal"}}`. The unresolved resource that actually caused the block —
+the fact an operator needs — never reaches the scheduling reason.
+
+**Impact:** the frontier still explains itself, but one indirection short. A
+reader has to open `milestone_registry.yaml` to learn that RES-CORPUS is the
+blocker. No decision is made wrongly; the answer is just one lookup away
+instead of present.
+
+**Accepted because:** the fix lives in `execution_authority.py`, a declared
+evidence input for all fifteen milestones, so it costs a full reverification
+pass. The registry entry, `docs/program/resource_registry.yaml`, and the
+milestone's own `requirements` all name RES-CORPUS explicitly.
+
+**Fix direction:** merge the resource check into the status branch so
+`not_open_for_execution` carries an `unresolved_resources` list when one exists.
+Batch with DEBT-003's `run_contract_checks.py` change, which needs the same pass.
