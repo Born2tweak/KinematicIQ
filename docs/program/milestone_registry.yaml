@@ -1833,7 +1833,7 @@ milestones:
   title: Audit legacy PoseTape/session schema definitions
   phase: B
   class: parallel_enabler
-  milestone_status: Pending
+  milestone_status: Passed
   expected_work_hours: 6
   objective: 'Produce and verify one bounded outcome: audit the legacy PoseTape and
     session schema definitions, readers, writers, and migration risks as they exist

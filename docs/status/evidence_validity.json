@@ -90,7 +90,13 @@
       "event_id": "VAL-KQ-015-C642ED298CEB-CURRENT",
       "evidence_id": "KQ-015-c642ed298ceb",
       "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
-      "validity": "Current"
+      "validity": "ReverificationRequired"
+    },
+    "KQ-018": {
+      "event_id": "VAL-KQ-018-458AF053B1C9-CURRENT",
+      "evidence_id": "KQ-018-458af053b1c9",
+      "reason": "Evidence schema v2 provenance and all declared milestone checks passed on the normal execution path.",
+      "validity": "ReverificationRequired"
     }
   },
   "summary": {
@@ -108,13 +114,22 @@
       "KQ-011",
       "KQ-012",
       "KQ-013",
-      "KQ-014",
-      "KQ-015"
+      "KQ-014"
     ],
     "Invalidated": [],
     "Retired": [],
-    "ReverificationRequired": [],
+    "ReverificationRequired": [
+      "KQ-015",
+      "KQ-018"
+    ],
     "Superseded": []
   },
-  "verification_errors": {}
+  "verification_errors": {
+    "KQ-015": [
+      "input is missing or stale: docs/program/milestone_registry.yaml"
+    ],
+    "KQ-018": [
+      "milestone contract is stale"
+    ]
+  }
 }
