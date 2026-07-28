@@ -164,9 +164,17 @@ def finalize(
 
     if not already:
         event_id = f"VAL-{record['evidence_id'].upper()}-CURRENT"
-        existing = {event["event_id"] for event in load_events(root)}
+        events = load_events(root)
+        existing = {event["event_id"] for event in events}
         if event_id not in existing:
-            prior = state["validity"] if state else None
+            # `from` must continue the recorded event chain, not the recomputed
+            # projection. The projection can say ReverificationRequired while
+            # the log's last transition still reads Current -- that is exactly
+            # the case where evidence went stale after being closed.
+            prior = None
+            for event in events:
+                if event["milestone_id"] == milestone_id:
+                    prior = event["to"]
             _append_event(root / VALIDITY_LOG, {
                 "event_id": event_id,
                 "milestone_id": milestone_id,
