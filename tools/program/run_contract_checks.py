@@ -26,6 +26,7 @@ from execution_authority import (
     assert_declared_branch,
     assert_executable,
 )
+from finalize_milestone import FinalizationError, finalize
 
 
 def main() -> int:
@@ -162,6 +163,19 @@ def main() -> int:
         print_errors(["one or more contract checks failed"])
         return 1
     print(output_path.relative_to(program.root))
+
+    # Normal execution closes the milestone: writes the declared status
+    # artifact, appends the validity event, refreshes projections, and verifies
+    # the result. --bootstrap-repair is the Phase A migration path, which owns
+    # its own event sequencing, so it opts out.
+    if not args.bootstrap_repair:
+        try:
+            summary = finalize(program, milestone, args.evidence_out)
+        except FinalizationError as error:
+            print_errors([str(error)])
+            return 1
+        verb = "already current" if summary["already_current"] else "closed"
+        print(f"PASS: {milestone['id']} {verb} -> {summary['evidence_id']}")
     return 0
 
 
