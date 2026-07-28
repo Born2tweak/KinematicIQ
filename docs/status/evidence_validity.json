@@ -84,13 +84,13 @@
       "event_id": "VAL-KQ-014-6C6CC25D1328-CURRENT",
       "evidence_id": "KQ-014-6c6cc25d1328",
       "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
-      "validity": "Current"
+      "validity": "ReverificationRequired"
     },
     "KQ-015": {
       "event_id": "VAL-KQ-015-8EAC54A968D2-CURRENT",
       "evidence_id": "KQ-015-8eac54a968d2",
       "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
-      "validity": "Current"
+      "validity": "ReverificationRequired"
     }
   },
   "summary": {
@@ -107,14 +107,23 @@
       "KQ-010",
       "KQ-011",
       "KQ-012",
-      "KQ-013",
-      "KQ-014",
-      "KQ-015"
+      "KQ-013"
     ],
     "Invalidated": [],
     "Retired": [],
-    "ReverificationRequired": [],
+    "ReverificationRequired": [
+      "KQ-014",
+      "KQ-015"
+    ],
     "Superseded": []
   },
-  "verification_errors": {}
+  "verification_errors": {
+    "KQ-014": [
+      "input is missing or stale: tools/program/transition_wave.py"
+    ],
+    "KQ-015": [
+      "input is missing or stale: docs/program/ACTIVE_WAVE.yaml",
+      "input is missing or stale: tools/program/transition_wave.py"
+    ]
+  }
 }
