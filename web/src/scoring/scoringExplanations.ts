@@ -80,7 +80,7 @@ function depthExplanation(metrics: SetMetricsSummary): Partial {
   if (t === 'limiting') {
     return {
       measured,
-      explanation: `Above ~${DEPTH_THRESHOLDS.goodMax}° reads as shallow from the side camera — the hips did not travel as far into the squat.`,
+      explanation: `Above ~${DEPTH_THRESHOLDS.goodMax}° reads as shallow from this camera angle — the hips did not travel as far into the squat.`,
     }
   }
   return {

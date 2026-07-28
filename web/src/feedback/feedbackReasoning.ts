@@ -124,7 +124,7 @@ function buildDepthCue(
       issue: 'Depth',
       observed: depthPhrase,
       whyItMatters:
-        'Limited hip flexion means the squat moves through less range of motion. From the side view, the camera reads thigh angle — when the hips do not sit as low, the camera reads less depth even if the rep felt effortful.',
+        'Limited hip flexion means the squat moves through less range of motion. From this camera angle, depth is read from knee bend — when the hips do not sit as low, the camera reads less depth even if the rep felt effortful.',
       tryNext:
         'Sit the hips slightly lower while keeping your chest controlled — think “hips back and down” rather than only bending the knees.',
       confidence,
@@ -141,7 +141,7 @@ function buildDepthCue(
     whyItMatters:
       'Depth is read from the smallest knee angle at the bottom of each rep. Less bend usually means the hips did not travel as far in the squat pattern.',
     tryNext:
-      'Film from the side, brace your core, and aim for the same hip height on each rep.',
+      'Film facing the camera with your full body in frame (lens at hip height, 3–4 m back), brace your core, and aim for the same hip height on each rep.',
     ...claimGated(avg !== null, confidence),
   }
 }
@@ -251,7 +251,7 @@ function buildKneeTrackingCue(
     whyItMatters:
       'Balanced knee bend keeps the squat centered over your base of support.',
     tryNext:
-      'Film from the front or a slight angle and aim for matching knee paths each rep.',
+      'Film facing the camera square-on and aim for matching knee paths each rep.',
     ...claimGated(asym !== null, confidence),
   }
 }
