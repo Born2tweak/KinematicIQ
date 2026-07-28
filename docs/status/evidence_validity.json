@@ -87,9 +87,9 @@
       "validity": "Current"
     },
     "KQ-015": {
-      "event_id": "VAL-KQ-015-C642ED298CEB-CURRENT",
+      "event_id": "VAL-KQ-015-REVERIFY-20260728T165446867033Z",
       "evidence_id": "KQ-015-c642ed298ceb",
-      "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
+      "reason": "Previously current evidence no longer matches the live controller scope.",
       "validity": "ReverificationRequired"
     },
     "KQ-018": {
@@ -125,9 +125,6 @@
     "Superseded": []
   },
   "verification_errors": {
-    "KQ-015": [
-      "input is missing or stale: docs/program/milestone_registry.yaml"
-    ],
     "KQ-018": [
       "milestone contract is stale"
     ]

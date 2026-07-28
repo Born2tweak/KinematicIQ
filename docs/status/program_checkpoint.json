@@ -113,6 +113,7 @@
       "22335f5fdcf99273f04cab24331bf98df2ede340",
       "24bec2e1a634afb0c4dc6a4bf81c46ac74aee602",
       "2a52f5d84ab3779164e9e646de1eba69d06ebe15",
+      "3c9388fe0d0b4a867e171a81f4b57073ddcb199f",
       "458af053b1c9f1e6cff65886732208bf451f49f5",
       "4c64a080d49a22593cad013a7027286e34cf8a9e",
       "505c7511f9bcda47a3e2d0df8f8966c11f450315",
@@ -131,9 +132,6 @@
       "ffa3907456833d37c06b74bc937a595c9fb6dd3f"
     ],
     "verification_failures": {
-      "KQ-015": [
-        "input is missing or stale: docs/program/milestone_registry.yaml"
-      ],
       "KQ-018": [
         "milestone contract is stale"
       ]
@@ -289,6 +287,7 @@
     "docs/status/evidence/KQ-015/KQ-015-17088d5b8d0f.json": "c43944ead88b1606a004e063d43cf06939dbb5a3619c63b7c94a3d92ebd04881",
     "docs/status/evidence/KQ-015/KQ-015-22335f5fdcf9.json": "cbe9b99d831e47bbef49a535104a6d486eeb4773890601840f9700f46a3196c2",
     "docs/status/evidence/KQ-015/KQ-015-24bec2e1a634.json": "43cefeb67297b485214b94d7ed52cdb7bf16bf4c148b5b8b67f4129eea1d06dd",
+    "docs/status/evidence/KQ-015/KQ-015-3c9388fe0d0b.json": "941f202c095bf0d05d359ad3dbd8654b2a0a876d9702afdca3245627f254286b",
     "docs/status/evidence/KQ-015/KQ-015-4c64a080d49a.json": "c6e217a44ba27db5e04f2ce54e7e3d4bb1d198d29977249d0d0cfaef44891997",
     "docs/status/evidence/KQ-015/KQ-015-6c6cc25d1328.json": "5fff0649a030fccd131eb2a8162d1bfc6ff65801aad321336a057834eff0e2a2",
     "docs/status/evidence/KQ-015/KQ-015-84537473e620.json": "179ef98be51a591971f527cf00e0086458f12b838922647ca700daa667f469df",
@@ -301,8 +300,8 @@
     "docs/status/evidence/KQ-015/KQ-015-ff41350e93de.json": "1252cee6083cead25ca2ddd64a5fcf1f5b83c71bc338e76675d858764389e363",
     "docs/status/evidence/KQ-018/KQ-018-2a52f5d84ab3.json": "0931b463e098c84738a6042569375d88d7f2357938c872734af4f405db09106f",
     "docs/status/evidence/KQ-018/KQ-018-458af053b1c9.json": "c8c1786b98d47d7947265459c788b39f3f5874c12b5a608a7df66342409c0049",
-    "docs/status/evidence_validity.json": "287ead9733e64ee273c73bbf1715aeb70898a40b46e61ad48f7d713c07d480d2",
-    "docs/status/evidence_validity_events.ndjson": "b6bb3bd8b94ce534a9634c787bf20aa6712dad02dbd7527f8e15201275533fb3",
+    "docs/status/evidence_validity.json": "7010d1f6d8f8527d1be31e1846add8759dffba0de92cbede9e987652ddd38ec6",
+    "docs/status/evidence_validity_events.ndjson": "a61ed751f6dded508173d0eabb494c4d8203f6b7d43bc26cb246e3e800aa0501",
     "docs/status/milestones/KQ-001.json": "7e3058ae976e5683cc3feabc41a115dedd91f66e221747469803a5f2b1d147c6",
     "docs/status/milestones/KQ-002.json": "7f93c5d052ef6acbd35e977c800e2bb79e9e656702d626be1fc6b6c4ce6955d5",
     "docs/status/milestones/KQ-003.json": "fa062f54317050c08b955ba310eab44bc82bb83f3f53a95104ff4695c69acc39",
@@ -319,7 +318,7 @@
     "docs/status/milestones/KQ-014.json": "1d29dbaca182957965eb19120b54274df2cd6789a27cae790cea2245d53d3f59",
     "docs/status/milestones/KQ-015.json": "8b73d40dfcca7e0ebc617cde3164dbb9a05ffd03bd58e55c35662ca33ce75764",
     "docs/status/milestones/KQ-018.json": "c8c1786b98d47d7947265459c788b39f3f5874c12b5a608a7df66342409c0049",
-    "docs/status/program_status.json": "4e599ba98dbbd5c1965c46e6108516d272b26ee6c934c43d72dffeebda6f17eb",
+    "docs/status/program_status.json": "580b73e5d6aa15438c6dae5b2f34fc6267d24d9dfd9603026549c7378bedfa0a",
     "docs/validation/protocol_validation_registry.yaml": "b4e6b116d36b7213c7257c00df166e98a6ac02cb475c90a5b23807ece1aa8141"
   },
   "triggers": [
