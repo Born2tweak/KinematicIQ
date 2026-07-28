@@ -87,10 +87,10 @@
       "validity": "Current"
     },
     "KQ-015": {
-      "event_id": "VAL-KQ-015-REVERIFY-20260728T105532043598Z",
-      "evidence_id": "KQ-015-8eac54a968d2",
-      "reason": "Previously current evidence no longer matches the live controller scope.",
-      "validity": "ReverificationRequired"
+      "event_id": "VAL-KQ-015-14E4FF449516-CURRENT",
+      "evidence_id": "KQ-015-14e4ff449516",
+      "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
+      "validity": "Current"
     }
   },
   "summary": {
@@ -108,13 +108,12 @@
       "KQ-011",
       "KQ-012",
       "KQ-013",
-      "KQ-014"
+      "KQ-014",
+      "KQ-015"
     ],
     "Invalidated": [],
     "Retired": [],
-    "ReverificationRequired": [
-      "KQ-015"
-    ],
+    "ReverificationRequired": [],
     "Superseded": []
   },
   "verification_errors": {}

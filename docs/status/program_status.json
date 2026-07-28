@@ -24,1601 +24,2296 @@
     ]
   },
   "milestones": {
-    "allowed_executable_ids": [],
-    "committed_wave_ready_ids": [],
-    "dependency_ready_ids": [],
+    "allowed_executable_ids": [
+      "KQ-018",
+      "KQ-026"
+    ],
+    "committed_wave_ready_ids": [
+      "KQ-018",
+      "KQ-026"
+    ],
+    "dependency_ready_ids": [
+      "KQ-018",
+      "KQ-026",
+      "KQ-056"
+    ],
     "evidence_validity_counts": {
-      "Current": 14,
+      "Current": 15,
       "Invalidated": 0,
       "Retired": 0,
-      "ReverificationRequired": 1,
+      "ReverificationRequired": 0,
       "Superseded": 0
     },
-    "next_executable_id": null,
-    "resource_blocked": {},
+    "next_executable_id": "KQ-018",
+    "resource_blocked": {
+      "KQ-051": [
+        "RES-RATER"
+      ],
+      "KQ-054": [
+        "RES-PRIVACY"
+      ],
+      "KQ-061": [
+        "RES-PRIVACY"
+      ],
+      "KQ-088": [
+        "RES-DEVICES",
+        "RES-KINEMATICS",
+        "RES-PARTICIPANTS",
+        "RES-PRIVACY",
+        "RES-RATER",
+        "RES-REPEAT"
+      ],
+      "KQ-092": [
+        "RES-DEVICES",
+        "RES-KINEMATICS",
+        "RES-PARTICIPANTS",
+        "RES-PRIVACY",
+        "RES-RATER",
+        "RES-REPEAT"
+      ],
+      "KQ-096": [
+        "RES-DEVICES",
+        "RES-KINEMATICS",
+        "RES-PARTICIPANTS",
+        "RES-PRIVACY",
+        "RES-RATER",
+        "RES-REPEAT"
+      ],
+      "KQ-100": [
+        "RES-DEVICES",
+        "RES-KINEMATICS",
+        "RES-PARTICIPANTS",
+        "RES-PRIVACY",
+        "RES-RATER",
+        "RES-REPEAT"
+      ],
+      "KQ-104": [
+        "RES-DEVICES",
+        "RES-KINEMATICS",
+        "RES-PARTICIPANTS",
+        "RES-PRIVACY",
+        "RES-RATER",
+        "RES-REPEAT"
+      ],
+      "KQ-108": [
+        "RES-DEVICES",
+        "RES-KINEMATICS",
+        "RES-PARTICIPANTS",
+        "RES-PRIVACY",
+        "RES-RATER",
+        "RES-REPEAT"
+      ],
+      "KQ-112": [
+        "RES-DEVICES",
+        "RES-KINEMATICS",
+        "RES-PARTICIPANTS",
+        "RES-PRIVACY",
+        "RES-RATER",
+        "RES-REPEAT"
+      ],
+      "KQ-116": [
+        "RES-DEVICES",
+        "RES-KINEMATICS",
+        "RES-PARTICIPANTS",
+        "RES-PRIVACY",
+        "RES-RATER",
+        "RES-REPEAT"
+      ],
+      "KQ-120": [
+        "RES-DEVICES",
+        "RES-KINEMATICS",
+        "RES-PARTICIPANTS",
+        "RES-PRIVACY",
+        "RES-RATER",
+        "RES-REPEAT"
+      ],
+      "KQ-124": [
+        "RES-DEVICES",
+        "RES-KINEMATICS",
+        "RES-PARTICIPANTS",
+        "RES-PRIVACY",
+        "RES-RATER",
+        "RES-REPEAT"
+      ],
+      "KQ-128": [
+        "RES-DEVICES",
+        "RES-KINEMATICS",
+        "RES-PARTICIPANTS",
+        "RES-PRIVACY",
+        "RES-RATER",
+        "RES-REPEAT"
+      ],
+      "KQ-132": [
+        "RES-DEVICES",
+        "RES-KINEMATICS",
+        "RES-PARTICIPANTS",
+        "RES-PRIVACY",
+        "RES-RATER",
+        "RES-REPEAT"
+      ],
+      "KQ-136": [
+        "RES-DEVICES",
+        "RES-PARTICIPANTS",
+        "RES-PRIVACY",
+        "RES-RATER",
+        "RES-REPEAT",
+        "RES-TIMING"
+      ],
+      "KQ-140": [
+        "RES-DEVICES",
+        "RES-PARTICIPANTS",
+        "RES-PRIVACY",
+        "RES-RATER",
+        "RES-REPEAT",
+        "RES-TIMING"
+      ],
+      "KQ-144": [
+        "RES-DEVICES",
+        "RES-FORCE_CONTACT",
+        "RES-PARTICIPANTS",
+        "RES-PRIVACY",
+        "RES-RATER",
+        "RES-REPEAT"
+      ],
+      "KQ-148": [
+        "RES-DEVICES",
+        "RES-FORCE_CONTACT",
+        "RES-PARTICIPANTS",
+        "RES-PRIVACY",
+        "RES-RATER",
+        "RES-REPEAT"
+      ],
+      "KQ-152": [
+        "RES-CALIBRATED_PLATFORM",
+        "RES-DEVICES",
+        "RES-FORCE_CONTACT",
+        "RES-PARTICIPANTS",
+        "RES-PRIVACY",
+        "RES-RATER",
+        "RES-REPEAT"
+      ],
+      "KQ-156": [
+        "RES-CALIBRATED_PLATFORM",
+        "RES-DEVICES",
+        "RES-FORCE_CONTACT",
+        "RES-PARTICIPANTS",
+        "RES-PRIVACY",
+        "RES-RATER",
+        "RES-REPEAT"
+      ],
+      "KQ-160": [
+        "RES-DEVICES",
+        "RES-PARTICIPANTS",
+        "RES-PRIVACY",
+        "RES-RATER",
+        "RES-REPEAT",
+        "RES-TIMING"
+      ],
+      "KQ-164": [
+        "RES-DEVICES",
+        "RES-PARTICIPANTS",
+        "RES-PRIVACY",
+        "RES-RATER",
+        "RES-REPEAT",
+        "RES-TIMING"
+      ]
+    },
     "scheduling_reasons": {
       "KQ-001": {
         "detail": {
-          "not_current": [
-            "KQ-015"
-          ]
+          "milestone_status": "Passed"
         },
-        "reason": "program_closure_gate",
+        "reason": "not_open_for_execution",
         "state": "blocked"
       },
       "KQ-002": {
         "detail": {
-          "not_current": [
-            "KQ-015"
-          ]
+          "milestone_status": "Passed"
         },
-        "reason": "program_closure_gate",
+        "reason": "not_open_for_execution",
         "state": "blocked"
       },
       "KQ-003": {
         "detail": {
-          "not_current": [
-            "KQ-015"
-          ]
+          "milestone_status": "Passed"
         },
-        "reason": "program_closure_gate",
+        "reason": "not_open_for_execution",
         "state": "blocked"
       },
       "KQ-004": {
         "detail": {
-          "not_current": [
-            "KQ-015"
-          ]
+          "milestone_status": "Passed"
         },
-        "reason": "program_closure_gate",
+        "reason": "not_open_for_execution",
         "state": "blocked"
       },
       "KQ-005": {
         "detail": {
-          "not_current": [
-            "KQ-015"
-          ]
+          "milestone_status": "Passed"
         },
-        "reason": "program_closure_gate",
+        "reason": "not_open_for_execution",
         "state": "blocked"
       },
       "KQ-006": {
         "detail": {
-          "not_current": [
-            "KQ-015"
-          ]
+          "milestone_status": "Passed"
         },
-        "reason": "program_closure_gate",
+        "reason": "not_open_for_execution",
         "state": "blocked"
       },
       "KQ-007": {
         "detail": {
-          "not_current": [
-            "KQ-015"
-          ]
+          "milestone_status": "Passed"
         },
-        "reason": "program_closure_gate",
+        "reason": "not_open_for_execution",
         "state": "blocked"
       },
       "KQ-008": {
         "detail": {
-          "not_current": [
-            "KQ-015"
-          ]
+          "milestone_status": "Passed"
         },
-        "reason": "program_closure_gate",
+        "reason": "not_open_for_execution",
         "state": "blocked"
       },
       "KQ-009": {
         "detail": {
-          "not_current": [
-            "KQ-015"
-          ]
+          "milestone_status": "Passed"
         },
-        "reason": "program_closure_gate",
+        "reason": "not_open_for_execution",
         "state": "blocked"
       },
       "KQ-010": {
         "detail": {
-          "not_current": [
-            "KQ-015"
-          ]
+          "milestone_status": "Passed"
         },
-        "reason": "program_closure_gate",
+        "reason": "not_open_for_execution",
         "state": "blocked"
       },
       "KQ-011": {
         "detail": {
-          "not_current": [
-            "KQ-015"
-          ]
+          "milestone_status": "Passed"
         },
-        "reason": "program_closure_gate",
+        "reason": "not_open_for_execution",
         "state": "blocked"
       },
       "KQ-012": {
         "detail": {
-          "not_current": [
-            "KQ-015"
-          ]
+          "milestone_status": "Passed"
         },
-        "reason": "program_closure_gate",
+        "reason": "not_open_for_execution",
         "state": "blocked"
       },
       "KQ-013": {
         "detail": {
-          "not_current": [
-            "KQ-015"
-          ]
+          "milestone_status": "Passed"
         },
-        "reason": "program_closure_gate",
+        "reason": "not_open_for_execution",
         "state": "blocked"
       },
       "KQ-014": {
         "detail": {
-          "not_current": [
-            "KQ-015"
-          ]
+          "milestone_status": "Passed"
         },
-        "reason": "program_closure_gate",
+        "reason": "not_open_for_execution",
         "state": "blocked"
       },
       "KQ-015": {
         "detail": {
-          "not_current": [
-            "KQ-015"
-          ]
+          "milestone_status": "Passed"
         },
-        "reason": "program_closure_gate",
+        "reason": "not_open_for_execution",
         "state": "blocked"
       },
       "KQ-016": {
         "detail": {
-          "not_current": [
-            "KQ-015"
-          ]
+          "milestone_status": "BlockedExternal"
         },
-        "reason": "program_closure_gate",
+        "reason": "not_open_for_execution",
         "state": "blocked"
       },
       "KQ-017": {
         "detail": {
-          "not_current": [
-            "KQ-015"
-          ]
+          "milestone_status": "BlockedExternal"
         },
-        "reason": "program_closure_gate",
+        "reason": "not_open_for_execution",
         "state": "blocked"
       },
       "KQ-018": {
         "detail": {
-          "not_current": [
-            "KQ-015"
-          ]
+          "sequence": 1,
+          "worker_id": "W2"
         },
-        "reason": "program_closure_gate",
-        "state": "blocked"
+        "reason": "scheduled",
+        "state": "allowed"
       },
       "KQ-019": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-018:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-020": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-019:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-021": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-019:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-022": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-018:status=Pending",
+            "KQ-019:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-023": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-022:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-024": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-018:status=Pending",
+            "KQ-022:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-025": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-019:status=Pending",
+            "KQ-022:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-026": {
         "detail": {
-          "not_current": [
-            "KQ-015"
-          ]
+          "sequence": 1,
+          "worker_id": "W1"
         },
-        "reason": "program_closure_gate",
-        "state": "blocked"
+        "reason": "scheduled",
+        "state": "allowed"
       },
       "KQ-027": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-026:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-028": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-026:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-029": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-022:status=Pending",
+            "KQ-026:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-030": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-029:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-031": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-026:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-032": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-029:status=Pending",
+            "KQ-030:status=Pending",
+            "KQ-031:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-033": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-032:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-034": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-026:status=Pending",
+            "KQ-027:status=Pending",
+            "KQ-028:status=Pending",
+            "KQ-029:status=Pending",
+            "KQ-030:status=Pending",
+            "KQ-031:status=Pending",
+            "KQ-032:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-035": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-020:status=Pending",
+            "KQ-021:status=Pending",
+            "KQ-023:status=Pending",
+            "KQ-024:status=Pending",
+            "KQ-025:status=Pending",
+            "KQ-033:status=Pending",
+            "KQ-034:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-036": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-022:status=Pending",
+            "KQ-026:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-037": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-036:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-038": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-036:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-039": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-036:status=Pending",
+            "KQ-037:status=Pending",
+            "KQ-038:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-040": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-038:status=Pending",
+            "KQ-039:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-041": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-040:status=Pending",
+            "KQ-043:status=Pending",
+            "KQ-044:status=Pending",
+            "KQ-045:status=Pending",
+            "KQ-046:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-042": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-041:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-043": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-016:status=BlockedExternal",
+            "KQ-017:status=BlockedExternal",
+            "KQ-038:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-044": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-039:status=Pending",
+            "KQ-043:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-045": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-039:status=Pending",
+            "KQ-043:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-046": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-039:status=Pending",
+            "KQ-043:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-047": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-041:status=Pending",
+            "KQ-042:status=Pending",
+            "KQ-044:status=Pending",
+            "KQ-045:status=Pending",
+            "KQ-046:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-048": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-025:status=Pending",
+            "KQ-047:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-049": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-029:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-050": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-049:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-051": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "resources": [
+            "RES-RATER"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unresolved_resource",
         "state": "blocked"
       },
       "KQ-052": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-029:status=Pending",
+            "KQ-049:status=Pending",
+            "KQ-051:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-053": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-038:status=Pending",
+            "KQ-046:status=Pending",
+            "KQ-052:status=Pending",
+            "KQ-061:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-054": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "resources": [
+            "RES-PRIVACY"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unresolved_resource",
         "state": "blocked"
       },
       "KQ-055": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-037:status=Pending",
+            "KQ-039:status=Pending",
+            "KQ-040:status=Pending",
+            "KQ-041:status=Pending",
+            "KQ-043:status=Pending",
+            "KQ-044:status=Pending",
+            "KQ-045:status=Pending",
+            "KQ-046:status=Pending",
+            "KQ-047:status=Pending",
+            "KQ-048:status=Pending",
+            "KQ-049:status=Pending",
+            "KQ-051:status=Pending",
+            "KQ-052:status=Pending",
+            "KQ-053:status=Pending",
+            "KQ-054:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-056": {
         "detail": {
-          "not_current": [
-            "KQ-015"
-          ]
+          "wave_id": "expanded-10-wave-3"
         },
-        "reason": "program_closure_gate",
-        "state": "blocked"
+        "reason": "not_committed_to_active_wave",
+        "state": "eligible_but_not_scheduled"
       },
       "KQ-057": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-056:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-058": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-056:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-059": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-058:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-060": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-058:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-061": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "resources": [
+            "RES-PRIVACY"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unresolved_resource",
         "state": "blocked"
       },
       "KQ-062": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-019:status=Pending",
+            "KQ-061:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-063": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-027:status=Pending",
+            "KQ-056:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-064": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-063:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-065": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-058:status=Pending",
+            "KQ-061:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-066": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-056:status=Pending",
+            "KQ-057:status=Pending",
+            "KQ-065:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-067": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-056:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-068": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-057:status=Pending",
+            "KQ-067:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-069": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-057:status=Pending",
+            "KQ-067:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-070": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-029:status=Pending",
+            "KQ-030:status=Pending",
+            "KQ-052:status=Pending",
+            "KQ-067:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-071": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-058:status=Pending",
+            "KQ-065:status=Pending",
+            "KQ-067:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-072": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-020:status=Pending",
+            "KQ-021:status=Pending",
+            "KQ-054:status=Pending",
+            "KQ-067:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-073": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-056:status=Pending",
+            "KQ-057:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-074": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-028:status=Pending",
+            "KQ-056:status=Pending",
+            "KQ-057:status=Pending",
+            "KQ-066:status=Pending",
+            "KQ-068:status=Pending",
+            "KQ-069:status=Pending",
+            "KQ-070:status=Pending",
+            "KQ-071:status=Pending",
+            "KQ-072:status=Pending",
+            "KQ-073:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-075": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-058:status=Pending",
+            "KQ-059:status=Pending",
+            "KQ-061:status=Pending",
+            "KQ-062:status=Pending",
+            "KQ-063:status=Pending",
+            "KQ-064:status=Pending",
+            "KQ-065:status=Pending",
+            "KQ-066:status=Pending",
+            "KQ-067:status=Pending",
+            "KQ-068:status=Pending",
+            "KQ-069:status=Pending",
+            "KQ-070:status=Pending",
+            "KQ-071:status=Pending",
+            "KQ-072:status=Pending",
+            "KQ-073:status=Pending",
+            "KQ-074:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-076": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-027:status=Pending",
+            "KQ-028:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-077": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-027:status=Pending",
+            "KQ-028:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-078": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-026:status=Pending",
+            "KQ-027:status=Pending",
+            "KQ-029:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-079": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-049:status=Pending",
+            "KQ-051:status=Pending",
+            "KQ-078:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-080": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-020:status=Pending",
+            "KQ-021:status=Pending",
+            "KQ-032:status=Pending",
+            "KQ-078:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-081": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-030:status=Pending",
+            "KQ-032:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-082": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-031:status=Pending",
+            "KQ-056:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-083": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-028:status=Pending",
+            "KQ-073:status=Pending",
+            "KQ-077:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-084": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-076:status=Pending",
+            "KQ-078:status=Pending",
+            "KQ-079:status=Pending",
+            "KQ-080:status=Pending",
+            "KQ-081:status=Pending",
+            "KQ-082:status=Pending",
+            "KQ-083:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-085": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-076:status=Pending",
+            "KQ-077:status=Pending",
+            "KQ-078:status=Pending",
+            "KQ-079:status=Pending",
+            "KQ-080:status=Pending",
+            "KQ-081:status=Pending",
+            "KQ-082:status=Pending",
+            "KQ-083:status=Pending",
+            "KQ-084:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-086": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-027:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-087": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-086:status=Pending",
+            "KQ-029:status=Pending",
+            "KQ-056:status=Pending",
+            "KQ-057:status=Pending",
+            "KQ-073:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-088": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "resources": [
+            "RES-DEVICES",
+            "RES-KINEMATICS",
+            "RES-PARTICIPANTS",
+            "RES-PRIVACY",
+            "RES-RATER",
+            "RES-REPEAT"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unresolved_resource",
         "state": "blocked"
       },
       "KQ-089": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-087:status=Pending",
+            "KQ-029:status=Pending",
+            "KQ-035:status=Pending",
+            "KQ-037:status=Pending",
+            "KQ-039:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-090": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-089:status=Pending",
+            "KQ-076:status=Pending",
+            "KQ-077:status=Pending",
+            "KQ-078:status=Pending",
+            "KQ-079:status=Pending",
+            "KQ-080:status=Pending",
+            "KQ-081:status=Pending",
+            "KQ-082:status=Pending",
+            "KQ-083:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-091": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-088:status=Pending",
+            "KQ-089:status=Pending",
+            "KQ-090:status=Pending",
+            "KQ-066:status=Pending",
+            "KQ-067:status=Pending",
+            "KQ-068:status=Pending",
+            "KQ-069:status=Pending",
+            "KQ-070:status=Pending",
+            "KQ-071:status=Pending",
+            "KQ-072:status=Pending",
+            "KQ-073:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-092": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "resources": [
+            "RES-DEVICES",
+            "RES-KINEMATICS",
+            "RES-PARTICIPANTS",
+            "RES-PRIVACY",
+            "RES-RATER",
+            "RES-REPEAT"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unresolved_resource",
         "state": "blocked"
       },
       "KQ-093": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-092:status=Pending",
+            "KQ-074:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-094": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-027:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-095": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-094:status=Pending",
+            "KQ-029:status=Pending",
+            "KQ-056:status=Pending",
+            "KQ-057:status=Pending",
+            "KQ-073:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-096": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "resources": [
+            "RES-DEVICES",
+            "RES-KINEMATICS",
+            "RES-PARTICIPANTS",
+            "RES-PRIVACY",
+            "RES-RATER",
+            "RES-REPEAT"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unresolved_resource",
         "state": "blocked"
       },
       "KQ-097": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-095:status=Pending",
+            "KQ-029:status=Pending",
+            "KQ-035:status=Pending",
+            "KQ-037:status=Pending",
+            "KQ-039:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-098": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-097:status=Pending",
+            "KQ-076:status=Pending",
+            "KQ-077:status=Pending",
+            "KQ-078:status=Pending",
+            "KQ-079:status=Pending",
+            "KQ-080:status=Pending",
+            "KQ-081:status=Pending",
+            "KQ-082:status=Pending",
+            "KQ-083:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-099": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-096:status=Pending",
+            "KQ-097:status=Pending",
+            "KQ-098:status=Pending",
+            "KQ-066:status=Pending",
+            "KQ-067:status=Pending",
+            "KQ-068:status=Pending",
+            "KQ-069:status=Pending",
+            "KQ-070:status=Pending",
+            "KQ-071:status=Pending",
+            "KQ-072:status=Pending",
+            "KQ-073:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-100": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "resources": [
+            "RES-DEVICES",
+            "RES-KINEMATICS",
+            "RES-PARTICIPANTS",
+            "RES-PRIVACY",
+            "RES-RATER",
+            "RES-REPEAT"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unresolved_resource",
         "state": "blocked"
       },
       "KQ-101": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-100:status=Pending",
+            "KQ-074:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-102": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-027:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-103": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-102:status=Pending",
+            "KQ-029:status=Pending",
+            "KQ-056:status=Pending",
+            "KQ-057:status=Pending",
+            "KQ-073:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-104": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "resources": [
+            "RES-DEVICES",
+            "RES-KINEMATICS",
+            "RES-PARTICIPANTS",
+            "RES-PRIVACY",
+            "RES-RATER",
+            "RES-REPEAT"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unresolved_resource",
         "state": "blocked"
       },
       "KQ-105": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-103:status=Pending",
+            "KQ-029:status=Pending",
+            "KQ-035:status=Pending",
+            "KQ-037:status=Pending",
+            "KQ-039:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-106": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-105:status=Pending",
+            "KQ-076:status=Pending",
+            "KQ-077:status=Pending",
+            "KQ-078:status=Pending",
+            "KQ-079:status=Pending",
+            "KQ-080:status=Pending",
+            "KQ-081:status=Pending",
+            "KQ-082:status=Pending",
+            "KQ-083:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-107": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-104:status=Pending",
+            "KQ-105:status=Pending",
+            "KQ-106:status=Pending",
+            "KQ-066:status=Pending",
+            "KQ-067:status=Pending",
+            "KQ-068:status=Pending",
+            "KQ-069:status=Pending",
+            "KQ-070:status=Pending",
+            "KQ-071:status=Pending",
+            "KQ-072:status=Pending",
+            "KQ-073:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-108": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "resources": [
+            "RES-DEVICES",
+            "RES-KINEMATICS",
+            "RES-PARTICIPANTS",
+            "RES-PRIVACY",
+            "RES-RATER",
+            "RES-REPEAT"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unresolved_resource",
         "state": "blocked"
       },
       "KQ-109": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-108:status=Pending",
+            "KQ-074:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-110": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-027:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-111": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-110:status=Pending",
+            "KQ-029:status=Pending",
+            "KQ-056:status=Pending",
+            "KQ-057:status=Pending",
+            "KQ-073:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-112": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "resources": [
+            "RES-DEVICES",
+            "RES-KINEMATICS",
+            "RES-PARTICIPANTS",
+            "RES-PRIVACY",
+            "RES-RATER",
+            "RES-REPEAT"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unresolved_resource",
         "state": "blocked"
       },
       "KQ-113": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-111:status=Pending",
+            "KQ-029:status=Pending",
+            "KQ-035:status=Pending",
+            "KQ-037:status=Pending",
+            "KQ-039:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-114": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-113:status=Pending",
+            "KQ-076:status=Pending",
+            "KQ-077:status=Pending",
+            "KQ-078:status=Pending",
+            "KQ-079:status=Pending",
+            "KQ-080:status=Pending",
+            "KQ-081:status=Pending",
+            "KQ-082:status=Pending",
+            "KQ-083:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-115": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-112:status=Pending",
+            "KQ-113:status=Pending",
+            "KQ-114:status=Pending",
+            "KQ-066:status=Pending",
+            "KQ-067:status=Pending",
+            "KQ-068:status=Pending",
+            "KQ-069:status=Pending",
+            "KQ-070:status=Pending",
+            "KQ-071:status=Pending",
+            "KQ-072:status=Pending",
+            "KQ-073:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-116": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "resources": [
+            "RES-DEVICES",
+            "RES-KINEMATICS",
+            "RES-PARTICIPANTS",
+            "RES-PRIVACY",
+            "RES-RATER",
+            "RES-REPEAT"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unresolved_resource",
         "state": "blocked"
       },
       "KQ-117": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-116:status=Pending",
+            "KQ-074:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-118": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-027:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-119": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-118:status=Pending",
+            "KQ-029:status=Pending",
+            "KQ-056:status=Pending",
+            "KQ-057:status=Pending",
+            "KQ-073:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-120": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "resources": [
+            "RES-DEVICES",
+            "RES-KINEMATICS",
+            "RES-PARTICIPANTS",
+            "RES-PRIVACY",
+            "RES-RATER",
+            "RES-REPEAT"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unresolved_resource",
         "state": "blocked"
       },
       "KQ-121": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-119:status=Pending",
+            "KQ-029:status=Pending",
+            "KQ-035:status=Pending",
+            "KQ-037:status=Pending",
+            "KQ-039:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-122": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-121:status=Pending",
+            "KQ-076:status=Pending",
+            "KQ-077:status=Pending",
+            "KQ-078:status=Pending",
+            "KQ-079:status=Pending",
+            "KQ-080:status=Pending",
+            "KQ-081:status=Pending",
+            "KQ-082:status=Pending",
+            "KQ-083:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-123": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-120:status=Pending",
+            "KQ-121:status=Pending",
+            "KQ-122:status=Pending",
+            "KQ-066:status=Pending",
+            "KQ-067:status=Pending",
+            "KQ-068:status=Pending",
+            "KQ-069:status=Pending",
+            "KQ-070:status=Pending",
+            "KQ-071:status=Pending",
+            "KQ-072:status=Pending",
+            "KQ-073:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-124": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "resources": [
+            "RES-DEVICES",
+            "RES-KINEMATICS",
+            "RES-PARTICIPANTS",
+            "RES-PRIVACY",
+            "RES-RATER",
+            "RES-REPEAT"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unresolved_resource",
         "state": "blocked"
       },
       "KQ-125": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-124:status=Pending",
+            "KQ-074:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-126": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-027:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-127": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-126:status=Pending",
+            "KQ-029:status=Pending",
+            "KQ-056:status=Pending",
+            "KQ-057:status=Pending",
+            "KQ-073:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-128": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "resources": [
+            "RES-DEVICES",
+            "RES-KINEMATICS",
+            "RES-PARTICIPANTS",
+            "RES-PRIVACY",
+            "RES-RATER",
+            "RES-REPEAT"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unresolved_resource",
         "state": "blocked"
       },
       "KQ-129": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-127:status=Pending",
+            "KQ-029:status=Pending",
+            "KQ-035:status=Pending",
+            "KQ-037:status=Pending",
+            "KQ-039:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-130": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-129:status=Pending",
+            "KQ-076:status=Pending",
+            "KQ-077:status=Pending",
+            "KQ-078:status=Pending",
+            "KQ-079:status=Pending",
+            "KQ-080:status=Pending",
+            "KQ-081:status=Pending",
+            "KQ-082:status=Pending",
+            "KQ-083:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-131": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-128:status=Pending",
+            "KQ-129:status=Pending",
+            "KQ-130:status=Pending",
+            "KQ-066:status=Pending",
+            "KQ-067:status=Pending",
+            "KQ-068:status=Pending",
+            "KQ-069:status=Pending",
+            "KQ-070:status=Pending",
+            "KQ-071:status=Pending",
+            "KQ-072:status=Pending",
+            "KQ-073:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-132": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "resources": [
+            "RES-DEVICES",
+            "RES-KINEMATICS",
+            "RES-PARTICIPANTS",
+            "RES-PRIVACY",
+            "RES-RATER",
+            "RES-REPEAT"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unresolved_resource",
         "state": "blocked"
       },
       "KQ-133": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-132:status=Pending",
+            "KQ-074:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-134": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-027:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-135": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-134:status=Pending",
+            "KQ-029:status=Pending",
+            "KQ-056:status=Pending",
+            "KQ-057:status=Pending",
+            "KQ-073:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-136": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "resources": [
+            "RES-DEVICES",
+            "RES-PARTICIPANTS",
+            "RES-PRIVACY",
+            "RES-RATER",
+            "RES-REPEAT",
+            "RES-TIMING"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unresolved_resource",
         "state": "blocked"
       },
       "KQ-137": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-135:status=Pending",
+            "KQ-029:status=Pending",
+            "KQ-035:status=Pending",
+            "KQ-037:status=Pending",
+            "KQ-039:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-138": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-137:status=Pending",
+            "KQ-076:status=Pending",
+            "KQ-077:status=Pending",
+            "KQ-078:status=Pending",
+            "KQ-079:status=Pending",
+            "KQ-080:status=Pending",
+            "KQ-081:status=Pending",
+            "KQ-082:status=Pending",
+            "KQ-083:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-139": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-136:status=Pending",
+            "KQ-137:status=Pending",
+            "KQ-138:status=Pending",
+            "KQ-066:status=Pending",
+            "KQ-067:status=Pending",
+            "KQ-068:status=Pending",
+            "KQ-069:status=Pending",
+            "KQ-070:status=Pending",
+            "KQ-071:status=Pending",
+            "KQ-072:status=Pending",
+            "KQ-073:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-140": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "resources": [
+            "RES-DEVICES",
+            "RES-PARTICIPANTS",
+            "RES-PRIVACY",
+            "RES-RATER",
+            "RES-REPEAT",
+            "RES-TIMING"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unresolved_resource",
         "state": "blocked"
       },
       "KQ-141": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-140:status=Pending",
+            "KQ-074:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-142": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-027:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-143": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-142:status=Pending",
+            "KQ-029:status=Pending",
+            "KQ-056:status=Pending",
+            "KQ-057:status=Pending",
+            "KQ-073:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-144": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "resources": [
+            "RES-DEVICES",
+            "RES-FORCE_CONTACT",
+            "RES-PARTICIPANTS",
+            "RES-PRIVACY",
+            "RES-RATER",
+            "RES-REPEAT"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unresolved_resource",
         "state": "blocked"
       },
       "KQ-145": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-143:status=Pending",
+            "KQ-029:status=Pending",
+            "KQ-035:status=Pending",
+            "KQ-037:status=Pending",
+            "KQ-039:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-146": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-145:status=Pending",
+            "KQ-076:status=Pending",
+            "KQ-077:status=Pending",
+            "KQ-078:status=Pending",
+            "KQ-079:status=Pending",
+            "KQ-080:status=Pending",
+            "KQ-081:status=Pending",
+            "KQ-082:status=Pending",
+            "KQ-083:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-147": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-144:status=Pending",
+            "KQ-145:status=Pending",
+            "KQ-146:status=Pending",
+            "KQ-066:status=Pending",
+            "KQ-067:status=Pending",
+            "KQ-068:status=Pending",
+            "KQ-069:status=Pending",
+            "KQ-070:status=Pending",
+            "KQ-071:status=Pending",
+            "KQ-072:status=Pending",
+            "KQ-073:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-148": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "resources": [
+            "RES-DEVICES",
+            "RES-FORCE_CONTACT",
+            "RES-PARTICIPANTS",
+            "RES-PRIVACY",
+            "RES-RATER",
+            "RES-REPEAT"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unresolved_resource",
         "state": "blocked"
       },
       "KQ-149": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-148:status=Pending",
+            "KQ-074:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-150": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-027:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-151": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-150:status=Pending",
+            "KQ-029:status=Pending",
+            "KQ-056:status=Pending",
+            "KQ-057:status=Pending",
+            "KQ-073:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-152": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "resources": [
+            "RES-CALIBRATED_PLATFORM",
+            "RES-DEVICES",
+            "RES-FORCE_CONTACT",
+            "RES-PARTICIPANTS",
+            "RES-PRIVACY",
+            "RES-RATER",
+            "RES-REPEAT"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unresolved_resource",
         "state": "blocked"
       },
       "KQ-153": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-151:status=Pending",
+            "KQ-029:status=Pending",
+            "KQ-035:status=Pending",
+            "KQ-037:status=Pending",
+            "KQ-039:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-154": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-153:status=Pending",
+            "KQ-076:status=Pending",
+            "KQ-077:status=Pending",
+            "KQ-078:status=Pending",
+            "KQ-079:status=Pending",
+            "KQ-080:status=Pending",
+            "KQ-081:status=Pending",
+            "KQ-082:status=Pending",
+            "KQ-083:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-155": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-152:status=Pending",
+            "KQ-153:status=Pending",
+            "KQ-154:status=Pending",
+            "KQ-066:status=Pending",
+            "KQ-067:status=Pending",
+            "KQ-068:status=Pending",
+            "KQ-069:status=Pending",
+            "KQ-070:status=Pending",
+            "KQ-071:status=Pending",
+            "KQ-072:status=Pending",
+            "KQ-073:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-156": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "resources": [
+            "RES-CALIBRATED_PLATFORM",
+            "RES-DEVICES",
+            "RES-FORCE_CONTACT",
+            "RES-PARTICIPANTS",
+            "RES-PRIVACY",
+            "RES-RATER",
+            "RES-REPEAT"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unresolved_resource",
         "state": "blocked"
       },
       "KQ-157": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-156:status=Pending",
+            "KQ-074:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-158": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-027:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-159": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-158:status=Pending",
+            "KQ-029:status=Pending",
+            "KQ-056:status=Pending",
+            "KQ-057:status=Pending",
+            "KQ-073:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-160": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "resources": [
+            "RES-DEVICES",
+            "RES-PARTICIPANTS",
+            "RES-PRIVACY",
+            "RES-RATER",
+            "RES-REPEAT",
+            "RES-TIMING"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unresolved_resource",
         "state": "blocked"
       },
       "KQ-161": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-159:status=Pending",
+            "KQ-029:status=Pending",
+            "KQ-035:status=Pending",
+            "KQ-037:status=Pending",
+            "KQ-039:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-162": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-161:status=Pending",
+            "KQ-076:status=Pending",
+            "KQ-077:status=Pending",
+            "KQ-078:status=Pending",
+            "KQ-079:status=Pending",
+            "KQ-080:status=Pending",
+            "KQ-081:status=Pending",
+            "KQ-082:status=Pending",
+            "KQ-083:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-163": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-160:status=Pending",
+            "KQ-161:status=Pending",
+            "KQ-162:status=Pending",
+            "KQ-066:status=Pending",
+            "KQ-067:status=Pending",
+            "KQ-068:status=Pending",
+            "KQ-069:status=Pending",
+            "KQ-070:status=Pending",
+            "KQ-071:status=Pending",
+            "KQ-072:status=Pending",
+            "KQ-073:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-164": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "resources": [
+            "RES-DEVICES",
+            "RES-PARTICIPANTS",
+            "RES-PRIVACY",
+            "RES-RATER",
+            "RES-REPEAT",
+            "RES-TIMING"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unresolved_resource",
         "state": "blocked"
       },
       "KQ-165": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-164:status=Pending",
+            "KQ-074:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-166": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-089:status=Pending",
+            "KQ-097:status=Pending",
+            "KQ-105:status=Pending",
+            "KQ-113:status=Pending",
+            "KQ-121:status=Pending",
+            "KQ-129:status=Pending",
+            "KQ-137:status=Pending",
+            "KQ-145:status=Pending",
+            "KQ-153:status=Pending",
+            "KQ-161:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-167": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-051:status=Pending",
+            "KQ-052:status=Pending",
+            "KQ-166:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-168": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-166:status=Pending",
+            "KQ-167:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-169": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-031:status=Pending",
+            "KQ-082:status=Pending",
+            "KQ-089:status=Pending",
+            "KQ-097:status=Pending",
+            "KQ-105:status=Pending",
+            "KQ-113:status=Pending",
+            "KQ-121:status=Pending",
+            "KQ-129:status=Pending",
+            "KQ-137:status=Pending",
+            "KQ-145:status=Pending",
+            "KQ-153:status=Pending",
+            "KQ-161:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-170": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-032:status=Pending",
+            "KQ-073:status=Pending",
+            "KQ-083:status=Pending",
+            "KQ-169:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-171": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-054:status=Pending",
+            "KQ-061:status=Pending",
+            "KQ-072:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-172": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-046:status=Pending",
+            "KQ-084:status=Pending",
+            "KQ-085:status=Pending",
+            "KQ-089:status=Pending",
+            "KQ-097:status=Pending",
+            "KQ-105:status=Pending",
+            "KQ-113:status=Pending",
+            "KQ-121:status=Pending",
+            "KQ-129:status=Pending",
+            "KQ-137:status=Pending",
+            "KQ-145:status=Pending",
+            "KQ-153:status=Pending",
+            "KQ-161:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-173": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-035:status=Pending",
+            "KQ-055:status=Pending",
+            "KQ-075:status=Pending",
+            "KQ-085:status=Pending",
+            "KQ-166:status=Pending",
+            "KQ-170:status=Pending",
+            "KQ-171:status=Pending",
+            "KQ-172:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-174": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-093:status=Pending",
+            "KQ-101:status=Pending",
+            "KQ-109:status=Pending",
+            "KQ-117:status=Pending",
+            "KQ-125:status=Pending",
+            "KQ-133:status=Pending",
+            "KQ-141:status=Pending",
+            "KQ-149:status=Pending",
+            "KQ-157:status=Pending",
+            "KQ-165:status=Pending",
+            "KQ-173:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-175": {
         "detail": {
-          "not_current": [
-            "KQ-015"
+          "dependencies": [
+            "KQ-060:status=Pending",
+            "KQ-074:status=Pending",
+            "KQ-174:status=Pending"
           ]
         },
-        "reason": "program_closure_gate",
+        "reason": "unmet_dependency",
         "state": "blocked"
       },
       "KQ-176": {
         "detail": {
-          "not_current": [
-            "KQ-015"
-          ]
+          "milestone_status": "BlockedExternal"
         },
-        "reason": "program_closure_gate",
+        "reason": "not_open_for_execution",
         "state": "blocked"
       }
     },
@@ -1653,6 +2348,6 @@
     "docs/program/artifacts/kq-002.yaml": "636f533ffca7bf54503819e76ed9ed844c75c76be4c5bd653252a2c74018f0b1",
     "docs/program/milestone_registry.yaml": "16f26bb87e5d21e6c938b654ceba250b89ecb6a7779b45bf5272817a6a9d2146",
     "docs/program/resource_registry.yaml": "3df2e425c0c2b23e6e76428229f114fca223bae50630b044543ae6a6a1b29dd5",
-    "docs/status/evidence_validity.json": "f39dbd3b93c96c3adaa006d48ff456aa1556981afe22fa656eba384a19e8c452"
+    "docs/status/evidence_validity.json": "706e681448292ba3bc50610f74ceb019f1e8ff061dda49ac6999c008d612184a"
   }
 }

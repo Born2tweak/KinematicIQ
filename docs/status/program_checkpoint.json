@@ -9,8 +9,32 @@
       "BlockedHuman": [],
       "FailedTechnical": []
     },
-    "resource_blocked_milestone_count": 0,
-    "resource_blocked_milestone_ids": [],
+    "resource_blocked_milestone_count": 23,
+    "resource_blocked_milestone_ids": [
+      "KQ-051",
+      "KQ-054",
+      "KQ-061",
+      "KQ-088",
+      "KQ-092",
+      "KQ-096",
+      "KQ-100",
+      "KQ-104",
+      "KQ-108",
+      "KQ-112",
+      "KQ-116",
+      "KQ-120",
+      "KQ-124",
+      "KQ-128",
+      "KQ-132",
+      "KQ-136",
+      "KQ-140",
+      "KQ-144",
+      "KQ-148",
+      "KQ-152",
+      "KQ-156",
+      "KQ-160",
+      "KQ-164"
+    ],
     "resource_status_counts": {
       "PartiallyAvailable": 1,
       "UnresolvedExternal": 9,
@@ -61,7 +85,10 @@
       "KQ-014",
       "KQ-015"
     ],
-    "next_executable_range": [],
+    "next_executable_range": [
+      "KQ-018",
+      "KQ-026"
+    ],
     "objective_evidence": {
       "currently_valid_ids": [
         "KQ-001",
@@ -77,7 +104,8 @@
         "KQ-011",
         "KQ-012",
         "KQ-013",
-        "KQ-014"
+        "KQ-014",
+        "KQ-015"
       ],
       "historically_passed_ids": [
         "KQ-001",
@@ -97,12 +125,11 @@
         "KQ-015"
       ],
       "invalidated_ids": [],
-      "reverification_required_ids": [
-        "KQ-015"
-      ]
+      "reverification_required_ids": []
     },
     "subject_commits": [
       "04da1d5fa31a6ac5c8f1ff6626cfb2155f568c87",
+      "14e4ff44951664ddb52ccd11912c5e21afe40023",
       "197c931fd0f4616e7804fc38b5fe74d9cab48683",
       "1fd94b2921021a762f4b4dbf98e426c9d073a354",
       "22335f5fdcf99273f04cab24331bf98df2ede340",
@@ -131,8 +158,15 @@
     "rule": "ReleaseEligible requires GATE_PASS; no blocked, failed, skipped, or missing outcome can satisfy it"
   },
   "replan_summary": {
-    "committed_wave_ready_ids": [],
-    "dependency_ready_ids": [],
+    "committed_wave_ready_ids": [
+      "KQ-018",
+      "KQ-026"
+    ],
+    "dependency_ready_ids": [
+      "KQ-018",
+      "KQ-026",
+      "KQ-056"
+    ],
     "recorded_inflection_count": 0,
     "roadmap_changes": []
   },
@@ -255,6 +289,7 @@
     "docs/status/evidence/KQ-014/KQ-014-84537473e620.json": "ba108c6334dabfc19097a2a61593d3184c2e6225d108b87a3313fb8c1bb43bba",
     "docs/status/evidence/KQ-014/KQ-014-a11f42de082e.json": "ad845242855fa822a7ba944258d21d1367d9ceb9dd1ffed5f855f22bdf9048df",
     "docs/status/evidence/KQ-014/KQ-014-d3e25e38b5ae.json": "4102d7d0bff38fbb9c3bad3b3efdd43f9f5068ad2acf22064ca39d8539236da7",
+    "docs/status/evidence/KQ-015/KQ-015-14e4ff449516.json": "a02a25b8575ed53210191e352cb902a50522058a9691b725f99cdb370772be0c",
     "docs/status/evidence/KQ-015/KQ-015-22335f5fdcf9.json": "cbe9b99d831e47bbef49a535104a6d486eeb4773890601840f9700f46a3196c2",
     "docs/status/evidence/KQ-015/KQ-015-24bec2e1a634.json": "43cefeb67297b485214b94d7ed52cdb7bf16bf4c148b5b8b67f4129eea1d06dd",
     "docs/status/evidence/KQ-015/KQ-015-4c64a080d49a.json": "c6e217a44ba27db5e04f2ce54e7e3d4bb1d198d29977249d0d0cfaef44891997",
@@ -265,8 +300,8 @@
     "docs/status/evidence/KQ-015/KQ-015-8eac54a968d2.json": "e3d9892b6c361041d38d934ba44883faaf4cbfef9d02309347590ec7337f84b3",
     "docs/status/evidence/KQ-015/KQ-015-a03adb8f0fea.json": "84e0f9609e73ef789f4bf43eb9b60a681a0c640f717fcfc032ab7eb856e88861",
     "docs/status/evidence/KQ-015/KQ-015-ff41350e93de.json": "1252cee6083cead25ca2ddd64a5fcf1f5b83c71bc338e76675d858764389e363",
-    "docs/status/evidence_validity.json": "f39dbd3b93c96c3adaa006d48ff456aa1556981afe22fa656eba384a19e8c452",
-    "docs/status/evidence_validity_events.ndjson": "0f26c94edffaf21e3693e6cfe7f5b06d30deb5d1b59992c5489d98caea3d138e",
+    "docs/status/evidence_validity.json": "706e681448292ba3bc50610f74ceb019f1e8ff061dda49ac6999c008d612184a",
+    "docs/status/evidence_validity_events.ndjson": "2325d9267d007ac4d69a651c4a84d35441342e51914be5e9c4abbd9b32c82471",
     "docs/status/milestones/KQ-001.json": "7e3058ae976e5683cc3feabc41a115dedd91f66e221747469803a5f2b1d147c6",
     "docs/status/milestones/KQ-002.json": "7f93c5d052ef6acbd35e977c800e2bb79e9e656702d626be1fc6b6c4ce6955d5",
     "docs/status/milestones/KQ-003.json": "fa062f54317050c08b955ba310eab44bc82bb83f3f53a95104ff4695c69acc39",
@@ -282,7 +317,7 @@
     "docs/status/milestones/KQ-013.json": "bdf9e17c2b7d5346837f9afedc6e4e23776c184fbcb060465acab94732e8e86c",
     "docs/status/milestones/KQ-014.json": "1d29dbaca182957965eb19120b54274df2cd6789a27cae790cea2245d53d3f59",
     "docs/status/milestones/KQ-015.json": "8b73d40dfcca7e0ebc617cde3164dbb9a05ffd03bd58e55c35662ca33ce75764",
-    "docs/status/program_status.json": "c08756f20699a6519732053878fe1423463bb973451f34e6304cb500a265e443",
+    "docs/status/program_status.json": "cb6c4e0a17b19dcd688fcd0f6c3f6f40d252963e13f897899c8a4d5721f3e236",
     "docs/validation/protocol_validation_registry.yaml": "b4e6b116d36b7213c7257c00df166e98a6ac02cb475c90a5b23807ece1aa8141"
   },
   "triggers": [
