@@ -28,10 +28,10 @@
     "committed_wave_ready_ids": [],
     "dependency_ready_ids": [],
     "evidence_validity_counts": {
-      "Current": 13,
+      "Current": 14,
       "Invalidated": 0,
       "Retired": 0,
-      "ReverificationRequired": 2,
+      "ReverificationRequired": 1,
       "Superseded": 0
     },
     "next_executable_id": null,
@@ -40,7 +40,6 @@
       "KQ-001": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -50,7 +49,6 @@
       "KQ-002": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -60,7 +58,6 @@
       "KQ-003": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -70,7 +67,6 @@
       "KQ-004": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -80,7 +76,6 @@
       "KQ-005": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -90,7 +85,6 @@
       "KQ-006": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -100,7 +94,6 @@
       "KQ-007": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -110,7 +103,6 @@
       "KQ-008": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -120,7 +112,6 @@
       "KQ-009": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -130,7 +121,6 @@
       "KQ-010": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -140,7 +130,6 @@
       "KQ-011": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -150,7 +139,6 @@
       "KQ-012": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -160,7 +148,6 @@
       "KQ-013": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -170,7 +157,6 @@
       "KQ-014": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -180,7 +166,6 @@
       "KQ-015": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -190,7 +175,6 @@
       "KQ-016": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -200,7 +184,6 @@
       "KQ-017": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -210,7 +193,6 @@
       "KQ-018": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -220,7 +202,6 @@
       "KQ-019": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -230,7 +211,6 @@
       "KQ-020": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -240,7 +220,6 @@
       "KQ-021": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -250,7 +229,6 @@
       "KQ-022": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -260,7 +238,6 @@
       "KQ-023": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -270,7 +247,6 @@
       "KQ-024": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -280,7 +256,6 @@
       "KQ-025": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -290,7 +265,6 @@
       "KQ-026": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -300,7 +274,6 @@
       "KQ-027": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -310,7 +283,6 @@
       "KQ-028": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -320,7 +292,6 @@
       "KQ-029": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -330,7 +301,6 @@
       "KQ-030": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -340,7 +310,6 @@
       "KQ-031": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -350,7 +319,6 @@
       "KQ-032": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -360,7 +328,6 @@
       "KQ-033": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -370,7 +337,6 @@
       "KQ-034": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -380,7 +346,6 @@
       "KQ-035": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -390,7 +355,6 @@
       "KQ-036": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -400,7 +364,6 @@
       "KQ-037": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -410,7 +373,6 @@
       "KQ-038": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -420,7 +382,6 @@
       "KQ-039": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -430,7 +391,6 @@
       "KQ-040": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -440,7 +400,6 @@
       "KQ-041": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -450,7 +409,6 @@
       "KQ-042": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -460,7 +418,6 @@
       "KQ-043": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -470,7 +427,6 @@
       "KQ-044": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -480,7 +436,6 @@
       "KQ-045": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -490,7 +445,6 @@
       "KQ-046": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -500,7 +454,6 @@
       "KQ-047": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -510,7 +463,6 @@
       "KQ-048": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -520,7 +472,6 @@
       "KQ-049": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -530,7 +481,6 @@
       "KQ-050": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -540,7 +490,6 @@
       "KQ-051": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -550,7 +499,6 @@
       "KQ-052": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -560,7 +508,6 @@
       "KQ-053": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -570,7 +517,6 @@
       "KQ-054": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -580,7 +526,6 @@
       "KQ-055": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -590,7 +535,6 @@
       "KQ-056": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -600,7 +544,6 @@
       "KQ-057": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -610,7 +553,6 @@
       "KQ-058": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -620,7 +562,6 @@
       "KQ-059": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -630,7 +571,6 @@
       "KQ-060": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -640,7 +580,6 @@
       "KQ-061": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -650,7 +589,6 @@
       "KQ-062": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -660,7 +598,6 @@
       "KQ-063": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -670,7 +607,6 @@
       "KQ-064": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -680,7 +616,6 @@
       "KQ-065": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -690,7 +625,6 @@
       "KQ-066": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -700,7 +634,6 @@
       "KQ-067": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -710,7 +643,6 @@
       "KQ-068": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -720,7 +652,6 @@
       "KQ-069": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -730,7 +661,6 @@
       "KQ-070": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -740,7 +670,6 @@
       "KQ-071": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -750,7 +679,6 @@
       "KQ-072": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -760,7 +688,6 @@
       "KQ-073": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -770,7 +697,6 @@
       "KQ-074": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -780,7 +706,6 @@
       "KQ-075": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -790,7 +715,6 @@
       "KQ-076": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -800,7 +724,6 @@
       "KQ-077": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -810,7 +733,6 @@
       "KQ-078": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -820,7 +742,6 @@
       "KQ-079": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -830,7 +751,6 @@
       "KQ-080": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -840,7 +760,6 @@
       "KQ-081": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -850,7 +769,6 @@
       "KQ-082": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -860,7 +778,6 @@
       "KQ-083": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -870,7 +787,6 @@
       "KQ-084": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -880,7 +796,6 @@
       "KQ-085": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -890,7 +805,6 @@
       "KQ-086": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -900,7 +814,6 @@
       "KQ-087": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -910,7 +823,6 @@
       "KQ-088": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -920,7 +832,6 @@
       "KQ-089": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -930,7 +841,6 @@
       "KQ-090": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -940,7 +850,6 @@
       "KQ-091": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -950,7 +859,6 @@
       "KQ-092": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -960,7 +868,6 @@
       "KQ-093": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -970,7 +877,6 @@
       "KQ-094": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -980,7 +886,6 @@
       "KQ-095": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -990,7 +895,6 @@
       "KQ-096": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -1000,7 +904,6 @@
       "KQ-097": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -1010,7 +913,6 @@
       "KQ-098": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -1020,7 +922,6 @@
       "KQ-099": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -1030,7 +931,6 @@
       "KQ-100": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -1040,7 +940,6 @@
       "KQ-101": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -1050,7 +949,6 @@
       "KQ-102": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -1060,7 +958,6 @@
       "KQ-103": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -1070,7 +967,6 @@
       "KQ-104": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -1080,7 +976,6 @@
       "KQ-105": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -1090,7 +985,6 @@
       "KQ-106": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -1100,7 +994,6 @@
       "KQ-107": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -1110,7 +1003,6 @@
       "KQ-108": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -1120,7 +1012,6 @@
       "KQ-109": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -1130,7 +1021,6 @@
       "KQ-110": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -1140,7 +1030,6 @@
       "KQ-111": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -1150,7 +1039,6 @@
       "KQ-112": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -1160,7 +1048,6 @@
       "KQ-113": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -1170,7 +1057,6 @@
       "KQ-114": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -1180,7 +1066,6 @@
       "KQ-115": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -1190,7 +1075,6 @@
       "KQ-116": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -1200,7 +1084,6 @@
       "KQ-117": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -1210,7 +1093,6 @@
       "KQ-118": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -1220,7 +1102,6 @@
       "KQ-119": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -1230,7 +1111,6 @@
       "KQ-120": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -1240,7 +1120,6 @@
       "KQ-121": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -1250,7 +1129,6 @@
       "KQ-122": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -1260,7 +1138,6 @@
       "KQ-123": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -1270,7 +1147,6 @@
       "KQ-124": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -1280,7 +1156,6 @@
       "KQ-125": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -1290,7 +1165,6 @@
       "KQ-126": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -1300,7 +1174,6 @@
       "KQ-127": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -1310,7 +1183,6 @@
       "KQ-128": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -1320,7 +1192,6 @@
       "KQ-129": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -1330,7 +1201,6 @@
       "KQ-130": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -1340,7 +1210,6 @@
       "KQ-131": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -1350,7 +1219,6 @@
       "KQ-132": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -1360,7 +1228,6 @@
       "KQ-133": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -1370,7 +1237,6 @@
       "KQ-134": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -1380,7 +1246,6 @@
       "KQ-135": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -1390,7 +1255,6 @@
       "KQ-136": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -1400,7 +1264,6 @@
       "KQ-137": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -1410,7 +1273,6 @@
       "KQ-138": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -1420,7 +1282,6 @@
       "KQ-139": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -1430,7 +1291,6 @@
       "KQ-140": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -1440,7 +1300,6 @@
       "KQ-141": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -1450,7 +1309,6 @@
       "KQ-142": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -1460,7 +1318,6 @@
       "KQ-143": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -1470,7 +1327,6 @@
       "KQ-144": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -1480,7 +1336,6 @@
       "KQ-145": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -1490,7 +1345,6 @@
       "KQ-146": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -1500,7 +1354,6 @@
       "KQ-147": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -1510,7 +1363,6 @@
       "KQ-148": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -1520,7 +1372,6 @@
       "KQ-149": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -1530,7 +1381,6 @@
       "KQ-150": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -1540,7 +1390,6 @@
       "KQ-151": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -1550,7 +1399,6 @@
       "KQ-152": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -1560,7 +1408,6 @@
       "KQ-153": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -1570,7 +1417,6 @@
       "KQ-154": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -1580,7 +1426,6 @@
       "KQ-155": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -1590,7 +1435,6 @@
       "KQ-156": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -1600,7 +1444,6 @@
       "KQ-157": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -1610,7 +1453,6 @@
       "KQ-158": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -1620,7 +1462,6 @@
       "KQ-159": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -1630,7 +1471,6 @@
       "KQ-160": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -1640,7 +1480,6 @@
       "KQ-161": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -1650,7 +1489,6 @@
       "KQ-162": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -1660,7 +1498,6 @@
       "KQ-163": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -1670,7 +1507,6 @@
       "KQ-164": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -1680,7 +1516,6 @@
       "KQ-165": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -1690,7 +1525,6 @@
       "KQ-166": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -1700,7 +1534,6 @@
       "KQ-167": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -1710,7 +1543,6 @@
       "KQ-168": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -1720,7 +1552,6 @@
       "KQ-169": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -1730,7 +1561,6 @@
       "KQ-170": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -1740,7 +1570,6 @@
       "KQ-171": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -1750,7 +1579,6 @@
       "KQ-172": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -1760,7 +1588,6 @@
       "KQ-173": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -1770,7 +1597,6 @@
       "KQ-174": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -1780,7 +1606,6 @@
       "KQ-175": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -1790,7 +1615,6 @@
       "KQ-176": {
         "detail": {
           "not_current": [
-            "KQ-014",
             "KQ-015"
           ]
         },
@@ -1829,6 +1653,6 @@
     "docs/program/artifacts/kq-002.yaml": "636f533ffca7bf54503819e76ed9ed844c75c76be4c5bd653252a2c74018f0b1",
     "docs/program/milestone_registry.yaml": "16f26bb87e5d21e6c938b654ceba250b89ecb6a7779b45bf5272817a6a9d2146",
     "docs/program/resource_registry.yaml": "3df2e425c0c2b23e6e76428229f114fca223bae50630b044543ae6a6a1b29dd5",
-    "docs/status/evidence_validity.json": "c9dbe50a98f5a3962a0b54fa3582a038020f47ff298485dde3c4b6f1646f47e3"
+    "docs/status/evidence_validity.json": "f39dbd3b93c96c3adaa006d48ff456aa1556981afe22fa656eba384a19e8c452"
   }
 }

@@ -55,14 +55,20 @@ class DeclaredBranchPreconditionTests(unittest.TestCase):
 
 
 class ExecutionAuthorityTests(unittest.TestCase):
-    def test_wave_two_is_capacity_feasible_and_assigned(self) -> None:
+    def test_wave_three_is_capacity_feasible_and_assigned(self) -> None:
         wave = build_active_wave()
         verify_active_wave(wave)
         self.assertEqual(
             [item["id"] for item in wave["committed"]],
-            ["KQ-016", "KQ-017", "KQ-026"],
+            [f"KQ-{n:03d}" for n in range(18, 36)],
         )
         self.assertNotIn("KQ-056", [item["id"] for item in wave["committed"]])
+
+    def test_corpus_blocked_ids_are_never_committed_to_a_wave(self) -> None:
+        """KQ-016/017/176 need RES-CORPUS; a wave must not grant them mutation rights."""
+        committed = {item["id"] for item in build_active_wave()["committed"]}
+        for blocked_id in ("KQ-016", "KQ-017", "KQ-176"):
+            self.assertNotIn(blocked_id, committed)
 
     def test_missing_worker_or_capacity_overrun_fails_closed(self) -> None:
         wave = build_active_wave()
@@ -79,14 +85,16 @@ class ExecutionAuthorityTests(unittest.TestCase):
     def test_worker_frontier_serializes_lane_and_rejects_unslotted(
         self, ready_mock, wave_mock
     ) -> None:
-        ready_mock.return_value = (["KQ-016", "KQ-017", "KQ-026", "KQ-056"], {})
+        ready_mock.return_value = (["KQ-018", "KQ-019", "KQ-026", "KQ-056"], {})
         wave_mock.return_value = build_active_wave()
         frontier = executable_frontier(ROOT)
-        self.assertEqual(frontier["allowed_executable_ids"], ["KQ-016", "KQ-017"])
-        self.assertEqual(frontier["next_executable_id"], "KQ-016")
-        assert_executable(ROOT, "KQ-017")
+        # One slot per worker: KQ-018 holds W2 (lane B), KQ-026 holds W1 (lane A).
+        self.assertEqual(frontier["allowed_executable_ids"], ["KQ-018", "KQ-026"])
+        self.assertEqual(frontier["next_executable_id"], "KQ-018")
+        assert_executable(ROOT, "KQ-026")
+        # KQ-019 is committed but its worker is busy; KQ-056 is not committed at all.
         with self.assertRaisesRegex(ExecutionAuthorityError, "not an allowed"):
-            assert_executable(ROOT, "KQ-026")
+            assert_executable(ROOT, "KQ-019")
         with self.assertRaisesRegex(ExecutionAuthorityError, "not an allowed"):
             assert_executable(ROOT, "KQ-056")
 
@@ -96,21 +104,21 @@ class ExecutionAuthorityTests(unittest.TestCase):
         self, ready_mock, wave_mock
     ) -> None:
         """A milestone left out of the frontier must say which rule excluded it."""
-        ready_mock.return_value = (["KQ-016", "KQ-017", "KQ-026", "KQ-056"], {})
+        ready_mock.return_value = (["KQ-018", "KQ-019", "KQ-026", "KQ-056"], {})
         wave_mock.return_value = build_active_wave()
         frontier = executable_frontier(ROOT)
         reasons = frontier["scheduling_reasons"]
         self.assertEqual(
-            sorted(reasons), ["KQ-016", "KQ-017", "KQ-026", "KQ-056"]
+            sorted(reasons), ["KQ-018", "KQ-019", "KQ-026", "KQ-056"]
         )
         allowed = set(frontier["allowed_executable_ids"])
         for milestone_id, reason in reasons.items():
             self.assertIn(reason["state"], {"allowed", "eligible_but_not_scheduled", "blocked"})
             self.assertTrue(reason["reason"])
             self.assertEqual(reason["state"] == "allowed", milestone_id in allowed)
-        self.assertEqual(reasons["KQ-026"]["reason"], "worker_slot_occupied")
-        self.assertEqual(reasons["KQ-026"]["detail"]["worker_id"], "W1")
-        self.assertEqual(reasons["KQ-026"]["detail"]["occupied_by"], "KQ-016")
+        self.assertEqual(reasons["KQ-019"]["reason"], "worker_slot_occupied")
+        self.assertEqual(reasons["KQ-019"]["detail"]["worker_id"], "W2")
+        self.assertEqual(reasons["KQ-019"]["detail"]["occupied_by"], "KQ-018")
         self.assertEqual(
             reasons["KQ-056"]["reason"], "not_committed_to_active_wave"
         )
@@ -120,13 +128,14 @@ class ExecutionAuthorityTests(unittest.TestCase):
     def test_freed_worker_slot_promotes_the_next_committed_id(
         self, ready_mock, wave_mock
     ) -> None:
-        """Serialisation is per worker: KQ-026 waits for W1, not forever."""
-        ready_mock.return_value = (["KQ-017", "KQ-026"], {})
+        """Serialisation is per worker: KQ-019 waits for W2, not forever."""
+        ready_mock.return_value = (["KQ-019", "KQ-026"], {})
         wave_mock.return_value = build_active_wave()
         frontier = executable_frontier(ROOT)
-        self.assertIn("KQ-026", frontier["allowed_executable_ids"])
+        # With KQ-018 no longer ready, KQ-019 inherits the W2 slot.
+        self.assertIn("KQ-019", frontier["allowed_executable_ids"])
         self.assertEqual(
-            frontier["scheduling_reasons"]["KQ-026"]["reason"], "scheduled"
+            frontier["scheduling_reasons"]["KQ-019"]["reason"], "scheduled"
         )
 
     @patch("execution_authority.executable_frontier")
