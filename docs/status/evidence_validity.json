@@ -93,10 +93,10 @@
       "validity": "ReverificationRequired"
     },
     "KQ-018": {
-      "event_id": "VAL-KQ-018-458AF053B1C9-CURRENT",
-      "evidence_id": "KQ-018-458af053b1c9",
+      "event_id": "VAL-KQ-018-C24260D09778-CURRENT",
+      "evidence_id": "KQ-018-c24260d09778",
       "reason": "Evidence schema v2 provenance and all declared milestone checks passed on the normal execution path.",
-      "validity": "ReverificationRequired"
+      "validity": "Current"
     }
   },
   "summary": {
@@ -114,21 +114,15 @@
       "KQ-011",
       "KQ-012",
       "KQ-013",
-      "KQ-014"
+      "KQ-014",
+      "KQ-018"
     ],
     "Invalidated": [],
     "Retired": [],
     "ReverificationRequired": [
-      "KQ-015",
-      "KQ-018"
+      "KQ-015"
     ],
     "Superseded": []
   },
-  "verification_errors": {
-    "KQ-018": [
-      "input is missing or stale: tools/program/compile_status.py",
-      "input is missing or stale: tools/program/execution_authority.py",
-      "input is missing or stale: tools/program/generate_checkpoint.py"
-    ]
-  }
+  "verification_errors": {}
 }

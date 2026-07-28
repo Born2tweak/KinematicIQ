@@ -25,27 +25,27 @@
   },
   "milestones": {
     "allowed_executable_ids": [
-      "KQ-018",
+      "KQ-019",
       "KQ-026"
     ],
     "committed_wave_ready_ids": [
-      "KQ-018",
+      "KQ-019",
       "KQ-026"
     ],
     "dependency_ready_ids": [
       "KQ-015",
-      "KQ-018",
+      "KQ-019",
       "KQ-026",
       "KQ-056"
     ],
     "evidence_validity_counts": {
-      "Current": 14,
+      "Current": 15,
       "Invalidated": 0,
       "Retired": 0,
-      "ReverificationRequired": 2,
+      "ReverificationRequired": 1,
       "Superseded": 0
     },
-    "next_executable_id": "KQ-018",
+    "next_executable_id": "KQ-019",
     "resource_blocked": {
       "KQ-051": [
         "RES-RATER"
@@ -341,20 +341,18 @@
       },
       "KQ-018": {
         "detail": {
-          "sequence": 1,
+          "milestone_status": "Passed"
+        },
+        "reason": "not_open_for_execution",
+        "state": "blocked"
+      },
+      "KQ-019": {
+        "detail": {
+          "sequence": 2,
           "worker_id": "W2"
         },
         "reason": "scheduled",
         "state": "allowed"
-      },
-      "KQ-019": {
-        "detail": {
-          "dependencies": [
-            "KQ-018:status=Pending"
-          ]
-        },
-        "reason": "unmet_dependency",
-        "state": "blocked"
       },
       "KQ-020": {
         "detail": {
@@ -377,7 +375,6 @@
       "KQ-022": {
         "detail": {
           "dependencies": [
-            "KQ-018:status=Pending",
             "KQ-019:status=Pending"
           ]
         },
@@ -396,7 +393,6 @@
       "KQ-024": {
         "detail": {
           "dependencies": [
-            "KQ-018:status=Pending",
             "KQ-022:status=Pending"
           ]
         },
@@ -2321,8 +2317,8 @@
     },
     "status_counts": {
       "BlockedExternal": 3,
-      "Passed": 14,
-      "Pending": 159
+      "Passed": 15,
+      "Pending": 158
     },
     "total": 176
   },
@@ -2350,6 +2346,6 @@
     "docs/program/artifacts/kq-002.yaml": "636f533ffca7bf54503819e76ed9ed844c75c76be4c5bd653252a2c74018f0b1",
     "docs/program/milestone_registry.yaml": "16f26bb87e5d21e6c938b654ceba250b89ecb6a7779b45bf5272817a6a9d2146",
     "docs/program/resource_registry.yaml": "3df2e425c0c2b23e6e76428229f114fca223bae50630b044543ae6a6a1b29dd5",
-    "docs/status/evidence_validity.json": "4aab62de02a2cc3e9c79184429be3868857fe29d57a5b4abb3fbc39c3a97eb02"
+    "docs/status/evidence_validity.json": "9c8c358eaec5c2a3d28623c076474911770fbd7fc800206d8bfc12693dcf6df2"
   }
 }
