@@ -6,85 +6,85 @@
       "event_id": "VAL-KQ-001-17088D5B8D0F-CURRENT",
       "evidence_id": "KQ-001-17088d5b8d0f",
       "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
-      "validity": "Current"
+      "validity": "ReverificationRequired"
     },
     "KQ-002": {
       "event_id": "VAL-KQ-002-17088D5B8D0F-CURRENT",
       "evidence_id": "KQ-002-17088d5b8d0f",
       "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
-      "validity": "Current"
+      "validity": "ReverificationRequired"
     },
     "KQ-003": {
       "event_id": "VAL-KQ-003-17088D5B8D0F-CURRENT",
       "evidence_id": "KQ-003-17088d5b8d0f",
       "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
-      "validity": "Current"
+      "validity": "ReverificationRequired"
     },
     "KQ-004": {
       "event_id": "VAL-KQ-004-17088D5B8D0F-CURRENT",
       "evidence_id": "KQ-004-17088d5b8d0f",
       "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
-      "validity": "Current"
+      "validity": "ReverificationRequired"
     },
     "KQ-005": {
       "event_id": "VAL-KQ-005-17088D5B8D0F-CURRENT",
       "evidence_id": "KQ-005-17088d5b8d0f",
       "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
-      "validity": "Current"
+      "validity": "ReverificationRequired"
     },
     "KQ-006": {
       "event_id": "VAL-KQ-006-17088D5B8D0F-CURRENT",
       "evidence_id": "KQ-006-17088d5b8d0f",
       "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
-      "validity": "Current"
+      "validity": "ReverificationRequired"
     },
     "KQ-007": {
       "event_id": "VAL-KQ-007-17088D5B8D0F-CURRENT",
       "evidence_id": "KQ-007-17088d5b8d0f",
       "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
-      "validity": "Current"
+      "validity": "ReverificationRequired"
     },
     "KQ-008": {
       "event_id": "VAL-KQ-008-17088D5B8D0F-CURRENT",
       "evidence_id": "KQ-008-17088d5b8d0f",
       "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
-      "validity": "Current"
+      "validity": "ReverificationRequired"
     },
     "KQ-009": {
       "event_id": "VAL-KQ-009-17088D5B8D0F-CURRENT",
       "evidence_id": "KQ-009-17088d5b8d0f",
       "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
-      "validity": "Current"
+      "validity": "ReverificationRequired"
     },
     "KQ-010": {
       "event_id": "VAL-KQ-010-17088D5B8D0F-CURRENT",
       "evidence_id": "KQ-010-17088d5b8d0f",
       "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
-      "validity": "Current"
+      "validity": "ReverificationRequired"
     },
     "KQ-011": {
       "event_id": "VAL-KQ-011-17088D5B8D0F-CURRENT",
       "evidence_id": "KQ-011-17088d5b8d0f",
       "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
-      "validity": "Current"
+      "validity": "ReverificationRequired"
     },
     "KQ-012": {
       "event_id": "VAL-KQ-012-17088D5B8D0F-CURRENT",
       "evidence_id": "KQ-012-17088d5b8d0f",
       "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
-      "validity": "Current"
+      "validity": "ReverificationRequired"
     },
     "KQ-013": {
       "event_id": "VAL-KQ-013-17088D5B8D0F-CURRENT",
       "evidence_id": "KQ-013-17088d5b8d0f",
       "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
-      "validity": "Current"
+      "validity": "ReverificationRequired"
     },
     "KQ-014": {
       "event_id": "VAL-KQ-014-17088D5B8D0F-CURRENT",
       "evidence_id": "KQ-014-17088d5b8d0f",
       "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
-      "validity": "Current"
+      "validity": "ReverificationRequired"
     },
     "KQ-015": {
       "event_id": "VAL-KQ-015-REVERIFY-20260728T165446867033Z",
@@ -100,7 +100,10 @@
     }
   },
   "summary": {
-    "Current": [
+    "Current": [],
+    "Invalidated": [],
+    "Retired": [],
+    "ReverificationRequired": [
       "KQ-001",
       "KQ-002",
       "KQ-003",
@@ -114,19 +117,87 @@
       "KQ-011",
       "KQ-012",
       "KQ-013",
-      "KQ-014"
-    ],
-    "Invalidated": [],
-    "Retired": [],
-    "ReverificationRequired": [
+      "KQ-014",
       "KQ-015",
       "KQ-018"
     ],
     "Superseded": []
   },
   "verification_errors": {
+    "KQ-001": [
+      "input is missing or stale: tools/program/compile_status.py",
+      "input is missing or stale: tools/program/execution_authority.py",
+      "input is missing or stale: tools/program/generate_checkpoint.py"
+    ],
+    "KQ-002": [
+      "input is missing or stale: tools/program/compile_status.py",
+      "input is missing or stale: tools/program/execution_authority.py",
+      "input is missing or stale: tools/program/generate_checkpoint.py"
+    ],
+    "KQ-003": [
+      "input is missing or stale: tools/program/compile_status.py",
+      "input is missing or stale: tools/program/execution_authority.py",
+      "input is missing or stale: tools/program/generate_checkpoint.py"
+    ],
+    "KQ-004": [
+      "input is missing or stale: tools/program/compile_status.py",
+      "input is missing or stale: tools/program/execution_authority.py",
+      "input is missing or stale: tools/program/generate_checkpoint.py"
+    ],
+    "KQ-005": [
+      "input is missing or stale: tools/program/compile_status.py",
+      "input is missing or stale: tools/program/execution_authority.py",
+      "input is missing or stale: tools/program/generate_checkpoint.py"
+    ],
+    "KQ-006": [
+      "input is missing or stale: tools/program/compile_status.py",
+      "input is missing or stale: tools/program/execution_authority.py",
+      "input is missing or stale: tools/program/generate_checkpoint.py"
+    ],
+    "KQ-007": [
+      "input is missing or stale: tools/program/compile_status.py",
+      "input is missing or stale: tools/program/execution_authority.py",
+      "input is missing or stale: tools/program/generate_checkpoint.py"
+    ],
+    "KQ-008": [
+      "input is missing or stale: tools/program/compile_status.py",
+      "input is missing or stale: tools/program/execution_authority.py",
+      "input is missing or stale: tools/program/generate_checkpoint.py"
+    ],
+    "KQ-009": [
+      "input is missing or stale: tools/program/compile_status.py",
+      "input is missing or stale: tools/program/execution_authority.py",
+      "input is missing or stale: tools/program/generate_checkpoint.py"
+    ],
+    "KQ-010": [
+      "input is missing or stale: tools/program/compile_status.py",
+      "input is missing or stale: tools/program/execution_authority.py",
+      "input is missing or stale: tools/program/generate_checkpoint.py"
+    ],
+    "KQ-011": [
+      "input is missing or stale: tools/program/compile_status.py",
+      "input is missing or stale: tools/program/execution_authority.py",
+      "input is missing or stale: tools/program/generate_checkpoint.py"
+    ],
+    "KQ-012": [
+      "input is missing or stale: tools/program/compile_status.py",
+      "input is missing or stale: tools/program/execution_authority.py",
+      "input is missing or stale: tools/program/generate_checkpoint.py"
+    ],
+    "KQ-013": [
+      "input is missing or stale: tools/program/compile_status.py",
+      "input is missing or stale: tools/program/execution_authority.py",
+      "input is missing or stale: tools/program/generate_checkpoint.py"
+    ],
+    "KQ-014": [
+      "input is missing or stale: tools/program/compile_status.py",
+      "input is missing or stale: tools/program/execution_authority.py",
+      "input is missing or stale: tools/program/generate_checkpoint.py"
+    ],
     "KQ-018": [
-      "milestone contract is stale"
+      "input is missing or stale: tools/program/compile_status.py",
+      "input is missing or stale: tools/program/execution_authority.py",
+      "input is missing or stale: tools/program/generate_checkpoint.py"
     ]
   }
 }

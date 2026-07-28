@@ -37,6 +37,7 @@ from evidence_integrity import (
 )
 from compile_status import compile_status
 from generate_checkpoint import compile_checkpoint
+from lifecycle import effective_status
 from program_contract import LoadedProgram, git_output
 
 
@@ -94,10 +95,11 @@ def _dependency_states(
             problems.append(f"{dep_id}: not in registry")
             continue
         accepted = dependency.get("accepted_milestone_statuses") or list(TERMINAL_STATUSES)
-        if dep["milestone_status"] not in accepted:
-            problems.append(
-                f"{dep_id}: status={dep['milestone_status']} not in {accepted}"
-            )
+        # Derived, not declared: a dependency is complete when its evidence is
+        # Current, never because the registry says so.
+        dep_status = effective_status(dep, projection["states"])
+        if dep_status not in accepted:
+            problems.append(f"{dep_id}: status={dep_status} not in {accepted}")
             continue
         state = projection["states"].get(dep_id)
         if not state or state["validity"] != "Current":

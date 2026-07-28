@@ -10,6 +10,7 @@ import yaml
 
 from evidence_integrity import VALIDITY_PROJECTION, compile_projection
 from execution_authority import ACTIVE_WAVE, executable_frontier
+from lifecycle import effective_status
 
 
 class StatusCompilerError(ValueError):
@@ -40,7 +41,10 @@ def compile_status(root: Path) -> dict:
     projection = compile_projection(root, registry["milestones"])
     frontier = executable_frontier(root)
     committed_ids = [item["id"] for item in schedule["committed"]]
-    status_counts = dict(sorted(Counter(item["milestone_status"] for item in registry["milestones"]).items()))
+    _states = compile_projection(root, registry["milestones"])["states"]
+    status_counts = dict(sorted(Counter(
+        effective_status(item, _states) for item in registry["milestones"]
+    ).items()))
     availability = charter["product_contract"]["availability_at_lock"]
     return {
         "schema_version": 1,

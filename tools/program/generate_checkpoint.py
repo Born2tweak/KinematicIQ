@@ -8,6 +8,7 @@ from pathlib import Path
 
 import yaml
 
+from lifecycle import effective_status
 from evidence_integrity import (
     EVIDENCE_ROOT,
     VALIDITY_LOG,
@@ -82,10 +83,14 @@ def compile_checkpoint(root: Path) -> dict:
     validity = compile_projection(root, registry["milestones"])
 
     milestones = registry["milestones"]
-    completed = sorted(item["id"] for item in milestones if item["milestone_status"] in COMPLETED_STATUSES)
-    active = sorted(item["id"] for item in milestones if item["milestone_status"] in {"Ready", "Running"})
+    # Derived, not declared: a milestone is completed when its evidence is
+    # Current, so the checkpoint cannot disagree with the projection.
+    _states = validity["states"]
+    _status = {item["id"]: effective_status(item, _states) for item in milestones}
+    completed = sorted(i for i, v in _status.items() if v in COMPLETED_STATUSES)
+    active = sorted(i for i, v in _status.items() if v in {"Ready", "Running"})
     status_blockers = {
-        state: sorted(item["id"] for item in milestones if item["milestone_status"] == state)
+        state: sorted(i for i, v in _status.items() if v == state)
         for state in sorted(BLOCKED_STATUSES)
     }
     current_evidence = sorted(set(completed) & set(validity["summary"]["Current"]))

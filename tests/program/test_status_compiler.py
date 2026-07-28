@@ -26,9 +26,12 @@ class StatusCompilerTests(unittest.TestCase):
             self.assertEqual(status["milestones"]["next_executable_id"], ready[0])
         else:
             self.assertIsNone(status["milestones"]["next_executable_id"])
-            self.assertLess(
-                status["milestones"]["evidence_validity_counts"]["Current"],
+            # Completion is derived, so Passed can never exceed Current -- the
+            # old "some Passed milestone lacks evidence" state is now
+            # unrepresentable. Assert the invariant that replaced it.
+            self.assertEqual(
                 status["milestones"]["status_counts"].get("Passed", 0),
+                status["milestones"]["evidence_validity_counts"]["Current"],
             )
 
     def test_checked_in_status_matches_compiler_when_present(self) -> None:

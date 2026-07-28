@@ -116,7 +116,10 @@ class FinalizationGuardTests(unittest.TestCase):
         ), patch(
             "finalize_milestone.compile_projection", return_value={"states": {}}
         ):
-            with self.assertRaisesRegex(FinalizationError, "no evidence"):
+            # With completion derived, a dependency lacking evidence reports as
+            # Pending rather than as a missing-evidence string. Either way it
+            # must block closure.
+            with self.assertRaisesRegex(FinalizationError, "unmet dependency"):
                 self._finalize()
 
     def test_projection_not_current_after_write_fails_closed(self) -> None:

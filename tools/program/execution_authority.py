@@ -7,6 +7,7 @@ from typing import Any
 import yaml
 
 from evidence_integrity import compile_projection, git_output
+from lifecycle import effective_status
 
 
 ACTIVE_WAVE = Path("docs/program/ACTIVE_WAVE.yaml")
@@ -56,12 +57,17 @@ def dependency_ready_ids(
     resources = _yaml(root / "docs/program/resource_registry.yaml")
     projection = compile_projection(root, registry["milestones"])
     milestones = {item["id"]: item for item in registry["milestones"]}
-    completed = {
+    # Completion is derived from evidence, so the closure gate only fires for
+    # milestones the registry itself declares terminal. A milestone merely
+    # awaiting reverification is not "closed but uncurrent" -- it is simply not
+    # complete yet, and must not freeze the whole program.
+    states = projection["states"]
+    declared_terminal = {
         item["id"]
         for item in registry["milestones"]
-        if item["milestone_status"] in {"Passed", "SkippedByDecision", "Retired"}
+        if item["milestone_status"] in {"SkippedByDecision", "Retired"}
     }
-    uncurrent = sorted(completed - set(projection["summary"]["Current"]))
+    uncurrent = sorted(declared_terminal - set(projection["summary"]["Current"]))
     if uncurrent:
         for milestone in registry["milestones"]:
             reasons[milestone["id"]] = {
@@ -74,11 +80,12 @@ def dependency_ready_ids(
     ready: list[str] = []
     blocked: dict[str, list[str]] = {}
     for milestone in registry["milestones"]:
-        if milestone["milestone_status"] not in {"Pending", "Ready", "FailedTechnical"}:
+        status = effective_status(milestone, states)
+        if status not in {"Pending", "Ready", "FailedTechnical"}:
             reasons[milestone["id"]] = {
                 "state": "blocked",
                 "reason": "not_open_for_execution",
-                "detail": {"milestone_status": milestone["milestone_status"]},
+                "detail": {"milestone_status": status},
             }
             continue
         unresolved_resources = sorted(
@@ -96,9 +103,10 @@ def dependency_ready_ids(
         unmet: list[str] = []
         for dependency in milestone["dependencies"]:
             upstream = milestones[dependency["id"]]
-            validity = projection["states"].get(dependency["id"], {}).get("validity")
-            if upstream["milestone_status"] not in dependency["accepted_milestone_statuses"]:
-                unmet.append(f"{dependency['id']}:status={upstream['milestone_status']}")
+            validity = states.get(dependency["id"], {}).get("validity")
+            upstream_status = effective_status(upstream, states)
+            if upstream_status not in dependency["accepted_milestone_statuses"]:
+                unmet.append(f"{dependency['id']}:status={upstream_status}")
                 continue
             if validity != "Current":
                 unmet.append(f"{dependency['id']}:validity={validity}")

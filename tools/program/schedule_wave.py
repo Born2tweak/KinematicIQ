@@ -87,12 +87,18 @@ def _ancestor_closure(milestone_id: str, milestones: dict[str, dict[str, Any]]) 
 def _imported_satisfied(
     milestones: dict[str, dict[str, Any]], registry_path: Path
 ) -> tuple[list[str], list[dict[str, str]]]:
-    """Import only registry-passed milestones backed by an explicit passing evidence file."""
+    """Import milestones backed by an explicit passing evidence file.
+
+    Completion is evidence-derived, so the passing status artifact is the whole
+    test. The registry is not consulted: it declares intent, not completion.
+    Milestones the registry declares terminal by decision are excluded, since
+    those are not evidenced work.
+    """
     root = registry_path.resolve().parents[2]
     imported: list[str] = []
     evidence: list[dict[str, str]] = []
     for milestone_id, milestone in sorted(milestones.items()):
-        if milestone.get("milestone_status") != "Passed":
+        if milestone.get("milestone_status") in {"SkippedByDecision", "Retired"}:
             continue
         candidate = root / "docs" / "status" / "milestones" / f"{milestone_id}.json"
         if not candidate.is_file():
