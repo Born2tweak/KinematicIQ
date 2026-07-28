@@ -3,94 +3,94 @@
   "schema_version": 1,
   "states": {
     "KQ-001": {
-      "event_id": "VAL-KQ-001-505C7511F9BC-CURRENT",
-      "evidence_id": "KQ-001-505c7511f9bc",
+      "event_id": "VAL-KQ-001-6C6CC25D1328-CURRENT",
+      "evidence_id": "KQ-001-6c6cc25d1328",
       "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
       "validity": "Current"
     },
     "KQ-002": {
-      "event_id": "VAL-KQ-002-505C7511F9BC-CURRENT",
-      "evidence_id": "KQ-002-505c7511f9bc",
+      "event_id": "VAL-KQ-002-6C6CC25D1328-CURRENT",
+      "evidence_id": "KQ-002-6c6cc25d1328",
       "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
       "validity": "Current"
     },
     "KQ-003": {
-      "event_id": "VAL-KQ-003-505C7511F9BC-CURRENT",
-      "evidence_id": "KQ-003-505c7511f9bc",
+      "event_id": "VAL-KQ-003-6C6CC25D1328-CURRENT",
+      "evidence_id": "KQ-003-6c6cc25d1328",
       "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
       "validity": "Current"
     },
     "KQ-004": {
-      "event_id": "VAL-KQ-004-505C7511F9BC-CURRENT",
-      "evidence_id": "KQ-004-505c7511f9bc",
+      "event_id": "VAL-KQ-004-6C6CC25D1328-CURRENT",
+      "evidence_id": "KQ-004-6c6cc25d1328",
       "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
       "validity": "Current"
     },
     "KQ-005": {
-      "event_id": "VAL-KQ-005-505C7511F9BC-CURRENT",
-      "evidence_id": "KQ-005-505c7511f9bc",
+      "event_id": "VAL-KQ-005-6C6CC25D1328-CURRENT",
+      "evidence_id": "KQ-005-6c6cc25d1328",
       "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
       "validity": "Current"
     },
     "KQ-006": {
-      "event_id": "VAL-KQ-006-505C7511F9BC-CURRENT",
-      "evidence_id": "KQ-006-505c7511f9bc",
+      "event_id": "VAL-KQ-006-6C6CC25D1328-CURRENT",
+      "evidence_id": "KQ-006-6c6cc25d1328",
       "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
       "validity": "Current"
     },
     "KQ-007": {
-      "event_id": "VAL-KQ-007-505C7511F9BC-CURRENT",
-      "evidence_id": "KQ-007-505c7511f9bc",
+      "event_id": "VAL-KQ-007-6C6CC25D1328-CURRENT",
+      "evidence_id": "KQ-007-6c6cc25d1328",
       "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
       "validity": "Current"
     },
     "KQ-008": {
-      "event_id": "VAL-KQ-008-505C7511F9BC-CURRENT",
-      "evidence_id": "KQ-008-505c7511f9bc",
+      "event_id": "VAL-KQ-008-6C6CC25D1328-CURRENT",
+      "evidence_id": "KQ-008-6c6cc25d1328",
       "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
       "validity": "Current"
     },
     "KQ-009": {
-      "event_id": "VAL-KQ-009-505C7511F9BC-CURRENT",
-      "evidence_id": "KQ-009-505c7511f9bc",
+      "event_id": "VAL-KQ-009-6C6CC25D1328-CURRENT",
+      "evidence_id": "KQ-009-6c6cc25d1328",
       "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
       "validity": "Current"
     },
     "KQ-010": {
-      "event_id": "VAL-KQ-010-505C7511F9BC-CURRENT",
-      "evidence_id": "KQ-010-505c7511f9bc",
+      "event_id": "VAL-KQ-010-6C6CC25D1328-CURRENT",
+      "evidence_id": "KQ-010-6c6cc25d1328",
       "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
       "validity": "Current"
     },
     "KQ-011": {
-      "event_id": "VAL-KQ-011-505C7511F9BC-CURRENT",
-      "evidence_id": "KQ-011-505c7511f9bc",
+      "event_id": "VAL-KQ-011-6C6CC25D1328-CURRENT",
+      "evidence_id": "KQ-011-6c6cc25d1328",
       "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
       "validity": "Current"
     },
     "KQ-012": {
-      "event_id": "VAL-KQ-012-505C7511F9BC-CURRENT",
-      "evidence_id": "KQ-012-505c7511f9bc",
+      "event_id": "VAL-KQ-012-6C6CC25D1328-CURRENT",
+      "evidence_id": "KQ-012-6c6cc25d1328",
       "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
       "validity": "Current"
     },
     "KQ-013": {
-      "event_id": "VAL-KQ-013-505C7511F9BC-CURRENT",
+      "event_id": "VAL-KQ-013-REVERIFY-20260728T054359156340Z",
       "evidence_id": "KQ-013-505c7511f9bc",
-      "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
-      "validity": "Current"
+      "reason": "Previously current evidence no longer matches the live controller scope.",
+      "validity": "ReverificationRequired"
     },
     "KQ-014": {
       "event_id": "VAL-KQ-014-505C7511F9BC-CURRENT",
       "evidence_id": "KQ-014-505c7511f9bc",
       "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
-      "validity": "Current"
+      "validity": "ReverificationRequired"
     },
     "KQ-015": {
       "event_id": "VAL-KQ-015-4C64A080D49A-CURRENT",
       "evidence_id": "KQ-015-4c64a080d49a",
       "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
-      "validity": "Current"
+      "validity": "ReverificationRequired"
     }
   },
   "summary": {
@@ -106,15 +106,29 @@
       "KQ-009",
       "KQ-010",
       "KQ-011",
-      "KQ-012",
+      "KQ-012"
+    ],
+    "Invalidated": [],
+    "Retired": [],
+    "ReverificationRequired": [
       "KQ-013",
       "KQ-014",
       "KQ-015"
     ],
-    "Invalidated": [],
-    "Retired": [],
-    "ReverificationRequired": [],
     "Superseded": []
   },
-  "verification_errors": {}
+  "verification_errors": {
+    "KQ-014": [
+      "input is missing or stale: docs/program/milestone_schema.yaml",
+      "input is missing or stale: tools/program/program_contract.py"
+    ],
+    "KQ-015": [
+      "milestone contract is stale",
+      "input is missing or stale: docs/program/execution_policy.yaml",
+      "input is missing or stale: docs/program/milestone_registry.yaml",
+      "input is missing or stale: docs/program/milestone_schema.yaml",
+      "input is missing or stale: tests/program/test_status_compiler.py",
+      "input is missing or stale: tools/program/program_contract.py"
+    ]
+  }
 }
