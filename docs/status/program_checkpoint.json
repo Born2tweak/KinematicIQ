@@ -80,7 +80,9 @@
       "KQ-009",
       "KQ-010",
       "KQ-011",
-      "KQ-012"
+      "KQ-012",
+      "KQ-013",
+      "KQ-014"
     ],
     "next_executable_range": [
       "KQ-018",
@@ -99,7 +101,9 @@
         "KQ-009",
         "KQ-010",
         "KQ-011",
-        "KQ-012"
+        "KQ-012",
+        "KQ-013",
+        "KQ-014"
       ],
       "historically_passed_ids": [
         "KQ-001",
@@ -113,7 +117,9 @@
         "KQ-009",
         "KQ-010",
         "KQ-011",
-        "KQ-012"
+        "KQ-012",
+        "KQ-013",
+        "KQ-014"
       ],
       "invalidated_ids": [],
       "reverification_required_ids": []
@@ -138,16 +144,10 @@
       "a11f42de082eeb73a99ab66b87ded7f1375c9c3c",
       "c642ed298ceb3a2b86c1a317bb138815dc220fc9",
       "d3e25e38b5ae08b7ba359a482ad7449eb1f9b318",
-      "d9bae6fbc4f0d5410bb5b240572d6ee4bdfcdd34",
       "ff41350e93de753bdb06ece9759716298ca6d35a",
       "ffa3907456833d37c06b74bc937a595c9fb6dd3f"
     ],
     "verification_failures": {
-      "KQ-014": [
-        "input is missing or stale: tools/program/compile_status.py",
-        "input is missing or stale: tools/program/execution_authority.py",
-        "input is missing or stale: tools/program/generate_checkpoint.py"
-      ],
       "KQ-018": [
         "input is missing or stale: tools/program/compile_status.py",
         "input is missing or stale: tools/program/execution_authority.py",
@@ -168,8 +168,7 @@
       "KQ-026"
     ],
     "dependency_ready_ids": [
-      "KQ-013",
-      "KQ-014",
+      "KQ-015",
       "KQ-018",
       "KQ-026",
       "KQ-056"
@@ -310,6 +309,7 @@
     "docs/status/evidence/KQ-013/KQ-013-197c931fd0f4.json": "1723c59d3872d595f06715d00c5b0b76d46cbe493f1262b1587b7703d2f1ea37",
     "docs/status/evidence/KQ-013/KQ-013-1fd94b292102.json": "522f6f2e9ef8adbaa9f954de44c94e7b5c60392b181d484285751b3d7d695a83",
     "docs/status/evidence/KQ-013/KQ-013-505c7511f9bc.json": "8f6c94f368369a7c37bed822271ec5f4eb517f3745de5aa9b84ba7841f8eb42a",
+    "docs/status/evidence/KQ-013/KQ-013-5993764d4ca3.json": "434028a7f4395675dfa67e39bccbb062fbbebeb07f39e84d35eb562ee99baf06",
     "docs/status/evidence/KQ-013/KQ-013-6c6cc25d1328.json": "3b306bfe5afd90903e886282986348ba15d765662654eb3ba94bcb33484eb5ad",
     "docs/status/evidence/KQ-013/KQ-013-a11f42de082e.json": "71aaaa9313293e101a1ac89b15fcd20ad5aa512c889ccd68d85ec8ce0b868496",
     "docs/status/evidence/KQ-013/KQ-013-ffa390745683.json": "11315dced985f2cbd953bdfb2b5f6cacaccb968d843992cf66a384ea37edca2e",
@@ -318,6 +318,7 @@
     "docs/status/evidence/KQ-014/KQ-014-197c931fd0f4.json": "bb0563082acb5d931d93e3f84b866421321f94d00ed27ca8058675b294a6a083",
     "docs/status/evidence/KQ-014/KQ-014-1fd94b292102.json": "6c90852a1c8ebdf83c42cb0f549b326e0319c7302661e858dddf8e02f6f3ca3d",
     "docs/status/evidence/KQ-014/KQ-014-505c7511f9bc.json": "7cd2c60bb321d0e74ff0416683e490b9a2394869cd446147421dbcabec746c34",
+    "docs/status/evidence/KQ-014/KQ-014-5993764d4ca3.json": "5ffb90349145a2702e46f1be2539381aabcea98ab505d26840402faa6740290d",
     "docs/status/evidence/KQ-014/KQ-014-6c6cc25d1328.json": "ffb8398f91a5268f068817511856f859b794e245a4853eaf217b8e88e9702518",
     "docs/status/evidence/KQ-014/KQ-014-84537473e620.json": "ba108c6334dabfc19097a2a61593d3184c2e6225d108b87a3313fb8c1bb43bba",
     "docs/status/evidence/KQ-014/KQ-014-a11f42de082e.json": "ad845242855fa822a7ba944258d21d1367d9ceb9dd1ffed5f855f22bdf9048df",
@@ -328,12 +329,11 @@
     "docs/status/evidence/KQ-015/KQ-015-8c5bc6e76a19.json": "df2778835cac9b61dc2aa459fccc46133baecb67f50bd5918942b8519621c8fd",
     "docs/status/evidence/KQ-015/KQ-015-8eac54a968d2.json": "e3d9892b6c361041d38d934ba44883faaf4cbfef9d02309347590ec7337f84b3",
     "docs/status/evidence/KQ-015/KQ-015-c642ed298ceb.json": "fb2092861ffa72d7beef05b2662a30d1b62ebd26134d73fb76955f2370f2a897",
-    "docs/status/evidence/KQ-015/KQ-015-d9bae6fbc4f0.json": "108d237a24b6c05fe20449732fabc7db3e944332da1b2d0a971429dea4ec9264",
     "docs/status/evidence/KQ-015/KQ-015-ff41350e93de.json": "1252cee6083cead25ca2ddd64a5fcf1f5b83c71bc338e76675d858764389e363",
     "docs/status/evidence/KQ-018/KQ-018-2a52f5d84ab3.json": "0931b463e098c84738a6042569375d88d7f2357938c872734af4f405db09106f",
     "docs/status/evidence/KQ-018/KQ-018-458af053b1c9.json": "c8c1786b98d47d7947265459c788b39f3f5874c12b5a608a7df66342409c0049",
-    "docs/status/evidence_validity.json": "7b5b963f80bc05a4ec3641ae3a75a73c68bb823a1b74d5bf85fe198d9f66699e",
-    "docs/status/evidence_validity_events.ndjson": "3e00fd9feba34453afb6c52a182ed79e4cf70fe8b0076e920ba7b87a472bda77",
+    "docs/status/evidence_validity.json": "4aab62de02a2cc3e9c79184429be3868857fe29d57a5b4abb3fbc39c3a97eb02",
+    "docs/status/evidence_validity_events.ndjson": "a2576f0bae358173092e6e4e704f44cba03594701d5f0a6e9b5a3c654bc07b00",
     "docs/status/milestones/KQ-001.json": "7e3058ae976e5683cc3feabc41a115dedd91f66e221747469803a5f2b1d147c6",
     "docs/status/milestones/KQ-002.json": "7f93c5d052ef6acbd35e977c800e2bb79e9e656702d626be1fc6b6c4ce6955d5",
     "docs/status/milestones/KQ-003.json": "fa062f54317050c08b955ba310eab44bc82bb83f3f53a95104ff4695c69acc39",
@@ -350,7 +350,7 @@
     "docs/status/milestones/KQ-014.json": "1d29dbaca182957965eb19120b54274df2cd6789a27cae790cea2245d53d3f59",
     "docs/status/milestones/KQ-015.json": "8b73d40dfcca7e0ebc617cde3164dbb9a05ffd03bd58e55c35662ca33ce75764",
     "docs/status/milestones/KQ-018.json": "c8c1786b98d47d7947265459c788b39f3f5874c12b5a608a7df66342409c0049",
-    "docs/status/program_status.json": "3e8cd08d46480dfc4b3aeb61c226fc7666ac3383b0c1f3f73d1af8929b9a3759",
+    "docs/status/program_status.json": "17cbfdcac2f482c8393ee1eae4a9084843357e151173f6f818543397418a38af",
     "docs/validation/protocol_validation_registry.yaml": "b4e6b116d36b7213c7257c00df166e98a6ac02cb475c90a5b23807ece1aa8141"
   },
   "triggers": [

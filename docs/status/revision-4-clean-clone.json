@@ -11,10 +11,10 @@
         "agent/phase-b-engineering",
         "--single-branch",
         "https://github.com/Born2tweak/KinematicIQ.git",
-        "C:\\Users\\acetu\\AppData\\Local\\Temp\\kinematiciq-clean-clone-at0mtn7z\\KinematicIQ"
+        "C:\\Users\\acetu\\AppData\\Local\\Temp\\kinematiciq-clean-clone-ck4jk4er\\KinematicIQ"
       ],
       "exit_code": 0,
-      "stderr": "Cloning into 'C:\\Users\\acetu\\AppData\\Local\\Temp\\kinematiciq-clean-clone-at0mtn7z\\KinematicIQ'...\n",
+      "stderr": "Cloning into 'C:\\Users\\acetu\\AppData\\Local\\Temp\\kinematiciq-clean-clone-ck4jk4er\\KinematicIQ'...\nUpdating files:  90% (841/927)\nUpdating files:  91% (844/927)\nUpdating files:  92% (853/927)\nUpdating files:  93% (863/927)\nUpdating files:  94% (872/927)\nUpdating files:  95% (881/927)\nUpdating files:  96% (890/927)\nUpdating files:  97% (900/927)\nUpdating files:  98% (909/927)\nUpdating files:  99% (918/927)\nUpdating files: 100% (927/927)\nUpdating files: 100% (927/927), done.\n",
       "stdout": ""
     },
     {
@@ -43,7 +43,7 @@
       "stdout": "{\n  \"schema_valid\": true,\n  \"semantic_contract_valid\": true,\n  \"milestone_count\": 176\n}\n"
     },
     {
-      "accepted": true,
+      "accepted": false,
       "command": [
         "python",
         "-m",
@@ -55,61 +55,13 @@
         "test_*.py",
         "-v"
       ],
-      "exit_code": 0,
-      "stderr": "test_competing_authority_fails_closed (test_artifact_structure.ArtifactStructureTests.test_competing_authority_fails_closed) ... ok\ntest_repository_layout_passes (test_artifact_structure.ArtifactStructureTests.test_repository_layout_passes) ... ok\ntest_authoritative_manifest_passes (test_authority.AuthorityTests.test_authoritative_manifest_passes) ... ok\ntest_missing_notice_fails_closed (test_authority.AuthorityTests.test_missing_notice_fails_closed) ... ok\ntest_overlap_fails_closed (test_authority.AuthorityTests.test_overlap_fails_closed) ... ok\ntest_blocker_summary_includes_all_milestone_blocker_classes (test_checkpoint_generator.CheckpointGeneratorTests.test_blocker_summary_includes_all_milestone_blocker_classes) ... ok\ntest_checked_in_checkpoint_matches_compiler_when_present (test_checkpoint_generator.CheckpointGeneratorTests.test_checked_in_checkpoint_matches_compiler_when_present) ... ok\ntest_checkpoint_covers_every_required_trigger (test_checkpoint_generator.CheckpointGeneratorTests.test_checkpoint_covers_every_required_trigger) ... ok\ntest_checkpoint_preserves_release_and_public_protocol_invariants (test_checkpoint_generator.CheckpointGeneratorTests.test_checkpoint_preserves_release_and_public_protocol_invariants) ... ok\ntest_push_summary_contains_required_checkpoint_fields (test_checkpoint_generator.CheckpointGeneratorTests.test_push_summary_contains_required_checkpoint_fields) ... ok\ntest_release_requires_explicit_gate_pass_evidence (test_checkpoint_generator.CheckpointGeneratorTests.test_release_requires_explicit_gate_pass_evidence) ... ok\ntest_missing_remote_branch_is_reported_before_cloning (test_clean_clone_gate.CleanCloneOrderingTests.test_missing_remote_branch_is_reported_before_cloning) ... ok\ntest_pushed_subject_passes_the_precondition (test_clean_clone_gate.CleanCloneOrderingTests.test_pushed_subject_passes_the_precondition) ... ok\ntest_unpushed_subject_is_named_an_ordering_failure (test_clean_clone_gate.CleanCloneOrderingTests.test_unpushed_subject_is_named_an_ordering_failure) ... ok\ntest_remove_tree_deletes_and_reports_success (test_clean_clone_gate.CloneCleanupTests.test_remove_tree_deletes_and_reports_success) ... ok\ntest_sweep_removes_stale_siblings_only (test_clean_clone_gate.CloneCleanupTests.test_sweep_removes_stale_siblings_only) ... ok\ntest_undeletable_clone_warns_and_never_raises (test_clean_clone_gate.CloneCleanupTests.test_undeletable_clone_warns_and_never_raises)\nCleanup runs in the gate's finally; raising would fail a passing gate. ... ok\ntest_a_complete_freeze_passes (test_corpus_freeze_gate.CorpusFreezeGateTests.test_a_complete_freeze_passes)\nThe gate must be satisfiable, or it would block the milestone forever. ... ok\ntest_checksum_mismatch_fails (test_corpus_freeze_gate.CorpusFreezeGateTests.test_checksum_mismatch_fails) ... ok\ntest_declared_asset_that_does_not_exist_fails (test_corpus_freeze_gate.CorpusFreezeGateTests.test_declared_asset_that_does_not_exist_fails) ... ok\ntest_duplicate_entry_ids_fail (test_corpus_freeze_gate.CorpusFreezeGateTests.test_duplicate_entry_ids_fail) ... ok\ntest_incomplete_capture_metadata_fails (test_corpus_freeze_gate.CorpusFreezeGateTests.test_incomplete_capture_metadata_fails) ... ok\ntest_manifest_with_no_recordings_is_a_res_corpus_blocker (test_corpus_freeze_gate.CorpusFreezeGateTests.test_manifest_with_no_recordings_is_a_res_corpus_blocker) ... ok\ntest_missing_governance_fails (test_corpus_freeze_gate.CorpusFreezeGateTests.test_missing_governance_fails) ... ok\ntest_missing_license_or_consent_fails (test_corpus_freeze_gate.CorpusFreezeGateTests.test_missing_license_or_consent_fails) ... ok\ntest_missing_manifest_is_a_res_corpus_blocker_not_a_pass (test_corpus_freeze_gate.CorpusFreezeGateTests.test_missing_manifest_is_a_res_corpus_blocker_not_a_pass) ... ok\ntest_protocol_mismatch_fails (test_corpus_freeze_gate.CorpusFreezeGateTests.test_protocol_mismatch_fails) ... ok\ntest_subject_spanning_two_splits_fails (test_corpus_freeze_gate.CorpusFreezeGateTests.test_subject_spanning_two_splits_fails) ... ok\ntest_closing_a_phase_b_milestone_leaves_phase_a_untouched (test_evidence_derived_completion.DerivedCompletionTests.test_closing_a_phase_b_milestone_leaves_phase_a_untouched)\nRequirement 4: a Phase B closure must not revoke Phase A evidence. ... ok\ntest_current_evidence_alone_makes_a_milestone_passed (test_evidence_derived_completion.DerivedCompletionTests.test_current_evidence_alone_makes_a_milestone_passed)\nRequirement 1: closing needs no registry status mutation. ... ok\ntest_declared_passed_without_evidence_is_not_trusted (test_evidence_derived_completion.DerivedCompletionTests.test_declared_passed_without_evidence_is_not_trusted)\nA registry claiming Passed with stale evidence reads as outstanding. ... ok\ntest_intent_statuses_survive_current_evidence (test_evidence_derived_completion.DerivedCompletionTests.test_intent_statuses_survive_current_evidence)\nBlocked/retired/skipped are decisions; evidence must not override them. ... ok\ntest_missing_validity_key_fails_closed (test_evidence_derived_completion.DerivedCompletionTests.test_missing_validity_key_fails_closed) ... ok\ntest_multiple_milestones_finalize_without_weakening_each_other (test_evidence_derived_completion.DerivedCompletionTests.test_multiple_milestones_finalize_without_weakening_each_other)\nRequirement 5: independent closures stay per-milestone. ... ok\ntest_passed_is_the_only_derived_status (test_evidence_derived_completion.DerivedCompletionTests.test_passed_is_the_only_derived_status) ... ok\ntest_registry_declares_no_new_passed_milestones (test_evidence_derived_completion.DerivedCompletionTests.test_registry_declares_no_new_passed_milestones)\nRequirement: the registry stores intent, not completion. ... ok\ntest_tampered_validity_cannot_forge_completion (test_evidence_derived_completion.DerivedCompletionTests.test_tampered_validity_cannot_forge_completion)\nRequirement 7: only the exact 'Current' verdict counts. ... ok\ntest_closure_inputs_exclude_the_registry (test_evidence_derived_completion.RegistryIsNotMutatedByClosureTests.test_closure_inputs_exclude_the_registry)\nThe paths a closure writes must not intersect any contract input. ... ok\ntest_finalization_writes_no_registry_path (test_evidence_derived_completion.RegistryIsNotMutatedByClosureTests.test_finalization_writes_no_registry_path)\nRequirement 2: finalizing must not touch the acceptance contract. ... ok\ntest_declared_input_is_required (test_evidence_integrity.EvidenceIntegrityTests.test_declared_input_is_required) ... ok\ntest_directory_scope_contains_only_tracked_content (test_evidence_integrity.EvidenceIntegrityTests.test_directory_scope_contains_only_tracked_content) ... ok\ntest_historical_true_flag_does_not_create_current_validity (test_evidence_integrity.EvidenceIntegrityTests.test_historical_true_flag_does_not_create_current_validity) ... ok\ntest_invalid_current_record_is_demoted (test_evidence_integrity.EvidenceIntegrityTests.test_invalid_current_record_is_demoted) ... ok\ntest_text_hashing_is_line_ending_independent (test_evidence_integrity.EvidenceIntegrityTests.test_text_hashing_is_line_ending_independent) ... ok\ntest_tracked_paths_follow_subject_commit_not_index (test_evidence_integrity.EvidenceIntegrityTests.test_tracked_paths_follow_subject_commit_not_index)\nScope must attest the subject commit, not whatever the index holds. ... ok\ntest_changed_verifier_schema_compiles_a_new_validator (test_evidence_integrity.VerificationCacheTests.test_changed_verifier_schema_compiles_a_new_validator) ... ok\ntest_commit_tree_caches_immutable_names_only (test_evidence_integrity.VerificationCacheTests.test_commit_tree_caches_immutable_names_only) ... ok\ntest_mutated_input_invalidates_the_hash_between_passes (test_evidence_integrity.VerificationCacheTests.test_mutated_input_invalidates_the_hash_between_passes) ... ok\ntest_repeated_hash_inside_one_pass_reads_the_file_once (test_evidence_integrity.VerificationCacheTests.test_repeated_hash_inside_one_pass_reads_the_file_once) ... ok\ntest_declared_branch_is_accepted (test_execution_authority.DeclaredBranchPreconditionTests.test_declared_branch_is_accepted) ... ok\ntest_other_branch_is_refused (test_execution_authority.DeclaredBranchPreconditionTests.test_other_branch_is_refused) ... ok\ntest_corpus_blocked_ids_are_never_committed_to_a_wave (test_execution_authority.ExecutionAuthorityTests.test_corpus_blocked_ids_are_never_committed_to_a_wave)\nKQ-016/017/176 need RES-CORPUS; a wave must not grant them mutation rights. ... ok\ntest_every_exclusion_carries_a_machine_readable_reason (test_execution_authority.ExecutionAuthorityTests.test_every_exclusion_carries_a_machine_readable_reason)\nA milestone left out of the frontier must say which rule excluded it. ... ok\ntest_freed_worker_slot_promotes_the_next_committed_id (test_execution_authority.ExecutionAuthorityTests.test_freed_worker_slot_promotes_the_next_committed_id)\nSerialisation is per worker: KQ-019 waits for W2, not forever. ... ok\ntest_missing_worker_or_capacity_overrun_fails_closed (test_execution_authority.ExecutionAuthorityTests.test_missing_worker_or_capacity_overrun_fails_closed) ... ok\ntest_null_frontier_rejects_all_execution (test_execution_authority.ExecutionAuthorityTests.test_null_frontier_rejects_all_execution) ... ok\ntest_wave_three_is_capacity_feasible_and_assigned (test_execution_authority.ExecutionAuthorityTests.test_wave_three_is_capacity_feasible_and_assigned) ... ok\ntest_worker_frontier_serializes_lane_and_rejects_unslotted (test_execution_authority.ExecutionAuthorityTests.test_worker_frontier_serializes_lane_and_rejects_unslotted) ... ok\ntest_all_ten_normative_fixtures (test_execution_fixtures.ExecutionFixtureTests.test_all_ten_normative_fixtures) ... ok\ntest_release_without_gate_pass_is_rejected (test_execution_fixtures.ExecutionFixtureTests.test_release_without_gate_pass_is_rejected) ... ok\ntest_skip_without_complete_decision_metadata_is_rejected (test_execution_fixtures.ExecutionFixtureTests.test_skip_without_complete_decision_metadata_is_rejected) ... ok\ntest_authoritative_policy_passes (test_execution_policy.ExecutionPolicyTests.test_authoritative_policy_passes) ... ok\ntest_direct_master_or_deploy_authority_fails_closed (test_execution_policy.ExecutionPolicyTests.test_direct_master_or_deploy_authority_fails_closed) ... ok\ntest_interruption_expansion_fails_closed (test_execution_policy.ExecutionPolicyTests.test_interruption_expansion_fails_closed) ... ok\ntest_locked_evidence_retry_and_global_pause_fail_closed (test_execution_policy.ExecutionPolicyTests.test_locked_evidence_retry_and_global_pause_fail_closed) ... ok\ntest_partial_write_leaves_no_file (test_finalize_milestone.AtomicWriteTests.test_partial_write_leaves_no_file)\nA serialization failure must not leave a truncated artifact behind. ... ok\ntest_write_replaces_existing_atomically (test_finalize_milestone.AtomicWriteTests.test_write_replaces_existing_atomically) ... ok\ntest_dependency_drift_blocks_closure (test_finalize_milestone.FinalizationGuardTests.test_dependency_drift_blocks_closure)\nA dependency whose evidence went stale must block the dependent. ... ok\ntest_dependency_with_no_evidence_blocks_closure (test_finalize_milestone.FinalizationGuardTests.test_dependency_with_no_evidence_blocks_closure) ... ok\ntest_duplicate_run_appends_no_second_event (test_finalize_milestone.FinalizationGuardTests.test_duplicate_run_appends_no_second_event)\nIdempotence: closing an already-current milestone writes no new event. ... ok\ntest_failed_checks_cannot_be_closed (test_finalize_milestone.FinalizationGuardTests.test_failed_checks_cannot_be_closed) ... ok\ntest_interrupted_run_recovers_without_duplicate_event (test_finalize_milestone.FinalizationGuardTests.test_interrupted_run_recovers_without_duplicate_event)\nA crash after the append must not double-append on the retry. ... ok\ntest_invalid_record_cannot_be_closed (test_finalize_milestone.FinalizationGuardTests.test_invalid_record_cannot_be_closed)\nA record that no longer verifies against its declared inputs is refused. ... ok\ntest_missing_record_fails_closed (test_finalize_milestone.FinalizationGuardTests.test_missing_record_fails_closed) ... ok\ntest_projection_not_current_after_write_fails_closed (test_finalize_milestone.FinalizationGuardTests.test_projection_not_current_after_write_fails_closed)\nIf the claimed transition did not happen, say so instead of passing. ... ok\ntest_projection_pointing_at_another_record_fails_closed (test_finalize_milestone.FinalizationGuardTests.test_projection_pointing_at_another_record_fails_closed)\nClosure must not accept a projection that names different evidence. ... ok\ntest_stale_subject_commit_fails_closed (test_finalize_milestone.FinalizationGuardTests.test_stale_subject_commit_fails_closed)\nEvidence from an older commit must not close the current tree. ... ok\ntest_authoritative_history_import_passes (test_history_import.HistoryImportTests.test_authoritative_history_import_passes) ... ok\ntest_current_proof_claim_fails_closed (test_history_import.HistoryImportTests.test_current_proof_claim_fails_closed) ... ok\ntest_missing_special_id_fails_closed (test_history_import.HistoryImportTests.test_missing_special_id_fails_closed) ... ok\ntest_not_executed_legacy_gap_cannot_be_promoted (test_history_import.HistoryImportTests.test_not_executed_legacy_gap_cannot_be_promoted) ... ok\ntest_authoritative_migration_passes (test_id_migration.IdMigrationTests.test_authoritative_migration_passes) ... ok\ntest_unknown_evidence_target_fails_closed (test_id_migration.IdMigrationTests.test_unknown_evidence_target_fails_closed) ... ok\ntest_unlinked_phase4_record_fails_closed (test_id_migration.IdMigrationTests.test_unlinked_phase4_record_fails_closed) ... ok\ntest_acceptance_cannot_reference_undeclared_command (test_program_contract.ProgramContractTests.test_acceptance_cannot_reference_undeclared_command) ... ok\ntest_artifact_and_evidence_bindings_fail_closed (test_program_contract.ProgramContractTests.test_artifact_and_evidence_bindings_fail_closed) ... ok\ntest_authoritative_registry_passes_schema_and_semantics (test_program_contract.ProgramContractTests.test_authoritative_registry_passes_schema_and_semantics) ... ok\ntest_declared_python_verifier_is_hashed_into_evidence (test_program_contract.ProgramContractTests.test_declared_python_verifier_is_hashed_into_evidence) ... ok\ntest_duplicate_verification_ids_fail_closed (test_program_contract.ProgramContractTests.test_duplicate_verification_ids_fail_closed) ... ok\ntest_mandatory_dependency_cannot_accept_skip (test_program_contract.ProgramContractTests.test_mandatory_dependency_cannot_accept_skip) ... ok\ntest_release_outcome_requires_gate_pass_dependency (test_program_contract.ProgramContractTests.test_release_outcome_requires_gate_pass_dependency) ... ok\ntest_skip_requires_declared_policy_and_outcome (test_program_contract.ProgramContractTests.test_skip_requires_declared_policy_and_outcome) ... ok\ntest_unknown_predicate_fails_closed (test_program_contract.ProgramContractTests.test_unknown_predicate_fails_closed) ... ok\ntest_fixture_is_deterministic_and_reopens_completed_seed (test_replan_impact.ReplanImpactTests.test_fixture_is_deterministic_and_reopens_completed_seed) ... ok\ntest_invalid_trigger_type_fails_schema (test_replan_impact.ReplanImpactTests.test_invalid_trigger_type_fails_schema) ... ok\ntest_unknown_seed_fails_closed (test_replan_impact.ReplanImpactTests.test_unknown_seed_fails_closed) ... ok\ntest_empty_canonical_registry_and_fixture_pass (test_research_workflow.ResearchWorkflowTests.test_empty_canonical_registry_and_fixture_pass) ... ok\ntest_fixture_cannot_claim_scientific_evidence (test_research_workflow.ResearchWorkflowTests.test_fixture_cannot_claim_scientific_evidence) ... ok\ntest_missing_exit_criteria_fails_closed (test_research_workflow.ResearchWorkflowTests.test_missing_exit_criteria_fails_closed) ... ok\ntest_cli_regenerates_and_verifies_same_manifest (test_schedule_wave.WaveScheduleTests.test_cli_regenerates_and_verifies_same_manifest) ... ok\ntest_every_id_is_classified_once_and_committed_is_dependency_closed (test_schedule_wave.WaveScheduleTests.test_every_id_is_classified_once_and_committed_is_dependency_closed) ... ok\ntest_manifest_is_deterministic_and_capacity_feasible (test_schedule_wave.WaveScheduleTests.test_manifest_is_deterministic_and_capacity_feasible) ... ok\ntest_verifier_rejects_capacity_and_dependency_corruption (test_schedule_wave.WaveScheduleTests.test_verifier_rejects_capacity_and_dependency_corruption) ... ok\ntest_checked_in_status_matches_compiler_when_present (test_status_compiler.StatusCompilerTests.test_checked_in_status_matches_compiler_when_present) ... ok\ntest_committed_frontier_next_is_first_or_phase_is_complete (test_status_compiler.StatusCompilerTests.test_committed_frontier_next_is_first_or_phase_is_complete) ... ok\ntest_compiled_frontier_preserves_authority_and_availability (test_status_compiler.StatusCompilerTests.test_compiled_frontier_preserves_authority_and_availability) ... ok\ntest_active_metric_orphan_fails_closed (test_traceability_validator.TraceabilityValidatorTests.test_active_metric_orphan_fails_closed) ... ok\ntest_bootstrap_contract_and_bundle_pass (test_traceability_validator.TraceabilityValidatorTests.test_bootstrap_contract_and_bundle_pass) ... ok\ntest_unknown_evidence_target_fails_closed (test_traceability_validator.TraceabilityValidatorTests.test_unknown_evidence_target_fails_closed) ... ok\ntest_wrong_namespace_and_gate_pass_id_fail_closed (test_traceability_validator.TraceabilityValidatorTests.test_wrong_namespace_and_gate_pass_id_fail_closed) ... ok\n\n----------------------------------------------------------------------\nRan 110 tests in 189.060s\n\nOK\n",
-      "stdout": "removed stale clone kinematiciq-clean-clone-stale\nWARN: could not remove C:\\Users\\acetu\\AppData\\Local\\Temp\\tmp3f5kzsag\\kinematiciq-clean-clone-locked; delete it manually\nPASS: generated and verified C:\\Users\\acetu\\AppData\\Local\\Temp\\tmpdve1lyg0\\wave.yaml\nPASS: generated and verified C:\\Users\\acetu\\AppData\\Local\\Temp\\tmpdve1lyg0\\wave.yaml\nPASS: verified C:\\Users\\acetu\\AppData\\Local\\Temp\\tmpdve1lyg0\\wave.yaml\n"
-    },
-    {
-      "accepted": true,
-      "command": [
-        "python",
-        "tools/program/transition_wave.py",
-        "--verify"
-      ],
-      "exit_code": 0,
-      "stderr": "",
-      "stdout": "PASS: verified docs/program/ACTIVE_WAVE.yaml\n"
-    },
-    {
-      "accepted": true,
-      "command": [
-        "python",
-        "tools/program/transition_wave.py",
-        "--verify",
-        "--output",
-        "docs/program/ACTIVE_WAVE.yaml"
-      ],
-      "exit_code": 0,
-      "stderr": "",
-      "stdout": "PASS: verified docs/program/ACTIVE_WAVE.yaml\n"
-    },
-    {
-      "accepted": true,
-      "command": [
-        "python",
-        "tools/program/compile_evidence_validity.py",
-        "--verify"
-      ],
-      "exit_code": 0,
-      "stderr": "",
-      "stdout": "PASS: verified docs/status/evidence_validity.json\n"
-    },
-    {
-      "accepted": false,
-      "command": [
-        "python",
-        "tools/program/verify_evidence.py",
-        "--all",
-        "--exclude",
-        "KQ-015"
-      ],
       "exit_code": 1,
-      "stderr": "",
-      "stdout": "{\n  \"current\": 0,\n  \"failed\": 14,\n  \"results\": {\n    \"KQ-001\": {\n      \"event_id\": \"VAL-KQ-001-17088D5B8D0F-CURRENT\",\n      \"evidence_id\": \"KQ-001-17088d5b8d0f\",\n      \"reason\": \"Evidence schema v2 provenance and all declared milestone checks passed.\",\n      \"validity\": \"ReverificationRequired\"\n    },\n    \"KQ-002\": {\n      \"event_id\": \"VAL-KQ-002-17088D5B8D0F-CURRENT\",\n      \"evidence_id\": \"KQ-002-17088d5b8d0f\",\n      \"reason\": \"Evidence schema v2 provenance and all declared milestone checks passed.\",\n      \"validity\": \"ReverificationRequired\"\n    },\n    \"KQ-003\": {\n      \"event_id\": \"VAL-KQ-003-17088D5B8D0F-CURRENT\",\n      \"evidence_id\": \"KQ-003-17088d5b8d0f\",\n      \"reason\": \"Evidence schema v2 provenance and all declared milestone checks passed.\",\n      \"validity\": \"ReverificationRequired\"\n    },\n    \"KQ-004\": {\n      \"event_id\": \"VAL-KQ-004-17088D5B8D0F-CURRENT\",\n      \"evidence_id\": \"KQ-004-17088d5b8d0f\",\n      \"reason\": \"Evidence schema v2 provenance and all declared milestone checks passed.\",\n      \"validity\": \"ReverificationRequired\"\n    },\n    \"KQ-005\": {\n      \"event_id\": \"VAL-KQ-005-17088D5B8D0F-CURRENT\",\n      \"evidence_id\": \"KQ-005-17088d5b8d0f\",\n      \"reason\": \"Evidence schema v2 provenance and all declared milestone checks passed.\",\n      \"validity\": \"ReverificationRequired\"\n    },\n    \"KQ-006\": {\n      \"event_id\": \"VAL-KQ-006-17088D5B8D0F-CURRENT\",\n      \"evidence_id\": \"KQ-006-17088d5b8d0f\",\n      \"reason\": \"Evidence schema v2 provenance and all declared milestone checks passed.\",\n      \"validity\": \"ReverificationRequired\"\n    },\n    \"KQ-007\": {\n      \"event_id\": \"VAL-KQ-007-17088D5B8D0F-CURRENT\",\n      \"evidence_id\": \"KQ-007-17088d5b8d0f\",\n      \"reason\": \"Evidence schema v2 provenance and all declared milestone checks passed.\",\n      \"validity\": \"ReverificationRequired\"\n    },\n    \"KQ-008\": {\n      \"event_id\": \"VAL-KQ-008-17088D5B8D0F-CURRENT\",\n      \"evidence_id\": \"KQ-008-17088d5b8d0f\",\n      \"reason\": \"Evidence schema v2 provenance and all declared milestone checks passed.\",\n      \"validity\": \"ReverificationRequired\"\n    },\n    \"KQ-009\": {\n      \"event_id\": \"VAL-KQ-009-17088D5B8D0F-CURRENT\",\n      \"evidence_id\": \"KQ-009-17088d5b8d0f\",\n      \"reason\": \"Evidence schema v2 provenance and all declared milestone checks passed.\",\n      \"validity\": \"ReverificationRequired\"\n    },\n    \"KQ-010\": {\n      \"event_id\": \"VAL-KQ-010-17088D5B8D0F-CURRENT\",\n      \"evidence_id\": \"KQ-010-17088d5b8d0f\",\n      \"reason\": \"Evidence schema v2 provenance and all declared milestone checks passed.\",\n      \"validity\": \"ReverificationRequired\"\n    },\n    \"KQ-011\": {\n      \"event_id\": \"VAL-KQ-011-17088D5B8D0F-CURRENT\",\n      \"evidence_id\": \"KQ-011-17088d5b8d0f\",\n      \"reason\": \"Evidence schema v2 provenance and all declared milestone checks passed.\",\n      \"validity\": \"ReverificationRequired\"\n    },\n    \"KQ-012\": {\n      \"event_id\": \"VAL-KQ-012-17088D5B8D0F-CURRENT\",\n      \"evidence_id\": \"KQ-012-17088d5b8d0f\",\n      \"reason\": \"Evidence schema v2 provenance and all declared milestone checks passed.\",\n      \"validity\": \"ReverificationRequired\"\n    },\n    \"KQ-013\": {\n      \"event_id\": \"VAL-KQ-013-17088D5B8D0F-CURRENT\",\n      \"evidence_id\": \"KQ-013-17088d5b8d0f\",\n      \"reason\": \"Evidence schema v2 provenance and all declared milestone checks passed.\",\n      \"validity\": \"ReverificationRequired\"\n    },\n    \"KQ-014\": {\n      \"event_id\": \"VAL-KQ-014-17088D5B8D0F-CURRENT\",\n      \"evidence_id\": \"KQ-014-17088d5b8d0f\",\n      \"reason\": \"Evidence schema v2 provenance and all declared milestone checks passed.\",\n      \"validity\": \"ReverificationRequired\"\n    }\n  },\n  \"total\": 14,\n  \"verification_errors\": {\n    \"KQ-001\": [\n      \"input is missing or stale: tools/program/compile_status.py\",\n      \"input is missing or stale: tools/program/execution_authority.py\",\n      \"input is missing or stale: tools/program/generate_checkpoint.py\"\n    ],\n    \"KQ-002\": [\n      \"input is missing or stale: tools/program/compile_status.py\",\n      \"input is missing or stale: tools/program/execution_authority.py\",\n      \"input is missing or stale: tools/program/generate_checkpoint.py\"\n    ],\n    \"KQ-003\": [\n      \"input is missing or stale: tools/program/compile_status.py\",\n      \"input is missing or stale: tools/program/execution_authority.py\",\n      \"input is missing or stale: tools/program/generate_checkpoint.py\"\n    ],\n    \"KQ-004\": [\n      \"input is missing or stale: tools/program/compile_status.py\",\n      \"input is missing or stale: tools/program/execution_authority.py\",\n      \"input is missing or stale: tools/program/generate_checkpoint.py\"\n    ],\n    \"KQ-005\": [\n      \"input is missing or stale: tools/program/compile_status.py\",\n      \"input is missing or stale: tools/program/execution_authority.py\",\n      \"input is missing or stale: tools/program/generate_checkpoint.py\"\n    ],\n    \"KQ-006\": [\n      \"input is missing or stale: tools/program/compile_status.py\",\n      \"input is missing or stale: tools/program/execution_authority.py\",\n      \"input is missing or stale: tools/program/generate_checkpoint.py\"\n    ],\n    \"KQ-007\": [\n      \"input is missing or stale: tools/program/compile_status.py\",\n      \"input is missing or stale: tools/program/execution_authority.py\",\n      \"input is missing or stale: tools/program/generate_checkpoint.py\"\n    ],\n    \"KQ-008\": [\n      \"input is missing or stale: tools/program/compile_status.py\",\n      \"input is missing or stale: tools/program/execution_authority.py\",\n      \"input is missing or stale: tools/program/generate_checkpoint.py\"\n    ],\n    \"KQ-009\": [\n      \"input is missing or stale: tools/program/compile_status.py\",\n      \"input is missing or stale: tools/program/execution_authority.py\",\n      \"input is missing or stale: tools/program/generate_checkpoint.py\"\n    ],\n    \"KQ-010\": [\n      \"input is missing or stale: tools/program/compile_status.py\",\n      \"input is missing or stale: tools/program/execution_authority.py\",\n      \"input is missing or stale: tools/program/generate_checkpoint.py\"\n    ],\n    \"KQ-011\": [\n      \"input is missing or stale: tools/program/compile_status.py\",\n      \"input is missing or stale: tools/program/execution_authority.py\",\n      \"input is missing or stale: tools/program/generate_checkpoint.py\"\n    ],\n    \"KQ-012\": [\n      \"input is missing or stale: tools/program/compile_status.py\",\n      \"input is missing or stale: tools/program/execution_authority.py\",\n      \"input is missing or stale: tools/program/generate_checkpoint.py\"\n    ],\n    \"KQ-013\": [\n      \"input is missing or stale: tools/program/compile_status.py\",\n      \"input is missing or stale: tools/program/execution_authority.py\",\n      \"input is missing or stale: tools/program/generate_checkpoint.py\"\n    ],\n    \"KQ-014\": [\n      \"input is missing or stale: tools/program/compile_status.py\",\n      \"input is missing or stale: tools/program/execution_authority.py\",\n      \"input is missing or stale: tools/program/generate_checkpoint.py\"\n    ]\n  }\n}\n"
+      "stderr": "test_competing_authority_fails_closed (test_artifact_structure.ArtifactStructureTests.test_competing_authority_fails_closed) ... ok\ntest_repository_layout_passes (test_artifact_structure.ArtifactStructureTests.test_repository_layout_passes) ... ok\ntest_authoritative_manifest_passes (test_authority.AuthorityTests.test_authoritative_manifest_passes) ... ok\ntest_missing_notice_fails_closed (test_authority.AuthorityTests.test_missing_notice_fails_closed) ... ok\ntest_overlap_fails_closed (test_authority.AuthorityTests.test_overlap_fails_closed) ... ok\ntest_blocker_summary_includes_all_milestone_blocker_classes (test_checkpoint_generator.CheckpointGeneratorTests.test_blocker_summary_includes_all_milestone_blocker_classes) ... ok\ntest_checked_in_checkpoint_matches_compiler_when_present (test_checkpoint_generator.CheckpointGeneratorTests.test_checked_in_checkpoint_matches_compiler_when_present) ... FAIL\ntest_checkpoint_covers_every_required_trigger (test_checkpoint_generator.CheckpointGeneratorTests.test_checkpoint_covers_every_required_trigger) ... ok\ntest_checkpoint_preserves_release_and_public_protocol_invariants (test_checkpoint_generator.CheckpointGeneratorTests.test_checkpoint_preserves_release_and_public_protocol_invariants) ... ok\ntest_push_summary_contains_required_checkpoint_fields (test_checkpoint_generator.CheckpointGeneratorTests.test_push_summary_contains_required_checkpoint_fields) ... ok\ntest_release_requires_explicit_gate_pass_evidence (test_checkpoint_generator.CheckpointGeneratorTests.test_release_requires_explicit_gate_pass_evidence) ... ok\ntest_missing_remote_branch_is_reported_before_cloning (test_clean_clone_gate.CleanCloneOrderingTests.test_missing_remote_branch_is_reported_before_cloning) ... ok\ntest_pushed_subject_passes_the_precondition (test_clean_clone_gate.CleanCloneOrderingTests.test_pushed_subject_passes_the_precondition) ... ok\ntest_unpushed_subject_is_named_an_ordering_failure (test_clean_clone_gate.CleanCloneOrderingTests.test_unpushed_subject_is_named_an_ordering_failure) ... ok\ntest_remove_tree_deletes_and_reports_success (test_clean_clone_gate.CloneCleanupTests.test_remove_tree_deletes_and_reports_success) ... ok\ntest_sweep_removes_stale_siblings_only (test_clean_clone_gate.CloneCleanupTests.test_sweep_removes_stale_siblings_only) ... ok\ntest_undeletable_clone_warns_and_never_raises (test_clean_clone_gate.CloneCleanupTests.test_undeletable_clone_warns_and_never_raises)\nCleanup runs in the gate's finally; raising would fail a passing gate. ... ok\ntest_a_complete_freeze_passes (test_corpus_freeze_gate.CorpusFreezeGateTests.test_a_complete_freeze_passes)\nThe gate must be satisfiable, or it would block the milestone forever. ... ok\ntest_checksum_mismatch_fails (test_corpus_freeze_gate.CorpusFreezeGateTests.test_checksum_mismatch_fails) ... ok\ntest_declared_asset_that_does_not_exist_fails (test_corpus_freeze_gate.CorpusFreezeGateTests.test_declared_asset_that_does_not_exist_fails) ... ok\ntest_duplicate_entry_ids_fail (test_corpus_freeze_gate.CorpusFreezeGateTests.test_duplicate_entry_ids_fail) ... ok\ntest_incomplete_capture_metadata_fails (test_corpus_freeze_gate.CorpusFreezeGateTests.test_incomplete_capture_metadata_fails) ... ok\ntest_manifest_with_no_recordings_is_a_res_corpus_blocker (test_corpus_freeze_gate.CorpusFreezeGateTests.test_manifest_with_no_recordings_is_a_res_corpus_blocker) ... ok\ntest_missing_governance_fails (test_corpus_freeze_gate.CorpusFreezeGateTests.test_missing_governance_fails) ... ok\ntest_missing_license_or_consent_fails (test_corpus_freeze_gate.CorpusFreezeGateTests.test_missing_license_or_consent_fails) ... ok\ntest_missing_manifest_is_a_res_corpus_blocker_not_a_pass (test_corpus_freeze_gate.CorpusFreezeGateTests.test_missing_manifest_is_a_res_corpus_blocker_not_a_pass) ... ok\ntest_protocol_mismatch_fails (test_corpus_freeze_gate.CorpusFreezeGateTests.test_protocol_mismatch_fails) ... ok\ntest_subject_spanning_two_splits_fails (test_corpus_freeze_gate.CorpusFreezeGateTests.test_subject_spanning_two_splits_fails) ... ok\ntest_closing_a_phase_b_milestone_leaves_phase_a_untouched (test_evidence_derived_completion.DerivedCompletionTests.test_closing_a_phase_b_milestone_leaves_phase_a_untouched)\nRequirement 4: a Phase B closure must not revoke Phase A evidence. ... ok\ntest_current_evidence_alone_makes_a_milestone_passed (test_evidence_derived_completion.DerivedCompletionTests.test_current_evidence_alone_makes_a_milestone_passed)\nRequirement 1: closing needs no registry status mutation. ... ok\ntest_declared_passed_without_evidence_is_not_trusted (test_evidence_derived_completion.DerivedCompletionTests.test_declared_passed_without_evidence_is_not_trusted)\nA registry claiming Passed with stale evidence reads as outstanding. ... ok\ntest_intent_statuses_survive_current_evidence (test_evidence_derived_completion.DerivedCompletionTests.test_intent_statuses_survive_current_evidence)\nBlocked/retired/skipped are decisions; evidence must not override them. ... ok\ntest_missing_validity_key_fails_closed (test_evidence_derived_completion.DerivedCompletionTests.test_missing_validity_key_fails_closed) ... ok\ntest_multiple_milestones_finalize_without_weakening_each_other (test_evidence_derived_completion.DerivedCompletionTests.test_multiple_milestones_finalize_without_weakening_each_other)\nRequirement 5: independent closures stay per-milestone. ... ok\ntest_passed_is_the_only_derived_status (test_evidence_derived_completion.DerivedCompletionTests.test_passed_is_the_only_derived_status) ... ok\ntest_registry_declares_no_new_passed_milestones (test_evidence_derived_completion.DerivedCompletionTests.test_registry_declares_no_new_passed_milestones)\nRequirement: the registry stores intent, not completion. ... ok\ntest_tampered_validity_cannot_forge_completion (test_evidence_derived_completion.DerivedCompletionTests.test_tampered_validity_cannot_forge_completion)\nRequirement 7: only the exact 'Current' verdict counts. ... ok\ntest_closure_inputs_exclude_the_registry (test_evidence_derived_completion.RegistryIsNotMutatedByClosureTests.test_closure_inputs_exclude_the_registry)\nThe paths a closure writes must not intersect any contract input. ... ok\ntest_finalization_writes_no_registry_path (test_evidence_derived_completion.RegistryIsNotMutatedByClosureTests.test_finalization_writes_no_registry_path)\nRequirement 2: finalizing must not touch the acceptance contract. ... ok\ntest_declared_input_is_required (test_evidence_integrity.EvidenceIntegrityTests.test_declared_input_is_required) ... ok\ntest_directory_scope_contains_only_tracked_content (test_evidence_integrity.EvidenceIntegrityTests.test_directory_scope_contains_only_tracked_content) ... ok\ntest_historical_true_flag_does_not_create_current_validity (test_evidence_integrity.EvidenceIntegrityTests.test_historical_true_flag_does_not_create_current_validity) ... ok\ntest_invalid_current_record_is_demoted (test_evidence_integrity.EvidenceIntegrityTests.test_invalid_current_record_is_demoted) ... ok\ntest_text_hashing_is_line_ending_independent (test_evidence_integrity.EvidenceIntegrityTests.test_text_hashing_is_line_ending_independent) ... ok\ntest_tracked_paths_follow_subject_commit_not_index (test_evidence_integrity.EvidenceIntegrityTests.test_tracked_paths_follow_subject_commit_not_index)\nScope must attest the subject commit, not whatever the index holds. ... ok\ntest_changed_verifier_schema_compiles_a_new_validator (test_evidence_integrity.VerificationCacheTests.test_changed_verifier_schema_compiles_a_new_validator) ... ok\ntest_commit_tree_caches_immutable_names_only (test_evidence_integrity.VerificationCacheTests.test_commit_tree_caches_immutable_names_only) ... ok\ntest_mutated_input_invalidates_the_hash_between_passes (test_evidence_integrity.VerificationCacheTests.test_mutated_input_invalidates_the_hash_between_passes) ... ok\ntest_repeated_hash_inside_one_pass_reads_the_file_once (test_evidence_integrity.VerificationCacheTests.test_repeated_hash_inside_one_pass_reads_the_file_once) ... ok\ntest_declared_branch_is_accepted (test_execution_authority.DeclaredBranchPreconditionTests.test_declared_branch_is_accepted) ... ok\ntest_other_branch_is_refused (test_execution_authority.DeclaredBranchPreconditionTests.test_other_branch_is_refused) ... ok\ntest_corpus_blocked_ids_are_never_committed_to_a_wave (test_execution_authority.ExecutionAuthorityTests.test_corpus_blocked_ids_are_never_committed_to_a_wave)\nKQ-016/017/176 need RES-CORPUS; a wave must not grant them mutation rights. ... ok\ntest_every_exclusion_carries_a_machine_readable_reason (test_execution_authority.ExecutionAuthorityTests.test_every_exclusion_carries_a_machine_readable_reason)\nA milestone left out of the frontier must say which rule excluded it. ... ok\ntest_freed_worker_slot_promotes_the_next_committed_id (test_execution_authority.ExecutionAuthorityTests.test_freed_worker_slot_promotes_the_next_committed_id)\nSerialisation is per worker: KQ-019 waits for W2, not forever. ... ok\ntest_missing_worker_or_capacity_overrun_fails_closed (test_execution_authority.ExecutionAuthorityTests.test_missing_worker_or_capacity_overrun_fails_closed) ... ok\ntest_null_frontier_rejects_all_execution (test_execution_authority.ExecutionAuthorityTests.test_null_frontier_rejects_all_execution) ... ok\ntest_wave_three_is_capacity_feasible_and_assigned (test_execution_authority.ExecutionAuthorityTests.test_wave_three_is_capacity_feasible_and_assigned) ... ok\ntest_worker_frontier_serializes_lane_and_rejects_unslotted (test_execution_authority.ExecutionAuthorityTests.test_worker_frontier_serializes_lane_and_rejects_unslotted) ... ok\ntest_all_ten_normative_fixtures (test_execution_fixtures.ExecutionFixtureTests.test_all_ten_normative_fixtures) ... ok\ntest_release_without_gate_pass_is_rejected (test_execution_fixtures.ExecutionFixtureTests.test_release_without_gate_pass_is_rejected) ... ok\ntest_skip_without_complete_decision_metadata_is_rejected (test_execution_fixtures.ExecutionFixtureTests.test_skip_without_complete_decision_metadata_is_rejected) ... ok\ntest_authoritative_policy_passes (test_execution_policy.ExecutionPolicyTests.test_authoritative_policy_passes) ... ok\ntest_direct_master_or_deploy_authority_fails_closed (test_execution_policy.ExecutionPolicyTests.test_direct_master_or_deploy_authority_fails_closed) ... ok\ntest_interruption_expansion_fails_closed (test_execution_policy.ExecutionPolicyTests.test_interruption_expansion_fails_closed) ... ok\ntest_locked_evidence_retry_and_global_pause_fail_closed (test_execution_policy.ExecutionPolicyTests.test_locked_evidence_retry_and_global_pause_fail_closed) ... ok\ntest_partial_write_leaves_no_file (test_finalize_milestone.AtomicWriteTests.test_partial_write_leaves_no_file)\nA serialization failure must not leave a truncated artifact behind. ... ok\ntest_write_replaces_existing_atomically (test_finalize_milestone.AtomicWriteTests.test_write_replaces_existing_atomically) ... ok\ntest_dependency_drift_blocks_closure (test_finalize_milestone.FinalizationGuardTests.test_dependency_drift_blocks_closure)\nA dependency whose evidence went stale must block the dependent. ... ok\ntest_dependency_with_no_evidence_blocks_closure (test_finalize_milestone.FinalizationGuardTests.test_dependency_with_no_evidence_blocks_closure) ... ok\ntest_duplicate_run_appends_no_second_event (test_finalize_milestone.FinalizationGuardTests.test_duplicate_run_appends_no_second_event)\nIdempotence: closing an already-current milestone writes no new event. ... ok\ntest_failed_checks_cannot_be_closed (test_finalize_milestone.FinalizationGuardTests.test_failed_checks_cannot_be_closed) ... ok\ntest_interrupted_run_recovers_without_duplicate_event (test_finalize_milestone.FinalizationGuardTests.test_interrupted_run_recovers_without_duplicate_event)\nA crash after the append must not double-append on the retry. ... ok\ntest_invalid_record_cannot_be_closed (test_finalize_milestone.FinalizationGuardTests.test_invalid_record_cannot_be_closed)\nA record that no longer verifies against its declared inputs is refused. ... ok\ntest_missing_record_fails_closed (test_finalize_milestone.FinalizationGuardTests.test_missing_record_fails_closed) ... ok\ntest_projection_not_current_after_write_fails_closed (test_finalize_milestone.FinalizationGuardTests.test_projection_not_current_after_write_fails_closed)\nIf the claimed transition did not happen, say so instead of passing. ... ok\ntest_projection_pointing_at_another_record_fails_closed (test_finalize_milestone.FinalizationGuardTests.test_projection_pointing_at_another_record_fails_closed)\nClosure must not accept a projection that names different evidence. ... ok\ntest_stale_subject_commit_fails_closed (test_finalize_milestone.FinalizationGuardTests.test_stale_subject_commit_fails_closed)\nEvidence from an older commit must not close the current tree. ... ok\ntest_authoritative_history_import_passes (test_history_import.HistoryImportTests.test_authoritative_history_import_passes) ... ok\ntest_current_proof_claim_fails_closed (test_history_import.HistoryImportTests.test_current_proof_claim_fails_closed) ... ok\ntest_missing_special_id_fails_closed (test_history_import.HistoryImportTests.test_missing_special_id_fails_closed) ... ok\ntest_not_executed_legacy_gap_cannot_be_promoted (test_history_import.HistoryImportTests.test_not_executed_legacy_gap_cannot_be_promoted) ... ok\ntest_authoritative_migration_passes (test_id_migration.IdMigrationTests.test_authoritative_migration_passes) ... ok\ntest_unknown_evidence_target_fails_closed (test_id_migration.IdMigrationTests.test_unknown_evidence_target_fails_closed) ... ok\ntest_unlinked_phase4_record_fails_closed (test_id_migration.IdMigrationTests.test_unlinked_phase4_record_fails_closed) ... ok\ntest_acceptance_cannot_reference_undeclared_command (test_program_contract.ProgramContractTests.test_acceptance_cannot_reference_undeclared_command) ... ok\ntest_artifact_and_evidence_bindings_fail_closed (test_program_contract.ProgramContractTests.test_artifact_and_evidence_bindings_fail_closed) ... ok\ntest_authoritative_registry_passes_schema_and_semantics (test_program_contract.ProgramContractTests.test_authoritative_registry_passes_schema_and_semantics) ... ok\ntest_declared_python_verifier_is_hashed_into_evidence (test_program_contract.ProgramContractTests.test_declared_python_verifier_is_hashed_into_evidence) ... ok\ntest_duplicate_verification_ids_fail_closed (test_program_contract.ProgramContractTests.test_duplicate_verification_ids_fail_closed) ... ok\ntest_mandatory_dependency_cannot_accept_skip (test_program_contract.ProgramContractTests.test_mandatory_dependency_cannot_accept_skip) ... ok\ntest_release_outcome_requires_gate_pass_dependency (test_program_contract.ProgramContractTests.test_release_outcome_requires_gate_pass_dependency) ... ok\ntest_skip_requires_declared_policy_and_outcome (test_program_contract.ProgramContractTests.test_skip_requires_declared_policy_and_outcome) ... ok\ntest_unknown_predicate_fails_closed (test_program_contract.ProgramContractTests.test_unknown_predicate_fails_closed) ... ok\ntest_fixture_is_deterministic_and_reopens_completed_seed (test_replan_impact.ReplanImpactTests.test_fixture_is_deterministic_and_reopens_completed_seed) ... ok\ntest_invalid_trigger_type_fails_schema (test_replan_impact.ReplanImpactTests.test_invalid_trigger_type_fails_schema) ... ok\ntest_unknown_seed_fails_closed (test_replan_impact.ReplanImpactTests.test_unknown_seed_fails_closed) ... ok\ntest_empty_canonical_registry_and_fixture_pass (test_research_workflow.ResearchWorkflowTests.test_empty_canonical_registry_and_fixture_pass) ... ok\ntest_fixture_cannot_claim_scientific_evidence (test_research_workflow.ResearchWorkflowTests.test_fixture_cannot_claim_scientific_evidence) ... ok\ntest_missing_exit_criteria_fails_closed (test_research_workflow.ResearchWorkflowTests.test_missing_exit_criteria_fails_closed) ... ok\ntest_cli_regenerates_and_verifies_same_manifest (test_schedule_wave.WaveScheduleTests.test_cli_regenerates_and_verifies_same_manifest) ... ok\ntest_every_id_is_classified_once_and_committed_is_dependency_closed (test_schedule_wave.WaveScheduleTests.test_every_id_is_classified_once_and_committed_is_dependency_closed) ... ok\ntest_manifest_is_deterministic_and_capacity_feasible (test_schedule_wave.WaveScheduleTests.test_manifest_is_deterministic_and_capacity_feasible) ... ok\ntest_verifier_rejects_capacity_and_dependency_corruption (test_schedule_wave.WaveScheduleTests.test_verifier_rejects_capacity_and_dependency_corruption) ... ok\ntest_checked_in_status_matches_compiler_when_present (test_status_compiler.StatusCompilerTests.test_checked_in_status_matches_compiler_when_present) ... FAIL\ntest_committed_frontier_next_is_first_or_phase_is_complete (test_status_compiler.StatusCompilerTests.test_committed_frontier_next_is_first_or_phase_is_complete) ... ok\ntest_compiled_frontier_preserves_authority_and_availability (test_status_compiler.StatusCompilerTests.test_compiled_frontier_preserves_authority_and_availability) ... ok\ntest_active_metric_orphan_fails_closed (test_traceability_validator.TraceabilityValidatorTests.test_active_metric_orphan_fails_closed) ... ok\ntest_bootstrap_contract_and_bundle_pass (test_traceability_validator.TraceabilityValidatorTests.test_bootstrap_contract_and_bundle_pass) ... ok\ntest_unknown_evidence_target_fails_closed (test_traceability_validator.TraceabilityValidatorTests.test_unknown_evidence_target_fails_closed) ... ok\ntest_wrong_namespace_and_gate_pass_id_fail_closed (test_traceability_validator.TraceabilityValidatorTests.test_wrong_namespace_and_gate_pass_id_fail_closed) ... ok\n\n======================================================================\nFAIL: test_checked_in_checkpoint_matches_compiler_when_present (test_checkpoint_generator.CheckpointGeneratorTests.test_checked_in_checkpoint_matches_compiler_when_present)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"C:\\Users\\acetu\\AppData\\Local\\Temp\\kinematiciq-clean-clone-ck4jk4er\\KinematicIQ\\tests\\program\\test_checkpoint_generator.py\", line 71, in test_checked_in_checkpoint_matches_compiler_when_present\n    self.assertEqual(json.loads(path.read_text(encoding=\"utf-8\")), compile_checkpoint(ROOT))\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: {'blocker_summary': {'milestone_blockers': [23946 chars]ge']} != {'schema_version': 1, 'program_id': 'kinema[24170 chars]4']}}\nDiff is 35847 characters long. Set self.maxDiff to None to see it.\n\n======================================================================\nFAIL: test_checked_in_status_matches_compiler_when_present (test_status_compiler.StatusCompilerTests.test_checked_in_status_matches_compiler_when_present)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"C:\\Users\\acetu\\AppData\\Local\\Temp\\kinematiciq-clean-clone-ck4jk4er\\KinematicIQ\\tests\\program\\test_status_compiler.py\", line 40, in test_checked_in_status_matches_compiler_when_present\n    self.assertEqual(json.loads(path.read_text(encoding=\"utf-8\")), compile_status(ROOT))\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: {'authority': {'automatic_production_deploy[37228 chars]9e'}} != {'schema_version': 1, 'program_id': 'kinema[37108 chars]5']}}\nDiff is 116808 characters long. Set self.maxDiff to None to see it.\n\n----------------------------------------------------------------------\nRan 110 tests in 153.100s\n\nFAILED (failures=2)\n",
+      "stdout": "removed stale clone kinematiciq-clean-clone-stale\nWARN: could not remove C:\\Users\\acetu\\AppData\\Local\\Temp\\tmpnmqlm1rv\\kinematiciq-clean-clone-locked; delete it manually\nPASS: generated and verified C:\\Users\\acetu\\AppData\\Local\\Temp\\tmpf4144ww9\\wave.yaml\nPASS: generated and verified C:\\Users\\acetu\\AppData\\Local\\Temp\\tmpf4144ww9\\wave.yaml\nPASS: verified C:\\Users\\acetu\\AppData\\Local\\Temp\\tmpf4144ww9\\wave.yaml\n"
     }
   ],
-  "clone_head": "5993764d4ca31b5b168091237aef0356ce369ad6",
-  "generated_at": "2026-07-28T22:59:02.247178+00:00",
+  "clone_head": "ee0015ed9a25a5b3be20c6cacef62d8e1f5b6816",
+  "generated_at": "2026-07-28T23:03:20.987197+00:00",
   "ignored_status": [
     "!! tests/program/__pycache__/",
     "!! tools/program/__pycache__/"
@@ -186,11 +138,53 @@
     "push_summary": {
       "active_work_ids": [],
       "branch": "agent/phase-b-engineering",
-      "completed_ids": [],
-      "next_executable_range": [],
+      "completed_ids": [
+        "KQ-001",
+        "KQ-002",
+        "KQ-003",
+        "KQ-004",
+        "KQ-005",
+        "KQ-006",
+        "KQ-007",
+        "KQ-008",
+        "KQ-009",
+        "KQ-010",
+        "KQ-011",
+        "KQ-012"
+      ],
+      "next_executable_range": [
+        "KQ-018",
+        "KQ-026"
+      ],
       "objective_evidence": {
-        "currently_valid_ids": [],
-        "historically_passed_ids": [],
+        "currently_valid_ids": [
+          "KQ-001",
+          "KQ-002",
+          "KQ-003",
+          "KQ-004",
+          "KQ-005",
+          "KQ-006",
+          "KQ-007",
+          "KQ-008",
+          "KQ-009",
+          "KQ-010",
+          "KQ-011",
+          "KQ-012"
+        ],
+        "historically_passed_ids": [
+          "KQ-001",
+          "KQ-002",
+          "KQ-003",
+          "KQ-004",
+          "KQ-005",
+          "KQ-006",
+          "KQ-007",
+          "KQ-008",
+          "KQ-009",
+          "KQ-010",
+          "KQ-011",
+          "KQ-012"
+        ],
         "invalidated_ids": [],
         "reverification_required_ids": []
       },
@@ -205,6 +199,7 @@
         "458af053b1c9f1e6cff65886732208bf451f49f5",
         "4c64a080d49a22593cad013a7027286e34cf8a9e",
         "505c7511f9bcda47a3e2d0df8f8966c11f450315",
+        "5993764d4ca31b5b168091237aef0356ce369ad6",
         "5993a6d48a3fda2e2f24201cdb60f91ba731c056",
         "6c6cc25d13281c03cda7489e3f8df20a17240291",
         "84537473e6206d1e2f3d11bddaeb75478f81802a",
@@ -218,71 +213,6 @@
         "ffa3907456833d37c06b74bc937a595c9fb6dd3f"
       ],
       "verification_failures": {
-        "KQ-001": [
-          "input is missing or stale: tools/program/compile_status.py",
-          "input is missing or stale: tools/program/execution_authority.py",
-          "input is missing or stale: tools/program/generate_checkpoint.py"
-        ],
-        "KQ-002": [
-          "input is missing or stale: tools/program/compile_status.py",
-          "input is missing or stale: tools/program/execution_authority.py",
-          "input is missing or stale: tools/program/generate_checkpoint.py"
-        ],
-        "KQ-003": [
-          "input is missing or stale: tools/program/compile_status.py",
-          "input is missing or stale: tools/program/execution_authority.py",
-          "input is missing or stale: tools/program/generate_checkpoint.py"
-        ],
-        "KQ-004": [
-          "input is missing or stale: tools/program/compile_status.py",
-          "input is missing or stale: tools/program/execution_authority.py",
-          "input is missing or stale: tools/program/generate_checkpoint.py"
-        ],
-        "KQ-005": [
-          "input is missing or stale: tools/program/compile_status.py",
-          "input is missing or stale: tools/program/execution_authority.py",
-          "input is missing or stale: tools/program/generate_checkpoint.py"
-        ],
-        "KQ-006": [
-          "input is missing or stale: tools/program/compile_status.py",
-          "input is missing or stale: tools/program/execution_authority.py",
-          "input is missing or stale: tools/program/generate_checkpoint.py"
-        ],
-        "KQ-007": [
-          "input is missing or stale: tools/program/compile_status.py",
-          "input is missing or stale: tools/program/execution_authority.py",
-          "input is missing or stale: tools/program/generate_checkpoint.py"
-        ],
-        "KQ-008": [
-          "input is missing or stale: tools/program/compile_status.py",
-          "input is missing or stale: tools/program/execution_authority.py",
-          "input is missing or stale: tools/program/generate_checkpoint.py"
-        ],
-        "KQ-009": [
-          "input is missing or stale: tools/program/compile_status.py",
-          "input is missing or stale: tools/program/execution_authority.py",
-          "input is missing or stale: tools/program/generate_checkpoint.py"
-        ],
-        "KQ-010": [
-          "input is missing or stale: tools/program/compile_status.py",
-          "input is missing or stale: tools/program/execution_authority.py",
-          "input is missing or stale: tools/program/generate_checkpoint.py"
-        ],
-        "KQ-011": [
-          "input is missing or stale: tools/program/compile_status.py",
-          "input is missing or stale: tools/program/execution_authority.py",
-          "input is missing or stale: tools/program/generate_checkpoint.py"
-        ],
-        "KQ-012": [
-          "input is missing or stale: tools/program/compile_status.py",
-          "input is missing or stale: tools/program/execution_authority.py",
-          "input is missing or stale: tools/program/generate_checkpoint.py"
-        ],
-        "KQ-013": [
-          "input is missing or stale: tools/program/compile_status.py",
-          "input is missing or stale: tools/program/execution_authority.py",
-          "input is missing or stale: tools/program/generate_checkpoint.py"
-        ],
         "KQ-014": [
           "input is missing or stale: tools/program/compile_status.py",
           "input is missing or stale: tools/program/execution_authority.py",
@@ -303,9 +233,16 @@
       "rule": "ReleaseEligible requires GATE_PASS; no blocked, failed, skipped, or missing outcome can satisfy it"
     },
     "replan_summary": {
-      "committed_wave_ready_ids": [],
+      "committed_wave_ready_ids": [
+        "KQ-018",
+        "KQ-026"
+      ],
       "dependency_ready_ids": [
-        "KQ-001"
+        "KQ-013",
+        "KQ-014",
+        "KQ-018",
+        "KQ-026",
+        "KQ-056"
       ],
       "recorded_inflection_count": 0,
       "roadmap_changes": []
@@ -327,6 +264,7 @@
       "docs/status/evidence/KQ-001/KQ-001-197c931fd0f4.json": "1d99b6dad8abe317852e632201ae178dae82718aada3112b18c0e27c01fa43d8",
       "docs/status/evidence/KQ-001/KQ-001-1fd94b292102.json": "8eb045994e9a4960edb2ad8992e633dd48bdb4695ada01d709e9cf5d78d1f1d0",
       "docs/status/evidence/KQ-001/KQ-001-505c7511f9bc.json": "46033091ffe560874bcef28258b3f4ec0b1e657710beab6cc1dcdb1c1a2884ff",
+      "docs/status/evidence/KQ-001/KQ-001-5993764d4ca3.json": "b67493c20fa88114a4e1c650aae059f1d14c5a0423b8beb1e3bbbc83cb0c8eb6",
       "docs/status/evidence/KQ-001/KQ-001-5993a6d48a3f.json": "d2209d4e7d2075796e23194e0c0af0702533c589e2357ced43d7dce8e5edd760",
       "docs/status/evidence/KQ-001/KQ-001-6c6cc25d1328.json": "ce94b44f3d8121031e9c63bdef3c1eef57412e4c426e477ff4b7a517086e94c6",
       "docs/status/evidence/KQ-001/KQ-001-a11f42de082e.json": "8ea355d19ef6ded9a7982c9e29dc0ab6c474dd2bdae245b06cf6cdfde71bc7b0",
@@ -336,6 +274,7 @@
       "docs/status/evidence/KQ-002/KQ-002-197c931fd0f4.json": "3d2a106cd37d64056e5ef2ed07e2fb2d04e276c4d1f2867949dca9feff3057f8",
       "docs/status/evidence/KQ-002/KQ-002-1fd94b292102.json": "9b579ca5641b2796c409dc5b3e8697471cf333a20b9109faed826e8c4671e5f6",
       "docs/status/evidence/KQ-002/KQ-002-505c7511f9bc.json": "beddf0c0bdc2e7f5b46fbe7b16f688caeb70a975a4e2775056dba89629bd718a",
+      "docs/status/evidence/KQ-002/KQ-002-5993764d4ca3.json": "1ab18a1c449d0bd488a17211b2d0976064096ff1f1fa7b65e3019a350f24038c",
       "docs/status/evidence/KQ-002/KQ-002-5993a6d48a3f.json": "c11253a7295bfec11b0ae5d14e52b9310b31a92d069e139664f8304b5c82a418",
       "docs/status/evidence/KQ-002/KQ-002-6c6cc25d1328.json": "a3fd6015e145fe09931c3f21a532428fc0edd6afdd6d4574ea2e767f07f9b752",
       "docs/status/evidence/KQ-002/KQ-002-a11f42de082e.json": "db315fb9fdd9fbb3f00940806555e53be33e923dacd9a880763fd21f6daa7d68",
@@ -345,6 +284,7 @@
       "docs/status/evidence/KQ-003/KQ-003-197c931fd0f4.json": "6ec923a260f73ee3b8041bd286b8b6629d172a8dc60e3d6cebddce5286a3aeeb",
       "docs/status/evidence/KQ-003/KQ-003-1fd94b292102.json": "e191b30a91bbf149385ba0cf885756e783633c27d45a063770237ecab977152c",
       "docs/status/evidence/KQ-003/KQ-003-505c7511f9bc.json": "8b8540e2a1b57b3dd5469e4f95eb6d5ddcfbdd0398c3b2efc812472d8d0913d5",
+      "docs/status/evidence/KQ-003/KQ-003-5993764d4ca3.json": "4937e2df8901158e3b8ee84bca8334e85d58c0026c866b4999d7223ce96f8f50",
       "docs/status/evidence/KQ-003/KQ-003-5993a6d48a3f.json": "6d7d39d2ee7265f272787248da904ea87a837bb15e9423c951a3fdf7eba94a43",
       "docs/status/evidence/KQ-003/KQ-003-6c6cc25d1328.json": "ae5e7618b8a994dce39c8059f7e744ccbec790e51608029105b8cce0ae5a8c2d",
       "docs/status/evidence/KQ-003/KQ-003-a11f42de082e.json": "87a59a015093240aed23be2b1d230ea63d15d5c39340f98b893f0f56b12b7882",
@@ -354,6 +294,7 @@
       "docs/status/evidence/KQ-004/KQ-004-197c931fd0f4.json": "c94a7ce721672c8ff9d94092fbac40b1133f3b3e0c6cceb91c9bb4e763588a1e",
       "docs/status/evidence/KQ-004/KQ-004-1fd94b292102.json": "d7737c3f67b404265df6b585d5b798ab4bb187888c04da7226a51f4d7e4fb207",
       "docs/status/evidence/KQ-004/KQ-004-505c7511f9bc.json": "a35ba8f9c768b4b140d05b38c233544206849d3e4e754ac19b9d8fc3379f1015",
+      "docs/status/evidence/KQ-004/KQ-004-5993764d4ca3.json": "142a0342884bc6cd9213f5e1f17f0e3c18b6b4380166803d6ef8e20500a73b83",
       "docs/status/evidence/KQ-004/KQ-004-5993a6d48a3f.json": "1737abae6d8f25496d35921113f57cca4a2915af52c23583c3e3060bc4681171",
       "docs/status/evidence/KQ-004/KQ-004-6c6cc25d1328.json": "d5de756fadd67868ecbdeb6d2ebfc514a528bebd620a87c1db8be93c7da5b165",
       "docs/status/evidence/KQ-004/KQ-004-a11f42de082e.json": "1798e7f3796dd1e6797cbbd9d7be9c84d979ffc1b707f5e8ddb17da175ae363b",
@@ -363,6 +304,7 @@
       "docs/status/evidence/KQ-005/KQ-005-197c931fd0f4.json": "497f928537eff6ea545eb496bb03c06c446e53b33109ebb343a1b7c3c052300b",
       "docs/status/evidence/KQ-005/KQ-005-1fd94b292102.json": "9940256170983d1bd7774b6ec1a20cedf158fdff4b3e74a479b0a0a38e01077c",
       "docs/status/evidence/KQ-005/KQ-005-505c7511f9bc.json": "b5fd347ac9101749cefda8b2d6328ba9fe404dcb5a7398a8e4a32ff6e74a992c",
+      "docs/status/evidence/KQ-005/KQ-005-5993764d4ca3.json": "15e6a72a6b2be3e28c799a21759906679c6186c68786e496c021a9f43a57f046",
       "docs/status/evidence/KQ-005/KQ-005-5993a6d48a3f.json": "8be13608678a382d423bf2dca628f116f91aba96923da8ef094086f6532b4d76",
       "docs/status/evidence/KQ-005/KQ-005-6c6cc25d1328.json": "6ff30aa6a676b23d599e8b91399557faceca4bfd3e6de7d32e6bb1dbee0884bc",
       "docs/status/evidence/KQ-005/KQ-005-a11f42de082e.json": "2e155f8b5f4984ab5e41e7f8482a6bbc901990a7e036dee3557a5590a48dccee",
@@ -372,6 +314,7 @@
       "docs/status/evidence/KQ-006/KQ-006-197c931fd0f4.json": "12df7ed933961e71f8e8b1f092de27c7259c3141c7e983bd4012bbcfae85d523",
       "docs/status/evidence/KQ-006/KQ-006-1fd94b292102.json": "a1c84f0ee7cfccd16a32b60773de4d78635fade9a9d5718873015b2d840f7414",
       "docs/status/evidence/KQ-006/KQ-006-505c7511f9bc.json": "695774b448267843925aa1af6aa28c81a3c583c26e3432d74b49abfef2cd4258",
+      "docs/status/evidence/KQ-006/KQ-006-5993764d4ca3.json": "daa14386d5f52ac8efad7c60476233d733a3ca89e34622e3e3591a2297c809ca",
       "docs/status/evidence/KQ-006/KQ-006-5993a6d48a3f.json": "6b55c3c914f4208072fb986398c9e91dfa5c39d69035700bdb196a380bbe58a1",
       "docs/status/evidence/KQ-006/KQ-006-6c6cc25d1328.json": "e20f58e8582240939f1259bba1fa50e2c2d9b25b7ec216fe6585d5f3fffbc84e",
       "docs/status/evidence/KQ-006/KQ-006-a11f42de082e.json": "7d29b8f2cfcc5af5461a09f9e6f0ab9f6979da3845ce148418de9effb6050ab6",
@@ -381,6 +324,7 @@
       "docs/status/evidence/KQ-007/KQ-007-197c931fd0f4.json": "d25c74362b71ab8e538d2e18fd4f8d38936e34c12d29cc75482b89721ca931d1",
       "docs/status/evidence/KQ-007/KQ-007-1fd94b292102.json": "d5b4ea0a4351cd2f1f70052ef960df303be1b8a01eff6fbbb55127ad2889dc6c",
       "docs/status/evidence/KQ-007/KQ-007-505c7511f9bc.json": "41c3aace1bd12c3d7c8635bc75e598f8464b893a5da88f71692e88e77453b135",
+      "docs/status/evidence/KQ-007/KQ-007-5993764d4ca3.json": "222862d77dc5972860cfa5070856a77b7e69454dd3e0422e84915edaa672ed1d",
       "docs/status/evidence/KQ-007/KQ-007-5993a6d48a3f.json": "5291c548fd1963816ed267a5382391f79eff37cdd11bddfb1a05b5d328d6d9cc",
       "docs/status/evidence/KQ-007/KQ-007-6c6cc25d1328.json": "0f765014dbcbf090df7a86e55a156d98f8a9a3e2e292a915051cbbc8ef9a950c",
       "docs/status/evidence/KQ-007/KQ-007-a11f42de082e.json": "89c65d60231bb0dc39626362f0704d33a9487d708a3334731790736dec4855c5",
@@ -390,6 +334,7 @@
       "docs/status/evidence/KQ-008/KQ-008-197c931fd0f4.json": "4d754f715375c18043ab952cec5ac247c2d805aa6dfa884febc949637c965171",
       "docs/status/evidence/KQ-008/KQ-008-1fd94b292102.json": "6e20f0947f0cd2a35f5c5dba1d043469ad5e3c70c683c593133d4615bc9050c0",
       "docs/status/evidence/KQ-008/KQ-008-505c7511f9bc.json": "d5bf159b3f868d72fa93dab0dba80f1e58a48159c0bc80d1b5b21472cc0c47ed",
+      "docs/status/evidence/KQ-008/KQ-008-5993764d4ca3.json": "3012ac106ce7ffe3cacd5f0980de79dc06a76ffa00e4f4ba568cd993b189a7a8",
       "docs/status/evidence/KQ-008/KQ-008-5993a6d48a3f.json": "4835bf2b18bd0a3fc68452468d3326d74e185d3e5c70d3527872129bf9734513",
       "docs/status/evidence/KQ-008/KQ-008-6c6cc25d1328.json": "fb0c72e68665efd6b19cc0fdd9a3aeffdb132f9ceb8a24711e77917054174f10",
       "docs/status/evidence/KQ-008/KQ-008-a11f42de082e.json": "fda69a0858f79b074806f3d1c84efedda11c5316ac28cacf114b52730be89697",
@@ -399,6 +344,7 @@
       "docs/status/evidence/KQ-009/KQ-009-197c931fd0f4.json": "9310764614076cd0c91660933f278f6e30026a3628ad0907eab800c5d6ec52bb",
       "docs/status/evidence/KQ-009/KQ-009-1fd94b292102.json": "1e4f82ab251f0f08dccad9a881ef5595c23276cea609ce6dffa4c00fe56aeb66",
       "docs/status/evidence/KQ-009/KQ-009-505c7511f9bc.json": "fdc1cc6f63a136b6bdc851ef30307cbfb49e0342b10585ea068f5eddf90ec8a9",
+      "docs/status/evidence/KQ-009/KQ-009-5993764d4ca3.json": "eb82711e66a60339b9eaf18a43136a3711e2f4ad2d429c8ff8808b83db8c459d",
       "docs/status/evidence/KQ-009/KQ-009-6c6cc25d1328.json": "a2299cc1c2bf1822000dee61741c7c33d364efa8ef3f85ac436ca95428be96e4",
       "docs/status/evidence/KQ-009/KQ-009-a11f42de082e.json": "951c6a8242e68a3f521cbaed3217ce4eaf87c9d787b5f2ad5da59cb7dde378e1",
       "docs/status/evidence/KQ-009/KQ-009-ffa390745683.json": "9c78a372c4ac65ed34fd79c643c832738d88b227c4350440906ab5cca2e09cf2",
@@ -407,6 +353,7 @@
       "docs/status/evidence/KQ-010/KQ-010-197c931fd0f4.json": "96d2904ddedcb376d079db51bd3e2f680ccf69df479eca76082ed6b5c8eb7a40",
       "docs/status/evidence/KQ-010/KQ-010-1fd94b292102.json": "a4d5af92d7e053e4968a2db107675b5eaf2899a51f8d615f5991a0f520fdbcde",
       "docs/status/evidence/KQ-010/KQ-010-505c7511f9bc.json": "8d98e07b79fa5c7524dee9c6282da5701d5844c1e805cd58c74d18fbbf1a1ca2",
+      "docs/status/evidence/KQ-010/KQ-010-5993764d4ca3.json": "e9481adce40045b5fca3c080e6df9d80cc25bf330314eec0054589d38f7bb5c8",
       "docs/status/evidence/KQ-010/KQ-010-6c6cc25d1328.json": "b24ad5fcb1f999410674e0fb5427c69881ccd629804c4de541761390bce76712",
       "docs/status/evidence/KQ-010/KQ-010-a11f42de082e.json": "2512780e7931e5a6f758b9a6651ba24ce448f19a15e9ab6058040c95d3577f43",
       "docs/status/evidence/KQ-010/KQ-010-ffa390745683.json": "687b1e8a08588a687615ba629f6110d551704f85e1b70ada9886303803ed827b",
@@ -415,6 +362,7 @@
       "docs/status/evidence/KQ-011/KQ-011-197c931fd0f4.json": "b716083ca26cb90d95e276fdd87718d8c0f0df922215688591d9bed607cd51f3",
       "docs/status/evidence/KQ-011/KQ-011-1fd94b292102.json": "6c1b2851853a7f868d44e5d324c6316235fda9b6c1bf7a12f1d5ade6b91ebd4e",
       "docs/status/evidence/KQ-011/KQ-011-505c7511f9bc.json": "87c8734c149cd040de11fab53f63de6a330042a1935f5041edbfa2f27245e6d4",
+      "docs/status/evidence/KQ-011/KQ-011-5993764d4ca3.json": "52a2f7da10ba85d9589a2b14c390c561e56057ce5fd3c6dd8b554ec75a26e863",
       "docs/status/evidence/KQ-011/KQ-011-6c6cc25d1328.json": "9c0d733379bf9eecb80b6e66a5576f8db3ac7f31c63483900a72899be0299d4f",
       "docs/status/evidence/KQ-011/KQ-011-a11f42de082e.json": "ddd5ff1320085534eb163c6501eeca803ce4dbb782b2521ac561ed026d2a0451",
       "docs/status/evidence/KQ-011/KQ-011-ffa390745683.json": "31ecb57d936a280ff4a9924b36f3bba4397903e85149966d31c6d4fd83d74895",
@@ -423,6 +371,7 @@
       "docs/status/evidence/KQ-012/KQ-012-197c931fd0f4.json": "e5a46070d2c694d925f22d8dc65650b94c9f4aca9c821c56df8c2e67d7621395",
       "docs/status/evidence/KQ-012/KQ-012-1fd94b292102.json": "838416cdf939a541147e48b6d89e623d57b8996ed23f4a789e3c653e43403427",
       "docs/status/evidence/KQ-012/KQ-012-505c7511f9bc.json": "0767015b47da5ce4a317e524fff0c12d0276c3d74b247bc6da777342c4d4a8ca",
+      "docs/status/evidence/KQ-012/KQ-012-5993764d4ca3.json": "e6db33bab06be9c32a391231fd1e553129aa1b9a7bfb767fa2bd7c82dd960ee5",
       "docs/status/evidence/KQ-012/KQ-012-6c6cc25d1328.json": "55fee09bca0784773494f7d98e603864627fdeec966145959b792a0e0ae4288e",
       "docs/status/evidence/KQ-012/KQ-012-a11f42de082e.json": "50f93cb6440066d44afa0e2629a5036d8cbce48f2abcbec02438456604c3fd02",
       "docs/status/evidence/KQ-012/KQ-012-ffa390745683.json": "dc0b6760b5e5e56cdda86b5301829bce7b4aa27ba252a74f2c17561413b23c16",
@@ -453,8 +402,8 @@
       "docs/status/evidence/KQ-015/KQ-015-ff41350e93de.json": "1252cee6083cead25ca2ddd64a5fcf1f5b83c71bc338e76675d858764389e363",
       "docs/status/evidence/KQ-018/KQ-018-2a52f5d84ab3.json": "0931b463e098c84738a6042569375d88d7f2357938c872734af4f405db09106f",
       "docs/status/evidence/KQ-018/KQ-018-458af053b1c9.json": "c8c1786b98d47d7947265459c788b39f3f5874c12b5a608a7df66342409c0049",
-      "docs/status/evidence_validity.json": "8e9d4cc9820024af3323a54a5abbcdad8ca5d89a5209443a5a55a413d128e4c6",
-      "docs/status/evidence_validity_events.ndjson": "a61ed751f6dded508173d0eabb494c4d8203f6b7d43bc26cb246e3e800aa0501",
+      "docs/status/evidence_validity.json": "7b5b963f80bc05a4ec3641ae3a75a73c68bb823a1b74d5bf85fe198d9f66699e",
+      "docs/status/evidence_validity_events.ndjson": "3e00fd9feba34453afb6c52a182ed79e4cf70fe8b0076e920ba7b87a472bda77",
       "docs/status/milestones/KQ-001.json": "7e3058ae976e5683cc3feabc41a115dedd91f66e221747469803a5f2b1d147c6",
       "docs/status/milestones/KQ-002.json": "7f93c5d052ef6acbd35e977c800e2bb79e9e656702d626be1fc6b6c4ce6955d5",
       "docs/status/milestones/KQ-003.json": "fa062f54317050c08b955ba310eab44bc82bb83f3f53a95104ff4695c69acc39",
@@ -471,7 +420,7 @@
       "docs/status/milestones/KQ-014.json": "1d29dbaca182957965eb19120b54274df2cd6789a27cae790cea2245d53d3f59",
       "docs/status/milestones/KQ-015.json": "8b73d40dfcca7e0ebc617cde3164dbb9a05ffd03bd58e55c35662ca33ce75764",
       "docs/status/milestones/KQ-018.json": "c8c1786b98d47d7947265459c788b39f3f5874c12b5a608a7df66342409c0049",
-      "docs/status/program_status.json": "3bc1c43baa6125790435ebbb043fa41726512548121166abb7ac2a3403373dd3",
+      "docs/status/program_status.json": "3e8cd08d46480dfc4b3aeb61c226fc7666ac3383b0c1f3f73d1af8929b9a3759",
       "docs/validation/protocol_validation_registry.yaml": "b4e6b116d36b7213c7257c00df166e98a6ac02cb475c90a5b23807ece1aa8141"
     },
     "triggers": [
@@ -508,19 +457,29 @@
       ]
     },
     "milestones": {
-      "allowed_executable_ids": [],
-      "committed_wave_ready_ids": [],
+      "allowed_executable_ids": [
+        "KQ-018",
+        "KQ-026"
+      ],
+      "committed_wave_ready_ids": [
+        "KQ-018",
+        "KQ-026"
+      ],
       "dependency_ready_ids": [
-        "KQ-001"
+        "KQ-013",
+        "KQ-014",
+        "KQ-018",
+        "KQ-026",
+        "KQ-056"
       ],
       "evidence_validity_counts": {
-        "Current": 0,
+        "Current": 12,
         "Invalidated": 0,
         "Retired": 0,
-        "ReverificationRequired": 16,
+        "ReverificationRequired": 4,
         "Superseded": 0
       },
-      "next_executable_id": null,
+      "next_executable_id": "KQ-018",
       "resource_blocked": {
         "KQ-051": [
           "RES-RATER"
@@ -697,147 +656,105 @@
       "scheduling_reasons": {
         "KQ-001": {
           "detail": {
+            "milestone_status": "Passed"
+          },
+          "reason": "not_open_for_execution",
+          "state": "blocked"
+        },
+        "KQ-002": {
+          "detail": {
+            "milestone_status": "Passed"
+          },
+          "reason": "not_open_for_execution",
+          "state": "blocked"
+        },
+        "KQ-003": {
+          "detail": {
+            "milestone_status": "Passed"
+          },
+          "reason": "not_open_for_execution",
+          "state": "blocked"
+        },
+        "KQ-004": {
+          "detail": {
+            "milestone_status": "Passed"
+          },
+          "reason": "not_open_for_execution",
+          "state": "blocked"
+        },
+        "KQ-005": {
+          "detail": {
+            "milestone_status": "Passed"
+          },
+          "reason": "not_open_for_execution",
+          "state": "blocked"
+        },
+        "KQ-006": {
+          "detail": {
+            "milestone_status": "Passed"
+          },
+          "reason": "not_open_for_execution",
+          "state": "blocked"
+        },
+        "KQ-007": {
+          "detail": {
+            "milestone_status": "Passed"
+          },
+          "reason": "not_open_for_execution",
+          "state": "blocked"
+        },
+        "KQ-008": {
+          "detail": {
+            "milestone_status": "Passed"
+          },
+          "reason": "not_open_for_execution",
+          "state": "blocked"
+        },
+        "KQ-009": {
+          "detail": {
+            "milestone_status": "Passed"
+          },
+          "reason": "not_open_for_execution",
+          "state": "blocked"
+        },
+        "KQ-010": {
+          "detail": {
+            "milestone_status": "Passed"
+          },
+          "reason": "not_open_for_execution",
+          "state": "blocked"
+        },
+        "KQ-011": {
+          "detail": {
+            "milestone_status": "Passed"
+          },
+          "reason": "not_open_for_execution",
+          "state": "blocked"
+        },
+        "KQ-012": {
+          "detail": {
+            "milestone_status": "Passed"
+          },
+          "reason": "not_open_for_execution",
+          "state": "blocked"
+        },
+        "KQ-013": {
+          "detail": {
             "wave_id": "expanded-10-wave-3"
           },
           "reason": "not_committed_to_active_wave",
           "state": "eligible_but_not_scheduled"
         },
-        "KQ-002": {
-          "detail": {
-            "dependencies": [
-              "KQ-001:status=Pending"
-            ]
-          },
-          "reason": "unmet_dependency",
-          "state": "blocked"
-        },
-        "KQ-003": {
-          "detail": {
-            "dependencies": [
-              "KQ-001:status=Pending",
-              "KQ-002:status=Pending"
-            ]
-          },
-          "reason": "unmet_dependency",
-          "state": "blocked"
-        },
-        "KQ-004": {
-          "detail": {
-            "dependencies": [
-              "KQ-003:status=Pending"
-            ]
-          },
-          "reason": "unmet_dependency",
-          "state": "blocked"
-        },
-        "KQ-005": {
-          "detail": {
-            "dependencies": [
-              "KQ-004:status=Pending"
-            ]
-          },
-          "reason": "unmet_dependency",
-          "state": "blocked"
-        },
-        "KQ-006": {
-          "detail": {
-            "dependencies": [
-              "KQ-005:status=Pending"
-            ]
-          },
-          "reason": "unmet_dependency",
-          "state": "blocked"
-        },
-        "KQ-007": {
-          "detail": {
-            "dependencies": [
-              "KQ-002:status=Pending",
-              "KQ-004:status=Pending"
-            ]
-          },
-          "reason": "unmet_dependency",
-          "state": "blocked"
-        },
-        "KQ-008": {
-          "detail": {
-            "dependencies": [
-              "KQ-004:status=Pending",
-              "KQ-006:status=Pending"
-            ]
-          },
-          "reason": "unmet_dependency",
-          "state": "blocked"
-        },
-        "KQ-009": {
-          "detail": {
-            "dependencies": [
-              "KQ-004:status=Pending",
-              "KQ-007:status=Pending",
-              "KQ-008:status=Pending"
-            ]
-          },
-          "reason": "unmet_dependency",
-          "state": "blocked"
-        },
-        "KQ-010": {
-          "detail": {
-            "dependencies": [
-              "KQ-003:status=Pending",
-              "KQ-004:status=Pending"
-            ]
-          },
-          "reason": "unmet_dependency",
-          "state": "blocked"
-        },
-        "KQ-011": {
-          "detail": {
-            "dependencies": [
-              "KQ-009:status=Pending"
-            ]
-          },
-          "reason": "unmet_dependency",
-          "state": "blocked"
-        },
-        "KQ-012": {
-          "detail": {
-            "dependencies": [
-              "KQ-008:status=Pending"
-            ]
-          },
-          "reason": "unmet_dependency",
-          "state": "blocked"
-        },
-        "KQ-013": {
-          "detail": {
-            "dependencies": [
-              "KQ-009:status=Pending"
-            ]
-          },
-          "reason": "unmet_dependency",
-          "state": "blocked"
-        },
         "KQ-014": {
           "detail": {
-            "dependencies": [
-              "KQ-004:status=Pending",
-              "KQ-008:status=Pending",
-              "KQ-009:status=Pending"
-            ]
+            "wave_id": "expanded-10-wave-3"
           },
-          "reason": "unmet_dependency",
-          "state": "blocked"
+          "reason": "not_committed_to_active_wave",
+          "state": "eligible_but_not_scheduled"
         },
         "KQ-015": {
           "detail": {
             "dependencies": [
-              "KQ-005:status=Pending",
-              "KQ-006:status=Pending",
-              "KQ-007:status=Pending",
-              "KQ-008:status=Pending",
-              "KQ-009:status=Pending",
-              "KQ-010:status=Pending",
-              "KQ-011:status=Pending",
-              "KQ-012:status=Pending",
               "KQ-013:status=Pending",
               "KQ-014:status=Pending"
             ]
@@ -861,13 +778,11 @@
         },
         "KQ-018": {
           "detail": {
-            "dependencies": [
-              "KQ-001:status=Pending",
-              "KQ-003:status=Pending"
-            ]
+            "sequence": 1,
+            "worker_id": "W2"
           },
-          "reason": "unmet_dependency",
-          "state": "blocked"
+          "reason": "scheduled",
+          "state": "allowed"
         },
         "KQ-019": {
           "detail": {
@@ -937,13 +852,11 @@
         },
         "KQ-026": {
           "detail": {
-            "dependencies": [
-              "KQ-002:status=Pending",
-              "KQ-004:status=Pending"
-            ]
+            "sequence": 1,
+            "worker_id": "W1"
           },
-          "reason": "unmet_dependency",
-          "state": "blocked"
+          "reason": "scheduled",
+          "state": "allowed"
         },
         "KQ-027": {
           "detail": {
@@ -1260,13 +1173,10 @@
         },
         "KQ-056": {
           "detail": {
-            "dependencies": [
-              "KQ-002:status=Pending",
-              "KQ-004:status=Pending"
-            ]
+            "wave_id": "expanded-10-wave-3"
           },
-          "reason": "unmet_dependency",
-          "state": "blocked"
+          "reason": "not_committed_to_active_wave",
+          "state": "eligible_but_not_scheduled"
         },
         "KQ-057": {
           "detail": {
@@ -1298,7 +1208,6 @@
         "KQ-060": {
           "detail": {
             "dependencies": [
-              "KQ-012:status=Pending",
               "KQ-058:status=Pending"
             ]
           },
@@ -1483,7 +1392,6 @@
         "KQ-076": {
           "detail": {
             "dependencies": [
-              "KQ-002:status=Pending",
               "KQ-027:status=Pending",
               "KQ-028:status=Pending"
             ]
@@ -1601,10 +1509,6 @@
         "KQ-086": {
           "detail": {
             "dependencies": [
-              "KQ-002:status=Pending",
-              "KQ-004:status=Pending",
-              "KQ-008:status=Pending",
-              "KQ-012:status=Pending",
               "KQ-027:status=Pending"
             ]
           },
@@ -1714,10 +1618,6 @@
         "KQ-094": {
           "detail": {
             "dependencies": [
-              "KQ-002:status=Pending",
-              "KQ-004:status=Pending",
-              "KQ-008:status=Pending",
-              "KQ-012:status=Pending",
               "KQ-027:status=Pending"
             ]
           },
@@ -1827,10 +1727,6 @@
         "KQ-102": {
           "detail": {
             "dependencies": [
-              "KQ-002:status=Pending",
-              "KQ-004:status=Pending",
-              "KQ-008:status=Pending",
-              "KQ-012:status=Pending",
               "KQ-027:status=Pending"
             ]
           },
@@ -1940,10 +1836,6 @@
         "KQ-110": {
           "detail": {
             "dependencies": [
-              "KQ-002:status=Pending",
-              "KQ-004:status=Pending",
-              "KQ-008:status=Pending",
-              "KQ-012:status=Pending",
               "KQ-027:status=Pending"
             ]
           },
@@ -2053,10 +1945,6 @@
         "KQ-118": {
           "detail": {
             "dependencies": [
-              "KQ-002:status=Pending",
-              "KQ-004:status=Pending",
-              "KQ-008:status=Pending",
-              "KQ-012:status=Pending",
               "KQ-027:status=Pending"
             ]
           },
@@ -2166,10 +2054,6 @@
         "KQ-126": {
           "detail": {
             "dependencies": [
-              "KQ-002:status=Pending",
-              "KQ-004:status=Pending",
-              "KQ-008:status=Pending",
-              "KQ-012:status=Pending",
               "KQ-027:status=Pending"
             ]
           },
@@ -2279,10 +2163,6 @@
         "KQ-134": {
           "detail": {
             "dependencies": [
-              "KQ-002:status=Pending",
-              "KQ-004:status=Pending",
-              "KQ-008:status=Pending",
-              "KQ-012:status=Pending",
               "KQ-027:status=Pending"
             ]
           },
@@ -2392,10 +2272,6 @@
         "KQ-142": {
           "detail": {
             "dependencies": [
-              "KQ-002:status=Pending",
-              "KQ-004:status=Pending",
-              "KQ-008:status=Pending",
-              "KQ-012:status=Pending",
               "KQ-027:status=Pending"
             ]
           },
@@ -2505,10 +2381,6 @@
         "KQ-150": {
           "detail": {
             "dependencies": [
-              "KQ-002:status=Pending",
-              "KQ-004:status=Pending",
-              "KQ-008:status=Pending",
-              "KQ-012:status=Pending",
               "KQ-027:status=Pending"
             ]
           },
@@ -2620,10 +2492,6 @@
         "KQ-158": {
           "detail": {
             "dependencies": [
-              "KQ-002:status=Pending",
-              "KQ-004:status=Pending",
-              "KQ-008:status=Pending",
-              "KQ-012:status=Pending",
               "KQ-027:status=Pending"
             ]
           },
@@ -2872,7 +2740,6 @@
         "KQ-175": {
           "detail": {
             "dependencies": [
-              "KQ-011:status=Pending",
               "KQ-013:status=Pending",
               "KQ-014:status=Pending",
               "KQ-060:status=Pending",
@@ -2893,7 +2760,8 @@
       },
       "status_counts": {
         "BlockedExternal": 3,
-        "Pending": 173
+        "Passed": 12,
+        "Pending": 161
       },
       "total": 176
     },
@@ -2921,7 +2789,7 @@
       "docs/program/artifacts/kq-002.yaml": "636f533ffca7bf54503819e76ed9ed844c75c76be4c5bd653252a2c74018f0b1",
       "docs/program/milestone_registry.yaml": "16f26bb87e5d21e6c938b654ceba250b89ecb6a7779b45bf5272817a6a9d2146",
       "docs/program/resource_registry.yaml": "3df2e425c0c2b23e6e76428229f114fca223bae50630b044543ae6a6a1b29dd5",
-      "docs/status/evidence_validity.json": "8e9d4cc9820024af3323a54a5abbcdad8ca5d89a5209443a5a55a413d128e4c6"
+      "docs/status/evidence_validity.json": "7b5b963f80bc05a4ec3641ae3a75a73c68bb823a1b74d5bf85fe198d9f66699e"
     }
   },
   "schema_version": 1
