@@ -75,7 +75,9 @@
         "KQ-009",
         "KQ-010",
         "KQ-011",
-        "KQ-012"
+        "KQ-012",
+        "KQ-013",
+        "KQ-014"
       ],
       "historically_passed_ids": [
         "KQ-001",
@@ -96,8 +98,6 @@
       ],
       "invalidated_ids": [],
       "reverification_required_ids": [
-        "KQ-013",
-        "KQ-014",
         "KQ-015"
       ]
     },
@@ -118,20 +118,7 @@
       "ff41350e93de753bdb06ece9759716298ca6d35a",
       "ffa3907456833d37c06b74bc937a595c9fb6dd3f"
     ],
-    "verification_failures": {
-      "KQ-014": [
-        "input is missing or stale: docs/program/milestone_schema.yaml",
-        "input is missing or stale: tools/program/program_contract.py"
-      ],
-      "KQ-015": [
-        "milestone contract is stale",
-        "input is missing or stale: docs/program/execution_policy.yaml",
-        "input is missing or stale: docs/program/milestone_registry.yaml",
-        "input is missing or stale: docs/program/milestone_schema.yaml",
-        "input is missing or stale: tests/program/test_status_compiler.py",
-        "input is missing or stale: tools/program/program_contract.py"
-      ]
-    }
+    "verification_failures": {}
   },
   "release_summary": {
     "automatic_production_deploy": false,
@@ -254,22 +241,25 @@
     "docs/status/evidence/KQ-013/KQ-013-197c931fd0f4.json": "1723c59d3872d595f06715d00c5b0b76d46cbe493f1262b1587b7703d2f1ea37",
     "docs/status/evidence/KQ-013/KQ-013-1fd94b292102.json": "522f6f2e9ef8adbaa9f954de44c94e7b5c60392b181d484285751b3d7d695a83",
     "docs/status/evidence/KQ-013/KQ-013-505c7511f9bc.json": "8f6c94f368369a7c37bed822271ec5f4eb517f3745de5aa9b84ba7841f8eb42a",
+    "docs/status/evidence/KQ-013/KQ-013-6c6cc25d1328.json": "3b306bfe5afd90903e886282986348ba15d765662654eb3ba94bcb33484eb5ad",
     "docs/status/evidence/KQ-013/KQ-013-a11f42de082e.json": "71aaaa9313293e101a1ac89b15fcd20ad5aa512c889ccd68d85ec8ce0b868496",
     "docs/status/evidence/KQ-013/KQ-013-ffa390745683.json": "11315dced985f2cbd953bdfb2b5f6cacaccb968d843992cf66a384ea37edca2e",
     "docs/status/evidence/KQ-014/KQ-014-04da1d5fa31a.json": "6d86954c1b50b49b0b2a8db8696b91ba8746493438745227c96e3a953a8bd75a",
     "docs/status/evidence/KQ-014/KQ-014-197c931fd0f4.json": "bb0563082acb5d931d93e3f84b866421321f94d00ed27ca8058675b294a6a083",
     "docs/status/evidence/KQ-014/KQ-014-1fd94b292102.json": "6c90852a1c8ebdf83c42cb0f549b326e0319c7302661e858dddf8e02f6f3ca3d",
     "docs/status/evidence/KQ-014/KQ-014-505c7511f9bc.json": "7cd2c60bb321d0e74ff0416683e490b9a2394869cd446147421dbcabec746c34",
+    "docs/status/evidence/KQ-014/KQ-014-6c6cc25d1328.json": "ffb8398f91a5268f068817511856f859b794e245a4853eaf217b8e88e9702518",
     "docs/status/evidence/KQ-014/KQ-014-a11f42de082e.json": "ad845242855fa822a7ba944258d21d1367d9ceb9dd1ffed5f855f22bdf9048df",
     "docs/status/evidence/KQ-014/KQ-014-d3e25e38b5ae.json": "4102d7d0bff38fbb9c3bad3b3efdd43f9f5068ad2acf22064ca39d8539236da7",
     "docs/status/evidence/KQ-015/KQ-015-22335f5fdcf9.json": "cbe9b99d831e47bbef49a535104a6d486eeb4773890601840f9700f46a3196c2",
     "docs/status/evidence/KQ-015/KQ-015-24bec2e1a634.json": "43cefeb67297b485214b94d7ed52cdb7bf16bf4c148b5b8b67f4129eea1d06dd",
     "docs/status/evidence/KQ-015/KQ-015-4c64a080d49a.json": "c6e217a44ba27db5e04f2ce54e7e3d4bb1d198d29977249d0d0cfaef44891997",
+    "docs/status/evidence/KQ-015/KQ-015-6c6cc25d1328.json": "5fff0649a030fccd131eb2a8162d1bfc6ff65801aad321336a057834eff0e2a2",
     "docs/status/evidence/KQ-015/KQ-015-865c5a49931d.json": "369bd90365102655f08ce4104756eb4038d97963b8e62d4b1a558a7849687ce1",
     "docs/status/evidence/KQ-015/KQ-015-8c5bc6e76a19.json": "df2778835cac9b61dc2aa459fccc46133baecb67f50bd5918942b8519621c8fd",
     "docs/status/evidence/KQ-015/KQ-015-ff41350e93de.json": "1252cee6083cead25ca2ddd64a5fcf1f5b83c71bc338e76675d858764389e363",
-    "docs/status/evidence_validity.json": "27864d6395963ff324199a5585c46ed3e529b912bf1bf4b3cba9f88a19913294",
-    "docs/status/evidence_validity_events.ndjson": "89d0a002cbe201f83ecdf8a149e46ac680eaa10e8d4d1f4d280eaa8f31514ab6",
+    "docs/status/evidence_validity.json": "254e86f582b597381a0a9717149f26046d0273441380fe482932577d2158979b",
+    "docs/status/evidence_validity_events.ndjson": "f3af2e994d3e257033c9a8aa5ee49ee559245ec5d0a9d41cab1fc62705c5652a",
     "docs/status/milestones/KQ-001.json": "7e3058ae976e5683cc3feabc41a115dedd91f66e221747469803a5f2b1d147c6",
     "docs/status/milestones/KQ-002.json": "7f93c5d052ef6acbd35e977c800e2bb79e9e656702d626be1fc6b6c4ce6955d5",
     "docs/status/milestones/KQ-003.json": "fa062f54317050c08b955ba310eab44bc82bb83f3f53a95104ff4695c69acc39",
@@ -285,7 +275,7 @@
     "docs/status/milestones/KQ-013.json": "bdf9e17c2b7d5346837f9afedc6e4e23776c184fbcb060465acab94732e8e86c",
     "docs/status/milestones/KQ-014.json": "1d29dbaca182957965eb19120b54274df2cd6789a27cae790cea2245d53d3f59",
     "docs/status/milestones/KQ-015.json": "8b73d40dfcca7e0ebc617cde3164dbb9a05ffd03bd58e55c35662ca33ce75764",
-    "docs/status/program_status.json": "d4ae3b850d11d4ce75fa783b1b97c594eeb8939ffdf3e5e67c4e2e7e8b53cf32",
+    "docs/status/program_status.json": "a95505e9d45ac33ad8d673494fb29ba86ef5e219408f58bcedc0199f3142a4ab",
     "docs/validation/protocol_validation_registry.yaml": "b4e6b116d36b7213c7257c00df166e98a6ac02cb475c90a5b23807ece1aa8141"
   },
   "triggers": [
