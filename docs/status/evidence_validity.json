@@ -3,94 +3,94 @@
   "schema_version": 1,
   "states": {
     "KQ-001": {
-      "event_id": "VAL-KQ-001-6C6CC25D1328-CURRENT",
-      "evidence_id": "KQ-001-6c6cc25d1328",
+      "event_id": "VAL-KQ-001-17088D5B8D0F-CURRENT",
+      "evidence_id": "KQ-001-17088d5b8d0f",
       "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
       "validity": "Current"
     },
     "KQ-002": {
-      "event_id": "VAL-KQ-002-6C6CC25D1328-CURRENT",
-      "evidence_id": "KQ-002-6c6cc25d1328",
+      "event_id": "VAL-KQ-002-17088D5B8D0F-CURRENT",
+      "evidence_id": "KQ-002-17088d5b8d0f",
       "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
       "validity": "Current"
     },
     "KQ-003": {
-      "event_id": "VAL-KQ-003-6C6CC25D1328-CURRENT",
-      "evidence_id": "KQ-003-6c6cc25d1328",
+      "event_id": "VAL-KQ-003-17088D5B8D0F-CURRENT",
+      "evidence_id": "KQ-003-17088d5b8d0f",
       "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
       "validity": "Current"
     },
     "KQ-004": {
-      "event_id": "VAL-KQ-004-6C6CC25D1328-CURRENT",
-      "evidence_id": "KQ-004-6c6cc25d1328",
+      "event_id": "VAL-KQ-004-17088D5B8D0F-CURRENT",
+      "evidence_id": "KQ-004-17088d5b8d0f",
       "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
       "validity": "Current"
     },
     "KQ-005": {
-      "event_id": "VAL-KQ-005-6C6CC25D1328-CURRENT",
-      "evidence_id": "KQ-005-6c6cc25d1328",
+      "event_id": "VAL-KQ-005-17088D5B8D0F-CURRENT",
+      "evidence_id": "KQ-005-17088d5b8d0f",
       "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
       "validity": "Current"
     },
     "KQ-006": {
-      "event_id": "VAL-KQ-006-6C6CC25D1328-CURRENT",
-      "evidence_id": "KQ-006-6c6cc25d1328",
+      "event_id": "VAL-KQ-006-17088D5B8D0F-CURRENT",
+      "evidence_id": "KQ-006-17088d5b8d0f",
       "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
       "validity": "Current"
     },
     "KQ-007": {
-      "event_id": "VAL-KQ-007-6C6CC25D1328-CURRENT",
-      "evidence_id": "KQ-007-6c6cc25d1328",
+      "event_id": "VAL-KQ-007-17088D5B8D0F-CURRENT",
+      "evidence_id": "KQ-007-17088d5b8d0f",
       "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
       "validity": "Current"
     },
     "KQ-008": {
-      "event_id": "VAL-KQ-008-6C6CC25D1328-CURRENT",
-      "evidence_id": "KQ-008-6c6cc25d1328",
+      "event_id": "VAL-KQ-008-17088D5B8D0F-CURRENT",
+      "evidence_id": "KQ-008-17088d5b8d0f",
       "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
       "validity": "Current"
     },
     "KQ-009": {
-      "event_id": "VAL-KQ-009-6C6CC25D1328-CURRENT",
-      "evidence_id": "KQ-009-6c6cc25d1328",
+      "event_id": "VAL-KQ-009-17088D5B8D0F-CURRENT",
+      "evidence_id": "KQ-009-17088d5b8d0f",
       "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
       "validity": "Current"
     },
     "KQ-010": {
-      "event_id": "VAL-KQ-010-6C6CC25D1328-CURRENT",
-      "evidence_id": "KQ-010-6c6cc25d1328",
+      "event_id": "VAL-KQ-010-17088D5B8D0F-CURRENT",
+      "evidence_id": "KQ-010-17088d5b8d0f",
       "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
       "validity": "Current"
     },
     "KQ-011": {
-      "event_id": "VAL-KQ-011-6C6CC25D1328-CURRENT",
-      "evidence_id": "KQ-011-6c6cc25d1328",
+      "event_id": "VAL-KQ-011-17088D5B8D0F-CURRENT",
+      "evidence_id": "KQ-011-17088d5b8d0f",
       "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
       "validity": "Current"
     },
     "KQ-012": {
-      "event_id": "VAL-KQ-012-6C6CC25D1328-CURRENT",
-      "evidence_id": "KQ-012-6c6cc25d1328",
+      "event_id": "VAL-KQ-012-17088D5B8D0F-CURRENT",
+      "evidence_id": "KQ-012-17088d5b8d0f",
       "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
       "validity": "Current"
     },
     "KQ-013": {
-      "event_id": "VAL-KQ-013-6C6CC25D1328-CURRENT",
+      "event_id": "VAL-KQ-013-REVERIFY-20260728T163516467498Z",
       "evidence_id": "KQ-013-6c6cc25d1328",
-      "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
-      "validity": "Current"
+      "reason": "Previously current evidence no longer matches the live controller scope.",
+      "validity": "ReverificationRequired"
     },
     "KQ-014": {
       "event_id": "VAL-KQ-014-84537473E620-CURRENT",
       "evidence_id": "KQ-014-84537473e620",
       "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
-      "validity": "Current"
+      "validity": "ReverificationRequired"
     },
     "KQ-015": {
       "event_id": "VAL-KQ-015-14E4FF449516-CURRENT",
       "evidence_id": "KQ-015-14e4ff449516",
       "reason": "Evidence schema v2 provenance and all declared milestone checks passed.",
-      "validity": "Current"
+      "validity": "ReverificationRequired"
     }
   },
   "summary": {
@@ -106,15 +106,23 @@
       "KQ-009",
       "KQ-010",
       "KQ-011",
-      "KQ-012",
+      "KQ-012"
+    ],
+    "Invalidated": [],
+    "Retired": [],
+    "ReverificationRequired": [
       "KQ-013",
       "KQ-014",
       "KQ-015"
     ],
-    "Invalidated": [],
-    "Retired": [],
-    "ReverificationRequired": [],
     "Superseded": []
   },
-  "verification_errors": {}
+  "verification_errors": {
+    "KQ-014": [
+      "input is missing or stale: tools/program/run_contract_checks.py"
+    ],
+    "KQ-015": [
+      "input is missing or stale: tools/program/run_contract_checks.py"
+    ]
+  }
 }

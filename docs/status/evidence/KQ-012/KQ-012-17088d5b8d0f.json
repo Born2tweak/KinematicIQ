@@ -1,0 +1,104 @@
+{
+  "all_required_checks_passed": true,
+  "checks": [
+    {
+      "detail": [],
+      "id": "schema",
+      "passed": true
+    },
+    {
+      "detail": [],
+      "id": "semantics",
+      "passed": true
+    },
+    {
+      "detail": {
+        "actual": "Question, exit criteria, sources, synthesis, decision impact",
+        "expected": "Question, exit criteria, sources, synthesis, decision impact"
+      },
+      "id": "registry_owned_outcome",
+      "passed": true
+    },
+    {
+      "detail": "exit_code=0",
+      "id": "research_workflow",
+      "passed": true
+    },
+    {
+      "detail": "exit_code=0",
+      "id": "targeted_contract_checks",
+      "passed": true
+    }
+  ],
+  "commands": {
+    "research_workflow": {
+      "exit_code": 0,
+      "stderr": "",
+      "stdout": "PASS: research registry and orchestration-only fixture satisfy the bounded workflow\n"
+    },
+    "targeted_contract_checks": {
+      "exit_code": 0,
+      "stderr": "",
+      "stdout": "repository-bound schema, semantics, artifact, and declared checks completed"
+    }
+  },
+  "dependency_evidence": {
+    "KQ-008": {
+      "evidence_id": "KQ-008-17088d5b8d0f",
+      "sha256": "5d55f8c22129eb56d3fc8e961c0e7c4cd04ac7fe0661c075cb9c4f8162cc5061"
+    }
+  },
+  "evidence_id": "KQ-012-17088d5b8d0f",
+  "generated_at": "2026-07-28T16:35:14.676695+00:00",
+  "input_hashes": {
+    "docs/program/artifacts/kq-012.yaml": "819d1897bf8e7c47957c2b8fd9219170da23724fd5254e8a8faf93c2f7b08dca",
+    "docs/program/evidence_v2.schema.yaml": "8df93a98ccf22313d473994b3a3ad285f0dfd0b7c8c55eaa5cd43b098a77e445",
+    "docs/program/evidence_validity_event.schema.yaml": "2183f50ebfb112e4826175181080eb1ca721ea85515ae82ee28f031357be113e",
+    "docs/program/milestone_schema.yaml": "d4c2e034fd4faf1e08241df1310c72cda7cf6a7880c5156314d517d8a50a8c9f",
+    "docs/program/predicate_catalog.yaml": "33bbb5548dbbd00aedfa65b04aa6a79fb4877159ab148afcda15ccd2bea721b4",
+    "docs/status/milestones/KQ-008.json": "9ed46821b671bb86228807529e36b5a4be4c62246d450616eef96099ae987cc9",
+    "tools/program/compile_evidence_validity.py": "9f5301b8452978462bd8e669f29d907eeabcba9255a009411222ad1cd4ec8cff",
+    "tools/program/compile_status.py": "36d1fc7a57ae893772bf9c9319e13e096809d0c991622b8b0090351305cf2f22",
+    "tools/program/evidence_integrity.py": "3d479cc7e66012a9befffb8dbc27af58d787d060283fb8b316f2f760224e9099",
+    "tools/program/execution_authority.py": "278091cdb578ea5d2b1601fd4711aeb50439e5b4a38c8051b4dd718ec7ee5618",
+    "tools/program/generate_checkpoint.py": "af044c3b3e333dc604bd83f9695838fe71fda7c19049e98660abd8a34cbc3483",
+    "tools/program/program_contract.py": "ef884017a4a96c73dba98f89b52e4b32802cde0478e62046831f858ee1b202d3",
+    "tools/program/run_contract_checks.py": "55b8a1f62c9bb973ead34df9390f7dadf8f21ebbd17a27e762215bb8ec0f969a",
+    "tools/program/verify_milestone.py": "0c8d70aff4ffcc6bc235b6eebed1a0929a0c9b0f9b9447780b5cefc1d75005e8",
+    "tools/program/verify_research_workflow.py": "97e77578bad640528961b3f0c908411fa96340422431af67ffa6345337abe2b8"
+  },
+  "milestone_contract_sha256": "eefa7236c54b7558a153972b2eb46d38fddbdf10985bbd1b3f623dbb88d964f2",
+  "milestone_id": "KQ-012",
+  "output_hashes": {
+    "docs/program/artifacts/kq-012.yaml": "819d1897bf8e7c47957c2b8fd9219170da23724fd5254e8a8faf93c2f7b08dca"
+  },
+  "schema_version": 2,
+  "scope": {
+    "justification": "The milestone is valid only while its declared inputs, verifier closure, contract artifact, and exercised web surface remain unchanged.",
+    "kind": "affected_paths",
+    "paths": [
+      "docs/program/artifacts/kq-012.yaml",
+      "docs/program/evidence_v2.schema.yaml",
+      "docs/program/evidence_validity_event.schema.yaml",
+      "docs/program/milestone_schema.yaml",
+      "docs/program/predicate_catalog.yaml",
+      "docs/status/milestones/KQ-008.json",
+      "tools/program/compile_evidence_validity.py",
+      "tools/program/compile_status.py",
+      "tools/program/evidence_integrity.py",
+      "tools/program/execution_authority.py",
+      "tools/program/generate_checkpoint.py",
+      "tools/program/program_contract.py",
+      "tools/program/run_contract_checks.py",
+      "tools/program/verify_milestone.py",
+      "tools/program/verify_research_workflow.py"
+    ]
+  },
+  "subject_commit": "17088d5b8d0fadd1c0ffac398900da5bc78dfe5e",
+  "subject_tree": "b25cd08f4fda33c0fd0b6e88ae7c1463dd0c0ef5",
+  "toolchain": {
+    "node": "v24.12.0",
+    "npm": "11.7.0",
+    "python": "3.14.0"
+  }
+}
