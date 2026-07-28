@@ -1,0 +1,46 @@
+schema_version: 1
+milestone_id: KQ-018
+audit: docs/implementation/PHASE_B_LEGACY_SCHEMA_AUDIT.md
+scope: structural
+corpus_required: false
+corpus_rationale: >-
+  The audit reads schema definitions, reader/writer coverage, and migration risk
+  from source. It makes no claim about the contents, accuracy, representativeness,
+  or biomechanical validity of any recording, so it needs no frozen corpus.
+  Dataset parity remains gated on RES-CORPUS through KQ-016, KQ-017, and KQ-176.
+schemas_audited:
+- PoseTape
+- PoseTapeEvidenceV2
+- SessionArtifact
+- StoredSession
+reader_writer_coverage:
+  pose_tape_non_test_modules: 21
+  session_artifact_non_test_modules: 4
+migration_risks:
+- id: R1
+  severity: high
+  finding: createTape never stamps schemaVersion, so ordinary writers emit untagged tapes
+- id: R2
+  severity: high
+  finding: optional schemaVersion makes untagged ambiguous with v1; normalization guesses via ?? 1
+- id: R3
+  severity: high
+  finding: normalizePoseTapeV2 returns tapes without meta.protocolId unstamped and unnormalized
+- id: R4
+  severity: medium
+  finding: a v2-tagged tape without evidence bypasses validatePoseTapeEvidence entirely
+- id: R5
+  severity: medium
+  finding: PoseTape has no readable-version gate equivalent to READABLE_SCHEMA_VERSIONS
+- id: R6
+  severity: low
+  finding: PoseTape uses a closed 1|2 union while session schemas use open number
+consumes:
+  KQ-019: explicit required version discriminator
+  KQ-022: closed readable-version set that refuses unknown versions
+  KQ-023: stamp version at construction, not at normalization
+  KQ-024: treat untagged as distinct from v1; a version tag must not imply validation
+  KQ-025: make transformation-lineage validation unconditional
+assertions:
+- id: KQ-018-OUTCOME
+  actual: Every reader/writer and migration risk is mapped
