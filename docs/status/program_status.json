@@ -24,19 +24,29 @@
     ]
   },
   "milestones": {
-    "allowed_executable_ids": [],
-    "committed_wave_ready_ids": [],
+    "allowed_executable_ids": [
+      "KQ-018",
+      "KQ-026"
+    ],
+    "committed_wave_ready_ids": [
+      "KQ-018",
+      "KQ-026"
+    ],
     "dependency_ready_ids": [
-      "KQ-001"
+      "KQ-013",
+      "KQ-014",
+      "KQ-018",
+      "KQ-026",
+      "KQ-056"
     ],
     "evidence_validity_counts": {
-      "Current": 0,
+      "Current": 12,
       "Invalidated": 0,
       "Retired": 0,
-      "ReverificationRequired": 16,
+      "ReverificationRequired": 4,
       "Superseded": 0
     },
-    "next_executable_id": null,
+    "next_executable_id": "KQ-018",
     "resource_blocked": {
       "KQ-051": [
         "RES-RATER"
@@ -213,147 +223,105 @@
     "scheduling_reasons": {
       "KQ-001": {
         "detail": {
+          "milestone_status": "Passed"
+        },
+        "reason": "not_open_for_execution",
+        "state": "blocked"
+      },
+      "KQ-002": {
+        "detail": {
+          "milestone_status": "Passed"
+        },
+        "reason": "not_open_for_execution",
+        "state": "blocked"
+      },
+      "KQ-003": {
+        "detail": {
+          "milestone_status": "Passed"
+        },
+        "reason": "not_open_for_execution",
+        "state": "blocked"
+      },
+      "KQ-004": {
+        "detail": {
+          "milestone_status": "Passed"
+        },
+        "reason": "not_open_for_execution",
+        "state": "blocked"
+      },
+      "KQ-005": {
+        "detail": {
+          "milestone_status": "Passed"
+        },
+        "reason": "not_open_for_execution",
+        "state": "blocked"
+      },
+      "KQ-006": {
+        "detail": {
+          "milestone_status": "Passed"
+        },
+        "reason": "not_open_for_execution",
+        "state": "blocked"
+      },
+      "KQ-007": {
+        "detail": {
+          "milestone_status": "Passed"
+        },
+        "reason": "not_open_for_execution",
+        "state": "blocked"
+      },
+      "KQ-008": {
+        "detail": {
+          "milestone_status": "Passed"
+        },
+        "reason": "not_open_for_execution",
+        "state": "blocked"
+      },
+      "KQ-009": {
+        "detail": {
+          "milestone_status": "Passed"
+        },
+        "reason": "not_open_for_execution",
+        "state": "blocked"
+      },
+      "KQ-010": {
+        "detail": {
+          "milestone_status": "Passed"
+        },
+        "reason": "not_open_for_execution",
+        "state": "blocked"
+      },
+      "KQ-011": {
+        "detail": {
+          "milestone_status": "Passed"
+        },
+        "reason": "not_open_for_execution",
+        "state": "blocked"
+      },
+      "KQ-012": {
+        "detail": {
+          "milestone_status": "Passed"
+        },
+        "reason": "not_open_for_execution",
+        "state": "blocked"
+      },
+      "KQ-013": {
+        "detail": {
           "wave_id": "expanded-10-wave-3"
         },
         "reason": "not_committed_to_active_wave",
         "state": "eligible_but_not_scheduled"
       },
-      "KQ-002": {
-        "detail": {
-          "dependencies": [
-            "KQ-001:status=Pending"
-          ]
-        },
-        "reason": "unmet_dependency",
-        "state": "blocked"
-      },
-      "KQ-003": {
-        "detail": {
-          "dependencies": [
-            "KQ-001:status=Pending",
-            "KQ-002:status=Pending"
-          ]
-        },
-        "reason": "unmet_dependency",
-        "state": "blocked"
-      },
-      "KQ-004": {
-        "detail": {
-          "dependencies": [
-            "KQ-003:status=Pending"
-          ]
-        },
-        "reason": "unmet_dependency",
-        "state": "blocked"
-      },
-      "KQ-005": {
-        "detail": {
-          "dependencies": [
-            "KQ-004:status=Pending"
-          ]
-        },
-        "reason": "unmet_dependency",
-        "state": "blocked"
-      },
-      "KQ-006": {
-        "detail": {
-          "dependencies": [
-            "KQ-005:status=Pending"
-          ]
-        },
-        "reason": "unmet_dependency",
-        "state": "blocked"
-      },
-      "KQ-007": {
-        "detail": {
-          "dependencies": [
-            "KQ-002:status=Pending",
-            "KQ-004:status=Pending"
-          ]
-        },
-        "reason": "unmet_dependency",
-        "state": "blocked"
-      },
-      "KQ-008": {
-        "detail": {
-          "dependencies": [
-            "KQ-004:status=Pending",
-            "KQ-006:status=Pending"
-          ]
-        },
-        "reason": "unmet_dependency",
-        "state": "blocked"
-      },
-      "KQ-009": {
-        "detail": {
-          "dependencies": [
-            "KQ-004:status=Pending",
-            "KQ-007:status=Pending",
-            "KQ-008:status=Pending"
-          ]
-        },
-        "reason": "unmet_dependency",
-        "state": "blocked"
-      },
-      "KQ-010": {
-        "detail": {
-          "dependencies": [
-            "KQ-003:status=Pending",
-            "KQ-004:status=Pending"
-          ]
-        },
-        "reason": "unmet_dependency",
-        "state": "blocked"
-      },
-      "KQ-011": {
-        "detail": {
-          "dependencies": [
-            "KQ-009:status=Pending"
-          ]
-        },
-        "reason": "unmet_dependency",
-        "state": "blocked"
-      },
-      "KQ-012": {
-        "detail": {
-          "dependencies": [
-            "KQ-008:status=Pending"
-          ]
-        },
-        "reason": "unmet_dependency",
-        "state": "blocked"
-      },
-      "KQ-013": {
-        "detail": {
-          "dependencies": [
-            "KQ-009:status=Pending"
-          ]
-        },
-        "reason": "unmet_dependency",
-        "state": "blocked"
-      },
       "KQ-014": {
         "detail": {
-          "dependencies": [
-            "KQ-004:status=Pending",
-            "KQ-008:status=Pending",
-            "KQ-009:status=Pending"
-          ]
+          "wave_id": "expanded-10-wave-3"
         },
-        "reason": "unmet_dependency",
-        "state": "blocked"
+        "reason": "not_committed_to_active_wave",
+        "state": "eligible_but_not_scheduled"
       },
       "KQ-015": {
         "detail": {
           "dependencies": [
-            "KQ-005:status=Pending",
-            "KQ-006:status=Pending",
-            "KQ-007:status=Pending",
-            "KQ-008:status=Pending",
-            "KQ-009:status=Pending",
-            "KQ-010:status=Pending",
-            "KQ-011:status=Pending",
-            "KQ-012:status=Pending",
             "KQ-013:status=Pending",
             "KQ-014:status=Pending"
           ]
@@ -377,13 +345,11 @@
       },
       "KQ-018": {
         "detail": {
-          "dependencies": [
-            "KQ-001:status=Pending",
-            "KQ-003:status=Pending"
-          ]
+          "sequence": 1,
+          "worker_id": "W2"
         },
-        "reason": "unmet_dependency",
-        "state": "blocked"
+        "reason": "scheduled",
+        "state": "allowed"
       },
       "KQ-019": {
         "detail": {
@@ -453,13 +419,11 @@
       },
       "KQ-026": {
         "detail": {
-          "dependencies": [
-            "KQ-002:status=Pending",
-            "KQ-004:status=Pending"
-          ]
+          "sequence": 1,
+          "worker_id": "W1"
         },
-        "reason": "unmet_dependency",
-        "state": "blocked"
+        "reason": "scheduled",
+        "state": "allowed"
       },
       "KQ-027": {
         "detail": {
@@ -776,13 +740,10 @@
       },
       "KQ-056": {
         "detail": {
-          "dependencies": [
-            "KQ-002:status=Pending",
-            "KQ-004:status=Pending"
-          ]
+          "wave_id": "expanded-10-wave-3"
         },
-        "reason": "unmet_dependency",
-        "state": "blocked"
+        "reason": "not_committed_to_active_wave",
+        "state": "eligible_but_not_scheduled"
       },
       "KQ-057": {
         "detail": {
@@ -814,7 +775,6 @@
       "KQ-060": {
         "detail": {
           "dependencies": [
-            "KQ-012:status=Pending",
             "KQ-058:status=Pending"
           ]
         },
@@ -999,7 +959,6 @@
       "KQ-076": {
         "detail": {
           "dependencies": [
-            "KQ-002:status=Pending",
             "KQ-027:status=Pending",
             "KQ-028:status=Pending"
           ]
@@ -1117,10 +1076,6 @@
       "KQ-086": {
         "detail": {
           "dependencies": [
-            "KQ-002:status=Pending",
-            "KQ-004:status=Pending",
-            "KQ-008:status=Pending",
-            "KQ-012:status=Pending",
             "KQ-027:status=Pending"
           ]
         },
@@ -1230,10 +1185,6 @@
       "KQ-094": {
         "detail": {
           "dependencies": [
-            "KQ-002:status=Pending",
-            "KQ-004:status=Pending",
-            "KQ-008:status=Pending",
-            "KQ-012:status=Pending",
             "KQ-027:status=Pending"
           ]
         },
@@ -1343,10 +1294,6 @@
       "KQ-102": {
         "detail": {
           "dependencies": [
-            "KQ-002:status=Pending",
-            "KQ-004:status=Pending",
-            "KQ-008:status=Pending",
-            "KQ-012:status=Pending",
             "KQ-027:status=Pending"
           ]
         },
@@ -1456,10 +1403,6 @@
       "KQ-110": {
         "detail": {
           "dependencies": [
-            "KQ-002:status=Pending",
-            "KQ-004:status=Pending",
-            "KQ-008:status=Pending",
-            "KQ-012:status=Pending",
             "KQ-027:status=Pending"
           ]
         },
@@ -1569,10 +1512,6 @@
       "KQ-118": {
         "detail": {
           "dependencies": [
-            "KQ-002:status=Pending",
-            "KQ-004:status=Pending",
-            "KQ-008:status=Pending",
-            "KQ-012:status=Pending",
             "KQ-027:status=Pending"
           ]
         },
@@ -1682,10 +1621,6 @@
       "KQ-126": {
         "detail": {
           "dependencies": [
-            "KQ-002:status=Pending",
-            "KQ-004:status=Pending",
-            "KQ-008:status=Pending",
-            "KQ-012:status=Pending",
             "KQ-027:status=Pending"
           ]
         },
@@ -1795,10 +1730,6 @@
       "KQ-134": {
         "detail": {
           "dependencies": [
-            "KQ-002:status=Pending",
-            "KQ-004:status=Pending",
-            "KQ-008:status=Pending",
-            "KQ-012:status=Pending",
             "KQ-027:status=Pending"
           ]
         },
@@ -1908,10 +1839,6 @@
       "KQ-142": {
         "detail": {
           "dependencies": [
-            "KQ-002:status=Pending",
-            "KQ-004:status=Pending",
-            "KQ-008:status=Pending",
-            "KQ-012:status=Pending",
             "KQ-027:status=Pending"
           ]
         },
@@ -2021,10 +1948,6 @@
       "KQ-150": {
         "detail": {
           "dependencies": [
-            "KQ-002:status=Pending",
-            "KQ-004:status=Pending",
-            "KQ-008:status=Pending",
-            "KQ-012:status=Pending",
             "KQ-027:status=Pending"
           ]
         },
@@ -2136,10 +2059,6 @@
       "KQ-158": {
         "detail": {
           "dependencies": [
-            "KQ-002:status=Pending",
-            "KQ-004:status=Pending",
-            "KQ-008:status=Pending",
-            "KQ-012:status=Pending",
             "KQ-027:status=Pending"
           ]
         },
@@ -2388,7 +2307,6 @@
       "KQ-175": {
         "detail": {
           "dependencies": [
-            "KQ-011:status=Pending",
             "KQ-013:status=Pending",
             "KQ-014:status=Pending",
             "KQ-060:status=Pending",
@@ -2409,7 +2327,8 @@
     },
     "status_counts": {
       "BlockedExternal": 3,
-      "Pending": 173
+      "Passed": 12,
+      "Pending": 161
     },
     "total": 176
   },
@@ -2437,6 +2356,6 @@
     "docs/program/artifacts/kq-002.yaml": "636f533ffca7bf54503819e76ed9ed844c75c76be4c5bd653252a2c74018f0b1",
     "docs/program/milestone_registry.yaml": "16f26bb87e5d21e6c938b654ceba250b89ecb6a7779b45bf5272817a6a9d2146",
     "docs/program/resource_registry.yaml": "3df2e425c0c2b23e6e76428229f114fca223bae50630b044543ae6a6a1b29dd5",
-    "docs/status/evidence_validity.json": "8e9d4cc9820024af3323a54a5abbcdad8ca5d89a5209443a5a55a413d128e4c6"
+    "docs/status/evidence_validity.json": "7b5b963f80bc05a4ec3641ae3a75a73c68bb823a1b74d5bf85fe198d9f66699e"
   }
 }

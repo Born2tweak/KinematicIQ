@@ -1,0 +1,116 @@
+{
+  "all_required_checks_passed": true,
+  "checks": [
+    {
+      "detail": [],
+      "id": "schema",
+      "passed": true
+    },
+    {
+      "detail": [],
+      "id": "semantics",
+      "passed": true
+    },
+    {
+      "detail": {
+        "actual": "Select ready high-leverage work without blocking on unrelated humans",
+        "expected": "Select ready high-leverage work without blocking on unrelated humans"
+      },
+      "id": "registry_owned_outcome",
+      "passed": true
+    },
+    {
+      "detail": "exit_code=0",
+      "id": "schedule_contract",
+      "passed": true
+    },
+    {
+      "detail": "exit_code=0",
+      "id": "targeted_contract_checks",
+      "passed": true
+    }
+  ],
+  "commands": {
+    "schedule_contract": {
+      "exit_code": 0,
+      "stderr": "",
+      "stdout": "PASS: verified docs/program/ACTIVE_WAVE.yaml\n"
+    },
+    "targeted_contract_checks": {
+      "exit_code": 0,
+      "stderr": "",
+      "stdout": "repository-bound schema, semantics, artifact, and declared checks completed"
+    }
+  },
+  "dependency_evidence": {
+    "KQ-004": {
+      "evidence_id": "KQ-004-5993764d4ca3",
+      "sha256": "3acfe7b3319faeb7f5722dbe5ead3415497b370968488ceb039f21cac9e1700e"
+    },
+    "KQ-008": {
+      "evidence_id": "KQ-008-5993764d4ca3",
+      "sha256": "e3ea4324de4e569e7d4853a48680ba218274aa94d56f756aba2540d4ce54a03d"
+    },
+    "KQ-009": {
+      "evidence_id": "KQ-009-5993764d4ca3",
+      "sha256": "5241294725c83219936cc228c15ef1f6d46e8685fe32b7175c48b0361a5b3a59"
+    }
+  },
+  "evidence_id": "KQ-014-5993764d4ca3",
+  "generated_at": "2026-07-28T22:55:22.389406+00:00",
+  "input_hashes": {
+    "docs/program/artifacts/kq-014.yaml": "91e637b283568f99fb66de507c410b1ece3a58013ab6ec18df90d6046e6d80ec",
+    "docs/program/evidence_v2.schema.yaml": "8df93a98ccf22313d473994b3a3ad285f0dfd0b7c8c55eaa5cd43b098a77e445",
+    "docs/program/evidence_validity_event.schema.yaml": "2183f50ebfb112e4826175181080eb1ca721ea85515ae82ee28f031357be113e",
+    "docs/program/milestone_schema.yaml": "d4c2e034fd4faf1e08241df1310c72cda7cf6a7880c5156314d517d8a50a8c9f",
+    "docs/program/predicate_catalog.yaml": "33bbb5548dbbd00aedfa65b04aa6a79fb4877159ab148afcda15ccd2bea721b4",
+    "docs/status/milestones/KQ-004.json": "36793959182878f04135cf4c557e6eb17ec104c5128d1f858b9d9cc7d87518c6",
+    "docs/status/milestones/KQ-008.json": "9ed46821b671bb86228807529e36b5a4be4c62246d450616eef96099ae987cc9",
+    "docs/status/milestones/KQ-009.json": "f36f6149dbf3b10ab37b4b3dba703fb9918e759cc9413e4220b01c27ec6e0c4c",
+    "tools/program/compile_evidence_validity.py": "9f5301b8452978462bd8e669f29d907eeabcba9255a009411222ad1cd4ec8cff",
+    "tools/program/compile_status.py": "c4547dec789e12795fb216b955b954f08e1f8d70db6c98d91a03db3c8c640171",
+    "tools/program/evidence_integrity.py": "3d479cc7e66012a9befffb8dbc27af58d787d060283fb8b316f2f760224e9099",
+    "tools/program/execution_authority.py": "d139dac29418fea8fc863ad4273300981587445f5e74ba19aab94370a178a3d1",
+    "tools/program/generate_checkpoint.py": "44c0ec5d950188eb357fe838c476193bd1405d7cf63d407a3b378bc761a9efae",
+    "tools/program/program_contract.py": "ef884017a4a96c73dba98f89b52e4b32802cde0478e62046831f858ee1b202d3",
+    "tools/program/run_contract_checks.py": "55b8a1f62c9bb973ead34df9390f7dadf8f21ebbd17a27e762215bb8ec0f969a",
+    "tools/program/transition_wave.py": "375817f997b109c8a76e18f1e4bab63ebbc88be3cc1957f797dbbb9ee80c831c",
+    "tools/program/verify_milestone.py": "0c8d70aff4ffcc6bc235b6eebed1a0929a0c9b0f9b9447780b5cefc1d75005e8"
+  },
+  "milestone_contract_sha256": "d011d689b267c632c7063169f4b3acbc0dbede645faf23b692438bc89e770feb",
+  "milestone_id": "KQ-014",
+  "output_hashes": {
+    "docs/program/artifacts/kq-014.yaml": "91e637b283568f99fb66de507c410b1ece3a58013ab6ec18df90d6046e6d80ec"
+  },
+  "schema_version": 2,
+  "scope": {
+    "justification": "The milestone is valid only while its declared inputs, verifier closure, contract artifact, and exercised web surface remain unchanged.",
+    "kind": "affected_paths",
+    "paths": [
+      "docs/program/artifacts/kq-014.yaml",
+      "docs/program/evidence_v2.schema.yaml",
+      "docs/program/evidence_validity_event.schema.yaml",
+      "docs/program/milestone_schema.yaml",
+      "docs/program/predicate_catalog.yaml",
+      "docs/status/milestones/KQ-004.json",
+      "docs/status/milestones/KQ-008.json",
+      "docs/status/milestones/KQ-009.json",
+      "tools/program/compile_evidence_validity.py",
+      "tools/program/compile_status.py",
+      "tools/program/evidence_integrity.py",
+      "tools/program/execution_authority.py",
+      "tools/program/generate_checkpoint.py",
+      "tools/program/program_contract.py",
+      "tools/program/run_contract_checks.py",
+      "tools/program/transition_wave.py",
+      "tools/program/verify_milestone.py"
+    ]
+  },
+  "subject_commit": "5993764d4ca31b5b168091237aef0356ce369ad6",
+  "subject_tree": "557b78399c35ab7e0313511d663e7674fbc9ebab",
+  "toolchain": {
+    "node": "v24.12.0",
+    "npm": "11.7.0",
+    "python": "3.14.0"
+  }
+}

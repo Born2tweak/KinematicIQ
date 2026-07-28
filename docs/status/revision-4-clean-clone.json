@@ -11,10 +11,10 @@
         "agent/phase-b-engineering",
         "--single-branch",
         "https://github.com/Born2tweak/KinematicIQ.git",
-        "C:\\Users\\acetu\\AppData\\Local\\Temp\\kinematiciq-clean-clone-jdeerju4\\KinematicIQ"
+        "C:\\Users\\acetu\\AppData\\Local\\Temp\\kinematiciq-clean-clone-at0mtn7z\\KinematicIQ"
       ],
       "exit_code": 0,
-      "stderr": "Cloning into 'C:\\Users\\acetu\\AppData\\Local\\Temp\\kinematiciq-clean-clone-jdeerju4\\KinematicIQ'...\nUpdating files:  89% (816/909)\nUpdating files:  90% (819/909)\nUpdating files:  91% (828/909)\nUpdating files:  92% (837/909)\nUpdating files:  93% (846/909)\nUpdating files:  94% (855/909)\nUpdating files:  95% (864/909)\nUpdating files:  96% (873/909)\nUpdating files:  97% (882/909)\nUpdating files:  98% (891/909)\nUpdating files:  99% (900/909)\nUpdating files: 100% (909/909)\nUpdating files: 100% (909/909), done.\n",
+      "stderr": "Cloning into 'C:\\Users\\acetu\\AppData\\Local\\Temp\\kinematiciq-clean-clone-at0mtn7z\\KinematicIQ'...\n",
       "stdout": ""
     },
     {
@@ -56,8 +56,8 @@
         "-v"
       ],
       "exit_code": 0,
-      "stderr": "test_competing_authority_fails_closed (test_artifact_structure.ArtifactStructureTests.test_competing_authority_fails_closed) ... ok\ntest_repository_layout_passes (test_artifact_structure.ArtifactStructureTests.test_repository_layout_passes) ... ok\ntest_authoritative_manifest_passes (test_authority.AuthorityTests.test_authoritative_manifest_passes) ... ok\ntest_missing_notice_fails_closed (test_authority.AuthorityTests.test_missing_notice_fails_closed) ... ok\ntest_overlap_fails_closed (test_authority.AuthorityTests.test_overlap_fails_closed) ... ok\ntest_blocker_summary_includes_all_milestone_blocker_classes (test_checkpoint_generator.CheckpointGeneratorTests.test_blocker_summary_includes_all_milestone_blocker_classes) ... ok\ntest_checked_in_checkpoint_matches_compiler_when_present (test_checkpoint_generator.CheckpointGeneratorTests.test_checked_in_checkpoint_matches_compiler_when_present) ... ok\ntest_checkpoint_covers_every_required_trigger (test_checkpoint_generator.CheckpointGeneratorTests.test_checkpoint_covers_every_required_trigger) ... ok\ntest_checkpoint_preserves_release_and_public_protocol_invariants (test_checkpoint_generator.CheckpointGeneratorTests.test_checkpoint_preserves_release_and_public_protocol_invariants) ... ok\ntest_push_summary_contains_required_checkpoint_fields (test_checkpoint_generator.CheckpointGeneratorTests.test_push_summary_contains_required_checkpoint_fields) ... ok\ntest_release_requires_explicit_gate_pass_evidence (test_checkpoint_generator.CheckpointGeneratorTests.test_release_requires_explicit_gate_pass_evidence) ... ok\ntest_missing_remote_branch_is_reported_before_cloning (test_clean_clone_gate.CleanCloneOrderingTests.test_missing_remote_branch_is_reported_before_cloning) ... ok\ntest_pushed_subject_passes_the_precondition (test_clean_clone_gate.CleanCloneOrderingTests.test_pushed_subject_passes_the_precondition) ... ok\ntest_unpushed_subject_is_named_an_ordering_failure (test_clean_clone_gate.CleanCloneOrderingTests.test_unpushed_subject_is_named_an_ordering_failure) ... ok\ntest_remove_tree_deletes_and_reports_success (test_clean_clone_gate.CloneCleanupTests.test_remove_tree_deletes_and_reports_success) ... ok\ntest_sweep_removes_stale_siblings_only (test_clean_clone_gate.CloneCleanupTests.test_sweep_removes_stale_siblings_only) ... ok\ntest_undeletable_clone_warns_and_never_raises (test_clean_clone_gate.CloneCleanupTests.test_undeletable_clone_warns_and_never_raises)\nCleanup runs in the gate's finally; raising would fail a passing gate. ... ok\ntest_a_complete_freeze_passes (test_corpus_freeze_gate.CorpusFreezeGateTests.test_a_complete_freeze_passes)\nThe gate must be satisfiable, or it would block the milestone forever. ... ok\ntest_checksum_mismatch_fails (test_corpus_freeze_gate.CorpusFreezeGateTests.test_checksum_mismatch_fails) ... ok\ntest_declared_asset_that_does_not_exist_fails (test_corpus_freeze_gate.CorpusFreezeGateTests.test_declared_asset_that_does_not_exist_fails) ... ok\ntest_duplicate_entry_ids_fail (test_corpus_freeze_gate.CorpusFreezeGateTests.test_duplicate_entry_ids_fail) ... ok\ntest_incomplete_capture_metadata_fails (test_corpus_freeze_gate.CorpusFreezeGateTests.test_incomplete_capture_metadata_fails) ... ok\ntest_manifest_with_no_recordings_is_a_res_corpus_blocker (test_corpus_freeze_gate.CorpusFreezeGateTests.test_manifest_with_no_recordings_is_a_res_corpus_blocker) ... ok\ntest_missing_governance_fails (test_corpus_freeze_gate.CorpusFreezeGateTests.test_missing_governance_fails) ... ok\ntest_missing_license_or_consent_fails (test_corpus_freeze_gate.CorpusFreezeGateTests.test_missing_license_or_consent_fails) ... ok\ntest_missing_manifest_is_a_res_corpus_blocker_not_a_pass (test_corpus_freeze_gate.CorpusFreezeGateTests.test_missing_manifest_is_a_res_corpus_blocker_not_a_pass) ... ok\ntest_protocol_mismatch_fails (test_corpus_freeze_gate.CorpusFreezeGateTests.test_protocol_mismatch_fails) ... ok\ntest_subject_spanning_two_splits_fails (test_corpus_freeze_gate.CorpusFreezeGateTests.test_subject_spanning_two_splits_fails) ... ok\ntest_declared_input_is_required (test_evidence_integrity.EvidenceIntegrityTests.test_declared_input_is_required) ... ok\ntest_directory_scope_contains_only_tracked_content (test_evidence_integrity.EvidenceIntegrityTests.test_directory_scope_contains_only_tracked_content) ... ok\ntest_historical_true_flag_does_not_create_current_validity (test_evidence_integrity.EvidenceIntegrityTests.test_historical_true_flag_does_not_create_current_validity) ... ok\ntest_invalid_current_record_is_demoted (test_evidence_integrity.EvidenceIntegrityTests.test_invalid_current_record_is_demoted) ... ok\ntest_text_hashing_is_line_ending_independent (test_evidence_integrity.EvidenceIntegrityTests.test_text_hashing_is_line_ending_independent) ... ok\ntest_tracked_paths_follow_subject_commit_not_index (test_evidence_integrity.EvidenceIntegrityTests.test_tracked_paths_follow_subject_commit_not_index)\nScope must attest the subject commit, not whatever the index holds. ... ok\ntest_changed_verifier_schema_compiles_a_new_validator (test_evidence_integrity.VerificationCacheTests.test_changed_verifier_schema_compiles_a_new_validator) ... ok\ntest_commit_tree_caches_immutable_names_only (test_evidence_integrity.VerificationCacheTests.test_commit_tree_caches_immutable_names_only) ... ok\ntest_mutated_input_invalidates_the_hash_between_passes (test_evidence_integrity.VerificationCacheTests.test_mutated_input_invalidates_the_hash_between_passes) ... ok\ntest_repeated_hash_inside_one_pass_reads_the_file_once (test_evidence_integrity.VerificationCacheTests.test_repeated_hash_inside_one_pass_reads_the_file_once) ... ok\ntest_declared_branch_is_accepted (test_execution_authority.DeclaredBranchPreconditionTests.test_declared_branch_is_accepted) ... ok\ntest_other_branch_is_refused (test_execution_authority.DeclaredBranchPreconditionTests.test_other_branch_is_refused) ... ok\ntest_corpus_blocked_ids_are_never_committed_to_a_wave (test_execution_authority.ExecutionAuthorityTests.test_corpus_blocked_ids_are_never_committed_to_a_wave)\nKQ-016/017/176 need RES-CORPUS; a wave must not grant them mutation rights. ... ok\ntest_every_exclusion_carries_a_machine_readable_reason (test_execution_authority.ExecutionAuthorityTests.test_every_exclusion_carries_a_machine_readable_reason)\nA milestone left out of the frontier must say which rule excluded it. ... ok\ntest_freed_worker_slot_promotes_the_next_committed_id (test_execution_authority.ExecutionAuthorityTests.test_freed_worker_slot_promotes_the_next_committed_id)\nSerialisation is per worker: KQ-019 waits for W2, not forever. ... ok\ntest_missing_worker_or_capacity_overrun_fails_closed (test_execution_authority.ExecutionAuthorityTests.test_missing_worker_or_capacity_overrun_fails_closed) ... ok\ntest_null_frontier_rejects_all_execution (test_execution_authority.ExecutionAuthorityTests.test_null_frontier_rejects_all_execution) ... ok\ntest_wave_three_is_capacity_feasible_and_assigned (test_execution_authority.ExecutionAuthorityTests.test_wave_three_is_capacity_feasible_and_assigned) ... ok\ntest_worker_frontier_serializes_lane_and_rejects_unslotted (test_execution_authority.ExecutionAuthorityTests.test_worker_frontier_serializes_lane_and_rejects_unslotted) ... ok\ntest_all_ten_normative_fixtures (test_execution_fixtures.ExecutionFixtureTests.test_all_ten_normative_fixtures) ... ok\ntest_release_without_gate_pass_is_rejected (test_execution_fixtures.ExecutionFixtureTests.test_release_without_gate_pass_is_rejected) ... ok\ntest_skip_without_complete_decision_metadata_is_rejected (test_execution_fixtures.ExecutionFixtureTests.test_skip_without_complete_decision_metadata_is_rejected) ... ok\ntest_authoritative_policy_passes (test_execution_policy.ExecutionPolicyTests.test_authoritative_policy_passes) ... ok\ntest_direct_master_or_deploy_authority_fails_closed (test_execution_policy.ExecutionPolicyTests.test_direct_master_or_deploy_authority_fails_closed) ... ok\ntest_interruption_expansion_fails_closed (test_execution_policy.ExecutionPolicyTests.test_interruption_expansion_fails_closed) ... ok\ntest_locked_evidence_retry_and_global_pause_fail_closed (test_execution_policy.ExecutionPolicyTests.test_locked_evidence_retry_and_global_pause_fail_closed) ... ok\ntest_partial_write_leaves_no_file (test_finalize_milestone.AtomicWriteTests.test_partial_write_leaves_no_file)\nA serialization failure must not leave a truncated artifact behind. ... ok\ntest_write_replaces_existing_atomically (test_finalize_milestone.AtomicWriteTests.test_write_replaces_existing_atomically) ... ok\ntest_dependency_drift_blocks_closure (test_finalize_milestone.FinalizationGuardTests.test_dependency_drift_blocks_closure)\nA dependency whose evidence went stale must block the dependent. ... ok\ntest_dependency_with_no_evidence_blocks_closure (test_finalize_milestone.FinalizationGuardTests.test_dependency_with_no_evidence_blocks_closure) ... ok\ntest_duplicate_run_appends_no_second_event (test_finalize_milestone.FinalizationGuardTests.test_duplicate_run_appends_no_second_event)\nIdempotence: closing an already-current milestone writes no new event. ... ok\ntest_failed_checks_cannot_be_closed (test_finalize_milestone.FinalizationGuardTests.test_failed_checks_cannot_be_closed) ... ok\ntest_interrupted_run_recovers_without_duplicate_event (test_finalize_milestone.FinalizationGuardTests.test_interrupted_run_recovers_without_duplicate_event)\nA crash after the append must not double-append on the retry. ... ok\ntest_invalid_record_cannot_be_closed (test_finalize_milestone.FinalizationGuardTests.test_invalid_record_cannot_be_closed)\nA record that no longer verifies against its declared inputs is refused. ... ok\ntest_missing_record_fails_closed (test_finalize_milestone.FinalizationGuardTests.test_missing_record_fails_closed) ... ok\ntest_projection_not_current_after_write_fails_closed (test_finalize_milestone.FinalizationGuardTests.test_projection_not_current_after_write_fails_closed)\nIf the claimed transition did not happen, say so instead of passing. ... ok\ntest_projection_pointing_at_another_record_fails_closed (test_finalize_milestone.FinalizationGuardTests.test_projection_pointing_at_another_record_fails_closed)\nClosure must not accept a projection that names different evidence. ... ok\ntest_stale_subject_commit_fails_closed (test_finalize_milestone.FinalizationGuardTests.test_stale_subject_commit_fails_closed)\nEvidence from an older commit must not close the current tree. ... ok\ntest_authoritative_history_import_passes (test_history_import.HistoryImportTests.test_authoritative_history_import_passes) ... ok\ntest_current_proof_claim_fails_closed (test_history_import.HistoryImportTests.test_current_proof_claim_fails_closed) ... ok\ntest_missing_special_id_fails_closed (test_history_import.HistoryImportTests.test_missing_special_id_fails_closed) ... ok\ntest_not_executed_legacy_gap_cannot_be_promoted (test_history_import.HistoryImportTests.test_not_executed_legacy_gap_cannot_be_promoted) ... ok\ntest_authoritative_migration_passes (test_id_migration.IdMigrationTests.test_authoritative_migration_passes) ... ok\ntest_unknown_evidence_target_fails_closed (test_id_migration.IdMigrationTests.test_unknown_evidence_target_fails_closed) ... ok\ntest_unlinked_phase4_record_fails_closed (test_id_migration.IdMigrationTests.test_unlinked_phase4_record_fails_closed) ... ok\ntest_acceptance_cannot_reference_undeclared_command (test_program_contract.ProgramContractTests.test_acceptance_cannot_reference_undeclared_command) ... ok\ntest_artifact_and_evidence_bindings_fail_closed (test_program_contract.ProgramContractTests.test_artifact_and_evidence_bindings_fail_closed) ... ok\ntest_authoritative_registry_passes_schema_and_semantics (test_program_contract.ProgramContractTests.test_authoritative_registry_passes_schema_and_semantics) ... ok\ntest_declared_python_verifier_is_hashed_into_evidence (test_program_contract.ProgramContractTests.test_declared_python_verifier_is_hashed_into_evidence) ... ok\ntest_duplicate_verification_ids_fail_closed (test_program_contract.ProgramContractTests.test_duplicate_verification_ids_fail_closed) ... ok\ntest_mandatory_dependency_cannot_accept_skip (test_program_contract.ProgramContractTests.test_mandatory_dependency_cannot_accept_skip) ... ok\ntest_release_outcome_requires_gate_pass_dependency (test_program_contract.ProgramContractTests.test_release_outcome_requires_gate_pass_dependency) ... ok\ntest_skip_requires_declared_policy_and_outcome (test_program_contract.ProgramContractTests.test_skip_requires_declared_policy_and_outcome) ... ok\ntest_unknown_predicate_fails_closed (test_program_contract.ProgramContractTests.test_unknown_predicate_fails_closed) ... ok\ntest_fixture_is_deterministic_and_reopens_completed_seed (test_replan_impact.ReplanImpactTests.test_fixture_is_deterministic_and_reopens_completed_seed) ... ok\ntest_invalid_trigger_type_fails_schema (test_replan_impact.ReplanImpactTests.test_invalid_trigger_type_fails_schema) ... ok\ntest_unknown_seed_fails_closed (test_replan_impact.ReplanImpactTests.test_unknown_seed_fails_closed) ... ok\ntest_empty_canonical_registry_and_fixture_pass (test_research_workflow.ResearchWorkflowTests.test_empty_canonical_registry_and_fixture_pass) ... ok\ntest_fixture_cannot_claim_scientific_evidence (test_research_workflow.ResearchWorkflowTests.test_fixture_cannot_claim_scientific_evidence) ... ok\ntest_missing_exit_criteria_fails_closed (test_research_workflow.ResearchWorkflowTests.test_missing_exit_criteria_fails_closed) ... ok\ntest_cli_regenerates_and_verifies_same_manifest (test_schedule_wave.WaveScheduleTests.test_cli_regenerates_and_verifies_same_manifest) ... ok\ntest_every_id_is_classified_once_and_committed_is_dependency_closed (test_schedule_wave.WaveScheduleTests.test_every_id_is_classified_once_and_committed_is_dependency_closed) ... ok\ntest_manifest_is_deterministic_and_capacity_feasible (test_schedule_wave.WaveScheduleTests.test_manifest_is_deterministic_and_capacity_feasible) ... ok\ntest_verifier_rejects_capacity_and_dependency_corruption (test_schedule_wave.WaveScheduleTests.test_verifier_rejects_capacity_and_dependency_corruption) ... ok\ntest_checked_in_status_matches_compiler_when_present (test_status_compiler.StatusCompilerTests.test_checked_in_status_matches_compiler_when_present) ... ok\ntest_committed_frontier_next_is_first_or_phase_is_complete (test_status_compiler.StatusCompilerTests.test_committed_frontier_next_is_first_or_phase_is_complete) ... ok\ntest_compiled_frontier_preserves_authority_and_availability (test_status_compiler.StatusCompilerTests.test_compiled_frontier_preserves_authority_and_availability) ... ok\ntest_active_metric_orphan_fails_closed (test_traceability_validator.TraceabilityValidatorTests.test_active_metric_orphan_fails_closed) ... ok\ntest_bootstrap_contract_and_bundle_pass (test_traceability_validator.TraceabilityValidatorTests.test_bootstrap_contract_and_bundle_pass) ... ok\ntest_unknown_evidence_target_fails_closed (test_traceability_validator.TraceabilityValidatorTests.test_unknown_evidence_target_fails_closed) ... ok\ntest_wrong_namespace_and_gate_pass_id_fail_closed (test_traceability_validator.TraceabilityValidatorTests.test_wrong_namespace_and_gate_pass_id_fail_closed) ... ok\n\n----------------------------------------------------------------------\nRan 99 tests in 131.016s\n\nOK\n",
-      "stdout": "removed stale clone kinematiciq-clean-clone-stale\nWARN: could not remove C:\\Users\\acetu\\AppData\\Local\\Temp\\tmp5da1uzi6\\kinematiciq-clean-clone-locked; delete it manually\nPASS: generated and verified C:\\Users\\acetu\\AppData\\Local\\Temp\\tmpdhq_zoib\\wave.yaml\nPASS: generated and verified C:\\Users\\acetu\\AppData\\Local\\Temp\\tmpdhq_zoib\\wave.yaml\nPASS: verified C:\\Users\\acetu\\AppData\\Local\\Temp\\tmpdhq_zoib\\wave.yaml\n"
+      "stderr": "test_competing_authority_fails_closed (test_artifact_structure.ArtifactStructureTests.test_competing_authority_fails_closed) ... ok\ntest_repository_layout_passes (test_artifact_structure.ArtifactStructureTests.test_repository_layout_passes) ... ok\ntest_authoritative_manifest_passes (test_authority.AuthorityTests.test_authoritative_manifest_passes) ... ok\ntest_missing_notice_fails_closed (test_authority.AuthorityTests.test_missing_notice_fails_closed) ... ok\ntest_overlap_fails_closed (test_authority.AuthorityTests.test_overlap_fails_closed) ... ok\ntest_blocker_summary_includes_all_milestone_blocker_classes (test_checkpoint_generator.CheckpointGeneratorTests.test_blocker_summary_includes_all_milestone_blocker_classes) ... ok\ntest_checked_in_checkpoint_matches_compiler_when_present (test_checkpoint_generator.CheckpointGeneratorTests.test_checked_in_checkpoint_matches_compiler_when_present) ... ok\ntest_checkpoint_covers_every_required_trigger (test_checkpoint_generator.CheckpointGeneratorTests.test_checkpoint_covers_every_required_trigger) ... ok\ntest_checkpoint_preserves_release_and_public_protocol_invariants (test_checkpoint_generator.CheckpointGeneratorTests.test_checkpoint_preserves_release_and_public_protocol_invariants) ... ok\ntest_push_summary_contains_required_checkpoint_fields (test_checkpoint_generator.CheckpointGeneratorTests.test_push_summary_contains_required_checkpoint_fields) ... ok\ntest_release_requires_explicit_gate_pass_evidence (test_checkpoint_generator.CheckpointGeneratorTests.test_release_requires_explicit_gate_pass_evidence) ... ok\ntest_missing_remote_branch_is_reported_before_cloning (test_clean_clone_gate.CleanCloneOrderingTests.test_missing_remote_branch_is_reported_before_cloning) ... ok\ntest_pushed_subject_passes_the_precondition (test_clean_clone_gate.CleanCloneOrderingTests.test_pushed_subject_passes_the_precondition) ... ok\ntest_unpushed_subject_is_named_an_ordering_failure (test_clean_clone_gate.CleanCloneOrderingTests.test_unpushed_subject_is_named_an_ordering_failure) ... ok\ntest_remove_tree_deletes_and_reports_success (test_clean_clone_gate.CloneCleanupTests.test_remove_tree_deletes_and_reports_success) ... ok\ntest_sweep_removes_stale_siblings_only (test_clean_clone_gate.CloneCleanupTests.test_sweep_removes_stale_siblings_only) ... ok\ntest_undeletable_clone_warns_and_never_raises (test_clean_clone_gate.CloneCleanupTests.test_undeletable_clone_warns_and_never_raises)\nCleanup runs in the gate's finally; raising would fail a passing gate. ... ok\ntest_a_complete_freeze_passes (test_corpus_freeze_gate.CorpusFreezeGateTests.test_a_complete_freeze_passes)\nThe gate must be satisfiable, or it would block the milestone forever. ... ok\ntest_checksum_mismatch_fails (test_corpus_freeze_gate.CorpusFreezeGateTests.test_checksum_mismatch_fails) ... ok\ntest_declared_asset_that_does_not_exist_fails (test_corpus_freeze_gate.CorpusFreezeGateTests.test_declared_asset_that_does_not_exist_fails) ... ok\ntest_duplicate_entry_ids_fail (test_corpus_freeze_gate.CorpusFreezeGateTests.test_duplicate_entry_ids_fail) ... ok\ntest_incomplete_capture_metadata_fails (test_corpus_freeze_gate.CorpusFreezeGateTests.test_incomplete_capture_metadata_fails) ... ok\ntest_manifest_with_no_recordings_is_a_res_corpus_blocker (test_corpus_freeze_gate.CorpusFreezeGateTests.test_manifest_with_no_recordings_is_a_res_corpus_blocker) ... ok\ntest_missing_governance_fails (test_corpus_freeze_gate.CorpusFreezeGateTests.test_missing_governance_fails) ... ok\ntest_missing_license_or_consent_fails (test_corpus_freeze_gate.CorpusFreezeGateTests.test_missing_license_or_consent_fails) ... ok\ntest_missing_manifest_is_a_res_corpus_blocker_not_a_pass (test_corpus_freeze_gate.CorpusFreezeGateTests.test_missing_manifest_is_a_res_corpus_blocker_not_a_pass) ... ok\ntest_protocol_mismatch_fails (test_corpus_freeze_gate.CorpusFreezeGateTests.test_protocol_mismatch_fails) ... ok\ntest_subject_spanning_two_splits_fails (test_corpus_freeze_gate.CorpusFreezeGateTests.test_subject_spanning_two_splits_fails) ... ok\ntest_closing_a_phase_b_milestone_leaves_phase_a_untouched (test_evidence_derived_completion.DerivedCompletionTests.test_closing_a_phase_b_milestone_leaves_phase_a_untouched)\nRequirement 4: a Phase B closure must not revoke Phase A evidence. ... ok\ntest_current_evidence_alone_makes_a_milestone_passed (test_evidence_derived_completion.DerivedCompletionTests.test_current_evidence_alone_makes_a_milestone_passed)\nRequirement 1: closing needs no registry status mutation. ... ok\ntest_declared_passed_without_evidence_is_not_trusted (test_evidence_derived_completion.DerivedCompletionTests.test_declared_passed_without_evidence_is_not_trusted)\nA registry claiming Passed with stale evidence reads as outstanding. ... ok\ntest_intent_statuses_survive_current_evidence (test_evidence_derived_completion.DerivedCompletionTests.test_intent_statuses_survive_current_evidence)\nBlocked/retired/skipped are decisions; evidence must not override them. ... ok\ntest_missing_validity_key_fails_closed (test_evidence_derived_completion.DerivedCompletionTests.test_missing_validity_key_fails_closed) ... ok\ntest_multiple_milestones_finalize_without_weakening_each_other (test_evidence_derived_completion.DerivedCompletionTests.test_multiple_milestones_finalize_without_weakening_each_other)\nRequirement 5: independent closures stay per-milestone. ... ok\ntest_passed_is_the_only_derived_status (test_evidence_derived_completion.DerivedCompletionTests.test_passed_is_the_only_derived_status) ... ok\ntest_registry_declares_no_new_passed_milestones (test_evidence_derived_completion.DerivedCompletionTests.test_registry_declares_no_new_passed_milestones)\nRequirement: the registry stores intent, not completion. ... ok\ntest_tampered_validity_cannot_forge_completion (test_evidence_derived_completion.DerivedCompletionTests.test_tampered_validity_cannot_forge_completion)\nRequirement 7: only the exact 'Current' verdict counts. ... ok\ntest_closure_inputs_exclude_the_registry (test_evidence_derived_completion.RegistryIsNotMutatedByClosureTests.test_closure_inputs_exclude_the_registry)\nThe paths a closure writes must not intersect any contract input. ... ok\ntest_finalization_writes_no_registry_path (test_evidence_derived_completion.RegistryIsNotMutatedByClosureTests.test_finalization_writes_no_registry_path)\nRequirement 2: finalizing must not touch the acceptance contract. ... ok\ntest_declared_input_is_required (test_evidence_integrity.EvidenceIntegrityTests.test_declared_input_is_required) ... ok\ntest_directory_scope_contains_only_tracked_content (test_evidence_integrity.EvidenceIntegrityTests.test_directory_scope_contains_only_tracked_content) ... ok\ntest_historical_true_flag_does_not_create_current_validity (test_evidence_integrity.EvidenceIntegrityTests.test_historical_true_flag_does_not_create_current_validity) ... ok\ntest_invalid_current_record_is_demoted (test_evidence_integrity.EvidenceIntegrityTests.test_invalid_current_record_is_demoted) ... ok\ntest_text_hashing_is_line_ending_independent (test_evidence_integrity.EvidenceIntegrityTests.test_text_hashing_is_line_ending_independent) ... ok\ntest_tracked_paths_follow_subject_commit_not_index (test_evidence_integrity.EvidenceIntegrityTests.test_tracked_paths_follow_subject_commit_not_index)\nScope must attest the subject commit, not whatever the index holds. ... ok\ntest_changed_verifier_schema_compiles_a_new_validator (test_evidence_integrity.VerificationCacheTests.test_changed_verifier_schema_compiles_a_new_validator) ... ok\ntest_commit_tree_caches_immutable_names_only (test_evidence_integrity.VerificationCacheTests.test_commit_tree_caches_immutable_names_only) ... ok\ntest_mutated_input_invalidates_the_hash_between_passes (test_evidence_integrity.VerificationCacheTests.test_mutated_input_invalidates_the_hash_between_passes) ... ok\ntest_repeated_hash_inside_one_pass_reads_the_file_once (test_evidence_integrity.VerificationCacheTests.test_repeated_hash_inside_one_pass_reads_the_file_once) ... ok\ntest_declared_branch_is_accepted (test_execution_authority.DeclaredBranchPreconditionTests.test_declared_branch_is_accepted) ... ok\ntest_other_branch_is_refused (test_execution_authority.DeclaredBranchPreconditionTests.test_other_branch_is_refused) ... ok\ntest_corpus_blocked_ids_are_never_committed_to_a_wave (test_execution_authority.ExecutionAuthorityTests.test_corpus_blocked_ids_are_never_committed_to_a_wave)\nKQ-016/017/176 need RES-CORPUS; a wave must not grant them mutation rights. ... ok\ntest_every_exclusion_carries_a_machine_readable_reason (test_execution_authority.ExecutionAuthorityTests.test_every_exclusion_carries_a_machine_readable_reason)\nA milestone left out of the frontier must say which rule excluded it. ... ok\ntest_freed_worker_slot_promotes_the_next_committed_id (test_execution_authority.ExecutionAuthorityTests.test_freed_worker_slot_promotes_the_next_committed_id)\nSerialisation is per worker: KQ-019 waits for W2, not forever. ... ok\ntest_missing_worker_or_capacity_overrun_fails_closed (test_execution_authority.ExecutionAuthorityTests.test_missing_worker_or_capacity_overrun_fails_closed) ... ok\ntest_null_frontier_rejects_all_execution (test_execution_authority.ExecutionAuthorityTests.test_null_frontier_rejects_all_execution) ... ok\ntest_wave_three_is_capacity_feasible_and_assigned (test_execution_authority.ExecutionAuthorityTests.test_wave_three_is_capacity_feasible_and_assigned) ... ok\ntest_worker_frontier_serializes_lane_and_rejects_unslotted (test_execution_authority.ExecutionAuthorityTests.test_worker_frontier_serializes_lane_and_rejects_unslotted) ... ok\ntest_all_ten_normative_fixtures (test_execution_fixtures.ExecutionFixtureTests.test_all_ten_normative_fixtures) ... ok\ntest_release_without_gate_pass_is_rejected (test_execution_fixtures.ExecutionFixtureTests.test_release_without_gate_pass_is_rejected) ... ok\ntest_skip_without_complete_decision_metadata_is_rejected (test_execution_fixtures.ExecutionFixtureTests.test_skip_without_complete_decision_metadata_is_rejected) ... ok\ntest_authoritative_policy_passes (test_execution_policy.ExecutionPolicyTests.test_authoritative_policy_passes) ... ok\ntest_direct_master_or_deploy_authority_fails_closed (test_execution_policy.ExecutionPolicyTests.test_direct_master_or_deploy_authority_fails_closed) ... ok\ntest_interruption_expansion_fails_closed (test_execution_policy.ExecutionPolicyTests.test_interruption_expansion_fails_closed) ... ok\ntest_locked_evidence_retry_and_global_pause_fail_closed (test_execution_policy.ExecutionPolicyTests.test_locked_evidence_retry_and_global_pause_fail_closed) ... ok\ntest_partial_write_leaves_no_file (test_finalize_milestone.AtomicWriteTests.test_partial_write_leaves_no_file)\nA serialization failure must not leave a truncated artifact behind. ... ok\ntest_write_replaces_existing_atomically (test_finalize_milestone.AtomicWriteTests.test_write_replaces_existing_atomically) ... ok\ntest_dependency_drift_blocks_closure (test_finalize_milestone.FinalizationGuardTests.test_dependency_drift_blocks_closure)\nA dependency whose evidence went stale must block the dependent. ... ok\ntest_dependency_with_no_evidence_blocks_closure (test_finalize_milestone.FinalizationGuardTests.test_dependency_with_no_evidence_blocks_closure) ... ok\ntest_duplicate_run_appends_no_second_event (test_finalize_milestone.FinalizationGuardTests.test_duplicate_run_appends_no_second_event)\nIdempotence: closing an already-current milestone writes no new event. ... ok\ntest_failed_checks_cannot_be_closed (test_finalize_milestone.FinalizationGuardTests.test_failed_checks_cannot_be_closed) ... ok\ntest_interrupted_run_recovers_without_duplicate_event (test_finalize_milestone.FinalizationGuardTests.test_interrupted_run_recovers_without_duplicate_event)\nA crash after the append must not double-append on the retry. ... ok\ntest_invalid_record_cannot_be_closed (test_finalize_milestone.FinalizationGuardTests.test_invalid_record_cannot_be_closed)\nA record that no longer verifies against its declared inputs is refused. ... ok\ntest_missing_record_fails_closed (test_finalize_milestone.FinalizationGuardTests.test_missing_record_fails_closed) ... ok\ntest_projection_not_current_after_write_fails_closed (test_finalize_milestone.FinalizationGuardTests.test_projection_not_current_after_write_fails_closed)\nIf the claimed transition did not happen, say so instead of passing. ... ok\ntest_projection_pointing_at_another_record_fails_closed (test_finalize_milestone.FinalizationGuardTests.test_projection_pointing_at_another_record_fails_closed)\nClosure must not accept a projection that names different evidence. ... ok\ntest_stale_subject_commit_fails_closed (test_finalize_milestone.FinalizationGuardTests.test_stale_subject_commit_fails_closed)\nEvidence from an older commit must not close the current tree. ... ok\ntest_authoritative_history_import_passes (test_history_import.HistoryImportTests.test_authoritative_history_import_passes) ... ok\ntest_current_proof_claim_fails_closed (test_history_import.HistoryImportTests.test_current_proof_claim_fails_closed) ... ok\ntest_missing_special_id_fails_closed (test_history_import.HistoryImportTests.test_missing_special_id_fails_closed) ... ok\ntest_not_executed_legacy_gap_cannot_be_promoted (test_history_import.HistoryImportTests.test_not_executed_legacy_gap_cannot_be_promoted) ... ok\ntest_authoritative_migration_passes (test_id_migration.IdMigrationTests.test_authoritative_migration_passes) ... ok\ntest_unknown_evidence_target_fails_closed (test_id_migration.IdMigrationTests.test_unknown_evidence_target_fails_closed) ... ok\ntest_unlinked_phase4_record_fails_closed (test_id_migration.IdMigrationTests.test_unlinked_phase4_record_fails_closed) ... ok\ntest_acceptance_cannot_reference_undeclared_command (test_program_contract.ProgramContractTests.test_acceptance_cannot_reference_undeclared_command) ... ok\ntest_artifact_and_evidence_bindings_fail_closed (test_program_contract.ProgramContractTests.test_artifact_and_evidence_bindings_fail_closed) ... ok\ntest_authoritative_registry_passes_schema_and_semantics (test_program_contract.ProgramContractTests.test_authoritative_registry_passes_schema_and_semantics) ... ok\ntest_declared_python_verifier_is_hashed_into_evidence (test_program_contract.ProgramContractTests.test_declared_python_verifier_is_hashed_into_evidence) ... ok\ntest_duplicate_verification_ids_fail_closed (test_program_contract.ProgramContractTests.test_duplicate_verification_ids_fail_closed) ... ok\ntest_mandatory_dependency_cannot_accept_skip (test_program_contract.ProgramContractTests.test_mandatory_dependency_cannot_accept_skip) ... ok\ntest_release_outcome_requires_gate_pass_dependency (test_program_contract.ProgramContractTests.test_release_outcome_requires_gate_pass_dependency) ... ok\ntest_skip_requires_declared_policy_and_outcome (test_program_contract.ProgramContractTests.test_skip_requires_declared_policy_and_outcome) ... ok\ntest_unknown_predicate_fails_closed (test_program_contract.ProgramContractTests.test_unknown_predicate_fails_closed) ... ok\ntest_fixture_is_deterministic_and_reopens_completed_seed (test_replan_impact.ReplanImpactTests.test_fixture_is_deterministic_and_reopens_completed_seed) ... ok\ntest_invalid_trigger_type_fails_schema (test_replan_impact.ReplanImpactTests.test_invalid_trigger_type_fails_schema) ... ok\ntest_unknown_seed_fails_closed (test_replan_impact.ReplanImpactTests.test_unknown_seed_fails_closed) ... ok\ntest_empty_canonical_registry_and_fixture_pass (test_research_workflow.ResearchWorkflowTests.test_empty_canonical_registry_and_fixture_pass) ... ok\ntest_fixture_cannot_claim_scientific_evidence (test_research_workflow.ResearchWorkflowTests.test_fixture_cannot_claim_scientific_evidence) ... ok\ntest_missing_exit_criteria_fails_closed (test_research_workflow.ResearchWorkflowTests.test_missing_exit_criteria_fails_closed) ... ok\ntest_cli_regenerates_and_verifies_same_manifest (test_schedule_wave.WaveScheduleTests.test_cli_regenerates_and_verifies_same_manifest) ... ok\ntest_every_id_is_classified_once_and_committed_is_dependency_closed (test_schedule_wave.WaveScheduleTests.test_every_id_is_classified_once_and_committed_is_dependency_closed) ... ok\ntest_manifest_is_deterministic_and_capacity_feasible (test_schedule_wave.WaveScheduleTests.test_manifest_is_deterministic_and_capacity_feasible) ... ok\ntest_verifier_rejects_capacity_and_dependency_corruption (test_schedule_wave.WaveScheduleTests.test_verifier_rejects_capacity_and_dependency_corruption) ... ok\ntest_checked_in_status_matches_compiler_when_present (test_status_compiler.StatusCompilerTests.test_checked_in_status_matches_compiler_when_present) ... ok\ntest_committed_frontier_next_is_first_or_phase_is_complete (test_status_compiler.StatusCompilerTests.test_committed_frontier_next_is_first_or_phase_is_complete) ... ok\ntest_compiled_frontier_preserves_authority_and_availability (test_status_compiler.StatusCompilerTests.test_compiled_frontier_preserves_authority_and_availability) ... ok\ntest_active_metric_orphan_fails_closed (test_traceability_validator.TraceabilityValidatorTests.test_active_metric_orphan_fails_closed) ... ok\ntest_bootstrap_contract_and_bundle_pass (test_traceability_validator.TraceabilityValidatorTests.test_bootstrap_contract_and_bundle_pass) ... ok\ntest_unknown_evidence_target_fails_closed (test_traceability_validator.TraceabilityValidatorTests.test_unknown_evidence_target_fails_closed) ... ok\ntest_wrong_namespace_and_gate_pass_id_fail_closed (test_traceability_validator.TraceabilityValidatorTests.test_wrong_namespace_and_gate_pass_id_fail_closed) ... ok\n\n----------------------------------------------------------------------\nRan 110 tests in 189.060s\n\nOK\n",
+      "stdout": "removed stale clone kinematiciq-clean-clone-stale\nWARN: could not remove C:\\Users\\acetu\\AppData\\Local\\Temp\\tmp3f5kzsag\\kinematiciq-clean-clone-locked; delete it manually\nPASS: generated and verified C:\\Users\\acetu\\AppData\\Local\\Temp\\tmpdve1lyg0\\wave.yaml\nPASS: generated and verified C:\\Users\\acetu\\AppData\\Local\\Temp\\tmpdve1lyg0\\wave.yaml\nPASS: verified C:\\Users\\acetu\\AppData\\Local\\Temp\\tmpdve1lyg0\\wave.yaml\n"
     },
     {
       "accepted": true,
@@ -105,11 +105,11 @@
       ],
       "exit_code": 1,
       "stderr": "",
-      "stdout": "{\n  \"current\": 14,\n  \"failed\": 1,\n  \"results\": {\n    \"KQ-001\": {\n      \"event_id\": \"VAL-KQ-001-17088D5B8D0F-CURRENT\",\n      \"evidence_id\": \"KQ-001-17088d5b8d0f\",\n      \"reason\": \"Evidence schema v2 provenance and all declared milestone checks passed.\",\n      \"validity\": \"Current\"\n    },\n    \"KQ-002\": {\n      \"event_id\": \"VAL-KQ-002-17088D5B8D0F-CURRENT\",\n      \"evidence_id\": \"KQ-002-17088d5b8d0f\",\n      \"reason\": \"Evidence schema v2 provenance and all declared milestone checks passed.\",\n      \"validity\": \"Current\"\n    },\n    \"KQ-003\": {\n      \"event_id\": \"VAL-KQ-003-17088D5B8D0F-CURRENT\",\n      \"evidence_id\": \"KQ-003-17088d5b8d0f\",\n      \"reason\": \"Evidence schema v2 provenance and all declared milestone checks passed.\",\n      \"validity\": \"Current\"\n    },\n    \"KQ-004\": {\n      \"event_id\": \"VAL-KQ-004-17088D5B8D0F-CURRENT\",\n      \"evidence_id\": \"KQ-004-17088d5b8d0f\",\n      \"reason\": \"Evidence schema v2 provenance and all declared milestone checks passed.\",\n      \"validity\": \"Current\"\n    },\n    \"KQ-005\": {\n      \"event_id\": \"VAL-KQ-005-17088D5B8D0F-CURRENT\",\n      \"evidence_id\": \"KQ-005-17088d5b8d0f\",\n      \"reason\": \"Evidence schema v2 provenance and all declared milestone checks passed.\",\n      \"validity\": \"Current\"\n    },\n    \"KQ-006\": {\n      \"event_id\": \"VAL-KQ-006-17088D5B8D0F-CURRENT\",\n      \"evidence_id\": \"KQ-006-17088d5b8d0f\",\n      \"reason\": \"Evidence schema v2 provenance and all declared milestone checks passed.\",\n      \"validity\": \"Current\"\n    },\n    \"KQ-007\": {\n      \"event_id\": \"VAL-KQ-007-17088D5B8D0F-CURRENT\",\n      \"evidence_id\": \"KQ-007-17088d5b8d0f\",\n      \"reason\": \"Evidence schema v2 provenance and all declared milestone checks passed.\",\n      \"validity\": \"Current\"\n    },\n    \"KQ-008\": {\n      \"event_id\": \"VAL-KQ-008-17088D5B8D0F-CURRENT\",\n      \"evidence_id\": \"KQ-008-17088d5b8d0f\",\n      \"reason\": \"Evidence schema v2 provenance and all declared milestone checks passed.\",\n      \"validity\": \"Current\"\n    },\n    \"KQ-009\": {\n      \"event_id\": \"VAL-KQ-009-17088D5B8D0F-CURRENT\",\n      \"evidence_id\": \"KQ-009-17088d5b8d0f\",\n      \"reason\": \"Evidence schema v2 provenance and all declared milestone checks passed.\",\n      \"validity\": \"Current\"\n    },\n    \"KQ-010\": {\n      \"event_id\": \"VAL-KQ-010-17088D5B8D0F-CURRENT\",\n      \"evidence_id\": \"KQ-010-17088d5b8d0f\",\n      \"reason\": \"Evidence schema v2 provenance and all declared milestone checks passed.\",\n      \"validity\": \"Current\"\n    },\n    \"KQ-011\": {\n      \"event_id\": \"VAL-KQ-011-17088D5B8D0F-CURRENT\",\n      \"evidence_id\": \"KQ-011-17088d5b8d0f\",\n      \"reason\": \"Evidence schema v2 provenance and all declared milestone checks passed.\",\n      \"validity\": \"Current\"\n    },\n    \"KQ-012\": {\n      \"event_id\": \"VAL-KQ-012-17088D5B8D0F-CURRENT\",\n      \"evidence_id\": \"KQ-012-17088d5b8d0f\",\n      \"reason\": \"Evidence schema v2 provenance and all declared milestone checks passed.\",\n      \"validity\": \"Current\"\n    },\n    \"KQ-013\": {\n      \"event_id\": \"VAL-KQ-013-17088D5B8D0F-CURRENT\",\n      \"evidence_id\": \"KQ-013-17088d5b8d0f\",\n      \"reason\": \"Evidence schema v2 provenance and all declared milestone checks passed.\",\n      \"validity\": \"Current\"\n    },\n    \"KQ-014\": {\n      \"event_id\": \"VAL-KQ-014-17088D5B8D0F-CURRENT\",\n      \"evidence_id\": \"KQ-014-17088d5b8d0f\",\n      \"reason\": \"Evidence schema v2 provenance and all declared milestone checks passed.\",\n      \"validity\": \"Current\"\n    },\n    \"KQ-018\": {\n      \"event_id\": \"VAL-KQ-018-458AF053B1C9-CURRENT\",\n      \"evidence_id\": \"KQ-018-458af053b1c9\",\n      \"reason\": \"Evidence schema v2 provenance and all declared milestone checks passed on the normal execution path.\",\n      \"validity\": \"ReverificationRequired\"\n    }\n  },\n  \"total\": 15,\n  \"verification_errors\": {\n    \"KQ-018\": [\n      \"milestone contract is stale\"\n    ]\n  }\n}\n"
+      "stdout": "{\n  \"current\": 0,\n  \"failed\": 14,\n  \"results\": {\n    \"KQ-001\": {\n      \"event_id\": \"VAL-KQ-001-17088D5B8D0F-CURRENT\",\n      \"evidence_id\": \"KQ-001-17088d5b8d0f\",\n      \"reason\": \"Evidence schema v2 provenance and all declared milestone checks passed.\",\n      \"validity\": \"ReverificationRequired\"\n    },\n    \"KQ-002\": {\n      \"event_id\": \"VAL-KQ-002-17088D5B8D0F-CURRENT\",\n      \"evidence_id\": \"KQ-002-17088d5b8d0f\",\n      \"reason\": \"Evidence schema v2 provenance and all declared milestone checks passed.\",\n      \"validity\": \"ReverificationRequired\"\n    },\n    \"KQ-003\": {\n      \"event_id\": \"VAL-KQ-003-17088D5B8D0F-CURRENT\",\n      \"evidence_id\": \"KQ-003-17088d5b8d0f\",\n      \"reason\": \"Evidence schema v2 provenance and all declared milestone checks passed.\",\n      \"validity\": \"ReverificationRequired\"\n    },\n    \"KQ-004\": {\n      \"event_id\": \"VAL-KQ-004-17088D5B8D0F-CURRENT\",\n      \"evidence_id\": \"KQ-004-17088d5b8d0f\",\n      \"reason\": \"Evidence schema v2 provenance and all declared milestone checks passed.\",\n      \"validity\": \"ReverificationRequired\"\n    },\n    \"KQ-005\": {\n      \"event_id\": \"VAL-KQ-005-17088D5B8D0F-CURRENT\",\n      \"evidence_id\": \"KQ-005-17088d5b8d0f\",\n      \"reason\": \"Evidence schema v2 provenance and all declared milestone checks passed.\",\n      \"validity\": \"ReverificationRequired\"\n    },\n    \"KQ-006\": {\n      \"event_id\": \"VAL-KQ-006-17088D5B8D0F-CURRENT\",\n      \"evidence_id\": \"KQ-006-17088d5b8d0f\",\n      \"reason\": \"Evidence schema v2 provenance and all declared milestone checks passed.\",\n      \"validity\": \"ReverificationRequired\"\n    },\n    \"KQ-007\": {\n      \"event_id\": \"VAL-KQ-007-17088D5B8D0F-CURRENT\",\n      \"evidence_id\": \"KQ-007-17088d5b8d0f\",\n      \"reason\": \"Evidence schema v2 provenance and all declared milestone checks passed.\",\n      \"validity\": \"ReverificationRequired\"\n    },\n    \"KQ-008\": {\n      \"event_id\": \"VAL-KQ-008-17088D5B8D0F-CURRENT\",\n      \"evidence_id\": \"KQ-008-17088d5b8d0f\",\n      \"reason\": \"Evidence schema v2 provenance and all declared milestone checks passed.\",\n      \"validity\": \"ReverificationRequired\"\n    },\n    \"KQ-009\": {\n      \"event_id\": \"VAL-KQ-009-17088D5B8D0F-CURRENT\",\n      \"evidence_id\": \"KQ-009-17088d5b8d0f\",\n      \"reason\": \"Evidence schema v2 provenance and all declared milestone checks passed.\",\n      \"validity\": \"ReverificationRequired\"\n    },\n    \"KQ-010\": {\n      \"event_id\": \"VAL-KQ-010-17088D5B8D0F-CURRENT\",\n      \"evidence_id\": \"KQ-010-17088d5b8d0f\",\n      \"reason\": \"Evidence schema v2 provenance and all declared milestone checks passed.\",\n      \"validity\": \"ReverificationRequired\"\n    },\n    \"KQ-011\": {\n      \"event_id\": \"VAL-KQ-011-17088D5B8D0F-CURRENT\",\n      \"evidence_id\": \"KQ-011-17088d5b8d0f\",\n      \"reason\": \"Evidence schema v2 provenance and all declared milestone checks passed.\",\n      \"validity\": \"ReverificationRequired\"\n    },\n    \"KQ-012\": {\n      \"event_id\": \"VAL-KQ-012-17088D5B8D0F-CURRENT\",\n      \"evidence_id\": \"KQ-012-17088d5b8d0f\",\n      \"reason\": \"Evidence schema v2 provenance and all declared milestone checks passed.\",\n      \"validity\": \"ReverificationRequired\"\n    },\n    \"KQ-013\": {\n      \"event_id\": \"VAL-KQ-013-17088D5B8D0F-CURRENT\",\n      \"evidence_id\": \"KQ-013-17088d5b8d0f\",\n      \"reason\": \"Evidence schema v2 provenance and all declared milestone checks passed.\",\n      \"validity\": \"ReverificationRequired\"\n    },\n    \"KQ-014\": {\n      \"event_id\": \"VAL-KQ-014-17088D5B8D0F-CURRENT\",\n      \"evidence_id\": \"KQ-014-17088d5b8d0f\",\n      \"reason\": \"Evidence schema v2 provenance and all declared milestone checks passed.\",\n      \"validity\": \"ReverificationRequired\"\n    }\n  },\n  \"total\": 14,\n  \"verification_errors\": {\n    \"KQ-001\": [\n      \"input is missing or stale: tools/program/compile_status.py\",\n      \"input is missing or stale: tools/program/execution_authority.py\",\n      \"input is missing or stale: tools/program/generate_checkpoint.py\"\n    ],\n    \"KQ-002\": [\n      \"input is missing or stale: tools/program/compile_status.py\",\n      \"input is missing or stale: tools/program/execution_authority.py\",\n      \"input is missing or stale: tools/program/generate_checkpoint.py\"\n    ],\n    \"KQ-003\": [\n      \"input is missing or stale: tools/program/compile_status.py\",\n      \"input is missing or stale: tools/program/execution_authority.py\",\n      \"input is missing or stale: tools/program/generate_checkpoint.py\"\n    ],\n    \"KQ-004\": [\n      \"input is missing or stale: tools/program/compile_status.py\",\n      \"input is missing or stale: tools/program/execution_authority.py\",\n      \"input is missing or stale: tools/program/generate_checkpoint.py\"\n    ],\n    \"KQ-005\": [\n      \"input is missing or stale: tools/program/compile_status.py\",\n      \"input is missing or stale: tools/program/execution_authority.py\",\n      \"input is missing or stale: tools/program/generate_checkpoint.py\"\n    ],\n    \"KQ-006\": [\n      \"input is missing or stale: tools/program/compile_status.py\",\n      \"input is missing or stale: tools/program/execution_authority.py\",\n      \"input is missing or stale: tools/program/generate_checkpoint.py\"\n    ],\n    \"KQ-007\": [\n      \"input is missing or stale: tools/program/compile_status.py\",\n      \"input is missing or stale: tools/program/execution_authority.py\",\n      \"input is missing or stale: tools/program/generate_checkpoint.py\"\n    ],\n    \"KQ-008\": [\n      \"input is missing or stale: tools/program/compile_status.py\",\n      \"input is missing or stale: tools/program/execution_authority.py\",\n      \"input is missing or stale: tools/program/generate_checkpoint.py\"\n    ],\n    \"KQ-009\": [\n      \"input is missing or stale: tools/program/compile_status.py\",\n      \"input is missing or stale: tools/program/execution_authority.py\",\n      \"input is missing or stale: tools/program/generate_checkpoint.py\"\n    ],\n    \"KQ-010\": [\n      \"input is missing or stale: tools/program/compile_status.py\",\n      \"input is missing or stale: tools/program/execution_authority.py\",\n      \"input is missing or stale: tools/program/generate_checkpoint.py\"\n    ],\n    \"KQ-011\": [\n      \"input is missing or stale: tools/program/compile_status.py\",\n      \"input is missing or stale: tools/program/execution_authority.py\",\n      \"input is missing or stale: tools/program/generate_checkpoint.py\"\n    ],\n    \"KQ-012\": [\n      \"input is missing or stale: tools/program/compile_status.py\",\n      \"input is missing or stale: tools/program/execution_authority.py\",\n      \"input is missing or stale: tools/program/generate_checkpoint.py\"\n    ],\n    \"KQ-013\": [\n      \"input is missing or stale: tools/program/compile_status.py\",\n      \"input is missing or stale: tools/program/execution_authority.py\",\n      \"input is missing or stale: tools/program/generate_checkpoint.py\"\n    ],\n    \"KQ-014\": [\n      \"input is missing or stale: tools/program/compile_status.py\",\n      \"input is missing or stale: tools/program/execution_authority.py\",\n      \"input is missing or stale: tools/program/generate_checkpoint.py\"\n    ]\n  }\n}\n"
     }
   ],
-  "clone_head": "d9bae6fbc4f0d5410bb5b240572d6ee4bdfcdd34",
-  "generated_at": "2026-07-28T17:19:27.044216+00:00",
+  "clone_head": "5993764d4ca31b5b168091237aef0356ce369ad6",
+  "generated_at": "2026-07-28T22:59:02.247178+00:00",
   "ignored_status": [
     "!! tests/program/__pycache__/",
     "!! tools/program/__pycache__/"
@@ -127,8 +127,32 @@
         "BlockedHuman": [],
         "FailedTechnical": []
       },
-      "resource_blocked_milestone_count": 0,
-      "resource_blocked_milestone_ids": [],
+      "resource_blocked_milestone_count": 23,
+      "resource_blocked_milestone_ids": [
+        "KQ-051",
+        "KQ-054",
+        "KQ-061",
+        "KQ-088",
+        "KQ-092",
+        "KQ-096",
+        "KQ-100",
+        "KQ-104",
+        "KQ-108",
+        "KQ-112",
+        "KQ-116",
+        "KQ-120",
+        "KQ-124",
+        "KQ-128",
+        "KQ-132",
+        "KQ-136",
+        "KQ-140",
+        "KQ-144",
+        "KQ-148",
+        "KQ-152",
+        "KQ-156",
+        "KQ-160",
+        "KQ-164"
+      ],
       "resource_status_counts": {
         "PartiallyAvailable": 1,
         "UnresolvedExternal": 9,
@@ -162,65 +186,13 @@
     "push_summary": {
       "active_work_ids": [],
       "branch": "agent/phase-b-engineering",
-      "completed_ids": [
-        "KQ-001",
-        "KQ-002",
-        "KQ-003",
-        "KQ-004",
-        "KQ-005",
-        "KQ-006",
-        "KQ-007",
-        "KQ-008",
-        "KQ-009",
-        "KQ-010",
-        "KQ-011",
-        "KQ-012",
-        "KQ-013",
-        "KQ-014",
-        "KQ-015",
-        "KQ-018"
-      ],
+      "completed_ids": [],
       "next_executable_range": [],
       "objective_evidence": {
-        "currently_valid_ids": [
-          "KQ-001",
-          "KQ-002",
-          "KQ-003",
-          "KQ-004",
-          "KQ-005",
-          "KQ-006",
-          "KQ-007",
-          "KQ-008",
-          "KQ-009",
-          "KQ-010",
-          "KQ-011",
-          "KQ-012",
-          "KQ-013",
-          "KQ-014"
-        ],
-        "historically_passed_ids": [
-          "KQ-001",
-          "KQ-002",
-          "KQ-003",
-          "KQ-004",
-          "KQ-005",
-          "KQ-006",
-          "KQ-007",
-          "KQ-008",
-          "KQ-009",
-          "KQ-010",
-          "KQ-011",
-          "KQ-012",
-          "KQ-013",
-          "KQ-014",
-          "KQ-015",
-          "KQ-018"
-        ],
+        "currently_valid_ids": [],
+        "historically_passed_ids": [],
         "invalidated_ids": [],
-        "reverification_required_ids": [
-          "KQ-015",
-          "KQ-018"
-        ]
+        "reverification_required_ids": []
       },
       "subject_commits": [
         "04da1d5fa31a6ac5c8f1ff6626cfb2155f568c87",
@@ -241,12 +213,85 @@
         "a11f42de082eeb73a99ab66b87ded7f1375c9c3c",
         "c642ed298ceb3a2b86c1a317bb138815dc220fc9",
         "d3e25e38b5ae08b7ba359a482ad7449eb1f9b318",
+        "d9bae6fbc4f0d5410bb5b240572d6ee4bdfcdd34",
         "ff41350e93de753bdb06ece9759716298ca6d35a",
         "ffa3907456833d37c06b74bc937a595c9fb6dd3f"
       ],
       "verification_failures": {
+        "KQ-001": [
+          "input is missing or stale: tools/program/compile_status.py",
+          "input is missing or stale: tools/program/execution_authority.py",
+          "input is missing or stale: tools/program/generate_checkpoint.py"
+        ],
+        "KQ-002": [
+          "input is missing or stale: tools/program/compile_status.py",
+          "input is missing or stale: tools/program/execution_authority.py",
+          "input is missing or stale: tools/program/generate_checkpoint.py"
+        ],
+        "KQ-003": [
+          "input is missing or stale: tools/program/compile_status.py",
+          "input is missing or stale: tools/program/execution_authority.py",
+          "input is missing or stale: tools/program/generate_checkpoint.py"
+        ],
+        "KQ-004": [
+          "input is missing or stale: tools/program/compile_status.py",
+          "input is missing or stale: tools/program/execution_authority.py",
+          "input is missing or stale: tools/program/generate_checkpoint.py"
+        ],
+        "KQ-005": [
+          "input is missing or stale: tools/program/compile_status.py",
+          "input is missing or stale: tools/program/execution_authority.py",
+          "input is missing or stale: tools/program/generate_checkpoint.py"
+        ],
+        "KQ-006": [
+          "input is missing or stale: tools/program/compile_status.py",
+          "input is missing or stale: tools/program/execution_authority.py",
+          "input is missing or stale: tools/program/generate_checkpoint.py"
+        ],
+        "KQ-007": [
+          "input is missing or stale: tools/program/compile_status.py",
+          "input is missing or stale: tools/program/execution_authority.py",
+          "input is missing or stale: tools/program/generate_checkpoint.py"
+        ],
+        "KQ-008": [
+          "input is missing or stale: tools/program/compile_status.py",
+          "input is missing or stale: tools/program/execution_authority.py",
+          "input is missing or stale: tools/program/generate_checkpoint.py"
+        ],
+        "KQ-009": [
+          "input is missing or stale: tools/program/compile_status.py",
+          "input is missing or stale: tools/program/execution_authority.py",
+          "input is missing or stale: tools/program/generate_checkpoint.py"
+        ],
+        "KQ-010": [
+          "input is missing or stale: tools/program/compile_status.py",
+          "input is missing or stale: tools/program/execution_authority.py",
+          "input is missing or stale: tools/program/generate_checkpoint.py"
+        ],
+        "KQ-011": [
+          "input is missing or stale: tools/program/compile_status.py",
+          "input is missing or stale: tools/program/execution_authority.py",
+          "input is missing or stale: tools/program/generate_checkpoint.py"
+        ],
+        "KQ-012": [
+          "input is missing or stale: tools/program/compile_status.py",
+          "input is missing or stale: tools/program/execution_authority.py",
+          "input is missing or stale: tools/program/generate_checkpoint.py"
+        ],
+        "KQ-013": [
+          "input is missing or stale: tools/program/compile_status.py",
+          "input is missing or stale: tools/program/execution_authority.py",
+          "input is missing or stale: tools/program/generate_checkpoint.py"
+        ],
+        "KQ-014": [
+          "input is missing or stale: tools/program/compile_status.py",
+          "input is missing or stale: tools/program/execution_authority.py",
+          "input is missing or stale: tools/program/generate_checkpoint.py"
+        ],
         "KQ-018": [
-          "milestone contract is stale"
+          "input is missing or stale: tools/program/compile_status.py",
+          "input is missing or stale: tools/program/execution_authority.py",
+          "input is missing or stale: tools/program/generate_checkpoint.py"
         ]
       }
     },
@@ -259,7 +304,9 @@
     },
     "replan_summary": {
       "committed_wave_ready_ids": [],
-      "dependency_ready_ids": [],
+      "dependency_ready_ids": [
+        "KQ-001"
+      ],
       "recorded_inflection_count": 0,
       "roadmap_changes": []
     },
@@ -272,7 +319,7 @@
     "schema_version": 1,
     "source_hashes": {
       "docs/program/inflection_log.ndjson": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "docs/program/milestone_registry.yaml": "1a99224e327230aa28fa203efc0e57762b351f4c7eeaa6c48b48dbde8f6ad246",
+      "docs/program/milestone_registry.yaml": "16f26bb87e5d21e6c938b654ceba250b89ecb6a7779b45bf5272817a6a9d2146",
       "docs/program/resource_registry.yaml": "3df2e425c0c2b23e6e76428229f114fca223bae50630b044543ae6a6a1b29dd5",
       "docs/research/research_questions.yaml": "6a45d8c097a67775add815fcd7fe2b8ff081583e6847e62d50a41ae2d42bf228",
       "docs/status/evidence/KQ-001/KQ-001-04da1d5fa31a.json": "d56ff08d7cef1d461c81581173a6775d279949cf9e578c130e4a1234c8940e7e",
@@ -402,10 +449,11 @@
       "docs/status/evidence/KQ-015/KQ-015-8c5bc6e76a19.json": "df2778835cac9b61dc2aa459fccc46133baecb67f50bd5918942b8519621c8fd",
       "docs/status/evidence/KQ-015/KQ-015-8eac54a968d2.json": "e3d9892b6c361041d38d934ba44883faaf4cbfef9d02309347590ec7337f84b3",
       "docs/status/evidence/KQ-015/KQ-015-c642ed298ceb.json": "fb2092861ffa72d7beef05b2662a30d1b62ebd26134d73fb76955f2370f2a897",
+      "docs/status/evidence/KQ-015/KQ-015-d9bae6fbc4f0.json": "108d237a24b6c05fe20449732fabc7db3e944332da1b2d0a971429dea4ec9264",
       "docs/status/evidence/KQ-015/KQ-015-ff41350e93de.json": "1252cee6083cead25ca2ddd64a5fcf1f5b83c71bc338e76675d858764389e363",
       "docs/status/evidence/KQ-018/KQ-018-2a52f5d84ab3.json": "0931b463e098c84738a6042569375d88d7f2357938c872734af4f405db09106f",
       "docs/status/evidence/KQ-018/KQ-018-458af053b1c9.json": "c8c1786b98d47d7947265459c788b39f3f5874c12b5a608a7df66342409c0049",
-      "docs/status/evidence_validity.json": "7010d1f6d8f8527d1be31e1846add8759dffba0de92cbede9e987652ddd38ec6",
+      "docs/status/evidence_validity.json": "8e9d4cc9820024af3323a54a5abbcdad8ca5d89a5209443a5a55a413d128e4c6",
       "docs/status/evidence_validity_events.ndjson": "a61ed751f6dded508173d0eabb494c4d8203f6b7d43bc26cb246e3e800aa0501",
       "docs/status/milestones/KQ-001.json": "7e3058ae976e5683cc3feabc41a115dedd91f66e221747469803a5f2b1d147c6",
       "docs/status/milestones/KQ-002.json": "7f93c5d052ef6acbd35e977c800e2bb79e9e656702d626be1fc6b6c4ce6955d5",
@@ -423,7 +471,7 @@
       "docs/status/milestones/KQ-014.json": "1d29dbaca182957965eb19120b54274df2cd6789a27cae790cea2245d53d3f59",
       "docs/status/milestones/KQ-015.json": "8b73d40dfcca7e0ebc617cde3164dbb9a05ffd03bd58e55c35662ca33ce75764",
       "docs/status/milestones/KQ-018.json": "c8c1786b98d47d7947265459c788b39f3f5874c12b5a608a7df66342409c0049",
-      "docs/status/program_status.json": "580b73e5d6aa15438c6dae5b2f34fc6267d24d9dfd9603026549c7378bedfa0a",
+      "docs/status/program_status.json": "3bc1c43baa6125790435ebbb043fa41726512548121166abb7ac2a3403373dd3",
       "docs/validation/protocol_validation_registry.yaml": "b4e6b116d36b7213c7257c00df166e98a6ac02cb475c90a5b23807ece1aa8141"
     },
     "triggers": [
@@ -462,1782 +510,2390 @@
     "milestones": {
       "allowed_executable_ids": [],
       "committed_wave_ready_ids": [],
-      "dependency_ready_ids": [],
+      "dependency_ready_ids": [
+        "KQ-001"
+      ],
       "evidence_validity_counts": {
-        "Current": 14,
+        "Current": 0,
         "Invalidated": 0,
         "Retired": 0,
-        "ReverificationRequired": 2,
+        "ReverificationRequired": 16,
         "Superseded": 0
       },
       "next_executable_id": null,
-      "resource_blocked": {},
+      "resource_blocked": {
+        "KQ-051": [
+          "RES-RATER"
+        ],
+        "KQ-054": [
+          "RES-PRIVACY"
+        ],
+        "KQ-061": [
+          "RES-PRIVACY"
+        ],
+        "KQ-088": [
+          "RES-DEVICES",
+          "RES-KINEMATICS",
+          "RES-PARTICIPANTS",
+          "RES-PRIVACY",
+          "RES-RATER",
+          "RES-REPEAT"
+        ],
+        "KQ-092": [
+          "RES-DEVICES",
+          "RES-KINEMATICS",
+          "RES-PARTICIPANTS",
+          "RES-PRIVACY",
+          "RES-RATER",
+          "RES-REPEAT"
+        ],
+        "KQ-096": [
+          "RES-DEVICES",
+          "RES-KINEMATICS",
+          "RES-PARTICIPANTS",
+          "RES-PRIVACY",
+          "RES-RATER",
+          "RES-REPEAT"
+        ],
+        "KQ-100": [
+          "RES-DEVICES",
+          "RES-KINEMATICS",
+          "RES-PARTICIPANTS",
+          "RES-PRIVACY",
+          "RES-RATER",
+          "RES-REPEAT"
+        ],
+        "KQ-104": [
+          "RES-DEVICES",
+          "RES-KINEMATICS",
+          "RES-PARTICIPANTS",
+          "RES-PRIVACY",
+          "RES-RATER",
+          "RES-REPEAT"
+        ],
+        "KQ-108": [
+          "RES-DEVICES",
+          "RES-KINEMATICS",
+          "RES-PARTICIPANTS",
+          "RES-PRIVACY",
+          "RES-RATER",
+          "RES-REPEAT"
+        ],
+        "KQ-112": [
+          "RES-DEVICES",
+          "RES-KINEMATICS",
+          "RES-PARTICIPANTS",
+          "RES-PRIVACY",
+          "RES-RATER",
+          "RES-REPEAT"
+        ],
+        "KQ-116": [
+          "RES-DEVICES",
+          "RES-KINEMATICS",
+          "RES-PARTICIPANTS",
+          "RES-PRIVACY",
+          "RES-RATER",
+          "RES-REPEAT"
+        ],
+        "KQ-120": [
+          "RES-DEVICES",
+          "RES-KINEMATICS",
+          "RES-PARTICIPANTS",
+          "RES-PRIVACY",
+          "RES-RATER",
+          "RES-REPEAT"
+        ],
+        "KQ-124": [
+          "RES-DEVICES",
+          "RES-KINEMATICS",
+          "RES-PARTICIPANTS",
+          "RES-PRIVACY",
+          "RES-RATER",
+          "RES-REPEAT"
+        ],
+        "KQ-128": [
+          "RES-DEVICES",
+          "RES-KINEMATICS",
+          "RES-PARTICIPANTS",
+          "RES-PRIVACY",
+          "RES-RATER",
+          "RES-REPEAT"
+        ],
+        "KQ-132": [
+          "RES-DEVICES",
+          "RES-KINEMATICS",
+          "RES-PARTICIPANTS",
+          "RES-PRIVACY",
+          "RES-RATER",
+          "RES-REPEAT"
+        ],
+        "KQ-136": [
+          "RES-DEVICES",
+          "RES-PARTICIPANTS",
+          "RES-PRIVACY",
+          "RES-RATER",
+          "RES-REPEAT",
+          "RES-TIMING"
+        ],
+        "KQ-140": [
+          "RES-DEVICES",
+          "RES-PARTICIPANTS",
+          "RES-PRIVACY",
+          "RES-RATER",
+          "RES-REPEAT",
+          "RES-TIMING"
+        ],
+        "KQ-144": [
+          "RES-DEVICES",
+          "RES-FORCE_CONTACT",
+          "RES-PARTICIPANTS",
+          "RES-PRIVACY",
+          "RES-RATER",
+          "RES-REPEAT"
+        ],
+        "KQ-148": [
+          "RES-DEVICES",
+          "RES-FORCE_CONTACT",
+          "RES-PARTICIPANTS",
+          "RES-PRIVACY",
+          "RES-RATER",
+          "RES-REPEAT"
+        ],
+        "KQ-152": [
+          "RES-CALIBRATED_PLATFORM",
+          "RES-DEVICES",
+          "RES-FORCE_CONTACT",
+          "RES-PARTICIPANTS",
+          "RES-PRIVACY",
+          "RES-RATER",
+          "RES-REPEAT"
+        ],
+        "KQ-156": [
+          "RES-CALIBRATED_PLATFORM",
+          "RES-DEVICES",
+          "RES-FORCE_CONTACT",
+          "RES-PARTICIPANTS",
+          "RES-PRIVACY",
+          "RES-RATER",
+          "RES-REPEAT"
+        ],
+        "KQ-160": [
+          "RES-DEVICES",
+          "RES-PARTICIPANTS",
+          "RES-PRIVACY",
+          "RES-RATER",
+          "RES-REPEAT",
+          "RES-TIMING"
+        ],
+        "KQ-164": [
+          "RES-DEVICES",
+          "RES-PARTICIPANTS",
+          "RES-PRIVACY",
+          "RES-RATER",
+          "RES-REPEAT",
+          "RES-TIMING"
+        ]
+      },
       "scheduling_reasons": {
         "KQ-001": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
-            ]
+            "wave_id": "expanded-10-wave-3"
           },
-          "reason": "program_closure_gate",
-          "state": "blocked"
+          "reason": "not_committed_to_active_wave",
+          "state": "eligible_but_not_scheduled"
         },
         "KQ-002": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-001:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-003": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-001:status=Pending",
+              "KQ-002:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-004": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-003:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-005": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-004:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-006": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-005:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-007": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-002:status=Pending",
+              "KQ-004:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-008": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-004:status=Pending",
+              "KQ-006:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-009": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-004:status=Pending",
+              "KQ-007:status=Pending",
+              "KQ-008:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-010": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-003:status=Pending",
+              "KQ-004:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-011": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-009:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-012": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-008:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-013": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-009:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-014": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-004:status=Pending",
+              "KQ-008:status=Pending",
+              "KQ-009:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-015": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-005:status=Pending",
+              "KQ-006:status=Pending",
+              "KQ-007:status=Pending",
+              "KQ-008:status=Pending",
+              "KQ-009:status=Pending",
+              "KQ-010:status=Pending",
+              "KQ-011:status=Pending",
+              "KQ-012:status=Pending",
+              "KQ-013:status=Pending",
+              "KQ-014:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-016": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
-            ]
+            "milestone_status": "BlockedExternal"
           },
-          "reason": "program_closure_gate",
+          "reason": "not_open_for_execution",
           "state": "blocked"
         },
         "KQ-017": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
-            ]
+            "milestone_status": "BlockedExternal"
           },
-          "reason": "program_closure_gate",
+          "reason": "not_open_for_execution",
           "state": "blocked"
         },
         "KQ-018": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-001:status=Pending",
+              "KQ-003:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-019": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-018:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-020": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-019:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-021": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-019:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-022": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-018:status=Pending",
+              "KQ-019:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-023": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-022:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-024": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-018:status=Pending",
+              "KQ-022:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-025": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-019:status=Pending",
+              "KQ-022:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-026": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-002:status=Pending",
+              "KQ-004:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-027": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-026:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-028": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-026:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-029": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-022:status=Pending",
+              "KQ-026:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-030": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-029:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-031": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-026:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-032": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-029:status=Pending",
+              "KQ-030:status=Pending",
+              "KQ-031:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-033": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-032:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-034": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-026:status=Pending",
+              "KQ-027:status=Pending",
+              "KQ-028:status=Pending",
+              "KQ-029:status=Pending",
+              "KQ-030:status=Pending",
+              "KQ-031:status=Pending",
+              "KQ-032:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-035": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-020:status=Pending",
+              "KQ-021:status=Pending",
+              "KQ-023:status=Pending",
+              "KQ-024:status=Pending",
+              "KQ-025:status=Pending",
+              "KQ-033:status=Pending",
+              "KQ-034:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-036": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-022:status=Pending",
+              "KQ-026:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-037": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-036:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-038": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-036:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-039": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-036:status=Pending",
+              "KQ-037:status=Pending",
+              "KQ-038:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-040": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-038:status=Pending",
+              "KQ-039:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-041": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-040:status=Pending",
+              "KQ-043:status=Pending",
+              "KQ-044:status=Pending",
+              "KQ-045:status=Pending",
+              "KQ-046:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-042": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-041:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-043": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-016:status=BlockedExternal",
+              "KQ-017:status=BlockedExternal",
+              "KQ-038:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-044": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-039:status=Pending",
+              "KQ-043:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-045": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-039:status=Pending",
+              "KQ-043:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-046": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-039:status=Pending",
+              "KQ-043:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-047": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-041:status=Pending",
+              "KQ-042:status=Pending",
+              "KQ-044:status=Pending",
+              "KQ-045:status=Pending",
+              "KQ-046:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-048": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-025:status=Pending",
+              "KQ-047:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-049": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-029:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-050": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-049:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-051": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "resources": [
+              "RES-RATER"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unresolved_resource",
           "state": "blocked"
         },
         "KQ-052": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-029:status=Pending",
+              "KQ-049:status=Pending",
+              "KQ-051:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-053": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-038:status=Pending",
+              "KQ-046:status=Pending",
+              "KQ-052:status=Pending",
+              "KQ-061:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-054": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "resources": [
+              "RES-PRIVACY"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unresolved_resource",
           "state": "blocked"
         },
         "KQ-055": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-037:status=Pending",
+              "KQ-039:status=Pending",
+              "KQ-040:status=Pending",
+              "KQ-041:status=Pending",
+              "KQ-043:status=Pending",
+              "KQ-044:status=Pending",
+              "KQ-045:status=Pending",
+              "KQ-046:status=Pending",
+              "KQ-047:status=Pending",
+              "KQ-048:status=Pending",
+              "KQ-049:status=Pending",
+              "KQ-051:status=Pending",
+              "KQ-052:status=Pending",
+              "KQ-053:status=Pending",
+              "KQ-054:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-056": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-002:status=Pending",
+              "KQ-004:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-057": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-056:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-058": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-056:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-059": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-058:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-060": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-012:status=Pending",
+              "KQ-058:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-061": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "resources": [
+              "RES-PRIVACY"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unresolved_resource",
           "state": "blocked"
         },
         "KQ-062": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-019:status=Pending",
+              "KQ-061:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-063": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-027:status=Pending",
+              "KQ-056:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-064": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-063:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-065": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-058:status=Pending",
+              "KQ-061:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-066": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-056:status=Pending",
+              "KQ-057:status=Pending",
+              "KQ-065:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-067": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-056:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-068": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-057:status=Pending",
+              "KQ-067:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-069": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-057:status=Pending",
+              "KQ-067:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-070": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-029:status=Pending",
+              "KQ-030:status=Pending",
+              "KQ-052:status=Pending",
+              "KQ-067:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-071": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-058:status=Pending",
+              "KQ-065:status=Pending",
+              "KQ-067:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-072": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-020:status=Pending",
+              "KQ-021:status=Pending",
+              "KQ-054:status=Pending",
+              "KQ-067:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-073": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-056:status=Pending",
+              "KQ-057:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-074": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-028:status=Pending",
+              "KQ-056:status=Pending",
+              "KQ-057:status=Pending",
+              "KQ-066:status=Pending",
+              "KQ-068:status=Pending",
+              "KQ-069:status=Pending",
+              "KQ-070:status=Pending",
+              "KQ-071:status=Pending",
+              "KQ-072:status=Pending",
+              "KQ-073:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-075": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-058:status=Pending",
+              "KQ-059:status=Pending",
+              "KQ-061:status=Pending",
+              "KQ-062:status=Pending",
+              "KQ-063:status=Pending",
+              "KQ-064:status=Pending",
+              "KQ-065:status=Pending",
+              "KQ-066:status=Pending",
+              "KQ-067:status=Pending",
+              "KQ-068:status=Pending",
+              "KQ-069:status=Pending",
+              "KQ-070:status=Pending",
+              "KQ-071:status=Pending",
+              "KQ-072:status=Pending",
+              "KQ-073:status=Pending",
+              "KQ-074:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-076": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-002:status=Pending",
+              "KQ-027:status=Pending",
+              "KQ-028:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-077": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-027:status=Pending",
+              "KQ-028:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-078": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-026:status=Pending",
+              "KQ-027:status=Pending",
+              "KQ-029:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-079": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-049:status=Pending",
+              "KQ-051:status=Pending",
+              "KQ-078:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-080": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-020:status=Pending",
+              "KQ-021:status=Pending",
+              "KQ-032:status=Pending",
+              "KQ-078:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-081": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-030:status=Pending",
+              "KQ-032:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-082": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-031:status=Pending",
+              "KQ-056:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-083": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-028:status=Pending",
+              "KQ-073:status=Pending",
+              "KQ-077:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-084": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-076:status=Pending",
+              "KQ-078:status=Pending",
+              "KQ-079:status=Pending",
+              "KQ-080:status=Pending",
+              "KQ-081:status=Pending",
+              "KQ-082:status=Pending",
+              "KQ-083:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-085": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-076:status=Pending",
+              "KQ-077:status=Pending",
+              "KQ-078:status=Pending",
+              "KQ-079:status=Pending",
+              "KQ-080:status=Pending",
+              "KQ-081:status=Pending",
+              "KQ-082:status=Pending",
+              "KQ-083:status=Pending",
+              "KQ-084:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-086": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-002:status=Pending",
+              "KQ-004:status=Pending",
+              "KQ-008:status=Pending",
+              "KQ-012:status=Pending",
+              "KQ-027:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-087": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-086:status=Pending",
+              "KQ-029:status=Pending",
+              "KQ-056:status=Pending",
+              "KQ-057:status=Pending",
+              "KQ-073:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-088": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "resources": [
+              "RES-DEVICES",
+              "RES-KINEMATICS",
+              "RES-PARTICIPANTS",
+              "RES-PRIVACY",
+              "RES-RATER",
+              "RES-REPEAT"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unresolved_resource",
           "state": "blocked"
         },
         "KQ-089": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-087:status=Pending",
+              "KQ-029:status=Pending",
+              "KQ-035:status=Pending",
+              "KQ-037:status=Pending",
+              "KQ-039:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-090": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-089:status=Pending",
+              "KQ-076:status=Pending",
+              "KQ-077:status=Pending",
+              "KQ-078:status=Pending",
+              "KQ-079:status=Pending",
+              "KQ-080:status=Pending",
+              "KQ-081:status=Pending",
+              "KQ-082:status=Pending",
+              "KQ-083:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-091": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-088:status=Pending",
+              "KQ-089:status=Pending",
+              "KQ-090:status=Pending",
+              "KQ-066:status=Pending",
+              "KQ-067:status=Pending",
+              "KQ-068:status=Pending",
+              "KQ-069:status=Pending",
+              "KQ-070:status=Pending",
+              "KQ-071:status=Pending",
+              "KQ-072:status=Pending",
+              "KQ-073:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-092": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "resources": [
+              "RES-DEVICES",
+              "RES-KINEMATICS",
+              "RES-PARTICIPANTS",
+              "RES-PRIVACY",
+              "RES-RATER",
+              "RES-REPEAT"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unresolved_resource",
           "state": "blocked"
         },
         "KQ-093": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-092:status=Pending",
+              "KQ-074:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-094": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-002:status=Pending",
+              "KQ-004:status=Pending",
+              "KQ-008:status=Pending",
+              "KQ-012:status=Pending",
+              "KQ-027:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-095": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-094:status=Pending",
+              "KQ-029:status=Pending",
+              "KQ-056:status=Pending",
+              "KQ-057:status=Pending",
+              "KQ-073:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-096": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "resources": [
+              "RES-DEVICES",
+              "RES-KINEMATICS",
+              "RES-PARTICIPANTS",
+              "RES-PRIVACY",
+              "RES-RATER",
+              "RES-REPEAT"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unresolved_resource",
           "state": "blocked"
         },
         "KQ-097": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-095:status=Pending",
+              "KQ-029:status=Pending",
+              "KQ-035:status=Pending",
+              "KQ-037:status=Pending",
+              "KQ-039:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-098": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-097:status=Pending",
+              "KQ-076:status=Pending",
+              "KQ-077:status=Pending",
+              "KQ-078:status=Pending",
+              "KQ-079:status=Pending",
+              "KQ-080:status=Pending",
+              "KQ-081:status=Pending",
+              "KQ-082:status=Pending",
+              "KQ-083:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-099": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-096:status=Pending",
+              "KQ-097:status=Pending",
+              "KQ-098:status=Pending",
+              "KQ-066:status=Pending",
+              "KQ-067:status=Pending",
+              "KQ-068:status=Pending",
+              "KQ-069:status=Pending",
+              "KQ-070:status=Pending",
+              "KQ-071:status=Pending",
+              "KQ-072:status=Pending",
+              "KQ-073:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-100": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "resources": [
+              "RES-DEVICES",
+              "RES-KINEMATICS",
+              "RES-PARTICIPANTS",
+              "RES-PRIVACY",
+              "RES-RATER",
+              "RES-REPEAT"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unresolved_resource",
           "state": "blocked"
         },
         "KQ-101": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-100:status=Pending",
+              "KQ-074:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-102": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-002:status=Pending",
+              "KQ-004:status=Pending",
+              "KQ-008:status=Pending",
+              "KQ-012:status=Pending",
+              "KQ-027:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-103": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-102:status=Pending",
+              "KQ-029:status=Pending",
+              "KQ-056:status=Pending",
+              "KQ-057:status=Pending",
+              "KQ-073:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-104": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "resources": [
+              "RES-DEVICES",
+              "RES-KINEMATICS",
+              "RES-PARTICIPANTS",
+              "RES-PRIVACY",
+              "RES-RATER",
+              "RES-REPEAT"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unresolved_resource",
           "state": "blocked"
         },
         "KQ-105": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-103:status=Pending",
+              "KQ-029:status=Pending",
+              "KQ-035:status=Pending",
+              "KQ-037:status=Pending",
+              "KQ-039:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-106": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-105:status=Pending",
+              "KQ-076:status=Pending",
+              "KQ-077:status=Pending",
+              "KQ-078:status=Pending",
+              "KQ-079:status=Pending",
+              "KQ-080:status=Pending",
+              "KQ-081:status=Pending",
+              "KQ-082:status=Pending",
+              "KQ-083:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-107": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-104:status=Pending",
+              "KQ-105:status=Pending",
+              "KQ-106:status=Pending",
+              "KQ-066:status=Pending",
+              "KQ-067:status=Pending",
+              "KQ-068:status=Pending",
+              "KQ-069:status=Pending",
+              "KQ-070:status=Pending",
+              "KQ-071:status=Pending",
+              "KQ-072:status=Pending",
+              "KQ-073:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-108": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "resources": [
+              "RES-DEVICES",
+              "RES-KINEMATICS",
+              "RES-PARTICIPANTS",
+              "RES-PRIVACY",
+              "RES-RATER",
+              "RES-REPEAT"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unresolved_resource",
           "state": "blocked"
         },
         "KQ-109": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-108:status=Pending",
+              "KQ-074:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-110": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-002:status=Pending",
+              "KQ-004:status=Pending",
+              "KQ-008:status=Pending",
+              "KQ-012:status=Pending",
+              "KQ-027:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-111": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-110:status=Pending",
+              "KQ-029:status=Pending",
+              "KQ-056:status=Pending",
+              "KQ-057:status=Pending",
+              "KQ-073:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-112": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "resources": [
+              "RES-DEVICES",
+              "RES-KINEMATICS",
+              "RES-PARTICIPANTS",
+              "RES-PRIVACY",
+              "RES-RATER",
+              "RES-REPEAT"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unresolved_resource",
           "state": "blocked"
         },
         "KQ-113": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-111:status=Pending",
+              "KQ-029:status=Pending",
+              "KQ-035:status=Pending",
+              "KQ-037:status=Pending",
+              "KQ-039:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-114": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-113:status=Pending",
+              "KQ-076:status=Pending",
+              "KQ-077:status=Pending",
+              "KQ-078:status=Pending",
+              "KQ-079:status=Pending",
+              "KQ-080:status=Pending",
+              "KQ-081:status=Pending",
+              "KQ-082:status=Pending",
+              "KQ-083:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-115": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-112:status=Pending",
+              "KQ-113:status=Pending",
+              "KQ-114:status=Pending",
+              "KQ-066:status=Pending",
+              "KQ-067:status=Pending",
+              "KQ-068:status=Pending",
+              "KQ-069:status=Pending",
+              "KQ-070:status=Pending",
+              "KQ-071:status=Pending",
+              "KQ-072:status=Pending",
+              "KQ-073:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-116": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "resources": [
+              "RES-DEVICES",
+              "RES-KINEMATICS",
+              "RES-PARTICIPANTS",
+              "RES-PRIVACY",
+              "RES-RATER",
+              "RES-REPEAT"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unresolved_resource",
           "state": "blocked"
         },
         "KQ-117": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-116:status=Pending",
+              "KQ-074:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-118": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-002:status=Pending",
+              "KQ-004:status=Pending",
+              "KQ-008:status=Pending",
+              "KQ-012:status=Pending",
+              "KQ-027:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-119": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-118:status=Pending",
+              "KQ-029:status=Pending",
+              "KQ-056:status=Pending",
+              "KQ-057:status=Pending",
+              "KQ-073:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-120": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "resources": [
+              "RES-DEVICES",
+              "RES-KINEMATICS",
+              "RES-PARTICIPANTS",
+              "RES-PRIVACY",
+              "RES-RATER",
+              "RES-REPEAT"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unresolved_resource",
           "state": "blocked"
         },
         "KQ-121": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-119:status=Pending",
+              "KQ-029:status=Pending",
+              "KQ-035:status=Pending",
+              "KQ-037:status=Pending",
+              "KQ-039:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-122": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-121:status=Pending",
+              "KQ-076:status=Pending",
+              "KQ-077:status=Pending",
+              "KQ-078:status=Pending",
+              "KQ-079:status=Pending",
+              "KQ-080:status=Pending",
+              "KQ-081:status=Pending",
+              "KQ-082:status=Pending",
+              "KQ-083:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-123": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-120:status=Pending",
+              "KQ-121:status=Pending",
+              "KQ-122:status=Pending",
+              "KQ-066:status=Pending",
+              "KQ-067:status=Pending",
+              "KQ-068:status=Pending",
+              "KQ-069:status=Pending",
+              "KQ-070:status=Pending",
+              "KQ-071:status=Pending",
+              "KQ-072:status=Pending",
+              "KQ-073:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-124": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "resources": [
+              "RES-DEVICES",
+              "RES-KINEMATICS",
+              "RES-PARTICIPANTS",
+              "RES-PRIVACY",
+              "RES-RATER",
+              "RES-REPEAT"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unresolved_resource",
           "state": "blocked"
         },
         "KQ-125": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-124:status=Pending",
+              "KQ-074:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-126": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-002:status=Pending",
+              "KQ-004:status=Pending",
+              "KQ-008:status=Pending",
+              "KQ-012:status=Pending",
+              "KQ-027:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-127": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-126:status=Pending",
+              "KQ-029:status=Pending",
+              "KQ-056:status=Pending",
+              "KQ-057:status=Pending",
+              "KQ-073:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-128": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "resources": [
+              "RES-DEVICES",
+              "RES-KINEMATICS",
+              "RES-PARTICIPANTS",
+              "RES-PRIVACY",
+              "RES-RATER",
+              "RES-REPEAT"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unresolved_resource",
           "state": "blocked"
         },
         "KQ-129": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-127:status=Pending",
+              "KQ-029:status=Pending",
+              "KQ-035:status=Pending",
+              "KQ-037:status=Pending",
+              "KQ-039:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-130": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-129:status=Pending",
+              "KQ-076:status=Pending",
+              "KQ-077:status=Pending",
+              "KQ-078:status=Pending",
+              "KQ-079:status=Pending",
+              "KQ-080:status=Pending",
+              "KQ-081:status=Pending",
+              "KQ-082:status=Pending",
+              "KQ-083:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-131": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-128:status=Pending",
+              "KQ-129:status=Pending",
+              "KQ-130:status=Pending",
+              "KQ-066:status=Pending",
+              "KQ-067:status=Pending",
+              "KQ-068:status=Pending",
+              "KQ-069:status=Pending",
+              "KQ-070:status=Pending",
+              "KQ-071:status=Pending",
+              "KQ-072:status=Pending",
+              "KQ-073:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-132": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "resources": [
+              "RES-DEVICES",
+              "RES-KINEMATICS",
+              "RES-PARTICIPANTS",
+              "RES-PRIVACY",
+              "RES-RATER",
+              "RES-REPEAT"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unresolved_resource",
           "state": "blocked"
         },
         "KQ-133": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-132:status=Pending",
+              "KQ-074:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-134": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-002:status=Pending",
+              "KQ-004:status=Pending",
+              "KQ-008:status=Pending",
+              "KQ-012:status=Pending",
+              "KQ-027:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-135": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-134:status=Pending",
+              "KQ-029:status=Pending",
+              "KQ-056:status=Pending",
+              "KQ-057:status=Pending",
+              "KQ-073:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-136": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "resources": [
+              "RES-DEVICES",
+              "RES-PARTICIPANTS",
+              "RES-PRIVACY",
+              "RES-RATER",
+              "RES-REPEAT",
+              "RES-TIMING"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unresolved_resource",
           "state": "blocked"
         },
         "KQ-137": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-135:status=Pending",
+              "KQ-029:status=Pending",
+              "KQ-035:status=Pending",
+              "KQ-037:status=Pending",
+              "KQ-039:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-138": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-137:status=Pending",
+              "KQ-076:status=Pending",
+              "KQ-077:status=Pending",
+              "KQ-078:status=Pending",
+              "KQ-079:status=Pending",
+              "KQ-080:status=Pending",
+              "KQ-081:status=Pending",
+              "KQ-082:status=Pending",
+              "KQ-083:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-139": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-136:status=Pending",
+              "KQ-137:status=Pending",
+              "KQ-138:status=Pending",
+              "KQ-066:status=Pending",
+              "KQ-067:status=Pending",
+              "KQ-068:status=Pending",
+              "KQ-069:status=Pending",
+              "KQ-070:status=Pending",
+              "KQ-071:status=Pending",
+              "KQ-072:status=Pending",
+              "KQ-073:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-140": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "resources": [
+              "RES-DEVICES",
+              "RES-PARTICIPANTS",
+              "RES-PRIVACY",
+              "RES-RATER",
+              "RES-REPEAT",
+              "RES-TIMING"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unresolved_resource",
           "state": "blocked"
         },
         "KQ-141": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-140:status=Pending",
+              "KQ-074:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-142": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-002:status=Pending",
+              "KQ-004:status=Pending",
+              "KQ-008:status=Pending",
+              "KQ-012:status=Pending",
+              "KQ-027:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-143": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-142:status=Pending",
+              "KQ-029:status=Pending",
+              "KQ-056:status=Pending",
+              "KQ-057:status=Pending",
+              "KQ-073:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-144": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "resources": [
+              "RES-DEVICES",
+              "RES-FORCE_CONTACT",
+              "RES-PARTICIPANTS",
+              "RES-PRIVACY",
+              "RES-RATER",
+              "RES-REPEAT"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unresolved_resource",
           "state": "blocked"
         },
         "KQ-145": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-143:status=Pending",
+              "KQ-029:status=Pending",
+              "KQ-035:status=Pending",
+              "KQ-037:status=Pending",
+              "KQ-039:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-146": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-145:status=Pending",
+              "KQ-076:status=Pending",
+              "KQ-077:status=Pending",
+              "KQ-078:status=Pending",
+              "KQ-079:status=Pending",
+              "KQ-080:status=Pending",
+              "KQ-081:status=Pending",
+              "KQ-082:status=Pending",
+              "KQ-083:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-147": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-144:status=Pending",
+              "KQ-145:status=Pending",
+              "KQ-146:status=Pending",
+              "KQ-066:status=Pending",
+              "KQ-067:status=Pending",
+              "KQ-068:status=Pending",
+              "KQ-069:status=Pending",
+              "KQ-070:status=Pending",
+              "KQ-071:status=Pending",
+              "KQ-072:status=Pending",
+              "KQ-073:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-148": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "resources": [
+              "RES-DEVICES",
+              "RES-FORCE_CONTACT",
+              "RES-PARTICIPANTS",
+              "RES-PRIVACY",
+              "RES-RATER",
+              "RES-REPEAT"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unresolved_resource",
           "state": "blocked"
         },
         "KQ-149": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-148:status=Pending",
+              "KQ-074:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-150": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-002:status=Pending",
+              "KQ-004:status=Pending",
+              "KQ-008:status=Pending",
+              "KQ-012:status=Pending",
+              "KQ-027:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-151": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-150:status=Pending",
+              "KQ-029:status=Pending",
+              "KQ-056:status=Pending",
+              "KQ-057:status=Pending",
+              "KQ-073:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-152": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "resources": [
+              "RES-CALIBRATED_PLATFORM",
+              "RES-DEVICES",
+              "RES-FORCE_CONTACT",
+              "RES-PARTICIPANTS",
+              "RES-PRIVACY",
+              "RES-RATER",
+              "RES-REPEAT"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unresolved_resource",
           "state": "blocked"
         },
         "KQ-153": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-151:status=Pending",
+              "KQ-029:status=Pending",
+              "KQ-035:status=Pending",
+              "KQ-037:status=Pending",
+              "KQ-039:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-154": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-153:status=Pending",
+              "KQ-076:status=Pending",
+              "KQ-077:status=Pending",
+              "KQ-078:status=Pending",
+              "KQ-079:status=Pending",
+              "KQ-080:status=Pending",
+              "KQ-081:status=Pending",
+              "KQ-082:status=Pending",
+              "KQ-083:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-155": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-152:status=Pending",
+              "KQ-153:status=Pending",
+              "KQ-154:status=Pending",
+              "KQ-066:status=Pending",
+              "KQ-067:status=Pending",
+              "KQ-068:status=Pending",
+              "KQ-069:status=Pending",
+              "KQ-070:status=Pending",
+              "KQ-071:status=Pending",
+              "KQ-072:status=Pending",
+              "KQ-073:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-156": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "resources": [
+              "RES-CALIBRATED_PLATFORM",
+              "RES-DEVICES",
+              "RES-FORCE_CONTACT",
+              "RES-PARTICIPANTS",
+              "RES-PRIVACY",
+              "RES-RATER",
+              "RES-REPEAT"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unresolved_resource",
           "state": "blocked"
         },
         "KQ-157": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-156:status=Pending",
+              "KQ-074:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-158": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-002:status=Pending",
+              "KQ-004:status=Pending",
+              "KQ-008:status=Pending",
+              "KQ-012:status=Pending",
+              "KQ-027:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-159": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-158:status=Pending",
+              "KQ-029:status=Pending",
+              "KQ-056:status=Pending",
+              "KQ-057:status=Pending",
+              "KQ-073:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-160": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "resources": [
+              "RES-DEVICES",
+              "RES-PARTICIPANTS",
+              "RES-PRIVACY",
+              "RES-RATER",
+              "RES-REPEAT",
+              "RES-TIMING"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unresolved_resource",
           "state": "blocked"
         },
         "KQ-161": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-159:status=Pending",
+              "KQ-029:status=Pending",
+              "KQ-035:status=Pending",
+              "KQ-037:status=Pending",
+              "KQ-039:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-162": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-161:status=Pending",
+              "KQ-076:status=Pending",
+              "KQ-077:status=Pending",
+              "KQ-078:status=Pending",
+              "KQ-079:status=Pending",
+              "KQ-080:status=Pending",
+              "KQ-081:status=Pending",
+              "KQ-082:status=Pending",
+              "KQ-083:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-163": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-160:status=Pending",
+              "KQ-161:status=Pending",
+              "KQ-162:status=Pending",
+              "KQ-066:status=Pending",
+              "KQ-067:status=Pending",
+              "KQ-068:status=Pending",
+              "KQ-069:status=Pending",
+              "KQ-070:status=Pending",
+              "KQ-071:status=Pending",
+              "KQ-072:status=Pending",
+              "KQ-073:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-164": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "resources": [
+              "RES-DEVICES",
+              "RES-PARTICIPANTS",
+              "RES-PRIVACY",
+              "RES-RATER",
+              "RES-REPEAT",
+              "RES-TIMING"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unresolved_resource",
           "state": "blocked"
         },
         "KQ-165": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-164:status=Pending",
+              "KQ-074:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-166": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-089:status=Pending",
+              "KQ-097:status=Pending",
+              "KQ-105:status=Pending",
+              "KQ-113:status=Pending",
+              "KQ-121:status=Pending",
+              "KQ-129:status=Pending",
+              "KQ-137:status=Pending",
+              "KQ-145:status=Pending",
+              "KQ-153:status=Pending",
+              "KQ-161:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-167": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-051:status=Pending",
+              "KQ-052:status=Pending",
+              "KQ-166:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-168": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-166:status=Pending",
+              "KQ-167:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-169": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-031:status=Pending",
+              "KQ-082:status=Pending",
+              "KQ-089:status=Pending",
+              "KQ-097:status=Pending",
+              "KQ-105:status=Pending",
+              "KQ-113:status=Pending",
+              "KQ-121:status=Pending",
+              "KQ-129:status=Pending",
+              "KQ-137:status=Pending",
+              "KQ-145:status=Pending",
+              "KQ-153:status=Pending",
+              "KQ-161:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-170": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-032:status=Pending",
+              "KQ-073:status=Pending",
+              "KQ-083:status=Pending",
+              "KQ-169:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-171": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-054:status=Pending",
+              "KQ-061:status=Pending",
+              "KQ-072:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-172": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-046:status=Pending",
+              "KQ-084:status=Pending",
+              "KQ-085:status=Pending",
+              "KQ-089:status=Pending",
+              "KQ-097:status=Pending",
+              "KQ-105:status=Pending",
+              "KQ-113:status=Pending",
+              "KQ-121:status=Pending",
+              "KQ-129:status=Pending",
+              "KQ-137:status=Pending",
+              "KQ-145:status=Pending",
+              "KQ-153:status=Pending",
+              "KQ-161:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-173": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-015:status=Pending",
+              "KQ-035:status=Pending",
+              "KQ-055:status=Pending",
+              "KQ-075:status=Pending",
+              "KQ-085:status=Pending",
+              "KQ-166:status=Pending",
+              "KQ-170:status=Pending",
+              "KQ-171:status=Pending",
+              "KQ-172:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-174": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-093:status=Pending",
+              "KQ-101:status=Pending",
+              "KQ-109:status=Pending",
+              "KQ-117:status=Pending",
+              "KQ-125:status=Pending",
+              "KQ-133:status=Pending",
+              "KQ-141:status=Pending",
+              "KQ-149:status=Pending",
+              "KQ-157:status=Pending",
+              "KQ-165:status=Pending",
+              "KQ-173:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-175": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
+            "dependencies": [
+              "KQ-011:status=Pending",
+              "KQ-013:status=Pending",
+              "KQ-014:status=Pending",
+              "KQ-060:status=Pending",
+              "KQ-074:status=Pending",
+              "KQ-174:status=Pending"
             ]
           },
-          "reason": "program_closure_gate",
+          "reason": "unmet_dependency",
           "state": "blocked"
         },
         "KQ-176": {
           "detail": {
-            "not_current": [
-              "KQ-015",
-              "KQ-018"
-            ]
+            "milestone_status": "BlockedExternal"
           },
-          "reason": "program_closure_gate",
+          "reason": "not_open_for_execution",
           "state": "blocked"
         }
       },
       "status_counts": {
         "BlockedExternal": 3,
-        "Passed": 16,
-        "Pending": 157
+        "Pending": 173
       },
       "total": 176
     },
@@ -2263,9 +2919,9 @@
     "source_hashes": {
       "docs/program/ACTIVE_WAVE.yaml": "230ccb93904fbfd9598aea6f3d90d996d05253261b559f2746c26e00475b658a",
       "docs/program/artifacts/kq-002.yaml": "636f533ffca7bf54503819e76ed9ed844c75c76be4c5bd653252a2c74018f0b1",
-      "docs/program/milestone_registry.yaml": "1a99224e327230aa28fa203efc0e57762b351f4c7eeaa6c48b48dbde8f6ad246",
+      "docs/program/milestone_registry.yaml": "16f26bb87e5d21e6c938b654ceba250b89ecb6a7779b45bf5272817a6a9d2146",
       "docs/program/resource_registry.yaml": "3df2e425c0c2b23e6e76428229f114fca223bae50630b044543ae6a6a1b29dd5",
-      "docs/status/evidence_validity.json": "7010d1f6d8f8527d1be31e1846add8759dffba0de92cbede9e987652ddd38ec6"
+      "docs/status/evidence_validity.json": "8e9d4cc9820024af3323a54a5abbcdad8ca5d89a5209443a5a55a413d128e4c6"
     }
   },
   "schema_version": 1
