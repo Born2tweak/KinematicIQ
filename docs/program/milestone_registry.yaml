@@ -3,7 +3,7 @@ program_id: kinematiciq-expanded-10
 status: candidate_execution_contract_repository_verification_pending
 registry_generated_from: docs/implementation/KINEMATICIQ_MASTER_EXECUTION_ROADMAP.md
 registry_policy:
-  default_branch: agent/evidence-integrity-wave-2
+  default_branch: agent/phase-b-engineering
   automatic_commit: true
   automatic_push: true
   automatic_production_deploy: false
@@ -100,6 +100,7 @@ milestones:
   - KQ-003
   - KQ-016
   - KQ-017
+  - KQ-018
 - id: KQ-002
   title: Approve locked product charter
   phase: A
@@ -293,6 +294,7 @@ milestones:
   - KQ-010
   - KQ-016
   - KQ-017
+  - KQ-018
 - id: KQ-004
   title: Create milestone registry schema
   phase: A
@@ -1554,7 +1556,7 @@ milestones:
     - id: targeted_contract_checks
       command: python tools/program/run_contract_checks.py --id KQ-015 --evidence-out docs/status/milestones/KQ-015.json
     - id: clean_clone_gate
-      command: python tools/program/verify_clean_clone.py --branch agent/evidence-integrity-wave-2 --pending-evidence-id KQ-015 --evidence-out docs/status/revision-4-clean-clone.json
+      command: python tools/program/verify_clean_clone.py --branch agent/phase-b-engineering --pending-evidence-id KQ-015 --evidence-out docs/status/revision-4-clean-clone.json
     manual_gate: null
     clean_clone_required: true
   failure:
@@ -1706,10 +1708,8 @@ milestones:
     push_on_pass: true
     batchable: true
   unlocks:
-  - KQ-018
-  - KQ-033
-  - KQ-035
   - KQ-043
+  - KQ-176
 - id: KQ-017
   title: Freeze forward-lunge research corpus
   phase: B
@@ -1827,37 +1827,46 @@ milestones:
     push_on_pass: true
     batchable: true
   unlocks:
-  - KQ-018
-  - KQ-035
   - KQ-043
+  - KQ-176
 - id: KQ-018
-  title: Audit legacy PoseTape/session schemas
+  title: Audit legacy PoseTape/session schema definitions
   phase: B
   class: parallel_enabler
   milestone_status: Pending
   expected_work_hours: 6
-  objective: 'Produce and verify one bounded outcome: Audit legacy PoseTape/session schemas.'
+  objective: 'Produce and verify one bounded outcome: audit the legacy PoseTape and
+    session schema definitions, readers, writers, and migration risks as they exist
+    in the repository. This is a structural audit of declared shapes and runtime contracts;
+    it makes no claim about the contents, accuracy, or representativeness of any recorded
+    movement data and therefore requires no frozen corpus.'
   user_visible_outcome: none
   dependencies:
-  - id: KQ-016
+  - id: KQ-001
     accepted_milestone_statuses:
     - Passed
-  - id: KQ-017
+  - id: KQ-003
     accepted_milestone_statuses:
     - Passed
   soft_dependencies: []
   resource_dependencies: []
   requirements:
   - required dependencies are PASS or conditionally skipped by an explicit negative decision
+  - findings describe schema shape, reader/writer coverage, and migration risk only;
+    any statement about biomechanical accuracy, dataset parity, or representativeness
+    belongs to a corpus-gated milestone
   evidence_inputs:
-  - docs/status/milestones/KQ-016.json
-  - docs/status/milestones/KQ-017.json
+  - docs/status/milestones/KQ-001.json
+  - docs/status/milestones/KQ-003.json
   in_scope:
   - Every reader/writer and migration risk is mapped
+  - Schema definitions and runtime contracts as declared in the repository
   - Current milestone artifacts, evidence, and directly affected tests only
   out_of_scope:
   - Production deployment or public activation
   - Weakening preregistered scientific, privacy, or safety gates
+  - Any claim of biomechanical accuracy, dataset parity, reliability, or generalization;
+    those remain gated on RES-CORPUS through KQ-016, KQ-017, and KQ-176
   artifacts:
   - docs/program/artifacts/kq-018.yaml
   - docs/status/milestones/KQ-018.json
@@ -3458,12 +3467,13 @@ milestones:
   class: parallel_enabler
   milestone_status: Pending
   expected_work_hours: 6
-  objective: 'Produce and verify one bounded outcome: Add backward-compatible result adapters.'
+  objective: 'Produce and verify one bounded outcome: add backward-compatible result
+    adapters so existing squat reports, history, and exports stay readable under the
+    vNext result shape. Acceptance is round-trip structural integrity against checked-in
+    fixtures; it asserts nothing about the biomechanical correctness of the values
+    carried through the adapter.'
   user_visible_outcome: none
   dependencies:
-  - id: KQ-016
-    accepted_milestone_statuses:
-    - Passed
   - id: KQ-032
     accepted_milestone_statuses:
     - Passed
@@ -3471,8 +3481,8 @@ milestones:
   resource_dependencies: []
   requirements:
   - required dependencies are PASS or conditionally skipped by an explicit negative decision
+  - round-trip fixtures are structural; corpus-backed value parity belongs to KQ-176
   evidence_inputs:
-  - docs/status/milestones/KQ-016.json
   - docs/status/milestones/KQ-032.json
   in_scope:
   - Existing squat reports/history/export remain readable
@@ -3683,20 +3693,19 @@ milestones:
   unlocks:
   - KQ-035
 - id: KQ-035
-  title: Phase B parity gate
+  title: Phase B engineering parity gate
   phase: B
   class: parallel_enabler
   milestone_status: Pending
   expected_work_hours: 6
-  objective: 'Produce and verify one bounded outcome: Phase B parity gate.'
-  user_visible_outcome: none
+  objective: 'Produce and verify one bounded outcome: squat and forward lunge both
+    execute end to end through the shared protocol runtime — live camera and upload
+    sources, tracking, phase and repetition detection, metrics, confidence and metric-level
+    abstention, coaching, and results presentation — and both are demonstrated in the
+    real browser. Forward lunge remains experimental and unreleased. This gate proves
+    runtime parity only; corpus-backed value parity is KQ-176.'
+  user_visible_outcome: browser-verified
   dependencies:
-  - id: KQ-016
-    accepted_milestone_statuses:
-    - Passed
-  - id: KQ-017
-    accepted_milestone_statuses:
-    - Passed
   - id: KQ-020
     accepted_milestone_statuses:
     - Passed
@@ -3722,9 +3731,9 @@ milestones:
   resource_dependencies: []
   requirements:
   - required dependencies are PASS or conditionally skipped by an explicit negative decision
+  - forward lunge lifecycle status stays experimental and unreleased; passing this gate
+    grants no scientific or release claim
   evidence_inputs:
-  - docs/status/milestones/KQ-016.json
-  - docs/status/milestones/KQ-017.json
   - docs/status/milestones/KQ-020.json
   - docs/status/milestones/KQ-021.json
   - docs/status/milestones/KQ-023.json
@@ -3733,11 +3742,15 @@ milestones:
   - docs/status/milestones/KQ-033.json
   - docs/status/milestones/KQ-034.json
   in_scope:
-  - Squat and lunge golden evidence pass without threshold/model change
+  - Squat and forward lunge both run end to end through the shared protocol runtime
+  - Camera and upload sources, phases, reps, metrics, abstention, coaching, results
+  - Behavior is demonstrated in the real browser, not only in unit tests
   - Current milestone artifacts, evidence, and directly affected tests only
   out_of_scope:
   - Production deployment or public activation
   - Weakening preregistered scientific, privacy, or safety gates
+  - Golden-corpus value parity, threshold validation, accuracy, reliability, or
+    generalization; all of that is KQ-176 and stays blocked on RES-CORPUS
   artifacts:
   - docs/program/artifacts/kq-035.yaml
   - docs/status/milestones/KQ-035.json
@@ -3825,6 +3838,7 @@ milestones:
   - KQ-153
   - KQ-161
   - KQ-173
+  - KQ-176
 - id: KQ-036
   title: Define `PoseModelAdapter` SDK
   phase: C
@@ -20388,6 +20402,122 @@ milestones:
   - milestone.KQ-175.result_code=<outcome.result_code>
   commit_policy:
     class: generated_status_batch
+    commit_on_pass: true
+    push_on_pass: true
+    batchable: true
+  unlocks: []
+- id: KQ-176
+  title: Phase B scientific parity gate
+  phase: B
+  class: parallel_enabler
+  milestone_status: BlockedExternal
+  expected_work_hours: 6
+  objective: 'Produce and verify one bounded outcome: squat and forward-lunge golden
+    evidence pass through the shared protocol runtime without any threshold or model
+    change. This is the scientific half of the former combined Phase B parity gate,
+    separated from KQ-035 so runtime parity can be engineered and browser-verified
+    while dataset parity stays gated on real recordings. It cannot pass without a
+    frozen corpus.'
+  user_visible_outcome: none
+  dependencies:
+  - id: KQ-016
+    accepted_milestone_statuses:
+    - Passed
+  - id: KQ-017
+    accepted_milestone_statuses:
+    - Passed
+  - id: KQ-035
+    accepted_milestone_statuses:
+    - Passed
+  soft_dependencies: []
+  resource_dependencies:
+  - RES-CORPUS
+  requirements:
+  - required dependencies are PASS or conditionally skipped by an explicit negative decision
+  - no threshold, model, or estimator may be retuned to make golden evidence pass
+  evidence_inputs:
+  - docs/status/milestones/KQ-016.json
+  - docs/status/milestones/KQ-017.json
+  - docs/status/milestones/KQ-035.json
+  in_scope:
+  - Squat and lunge golden evidence pass without threshold/model change
+  - Current milestone artifacts, evidence, and directly affected tests only
+  out_of_scope:
+  - Production deployment or public activation
+  - Weakening preregistered scientific, privacy, or safety gates
+  - Release eligibility, which remains with the locked studies KQ-092 and KQ-100
+  artifacts:
+  - docs/program/artifacts/kq-176.yaml
+  - docs/status/milestones/KQ-176.json
+  acceptance:
+  - id: KQ-176-A1
+    predicate: all_artifacts_exist_and_nonempty
+    inputs:
+    - docs/program/artifacts/kq-176.yaml
+    - docs/status/milestones/KQ-176.json
+  - id: KQ-176-A2
+    predicate: current_run_evidence_matches_head
+    evidence: docs/status/milestones/KQ-176.json
+    expected:
+      milestone_id: KQ-176
+      all_required_checks_passed: true
+  - id: KQ-176-A3
+    predicate: contract_output_assertion_passes
+    contract: docs/program/artifacts/kq-176.yaml
+    assertion_id: KQ-176-OUTCOME
+  - id: KQ-176-A4
+    predicate: command_exit_code_equals
+    command_id: targeted_contract_checks
+    expected: 0
+  - id: KQ-176-A5
+    predicate: regression_floor_passes
+    command_ids:
+    - web_unit_suite
+    - web_production_build
+    expected:
+      failed_tests: 0
+      build_exit_code: 0
+  verification:
+    profile: web_and_program_regression
+    automated:
+    - id: registry_contract
+      command: python tools/program/verify_milestone.py --registry docs/program/milestone_registry.yaml --schema docs/program/milestone_schema.yaml
+        --id KQ-176
+    - id: targeted_contract_checks
+      command: python tools/program/run_contract_checks.py --id KQ-176 --evidence-out docs/status/milestones/KQ-176.json
+    - id: web_unit_suite
+      command: npm --prefix web test -- --run --reporter=dot
+    - id: web_production_build
+      command: npm --prefix web run build
+    manual_gate: null
+    clean_clone_required: false
+  failure:
+    classify_as: FailedTechnical
+    abstain_or_rollback: Do not advance lifecycle or public claims; preserve evidence, create a revert commit only for changed code, and continue
+      the unaffected ready queue
+    research_trigger: Open a bounded research job only when diagnosis identifies a decision-critical knowledge or evidence gap
+    retry_budget: 0
+    locked_evidence_retuning_forbidden: true
+  outcomes:
+    pass:
+      milestone_status: Passed
+      result_code: ACCEPTED
+      state_updates:
+      - milestone.176=Passed
+    technical_failure:
+      milestone_status: FailedTechnical
+      result_code: TECHNICAL_FAILURE_RECORDED
+    human_block:
+      milestone_status: BlockedHuman
+      result_code: BLOCKED_HUMAN_WITH_OWNER
+    external_block:
+      milestone_status: BlockedExternal
+      result_code: BLOCKED_EXTERNAL_WITH_OWNER
+  state_updates:
+  - milestone.KQ-176.status=<outcome.milestone_status>
+  - milestone.KQ-176.result_code=<outcome.result_code>
+  commit_policy:
+    class: code_atomic
     commit_on_pass: true
     push_on_pass: true
     batchable: true

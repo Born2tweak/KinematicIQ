@@ -13,7 +13,7 @@ properties:
     additionalProperties: false
     required: [default_branch, automatic_commit, automatic_push, automatic_production_deploy, fail_closed, status_model, ready_rule, blocked_rule, release_rule, dependency_authority]
     properties:
-      default_branch: {const: agent/evidence-integrity-wave-2}
+      default_branch: {const: agent/phase-b-engineering}
       automatic_commit: {const: true}
       automatic_push: {const: true}
       automatic_production_deploy: {const: false}
@@ -29,8 +29,8 @@ properties:
     additionalProperties: {type: string, minLength: 12}
   milestones:
     type: array
-    minItems: 175
-    maxItems: 175
+    minItems: 176
+    maxItems: 176
     items: {$ref: "#/$defs/milestone"}
 $defs:
   milestone:

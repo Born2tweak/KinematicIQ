@@ -14,7 +14,7 @@ from compile_status import compile_status  # noqa: E402
 class StatusCompilerTests(unittest.TestCase):
     def test_compiled_frontier_preserves_authority_and_availability(self) -> None:
         status = compile_status(ROOT)
-        self.assertEqual(status["milestones"]["total"], 175)
+        self.assertEqual(status["milestones"]["total"], 176)
         self.assertEqual(status["protocols"]["available"], ["squat"])
         self.assertFalse(status["authority"]["automatic_production_deploy"])
         self.assertTrue(set(status["milestones"]["committed_wave_ready_ids"]) <= set(status["milestones"]["dependency_ready_ids"]))

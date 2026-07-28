@@ -190,8 +190,8 @@ def validate_semantics(program: LoadedProgram) -> list[str]:
     milestones = program.milestones
     by_id = program.by_id
     ids = [item["id"] for item in milestones]
-    if len(ids) != 175:
-        errors.append(f"registry must contain 175 milestones, found {len(ids)}")
+    if len(ids) != 176:
+        errors.append(f"registry must contain 176 milestones, found {len(ids)}")
     duplicates = sorted({item for item in ids if ids.count(item) > 1})
     if duplicates:
         errors.append(f"duplicate milestone IDs: {duplicates}")
