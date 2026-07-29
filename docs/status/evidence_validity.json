@@ -97,6 +97,12 @@
       "evidence_id": "KQ-018-c24260d09778",
       "reason": "Evidence schema v2 provenance and all declared milestone checks passed on the normal execution path.",
       "validity": "Current"
+    },
+    "KQ-019": {
+      "event_id": "VAL-KQ-019-677E1559B2CE-CURRENT",
+      "evidence_id": "KQ-019-677e1559b2ce",
+      "reason": "Evidence schema v2 provenance and all declared milestone checks passed on the normal execution path.",
+      "validity": "Current"
     }
   },
   "summary": {
@@ -115,7 +121,8 @@
       "KQ-012",
       "KQ-013",
       "KQ-014",
-      "KQ-018"
+      "KQ-018",
+      "KQ-019"
     ],
     "Invalidated": [],
     "Retired": [],
