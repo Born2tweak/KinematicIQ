@@ -1,0 +1,44 @@
+schema_version: 1
+milestone_id: KQ-026
+implementation: web/src/protocols/package.ts
+tests: web/src/protocols/package.test.ts
+corpus_required: false
+corpus_rationale: >-
+  The package schema validates structure and gates language. It measures
+  nothing and asserts no accuracy, so it needs no frozen corpus. It is in fact
+  the mechanism that keeps engineering availability from becoming a scientific
+  claim while RES-CORPUS stays unresolved.
+problem: >-
+  ProtocolStatus was binary - available or planned - so a protocol that is
+  engineering-complete but scientifically unvalidated had no representable
+  state. The only options were hiding working software or implying validation
+  that does not exist.
+axes:
+  engineering: absent | partial | complete
+  validation: unvalidated | blocked | in-progress | validated
+  release: unavailable | experimental | released
+release_rule: >-
+  Release state is derived, never declared. Complete engineering alone reaches
+  experimental and stops there; only validation evidence reaches released, and
+  blocked validation can never reach it however finished the code is.
+claim_gate: >-
+  assertClaimsPermitted refuses accuracy language - accurate, validated,
+  clinical, diagnostic, reliable, proven - on anything not actually released.
+  Descriptive claims about what is computed remain permitted.
+enables:
+  KQ-035: >-
+    Forward lunge can run end to end in the browser as experimental, labelled
+    "runs, but accuracy is unvalidated (awaiting RES-CORPUS)", while KQ-176 and
+    every scientific claim stay blocked.
+verification:
+  unit_tests: 24
+  covers:
+  - engineering alone never reaches released
+  - blocked validation cannot be promoted by engineering progress
+  - accuracy words refused before release, descriptive claims permitted
+  - blocked validation must name its blockers; non-blocked must not
+  - a complete implementation must emit at least one metric
+  - identity, semver, phase uniqueness and landmark indices validated
+assertions:
+- id: KQ-026-OUTCOME
+  actual: Identity through release state is validated
