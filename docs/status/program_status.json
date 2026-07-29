@@ -26,24 +26,28 @@
   "milestones": {
     "allowed_executable_ids": [
       "KQ-020",
-      "KQ-026"
+      "KQ-027"
     ],
     "committed_wave_ready_ids": [
       "KQ-020",
       "KQ-021",
       "KQ-022",
-      "KQ-026"
+      "KQ-027",
+      "KQ-028",
+      "KQ-031"
     ],
     "dependency_ready_ids": [
       "KQ-015",
       "KQ-020",
       "KQ-021",
       "KQ-022",
-      "KQ-026",
+      "KQ-027",
+      "KQ-028",
+      "KQ-031",
       "KQ-056"
     ],
     "evidence_validity_counts": {
-      "Current": 16,
+      "Current": 17,
       "Invalidated": 0,
       "Retired": 0,
       "ReverificationRequired": 1,
@@ -410,35 +414,31 @@
       },
       "KQ-026": {
         "detail": {
-          "sequence": 1,
+          "milestone_status": "Passed"
+        },
+        "reason": "not_open_for_execution",
+        "state": "blocked"
+      },
+      "KQ-027": {
+        "detail": {
+          "sequence": 2,
           "worker_id": "W1"
         },
         "reason": "scheduled",
         "state": "allowed"
       },
-      "KQ-027": {
-        "detail": {
-          "dependencies": [
-            "KQ-026:status=Pending"
-          ]
-        },
-        "reason": "unmet_dependency",
-        "state": "blocked"
-      },
       "KQ-028": {
         "detail": {
-          "dependencies": [
-            "KQ-026:status=Pending"
-          ]
+          "occupied_by": "KQ-027",
+          "worker_id": "W1"
         },
-        "reason": "unmet_dependency",
-        "state": "blocked"
+        "reason": "worker_slot_occupied",
+        "state": "eligible_but_not_scheduled"
       },
       "KQ-029": {
         "detail": {
           "dependencies": [
-            "KQ-022:status=Pending",
-            "KQ-026:status=Pending"
+            "KQ-022:status=Pending"
           ]
         },
         "reason": "unmet_dependency",
@@ -455,12 +455,11 @@
       },
       "KQ-031": {
         "detail": {
-          "dependencies": [
-            "KQ-026:status=Pending"
-          ]
+          "occupied_by": "KQ-027",
+          "worker_id": "W1"
         },
-        "reason": "unmet_dependency",
-        "state": "blocked"
+        "reason": "worker_slot_occupied",
+        "state": "eligible_but_not_scheduled"
       },
       "KQ-032": {
         "detail": {
@@ -485,7 +484,6 @@
       "KQ-034": {
         "detail": {
           "dependencies": [
-            "KQ-026:status=Pending",
             "KQ-027:status=Pending",
             "KQ-028:status=Pending",
             "KQ-029:status=Pending",
@@ -515,8 +513,7 @@
       "KQ-036": {
         "detail": {
           "dependencies": [
-            "KQ-022:status=Pending",
-            "KQ-026:status=Pending"
+            "KQ-022:status=Pending"
           ]
         },
         "reason": "unmet_dependency",
@@ -969,7 +966,6 @@
       "KQ-078": {
         "detail": {
           "dependencies": [
-            "KQ-026:status=Pending",
             "KQ-027:status=Pending",
             "KQ-029:status=Pending"
           ]
@@ -2315,8 +2311,8 @@
     },
     "status_counts": {
       "BlockedExternal": 3,
-      "Passed": 16,
-      "Pending": 157
+      "Passed": 17,
+      "Pending": 156
     },
     "total": 176
   },
@@ -2344,6 +2340,6 @@
     "docs/program/artifacts/kq-002.yaml": "636f533ffca7bf54503819e76ed9ed844c75c76be4c5bd653252a2c74018f0b1",
     "docs/program/milestone_registry.yaml": "16f26bb87e5d21e6c938b654ceba250b89ecb6a7779b45bf5272817a6a9d2146",
     "docs/program/resource_registry.yaml": "3df2e425c0c2b23e6e76428229f114fca223bae50630b044543ae6a6a1b29dd5",
-    "docs/status/evidence_validity.json": "9944a62cb40789b4e896b684ef7bc57916c80e4fad8d57aaea36eb0678202b76"
+    "docs/status/evidence_validity.json": "8f045a4c7f34dbb39e94f4085de8e5499abb4cfed1f66719634c578ea2e7de38"
   }
 }
