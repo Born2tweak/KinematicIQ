@@ -6,6 +6,7 @@ import {
   assertClaimsPermitted,
   deriveReleaseState,
   isSelectable,
+  releaseDetail,
   releaseLabel,
   validateProtocolPackage,
 } from './package'
@@ -66,22 +67,25 @@ describe('user-facing labels', () => {
       lifecycle: { engineering: 'complete', validation: 'blocked', blockedBy: ['RES-CORPUS'] },
     })
     expect(releaseLabel(lunge)).toBe(
-      'Experimental — runs, but accuracy is unvalidated (awaiting RES-CORPUS)',
+      'Experimental — results have not yet been benchmarked',
     )
+    // The resource id is developer vocabulary and must not reach the athlete.
+    expect(releaseLabel(lunge)).not.toContain('RES-CORPUS')
+    expect(releaseDetail(lunge)).toContain('RES-CORPUS')
   })
 
   it('labels an unvalidated package experimental without blockers', () => {
     const candidate = pkg({
       lifecycle: { engineering: 'complete', validation: 'unvalidated', blockedBy: [] },
     })
-    expect(releaseLabel(candidate)).toBe('Experimental — runs, but accuracy is unvalidated')
+    expect(releaseLabel(candidate)).toBe('Experimental — results have not yet been benchmarked')
   })
 
   it('labels unavailable and released packages plainly', () => {
     expect(
       releaseLabel(pkg({ lifecycle: { engineering: 'partial', validation: 'unvalidated', blockedBy: [] } })),
     ).toBe('In development — not yet available')
-    expect(releaseLabel(pkg())).toBe('Validated')
+    expect(releaseLabel(pkg())).toBe('Benchmarked')
   })
 })
 

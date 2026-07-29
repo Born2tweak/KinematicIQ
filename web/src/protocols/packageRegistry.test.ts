@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest'
 import { SQUAT_PROTOCOL } from './squat'
 import { INLINE_LUNGE_PROTOCOL } from './inlineLunge'
 import { buildProtocolPackage, deriveEngineeringState } from './packageRegistry'
-import { deriveReleaseState, releaseLabel } from './package'
+import { deriveReleaseState, releaseDetail, releaseLabel } from './package'
 
 describe('engineering state is derived from the definition, not declared', () => {
   it('is complete only with both a runtime and an input path', () => {
@@ -32,7 +32,9 @@ describe('shipped protocol packages', () => {
       version: '1.0.0',
     })
     expect(deriveReleaseState(pkg.lifecycle)).toBe('experimental')
-    expect(releaseLabel(pkg)).toContain('awaiting RES-CORPUS')
+    expect(releaseLabel(pkg)).toBe('Experimental — results have not yet been benchmarked')
+    // The blocking resource stays in developer detail, not the card.
+    expect(releaseDetail(pkg)).toContain('RES-CORPUS')
     expect(pkg.metrics.length).toBeGreaterThan(0)
   })
 

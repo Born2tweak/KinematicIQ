@@ -29,8 +29,10 @@ describe('protocol picker information architecture', () => {
   it('labels the runnable squat experimental rather than plainly available', () => {
     const [squat] = groups().experimental
     expect(squat.statusLabel).toBe(
-      'Experimental — runs, but accuracy is unvalidated (awaiting RES-CORPUS)',
+      'Experimental — results have not yet been benchmarked',
     )
+    // Internal program vocabulary must never reach the athlete interface.
+    expect(squat.statusLabel).not.toMatch(/RES-|KQ-\d/)
   })
 
   it('never shows accuracy language on a research card', () => {

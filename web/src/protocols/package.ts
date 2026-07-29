@@ -93,12 +93,29 @@ export function isSelectable(pkg: ProtocolPackage): boolean {
  */
 export function releaseLabel(pkg: ProtocolPackage): string {
   const state = deriveReleaseState(pkg.lifecycle)
-  if (state === 'released') return 'Validated'
+  if (state === 'released') return 'Benchmarked'
   if (state === 'unavailable') return 'In development — not yet available'
+  return 'Experimental — results have not yet been benchmarked'
+}
+
+/**
+ * Developer-facing detail for evidence records and debug surfaces.
+ *
+ * Resource identifiers like RES-CORPUS are internal program vocabulary. An
+ * athlete reading a result should be told it is not benchmarked; which registry
+ * resource is unresolved is our problem, not theirs. Keeping the two strings
+ * apart stops controller terminology leaking into the product.
+ */
+export function releaseDetail(pkg: ProtocolPackage): string {
+  const state = deriveReleaseState(pkg.lifecycle)
+  if (state === 'released') return 'Validated against reference evidence.'
+  if (state === 'unavailable') {
+    return 'No runnable input path yet; this movement cannot start a session.'
+  }
   const blockers = pkg.lifecycle.blockedBy
   return blockers.length
-    ? `Experimental — runs, but accuracy is unvalidated (awaiting ${blockers.join(', ')})`
-    : 'Experimental — runs, but accuracy is unvalidated'
+    ? `Runs end to end. Accuracy unmeasured; blocked on ${blockers.join(', ')}.`
+    : 'Runs end to end. Accuracy unmeasured.'
 }
 
 /**
