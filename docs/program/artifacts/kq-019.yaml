@@ -1,0 +1,50 @@
+schema_version: 1
+milestone_id: KQ-019
+implementation: web/src/ingest/framePacket.ts
+tests: web/src/ingest/framePacket.test.ts
+corpus_required: false
+corpus_rationale: >-
+  FramePacket is a capture-time envelope: when a frame happened, how the image
+  was oriented, where it came from, how to identify it, and how much of the body
+  the tracker could see. It asserts nothing about biomechanics, accuracy, or
+  dataset parity, so it needs no frozen corpus.
+carries:
+  timestamp: finite capture time on the producer clock, validated at construction
+  rotation: closed set 0/90/180/270 clockwise-to-upright
+  source: live-camera | uploaded-video | fixture-video | pose-tape
+  identity: frameIndex plus captureId, both required
+  quality: optional LandmarkQualityFrame; absence means not measured, never good
+audit_findings_addressed:
+- id: R1
+  finding: createTape never stamped schemaVersion
+  resolution: packetVersion is stamped in createFramePacket, at construction
+- id: R2
+  finding: optional schemaVersion made untagged ambiguous with v1 via ?? 1
+  resolution: packetVersion is required; readFramePacket refuses untagged input
+- id: R4
+  finding: a v2-tagged tape without evidence bypassed validation entirely
+  resolution: readFramePacket revalidates the payload, not just the version tag
+- id: R5
+  finding: PoseTape had no readable-version gate
+  resolution: FRAME_PACKET_VERSIONS is closed; unknown versions are refused
+- id: R6
+  finding: inconsistent version typing across schemas
+  resolution: FramePacketVersion is a closed union derived from one constant
+legacy_adoption: >-
+  fromPoseFrame wraps existing PoseFrame producers without changing their
+  behaviour. Rotation defaults to 0 and that default is recorded as an
+  assumption, because legacy frames carry no rotation measurement.
+verification:
+  unit_tests: 18
+  covers:
+  - version stamped at construction
+  - untagged input refused rather than assumed v1
+  - unknown future version refused rather than coerced
+  - payload revalidated on read
+  - rotation outside the closed set refused
+  - non-finite timestamp, negative frameIndex, empty captureId refused
+  - missing pose accepted as a legitimate dropped detection
+  - gap measurement refuses to cross captures or run backwards
+assertions:
+- id: KQ-019-OUTCOME
+  actual: Timestamp, rotation, source, frame identity, quality metadata
