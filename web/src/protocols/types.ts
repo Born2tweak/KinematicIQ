@@ -12,6 +12,7 @@
  */
 import type { MovementProfile } from '../analysis/movement/types'
 import type { ProtocolDefinition } from '../core/protocol'
+import type { TransitionProtocolProfile } from './inlineLunge/profile'
 
 export type {
   ProtocolDefinition,
@@ -22,19 +23,37 @@ export type {
 } from '../core/protocol'
 export { NotImplementedError, isAvailable, validateProtocolDefinition } from '../core/protocol'
 
+/**
+ * A protocol's runtime analysis configuration.
+ *
+ * Two shapes exist because two segmentation engines exist. `MovementProfile`
+ * configures the shared cyclic rep engine; `TransitionProtocolProfile`
+ * configures a protocol whose unit of observation is a discrete transition.
+ * They are discriminated by `kind` — a `MovementProfile` is never 'transition'.
+ */
+export type ProtocolAnalysisProfile = MovementProfile | TransitionProtocolProfile
+
 export interface Protocol {
   definition: ProtocolDefinition
   /**
-   * Runtime analysis configuration. Present for `available` protocols;
-   * `null` for `planned` stubs (M10) whose analysis is not implemented.
+   * Runtime analysis configuration, or `null` for a protocol with no
+   * implemented analysis at all (M10 stubs).
    *
    * Kept for compatibility alongside the M39 `ProtocolRuntime` contract
-   * (`./runtime.ts`) — the pluggable five-stage runtime that will supersede
-   * direct profile consumption once call sites migrate (M43).
+   * (`./runtime.ts`) — the pluggable runtime that will supersede direct
+   * profile consumption once call sites migrate (M43).
    */
-  profile: MovementProfile | null
+  profile: ProtocolAnalysisProfile | null
 }
 
+/** True when this profile drives the shared cyclic rep engine. */
+export function isCyclicMovementProfile(
+  profile: ProtocolAnalysisProfile | null,
+): profile is MovementProfile {
+  return profile !== null && profile.kind !== 'transition'
+}
+
+export type { TransitionProtocolProfile } from './inlineLunge/profile'
 export type { ProtocolRuntime, ReportMetadata } from './runtime'
 export type {
   ProtocolTrialKind,

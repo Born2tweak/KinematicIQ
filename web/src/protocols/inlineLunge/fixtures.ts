@@ -10,6 +10,10 @@ export function buildSyntheticInlineLungeFrames(options: {
   leadSide?: InlineLungeSide
   trials?: number
   unreadableActiveFrames?: number
+  /** Readable standing preroll. Must cover the calibration window. */
+  standingFrames?: number
+  /** Unreadable frames appended after the last trial (drives coverage down). */
+  trailingUnreadableFrames?: number
 } = {}): PoseFrame[] {
   const side = options.leadSide ?? 'left'
   const trialCount = options.trials ?? 1
@@ -29,7 +33,7 @@ export function buildSyntheticInlineLungeFrames(options: {
     frames.push({ timestamp: frameIndex * 33, frameIndex, landmarks: points, worldLandmarks: points, poseConfidence: visibility })
     frameIndex++
   }
-  for (let i = 0; i < 15; i++) push(0, 0)
+  for (let i = 0; i < (options.standingFrames ?? 15); i++) push(0, 0)
   for (let trial = 0; trial < trialCount; trial++) {
     ;[0.07, 0.10, 0.12].forEach((foot) => push(foot, 0.005))
     ;[0.03, 0.04, 0.055, 0.07, 0.085].forEach((drop) => push(0.12, drop))
@@ -37,5 +41,6 @@ export function buildSyntheticInlineLungeFrames(options: {
     ;[0.08, 0.07, 0.055, 0.04, 0.02, 0.01].forEach((drop) => push(0.12, drop))
     ;[0.09, 0.06, 0.03, 0.01, 0, 0, 0, 0].forEach((foot) => push(foot, 0.005))
   }
+  for (let i = 0; i < (options.trailingUnreadableFrames ?? 0); i++) push(0, 0, 0.1)
   return frames
 }

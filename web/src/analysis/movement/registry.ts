@@ -10,16 +10,20 @@
  */
 import {
   getActiveProtocolProfile,
-  getProtocol,
+  getProtocolProfile,
 } from '../../protocols/registry'
 import type { MovementId, MovementProfile } from './types'
 
+/**
+ * `getProtocolProfile` already refuses a non-cyclic profile, so a transition
+ * protocol cannot reach the cyclic pipeline through this shim.
+ */
 export function getMovementProfile(id: MovementId): MovementProfile {
-  const { profile } = getProtocol(id)
-  if (!profile) {
+  try {
+    return getProtocolProfile(id)
+  } catch {
     throw new Error(`Movement profile not registered: ${id}`)
   }
-  return profile
 }
 
 /** The movement the app currently analyzes. Movement selection UI is Phase 4. */

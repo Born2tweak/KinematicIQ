@@ -1,5 +1,4 @@
 import { describe, expect, it } from 'vitest'
-import { NotImplementedError } from '../../core/protocol'
 import { lintProtocolCompleteness } from '../completeness'
 import { getProtocol, getProtocolProfile } from '../registry'
 import { getProtocolRuntime } from '../runtime'
@@ -35,13 +34,20 @@ describe('inline-lunge research protocol', () => {
     expect(result.abstentionReasons).toHaveLength(1)
   })
 
-  it('remains planned, non-actionable, complete as a stub, and fail-closed publicly', () => {
-    expect(getProtocol('forwardLungeStrideReturn').definition.status).toBe('planned')
-    expect(getProtocol('forwardLungeStrideReturn').definition.capture.inputModes).toEqual([])
-    expect(lintProtocolCompleteness(INLINE_LUNGE_PROTOCOL)).toEqual([])
-    expect(() => getProtocolProfile('forwardLungeStrideReturn')).toThrow(NotImplementedError)
-    expect(() => getProtocolRuntime('forwardLungeStrideReturn')).toThrow(NotImplementedError)
-    expect(getProtocol('forwardLungeStrideReturn').definition.evidence.datasetProvenance).toEqual([{ datasetId: 'llm-fms', role: 'ontology-only' }])
+  it('is runnable through its own runtime while making no validation claim', () => {
+    const { definition } = getProtocol('forwardLungeStrideReturn')
+    // Never promoted to `available`: that flag tracks scientific validation,
+    // which is still blocked. Selectability comes from the derived package.
+    expect(definition.status).toBe('planned')
+    expect(definition.capture.inputModes).toEqual(['upload', 'replay'])
+    expect(definition.evidence.researchState).toBe('research-only')
+    expect(lintProtocolCompleteness(INLINE_LUNGE_PROTOCOL, getProtocolRuntime('forwardLungeStrideReturn'))).toEqual([])
+    // The cyclic entry points still refuse it — it has no cyclic engine.
+    expect(() => getProtocolProfile('forwardLungeStrideReturn')).toThrow(/no cyclic movement profile/)
+    expect(getProtocolRuntime('forwardLungeStrideReturn').analyzeSession).toBeTypeOf('function')
+    expect(definition.evidence.datasetProvenance).toEqual([{ datasetId: 'llm-fms', role: 'ontology-only' }])
+    // Every downstream human/data gate is still recorded as unpassed.
+    expect(definition.evidence.validationGates.filter((gate) => gate.state !== 'passed').length).toBeGreaterThan(0)
   })
 
   it('serializes research outcomes without changing the session-artifact schema', () => {

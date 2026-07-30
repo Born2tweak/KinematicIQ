@@ -51,11 +51,19 @@ describe('protocols/registry', () => {
     expect(getProtocol('jump').definition.kind).toBe('ballistic')
     expect(getProtocol('sprint').definition.kind).toBe('gait')
     expect(getProtocol('sitToStand').definition.kind).toBe('transition')
-    for (const id of ['forwardLungeStrideReturn', 'hipHinge', 'jump', 'sprint', 'sitToStand'] as const) {
+    for (const id of ['hipHinge', 'jump', 'sprint', 'sitToStand'] as const) {
       expect(getProtocol(id).profile).toBeNull()
       expect(getProtocol(id).definition.phases.length).toBeGreaterThan(0)
       expect(getProtocol(id).definition.requiredLandmarks.length).toBeGreaterThan(0)
     }
+  })
+
+  it('forward lunge carries a transition profile, not a cyclic movement profile', () => {
+    const { profile, definition } = getProtocol('forwardLungeStrideReturn')
+    expect(definition.kind).toBe('transition')
+    expect(profile?.kind).toBe('transition')
+    expect(definition.phases.length).toBeGreaterThan(0)
+    expect(definition.requiredLandmarks.length).toBeGreaterThan(0)
   })
 
   it('reads the legacy lunge alias without registering a second protocol', () => {
@@ -65,8 +73,13 @@ describe('protocols/registry', () => {
 
   it('analyze entry point throws NotImplementedError for planned stubs', () => {
     expect(() => getProtocolProfile('jump')).toThrow(NotImplementedError)
-    expect(() => getProtocolProfile('forwardLungeStrideReturn')).toThrow(NotImplementedError)
     expect(() => getProtocolProfile('sprint')).toThrow(/not yet implemented/)
+    // Forward lunge HAS an analysis configuration — it is simply not one the
+    // cyclic engine can read, so this entry point still refuses it rather than
+    // handing back a profile that lacks phase and rep thresholds.
+    expect(() => getProtocolProfile('forwardLungeStrideReturn')).toThrow(
+      /no cyclic movement profile/,
+    )
     // Squat path untouched.
     expect(getProtocolProfile('squat')).toBe(SQUAT_PROFILE)
   })

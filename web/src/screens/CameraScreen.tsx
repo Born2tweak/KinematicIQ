@@ -51,7 +51,7 @@ import {
 } from './cameraSessionUi'
 import { buildCameraSessionViewModel } from './cameraSessionController'
 import { getProtocol } from '../protocols/registry'
-import { getProtocolRuntime } from '../protocols/runtime'
+import { getCyclicProtocolRuntime } from '../protocols/runtime'
 import {
   CameraActionBar,
   CameraAnalystTools,
@@ -95,7 +95,9 @@ export function CameraScreen() {
     (location.state as { protocolId?: ProtocolId } | null)?.protocolId ??
     'squat'
   const selectedProtocol = getProtocol(selectedProtocolId).definition
-  const selectedRuntime = getProtocolRuntime(selectedProtocolId)
+  // The live surface drives the cyclic rep engine, so it requires a runtime
+  // that has one. A protocol reachable only through upload never routes here.
+  const selectedRuntime = getCyclicProtocolRuntime(selectedProtocolId)
   const liveCyclic = selectedRuntime.liveCyclic as NonNullable<
     typeof selectedRuntime.liveCyclic
   >

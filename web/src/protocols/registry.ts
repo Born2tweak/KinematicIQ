@@ -18,7 +18,7 @@ import { SPRINT_PROTOCOL } from './sprint'
 import { SIT_TO_STAND_PROTOCOL } from './sitToStand'
 import { SQUAT_PROTOCOL } from './squat'
 import { INLINE_LUNGE_PROTOCOL } from './inlineLunge'
-import type { Protocol } from './types'
+import { isCyclicMovementProfile, type Protocol } from './types'
 
 const PROTOCOLS: Partial<Record<ProtocolId, Protocol>> = {
   squat: SQUAT_PROTOCOL,
@@ -73,6 +73,14 @@ export function getProtocolProfile(id: ProtocolIdInput): MovementProfile {
   const { profile, definition } = getProtocol(id)
   if (!profile) {
     throw new NotImplementedError(definition.id)
+  }
+  // A transition protocol has a real analysis configuration, just not one the
+  // cyclic engine can read. Returning it here would hand squat thresholds to a
+  // caller that expects them — refuse instead of coercing.
+  if (!isCyclicMovementProfile(profile)) {
+    throw new Error(
+      `Protocol "${definition.id}" is segmented as a transition protocol and has no cyclic movement profile — use getProtocolRuntime.`,
+    )
   }
   return profile
 }

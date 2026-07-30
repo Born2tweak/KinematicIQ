@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { SQUAT_RUNTIME } from './runtime'
+import { SQUAT_RUNTIME, getProtocolRuntime, hasProtocolRuntime } from './runtime'
 import { getProtocol, listProtocolsByStatus } from './registry'
 import {
   assertRegisteredProtocolsComplete,
@@ -58,11 +58,26 @@ describe('protocol completeness and activation lint', () => {
     ]))
   })
 
-  it('keeps every planned protocol metadata-only and non-runnable', () => {
+  it('keeps every protocol without an implementation metadata-only', () => {
     for (const protocol of listProtocolsByStatus('planned')) {
+      if (hasProtocolRuntime(protocol.definition.id)) continue
       expect(lintProtocolCompleteness(protocol)).toEqual([])
       expect(protocol.profile).toBeNull()
       expect(protocol.definition.capture.inputModes).toEqual([])
     }
+  })
+
+  it('refuses an input path with no runtime behind it', () => {
+    // This is the invariant the old `status === 'planned'` rule was protecting:
+    // a movement a user can select must have an implementation.
+    const lunge = getProtocol('forwardLungeStrideReturn')
+    expect(lunge.definition.capture.inputModes.length).toBeGreaterThan(0)
+    expect(lintProtocolCompleteness(lunge).map((issue) => issue.field)).toEqual([
+      'runtime',
+      'runtime.outcomeKinds',
+    ])
+    expect(
+      lintProtocolCompleteness(lunge, getProtocolRuntime('forwardLungeStrideReturn')),
+    ).toEqual([])
   })
 })

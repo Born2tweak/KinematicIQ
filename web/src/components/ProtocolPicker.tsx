@@ -4,6 +4,7 @@ import { groupProtocolDefinitions } from './protocolPickerModel'
 
 const KIND_LABELS: Record<string, string> = {
   cyclic: 'rep-based',
+  transition: 'trial-based',
   ballistic: 'flight & landing',
   gait: 'stride-based',
 }
@@ -21,10 +22,10 @@ export function ProtocolPicker() {
           against reference data, so results are experimental.
         </p>
         <div className="protocol-picker__grid" role="list">
-          {[...groups.released, ...groups.experimental].map(({ definition, statusLabel }) => (
+          {[...groups.released, ...groups.experimental].map(({ definition, statusLabel, route }) => (
             <div key={definition.id} role="listitem" className="protocol-card-listitem">
               <button type="button" className="protocol-card"
-                onClick={() => navigate('/camera', { state: { protocolId: definition.id } })}>
+                onClick={() => navigate(route, { state: { protocolId: definition.id } })}>
                 <span className="protocol-card__label">{definition.label}</span>
                 <span className="protocol-card__kind">{KIND_LABELS[definition.kind] ?? definition.kind}</span>
                 <span className="protocol-card__status protocol-card__status--available">{statusLabel}</span>

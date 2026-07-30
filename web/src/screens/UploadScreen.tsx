@@ -5,8 +5,9 @@ import { Button } from '../components/Button'
 import { Card } from '../components/Card'
 import { DisclaimerBanner } from '../components/DisclaimerBanner'
 import { DEFAULT_ANALYSIS_FPS, runVideoAnalysis } from '../analysis/videoAnalyzer'
+import { analyzeFramesForProtocol } from '../analysis/analyzeProtocol'
 import { poseEngine } from '../cv/poseEngine'
-import { createTape } from '../eval/poseTape'
+import { createTape, deserializeTape, type PoseTape } from '../eval/poseTape'
 import { storeSessionTape } from '../eval/tapeStore'
 import {
   disposeVideo,
@@ -17,6 +18,8 @@ import {
 } from '../cv/videoFrameSource'
 import { getProtocol } from '../protocols/registry'
 import { getProtocolRuntime } from '../protocols/runtime'
+import { buildProtocolPackage } from '../protocols/packageRegistry'
+import { releaseDetail, releaseLabel } from '../protocols/package'
 
 // ── Advisory limits (warn, never silently block) ───────────────────
 const MAX_RECOMMENDED_DURATION_S = 90
@@ -58,15 +61,27 @@ function buildWarnings(loaded: LoadedVideo): string[] {
 }
 
 export function UploadScreen() {
-  const capture = getProtocol('squat').definition.capture
   const navigate = useNavigate()
   const location = useLocation()
   // Selected protocol from route state (M43); squat stays the default.
   const selectedProtocolId: ProtocolId =
     (location.state as { protocolId?: ProtocolId } | null)?.protocolId ??
     'squat'
+  // Setup guidance belongs to the SELECTED protocol. Reading squat's capture
+  // contract here would tell someone recording a side-view lunge to face the
+  // camera square-on.
+  const definition = getProtocol(selectedProtocolId).definition
+  const capture = definition.capture
+  const runtime = getProtocolRuntime(selectedProtocolId)
+  const pkg = buildProtocolPackage(definition, {
+    hasRuntime: true,
+    version: '1.0.0',
+  })
+  /** Stored pose tapes are a real input path when the protocol declares it. */
+  const acceptsTape = capture.inputModes.includes('replay')
   const fileInputRef = useRef<HTMLInputElement | null>(null)
   const loadedRef = useRef<LoadedVideo | null>(null)
+  const tapeRef = useRef<PoseTape | null>(null)
   const abortRef = useRef<AbortController | null>(null)
 
   const [status, setStatus] = useState<UploadStatus>('idle')
@@ -79,6 +94,13 @@ export function UploadScreen() {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null)
   const [progress, setProgress] = useState(0)
   const [isModelLoading, setIsModelLoading] = useState(true)
+  const [frameCount, setFrameCount] = useState<number | null>(null)
+  // Capture parameters the protocol declares (forward lunge: lead leg).
+  const [parameters, setParameters] = useState<Record<string, string>>(() =>
+    Object.fromEntries(
+      (capture.parameters ?? []).map((parameter) => [parameter.id, parameter.defaultValue]),
+    ),
+  )
 
   // Warm up the on-device model as soon as the screen mounts.
   useEffect(() => {
@@ -116,9 +138,18 @@ export function UploadScreen() {
     abortRef.current = null
     disposeVideo(loadedRef.current)
     loadedRef.current = null
+    tapeRef.current = null
     setPreviewUrl(null)
     setProgress(0)
+    setFrameCount(null)
   }, [])
+
+  const isTapeFile = useCallback(
+    (file: File) =>
+      acceptsTape &&
+      (file.type === 'application/json' || file.name.toLowerCase().endsWith('.json')),
+    [acceptsTape],
+  )
 
   const processFile = useCallback(
     async (file: File) => {
@@ -126,8 +157,41 @@ export function UploadScreen() {
       setError(null)
       setWarnings([])
 
+      if (isTapeFile(file)) {
+        setFileName(file.name)
+        setStatus('loading')
+        try {
+          const tape = deserializeTape(await file.text())
+          if (tape.frames.length === 0) {
+            throw new Error('This pose tape contains no tracked frames.')
+          }
+          tapeRef.current = tape
+          setFrameCount(tape.frames.length)
+          setDurationSeconds(
+            tape.meta.fps > 0 ? tape.frames.length / tape.meta.fps : null,
+          )
+          setDimensions(null)
+          setWarnings([
+            'Pose-tape input: this replays landmarks recorded earlier instead of tracking a new video. It is the deterministic path, not a real-world capture.',
+          ])
+          setStatus('ready')
+        } catch (err: unknown) {
+          setError(
+            err instanceof Error
+              ? `Could not read this pose tape: ${err.message}`
+              : 'Could not read this pose tape.',
+          )
+          setStatus('error')
+        }
+        return
+      }
+
       if (!isLikelySupportedVideo(file)) {
-        setError('Unsupported file. Please choose an MP4, MOV, or WebM video.')
+        setError(
+          acceptsTape
+            ? 'Unsupported file. Please choose an MP4, MOV, or WebM video, or a recorded pose tape (.json).'
+            : 'Unsupported file. Please choose an MP4, MOV, or WebM video.',
+        )
         setStatus('error')
         return
       }
@@ -150,7 +214,7 @@ export function UploadScreen() {
         setStatus('error')
       }
     },
-    [resetLoadedVideo],
+    [resetLoadedVideo, isTapeFile, acceptsTape],
   )
 
   const handleFileChange = useCallback(
@@ -185,11 +249,44 @@ export function UploadScreen() {
 
   const handleAnalyze = useCallback(async () => {
     const loaded = loadedRef.current
-    if (!loaded) return
+    const tape = tapeRef.current
+    if (!loaded && !tape) return
 
     setError(null)
     setProgress(0)
     setStatus('analyzing')
+
+    // Pose-tape replay needs no model and no seeking: the landmarks already
+    // exist, so the protocol runtime consumes them directly.
+    if (tape) {
+      try {
+        setProgress(50)
+        storeSessionTape(tape)
+        const { result } = analyzeFramesForProtocol(selectedProtocolId, tape.frames, {
+          capture: {
+            captureSource: 'replay',
+            filterVariant: tape.meta.filtering ?? 'raw',
+          },
+          parameters,
+          captureId: fileName ?? 'pose-tape',
+          // A tape that declares its own observation protocol is checked
+          // against the selected one instead of being reinterpreted.
+          observationProtocolId: tape.meta.protocolId,
+        })
+        setProgress(100)
+        navigate('/results', { state: { result } })
+      } catch (err: unknown) {
+        console.error('Error analyzing pose tape:', err)
+        setError(
+          err instanceof Error
+            ? err.message
+            : 'Something went wrong while analyzing this pose tape.',
+        )
+        setStatus('error')
+      }
+      return
+    }
+    if (!loaded) return
 
     try {
       // Ensure the model is ready (mount-time init may still be in flight).
@@ -237,13 +334,23 @@ export function UploadScreen() {
         ),
       )
 
-      const sessionResult = getProtocolRuntime(selectedProtocolId).buildSessionResult({
-        reps: result.reps,
-        poseConfidenceSamples: result.poseConfidenceSamples,
-        postureSamples: result.postureSamples,
-        repRejections: result.repRejections,
-        capture: { captureSource: 'upload', filterVariant: 'butterworth-offline' },
-      })
+      // A protocol with its own segmentation engine consumes the raw detected
+      // frames, so its provenance says 'raw' — the Butterworth pass above feeds
+      // the cyclic rep pipeline only, and claiming it here would be false.
+      const sessionResult = runtime.analyzeSession
+        ? runtime.analyzeSession({
+            frames: result.rawFrames,
+            capture: { captureSource: 'upload', filterVariant: 'raw' },
+            parameters,
+            captureId: fileName ?? 'uploaded-video',
+          })
+        : getProtocolRuntime(selectedProtocolId).buildSessionResult!({
+            reps: result.reps,
+            poseConfidenceSamples: result.poseConfidenceSamples,
+            postureSamples: result.postureSamples,
+            repRejections: result.repRejections,
+            capture: { captureSource: 'upload', filterVariant: 'butterworth-offline' },
+          })
       navigate('/results', { state: { result: sessionResult } })
     } catch (err: unknown) {
       if (err instanceof DOMException && err.name === 'AbortError') {
@@ -262,7 +369,7 @@ export function UploadScreen() {
     } finally {
       abortRef.current = null
     }
-  }, [navigate, fileName, selectedProtocolId])
+  }, [navigate, fileName, selectedProtocolId, runtime, parameters, capture.viewInstruction])
 
   const handleCancelAnalysis = useCallback(() => {
     abortRef.current?.abort()
@@ -284,14 +391,59 @@ export function UploadScreen() {
     <div className="stack-lg upload-page">
       <header className="upload-header">
         <p className="landing-eyebrow">Video analysis</p>
-        <h1 className="page-title">Analyze a movement video</h1>
+        <h1 className="page-title">Analyze a {definition.label.toLowerCase()} recording</h1>
+        <p className="protocol-card__status protocol-card__status--available">
+          {releaseLabel(pkg)}
+        </p>
         <DisclaimerBanner />
       </header>
+
+      <section className="results-panel" aria-label="Camera setup">
+        <h2 className="results-panel__heading">
+          {capture.cameraView === 'side' ? 'Side-camera setup' : 'Camera setup'}
+        </h2>
+        <p className="results-panel__intro">{capture.viewInstruction}</p>
+        <ul className="results-abstain__reasons">
+          {capture.setupInstructions.map((instruction) => (
+            <li key={instruction} className="results-abstain__reason">
+              {instruction}
+            </li>
+          ))}
+        </ul>
+        <p className="results-panel__intro">{releaseDetail(pkg)}</p>
+      </section>
+
+      {(capture.parameters ?? []).map((parameter) => (
+        <fieldset key={parameter.id} className="results-panel" aria-label={parameter.label}>
+          <legend className="results-panel__heading">{parameter.label}</legend>
+          <p className="results-panel__intro">{parameter.description}</p>
+          <div className="btn-group btn-group--row">
+            {parameter.options.map((option) => (
+              <label key={option.value} className="stat-pill">
+                <input
+                  type="radio"
+                  name={parameter.id}
+                  value={option.value}
+                  checked={parameters[parameter.id] === option.value}
+                  onChange={() =>
+                    setParameters((current) => ({ ...current, [parameter.id]: option.value }))
+                  }
+                />
+                <span className="stat-pill__value">{option.label}</span>
+              </label>
+            ))}
+          </div>
+        </fieldset>
+      ))}
 
       <input
         ref={fileInputRef}
         type="file"
-        accept="video/mp4,video/webm,video/quicktime,video/*"
+        accept={
+          acceptsTape
+            ? 'video/mp4,video/webm,video/quicktime,video/*,application/json,.json'
+            : 'video/mp4,video/webm,video/quicktime,video/*'
+        }
         onChange={handleFileChange}
         className="upload-file-input"
       />
@@ -337,12 +489,14 @@ export function UploadScreen() {
               <path d="M4 16.5V19a1.5 1.5 0 0 0 1.5 1.5h13A1.5 1.5 0 0 0 20 19v-2.5" />
             </svg>
           </span>
-          <span className="upload-drop__title">Drop a video here</span>
+          <span className="upload-drop__title">Drop a recording here</span>
           <span className="upload-drop__sub">
-            or tap to choose an MP4, MOV, or WebM
+            {acceptsTape
+              ? 'or tap to choose an MP4, MOV, WebM, or a recorded pose tape (.json)'
+              : 'or tap to choose an MP4, MOV, or WebM'}
           </span>
           <span className="upload-drop__meta">
-            One continuous set. {capture.viewInstruction}
+            One continuous set. {capture.viewInstruction}{' '}
             Everything stays on this device — nothing is uploaded.
           </span>
         </button>
@@ -351,25 +505,34 @@ export function UploadScreen() {
       {status === 'loading' && (
         <Card
           variant="status"
-          title="Reading video…"
+          title="Reading recording…"
           subtitle={fileName ?? 'Loading file details.'}
         />
       )}
 
-      {(status === 'ready' || status === 'analyzing') && previewUrl && (
+      {(status === 'ready' || status === 'analyzing') &&
+        (previewUrl !== null || frameCount !== null) && (
         <div className="stack-lg">
           <div className="upload-preview-panel">
-            <div className="upload-preview">
-              <video
-                src={previewUrl}
-                controls={status === 'ready'}
-                playsInline
-                muted
-                className="upload-preview__media"
-              />
-              <div className="upload-preview__glow" aria-hidden />
-            </div>
+            {previewUrl !== null && (
+              <div className="upload-preview">
+                <video
+                  src={previewUrl}
+                  controls={status === 'ready'}
+                  playsInline
+                  muted
+                  className="upload-preview__media"
+                />
+                <div className="upload-preview__glow" aria-hidden />
+              </div>
+            )}
             <div className="stat-pills">
+              {frameCount !== null && (
+                <div className="stat-pill">
+                  <span className="stat-pill__label">Tracked frames</span>
+                  <span className="stat-pill__value">{frameCount}</span>
+                </div>
+              )}
               {fileName && (
                 <div className="stat-pill">
                   <span className="stat-pill__label">File</span>
@@ -444,9 +607,13 @@ export function UploadScreen() {
                 <Button
                   variant="primary"
                   onClick={handleAnalyze}
-                  disabled={isModelLoading}
+                  // A pose tape needs no tracking model, so it is never blocked
+                  // on the model warm-up.
+                  disabled={isModelLoading && frameCount === null}
                 >
-                  {isModelLoading ? 'Preparing model…' : 'Analyze movement'}
+                  {isModelLoading && frameCount === null
+                    ? 'Preparing model…'
+                    : 'Analyze movement'}
                 </Button>
                 <Button variant="ghost" onClick={handleChooseAnother}>
                   Choose another

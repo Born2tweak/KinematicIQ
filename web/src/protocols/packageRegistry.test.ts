@@ -11,15 +11,21 @@ describe('engineering state is derived from the definition, not declared', () =>
     expect(deriveEngineeringState(definition, true)).toBe('complete')
   })
 
-  it('is partial when the analysis exists but no session can start', () => {
-    // Forward lunge has a working research seam but profile: null and no
-    // inputModes, so it cannot run a session. Claiming 'complete' would be
-    // false however finished the segmenter and metrics are.
+  it('is partial when an input path exists but no runtime backs it', () => {
+    // The rule that matters is unchanged: an input path without an
+    // implementation behind it can never read as complete.
     const definition = INLINE_LUNGE_PROTOCOL.definition
-    expect(definition.capture.inputModes).toHaveLength(0)
-    expect(INLINE_LUNGE_PROTOCOL.profile).toBeNull()
-    expect(deriveEngineeringState(definition, false)).toBe('absent')
+    expect(definition.capture.inputModes.length).toBeGreaterThan(0)
+    expect(deriveEngineeringState(definition, false)).toBe('partial')
+  })
+
+  it('is partial when a runtime exists but no session can start', () => {
+    const definition = {
+      ...INLINE_LUNGE_PROTOCOL.definition,
+      capture: { ...INLINE_LUNGE_PROTOCOL.definition.capture, inputModes: [] },
+    }
     expect(deriveEngineeringState(definition, true)).toBe('partial')
+    expect(deriveEngineeringState(definition, false)).toBe('absent')
   })
 })
 
@@ -38,12 +44,26 @@ describe('shipped protocol packages', () => {
     expect(pkg.metrics.length).toBeGreaterThan(0)
   })
 
-  it('keeps forward lunge unavailable until it has an input path', () => {
+  it('promotes forward lunge to experimental — never past it — once it runs', () => {
+    // It now has a registered runtime and a declared upload path, so the
+    // derived engineering state is complete. Validation is still blocked on
+    // RES-CORPUS, so the release state stops at experimental: selectable,
+    // labelled, and incapable of carrying an accuracy claim.
     const pkg = buildProtocolPackage(INLINE_LUNGE_PROTOCOL.definition, {
       hasRuntime: true,
       version: '0.1.0',
     })
-    expect(pkg.lifecycle.engineering).toBe('partial')
+    expect(pkg.lifecycle.engineering).toBe('complete')
+    expect(deriveReleaseState(pkg.lifecycle)).toBe('experimental')
+    expect(releaseLabel(pkg)).toBe('Experimental — results have not yet been benchmarked')
+    expect(pkg.allowedClaims).toEqual([])
+  })
+
+  it('drops forward lunge back to unavailable the moment its runtime is gone', () => {
+    const pkg = buildProtocolPackage(INLINE_LUNGE_PROTOCOL.definition, {
+      hasRuntime: false,
+      version: '0.1.0',
+    })
     expect(deriveReleaseState(pkg.lifecycle)).toBe('unavailable')
   })
 

@@ -23,6 +23,7 @@
     "eval:llm-fms": "vite-node scripts/runLlmFmsOntology.ts",
     "eval:tracking": "vite-node scripts/runTrackingRobustnessBaseline.ts",
     "eval:short-gap": "vite-node scripts/runShortGapRecoveryExperiment.ts",
+    "fixtures:forward-lunge": "vite-node scripts/buildForwardLungeFixtureTapes.ts",
     "eval:forward-lunge": "vite-node scripts/runForwardLungeEvaluation.ts",
     "eval:inline-lunge": "npm run eval:forward-lunge",
     "eval:perturbations": "vite-node scripts/runPerturbationMatrix.ts",

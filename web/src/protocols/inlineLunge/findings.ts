@@ -10,12 +10,14 @@ export function deriveInlineLungeResearchFindings(metrics: readonly MetricResult
     id: 'forwardLungeStrideReturn.completion.observed-trials', question: 'movement-completion',
     statement: `${count.value} complete Forward Lunge ${count.value === 1 ? 'trial was' : 'trials were'} observed in this set.`,
     evidence: [{ metricId: count.metricId, observed: `${count.value} complete step-to-return trials` }], confidence: count.confidence, priority: 'primary',
+    tryNext: 'Record at least three complete lunges with the same lead leg in one continuous clip so within-set variation can be described.',
     provenance: { ruleId: 'rule.forwardLungeStrideReturn.completion', sourceDocs: ['docs/research/INLINE_LUNGE_PROTOCOL_RESEARCH.md'], reviewStatus: 'internally-tested' },
   })
   if (duration?.value !== null && duration?.value !== undefined) findings.push({
     id: 'forwardLungeStrideReturn.timing.average-duration', question: 'strategy-selection',
     statement: `Complete trials averaged ${duration.value.toFixed(2)} seconds from step to stable return in this set.`,
     evidence: [{ metricId: duration.metricId, observed: `${duration.value.toFixed(2)} s average` }], confidence: duration.confidence, priority: 'secondary',
+    tryNext: 'Keep the same deliberate tempo on the next set so the two recordings can be compared.',
     provenance: { ruleId: 'rule.forwardLungeStrideReturn.timing', sourceDocs: ['docs/validation/INLINE_LUNGE_LABELING_PROTOCOL.md'], reviewStatus: 'internally-tested' },
   })
   if (consistency?.value !== null && consistency?.value !== undefined) findings.push({

@@ -1,6 +1,7 @@
 import { makeConfidence } from '../../core/confidence'
 import type { MetricDefinition, MetricResult } from '../../core/metric'
 import type { Provenance } from '../../core/provenance'
+import { UNVALIDATED_CONFIDENCE_CEILING } from './profile'
 import type { InlineLungeSide, InlineLungeTrial } from './types'
 
 export const INLINE_LUNGE_METRIC_DEFINITIONS: MetricDefinition[] = [
@@ -40,7 +41,7 @@ export function buildInlineLungeMetricResults(trials: readonly InlineLungeTrial[
       value,
       unit: definition.unit,
       side: definition.id.includes('knee') ? leadSide : 'none',
-      confidence: makeConfidence(value === null ? 0 : Math.min(0.74, coverage), definition.confidenceBasis),
+      confidence: makeConfidence(value === null ? 0 : Math.min(UNVALIDATED_CONFIDENCE_CEILING, coverage), definition.confidenceBasis),
       provenance,
       validationTier: definition.validationTier,
       qualityFlags: value === null ? ['insufficient-research-evidence'] : ['research-only'],

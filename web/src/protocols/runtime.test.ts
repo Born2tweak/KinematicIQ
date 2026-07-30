@@ -1,7 +1,10 @@
 import { describe, expect, it } from 'vitest'
 import {
   SQUAT_RUNTIME,
+  getCyclicProtocolRuntime,
   getProtocolRuntime,
+  hasProtocolRuntime,
+  isRunnableRuntime,
 } from './runtime'
 import { NotImplementedError, type ProtocolId } from '../core/protocol'
 import { runPipelineOnFrames } from '../analysis/videoAnalyzer'
@@ -31,12 +34,33 @@ describe('getProtocolRuntime', () => {
     expect(runtime).toBe(SQUAT_RUNTIME)
   })
 
-  it.each(['forwardLungeStrideReturn', 'sitToStand', 'hipHinge', 'jump', 'sprint'] as const)(
-    'throws NotImplementedError for planned protocol %s',
+  it.each(['sitToStand', 'hipHinge', 'jump', 'sprint'] as const)(
+    'throws NotImplementedError for unimplemented protocol %s',
     (id) => {
       expect(() => getProtocolRuntime(id)).toThrow(NotImplementedError)
+      expect(hasProtocolRuntime(id)).toBe(false)
     },
   )
+
+  it('returns the forward-lunge runtime as a whole-session runtime', () => {
+    const runtime = getProtocolRuntime('forwardLungeStrideReturn')
+    expect(runtime.protocolId).toBe('forwardLungeStrideReturn')
+    expect(runtime.outcomeKinds).toEqual(['transition'])
+    expect(runtime.analyzeSession).toBeTypeOf('function')
+    expect(isRunnableRuntime(runtime)).toBe(true)
+    // It has no cyclic stages, and asking for them fails loudly instead of
+    // returning a runtime whose methods are undefined.
+    expect(runtime.segmentFrames).toBeUndefined()
+    expect(() => getCyclicProtocolRuntime('forwardLungeStrideReturn')).toThrow(
+      /not segmented by the cyclic rep engine/,
+    )
+  })
+
+  it('resolves the legacy lunge alias to the same runtime', () => {
+    expect(getProtocolRuntime('inlineLunge')).toBe(
+      getProtocolRuntime('forwardLungeStrideReturn'),
+    )
+  })
 
   it('throws for unknown protocol ids', () => {
     expect(() => getProtocolRuntime('yoga' as ProtocolId)).toThrow(

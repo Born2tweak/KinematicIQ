@@ -87,9 +87,26 @@ export interface ProtocolEvidenceMetadataV2 {
   }
 }
 
+/**
+ * A capture parameter the athlete must declare before the recording can be
+ * interpreted. Not a preference: forward-lunge signals are computed relative to
+ * the lead leg, so an undeclared lead side makes the analysis undefined rather
+ * than merely less accurate.
+ */
+export interface ProtocolCaptureParameter {
+  id: 'leadSide'
+  label: string
+  /** Why the analysis needs it, in athlete-readable copy. */
+  description: string
+  options: Array<{ value: string; label: string }>
+  defaultValue: string
+}
+
 /** Capture/setup contract consumed by every input surface. */
 export interface ProtocolCaptureConfig {
   inputModes: ProtocolInputMode[]
+  /** Declared before capture; empty for protocols that need nothing. */
+  parameters?: ProtocolCaptureParameter[]
   cameraView: ProtocolCameraView
   viewInstruction: string
   setupInstructions: string[]
@@ -153,8 +170,19 @@ export function validateProtocolDefinition(
     if (evidence.researchState !== 'research-only') {
       throw new Error(`Planned protocol "${protocol.id}" must remain research-only.`)
     }
-    if (protocol.capture.inputModes.length > 0) {
-      throw new Error(`Planned protocol "${protocol.id}" cannot expose input modes.`)
+    // A research-only protocol MAY expose an input path — engineering
+    // completeness and scientific validation are separate axes (KQ-026), and
+    // `status` only ever tracked the second one. What it may not do is expose a
+    // path with nothing behind it, so it must carry a passed engineering gate.
+    // Whether an implementation is actually registered is enforced downstream
+    // in protocols/completeness.ts, which can see the runtime registry.
+    if (
+      protocol.capture.inputModes.length > 0 &&
+      !evidence.validationGates.some((gate) => gate.state === 'passed')
+    ) {
+      throw new Error(
+        `Research-only protocol "${protocol.id}" cannot expose input modes without a passed engineering gate.`,
+      )
     }
   }
   return protocol

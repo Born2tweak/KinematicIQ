@@ -8,7 +8,7 @@
  */
 import { createLiveStreamFilter, filterFrameSequence } from '../cv/landmarkFilter'
 import type { PipelineInitialState } from '../analysis/videoAnalyzer'
-import { getProtocolRuntime } from '../protocols/runtime'
+import { getCyclicProtocolRuntime } from '../protocols/runtime'
 import { getJointAngles } from '../analysis/angles'
 import { safeLandmark } from '../analysis/geometry'
 import { activateAnalysisPipeline } from '../analysis/setActivation'
@@ -32,7 +32,7 @@ export interface VariantResult {
 }
 
 function segmentSquat(frames: readonly PoseFrame[], initial?: PipelineInitialState) {
-  return getProtocolRuntime('squat').segmentFrames(frames, initial)
+  return getCyclicProtocolRuntime('squat').segmentFrames(frames, initial)
 }
 
 function applyVariant(tape: PoseTape, variant: Variant): PoseFrame[] {
