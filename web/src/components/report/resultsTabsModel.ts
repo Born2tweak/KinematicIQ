@@ -10,6 +10,7 @@
  */
 import { sortFindings, type Finding } from '../../core/finding'
 import { hasValue, type MetricResult } from '../../core/metric'
+import { getProtocol } from '../../protocols/registry'
 import type { SessionResult } from '../../session/types'
 
 export type ResultsTabId = 'summary' | 'evidence' | 'expert'
@@ -82,6 +83,20 @@ const QUESTION_SECTIONS: ReadonlyArray<
     abstainLine:
       'Nothing to flag here — the side-to-side reads stayed inside the expected range.',
   },
+  {
+    questionId: 'strategy-selection',
+    title: 'How was the movement paced?',
+    asks: 'Timing of each phase and how repeatable it was across the set.',
+    abstainLine:
+      'Nothing to flag here — the timing reads stayed inside the expected range.',
+  },
+]
+
+/** The questions a protocol answers when it does not declare its own set. */
+const DEFAULT_COACH_QUESTION_IDS = [
+  'movement-completion',
+  'posture-organization',
+  'load-symmetry',
 ]
 
 /**
@@ -95,8 +110,14 @@ export function coachQuestionSections(
   result: SessionResult,
 ): CoachQuestionSection[] {
   const sorted = sortFindings(result.findings)
-  return QUESTION_SECTIONS.map((section) => ({
-    ...section,
-    findings: sorted.filter((f) => f.question === section.questionId),
-  }))
+  const covered = new Set(
+    getProtocol(result.protocolId).definition.coachQuestionIds ??
+      DEFAULT_COACH_QUESTION_IDS,
+  )
+  return QUESTION_SECTIONS.filter((section) => covered.has(section.questionId)).map(
+    (section) => ({
+      ...section,
+      findings: sorted.filter((f) => f.question === section.questionId),
+    }),
+  )
 }

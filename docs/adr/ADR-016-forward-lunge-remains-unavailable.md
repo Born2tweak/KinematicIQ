@@ -2,6 +2,14 @@
 
 **Status:** Recorded fail-closed disposition. This does not close G-AVAIL or authorize an alternative.
 
+> **Superseded in part (2026-07-29) by
+> [ADR-017](ADR-017-forward-lunge-experimental-availability.md).** Only the
+> availability clause below is superseded: the protocol is now selectable and
+> runnable as *Experimental* through upload. Every gate this ADR records as
+> blocked remains blocked, and no claim it prohibits is permitted. The gate
+> table, scope, residual risks, and promotion requirements below stand as
+> written.
+
 ## Context
 
 Phase 4 produced engineering contracts and reproducible tooling through P4-M14. It did not produce the consented field pilot, qualified raters, selected real-data candidate, signed freeze, independent locked results, approved synchronized reference, repeat-session evidence, independent claims approval, device/accessibility evidence, or domain-owner signatures required for availability.

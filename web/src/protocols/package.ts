@@ -99,6 +99,28 @@ export function releaseLabel(pkg: ProtocolPackage): string {
 }
 
 /**
+ * Athlete-facing guidance for a capture surface.
+ *
+ * The counterpart to `releaseDetail` below: same facts, no program vocabulary.
+ * Someone about to record a set needs to know what the results are and are not;
+ * which registry resource is unresolved is our problem, not theirs.
+ */
+export function releaseGuidance(pkg: ProtocolPackage): string {
+  const state = deriveReleaseState(pkg.lifecycle)
+  if (state === 'released') {
+    return 'This movement has been compared against reference evidence.'
+  }
+  if (state === 'unavailable') {
+    return 'This movement cannot start a session yet.'
+  }
+  return (
+    'This movement runs end to end, but its results have never been compared ' +
+    'against reference measurements. Read them as observations about this ' +
+    'recording, not as measured accuracy.'
+  )
+}
+
+/**
  * Developer-facing detail for evidence records and debug surfaces.
  *
  * Resource identifiers like RES-CORPUS are internal program vocabulary. An

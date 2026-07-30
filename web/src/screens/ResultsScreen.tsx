@@ -27,6 +27,7 @@ import {
 } from '../components/report/resultsTabsModel'
 import { CaptureQualityPanel } from '../components/report/CaptureQualityPanel'
 import { realRejections } from './repRejectionUi'
+import { getProtocol } from '../protocols/registry'
 import { buildStoredSession, getSessionStore } from '../storage/sessionStore'
 import {
   buildSessionReport,
@@ -144,6 +145,10 @@ export function ResultsScreen() {
 
   const postureConcepts = useMemo(() => {
     if (!result || result.metrics.repCount === 0) return []
+    // The posture profile reads a 3D posture summary. A protocol that produces
+    // none must not render five squat concepts as "not enough data" — that
+    // reads as a failed measurement rather than a measurement never attempted.
+    if (result.posture === null) return []
     // Full abstain: no posture profile from an untrustworthy recording.
     if (result.quality.verdict === 'invalid') return []
     // Questionable sets never carry High-confidence reads.
@@ -180,6 +185,17 @@ export function ResultsScreen() {
   }
 
   const narrative = buildResultsNarrative(result)
+  // Send "record again" back to a surface this protocol can actually use: a
+  // movement with no live path must not land on the camera screen.
+  const protocolDefinition = getProtocol(result.protocolId).definition
+  const isTransitionProtocol = protocolDefinition.kind === 'transition'
+  const recordAgain = {
+    to: protocolDefinition.capture.inputModes.includes('live') ? '/camera' : '/upload',
+    state: { protocolId: result.protocolId },
+    label: protocolDefinition.capture.inputModes.includes('live')
+      ? 'Record another set'
+      : 'Analyze another recording',
+  }
   const { metrics, scoring, feedback, sessionConfidence, sessionConfidenceScore } =
     result
   const quality = result.quality
@@ -240,8 +256,8 @@ export function ResultsScreen() {
             </ul>
           )}
           <div className="results-actions">
-            <Button to="/camera" variant="primary">
-              Record again
+            <Button to={recordAgain.to} state={recordAgain.state} variant="primary">
+              {recordAgain.label}
             </Button>
           </div>
         </section>
@@ -426,9 +442,15 @@ export function ResultsScreen() {
         </section>
       )}
 
+      {/* NO_REPS_MESSAGE and INSUFFICIENT_DATA_MESSAGE are squat copy — they
+          talk about reps, calibration, and pausing at the bottom. A protocol
+          with a different unit of observation gets its own recovery guidance
+          from the quality gate instead. */}
       {showSummary && result.noRepsDetected && (
         <p className="results-alert" role="alert">
-          {NO_REPS_MESSAGE}
+          {isTransitionProtocol
+            ? (quality.captureFixes[0] ?? protocolDefinition.capture.viewInstruction)
+            : NO_REPS_MESSAGE}
         </p>
       )}
 
@@ -437,7 +459,9 @@ export function ResultsScreen() {
         !result.noRepsDetected &&
         !isInvalidSet && (
         <p className="results-alert results-alert--warning" role="alert">
-          {INSUFFICIENT_DATA_MESSAGE}
+          {isTransitionProtocol
+            ? 'Too little of this recording was readable to interpret. The measured evidence stays below; no observation is drawn from it.'
+            : INSUFFICIENT_DATA_MESSAGE}
         </p>
       )}
 
@@ -644,8 +668,8 @@ export function ResultsScreen() {
       )}
 
       <div className="results-actions">
-        <Button to="/camera" variant="primary">
-          Record another set
+        <Button to={recordAgain.to} state={recordAgain.state} variant="primary">
+          {recordAgain.label}
         </Button>
         <Button
           variant="secondary"

@@ -19,7 +19,7 @@ import {
 import { getProtocol } from '../protocols/registry'
 import { getProtocolRuntime } from '../protocols/runtime'
 import { buildProtocolPackage } from '../protocols/packageRegistry'
-import { releaseDetail, releaseLabel } from '../protocols/package'
+import { releaseGuidance, releaseLabel } from '../protocols/package'
 
 // ── Advisory limits (warn, never silently block) ───────────────────
 const MAX_RECOMMENDED_DURATION_S = 90
@@ -410,7 +410,9 @@ export function UploadScreen() {
             </li>
           ))}
         </ul>
-        <p className="results-panel__intro">{releaseDetail(pkg)}</p>
+        {/* Athlete-facing wording only — releaseDetail names registry
+            resources and belongs in evidence records, not here. */}
+        <p className="results-panel__intro">{releaseGuidance(pkg)}</p>
       </section>
 
       {(capture.parameters ?? []).map((parameter) => (
@@ -451,12 +453,12 @@ export function UploadScreen() {
       {status === 'error' && error && (
         <Card>
           <h2 className="card__title card__title--plain">
-            Couldn’t analyze this video
+            Couldn’t analyze this recording
           </h2>
           <p className="card__subtitle">{error}</p>
           <div className="btn-group btn-group--row card__footer-actions">
             <Button variant="primary" onClick={handleChooseAnother}>
-              Choose another video
+              Choose another recording
             </Button>
             <Button variant="ghost" onClick={() => navigate('/')}>
               Home

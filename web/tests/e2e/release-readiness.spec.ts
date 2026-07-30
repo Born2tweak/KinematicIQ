@@ -1,15 +1,33 @@
 import { expect, test } from '@playwright/test'
 
 test.describe('release readiness', () => {
-  test('inline lunge is research information and cannot start analysis', async ({ page }) => {
+  test('forward lunge is selectable but labelled experimental, never released', async ({ page }) => {
     await page.goto('/')
-    const research = page.getByRole('listitem').filter({ hasText: 'Inline lunge' })
-    await expect(research).toContainText('Research only')
-    await expect(research.getByRole('button')).toHaveCount(0)
-    await expect(research.getByRole('link')).toHaveCount(0)
-    await research.click()
-    await expect(page).toHaveURL(/\/$/)
-    await expect(page.getByRole('button', { name: /Bodyweight squat/ })).toHaveCount(1)
+    const card = page.getByRole('listitem').filter({ hasText: 'Forward Lunge' })
+    await expect(card).toContainText('Experimental — results have not yet been benchmarked')
+    // Program vocabulary must not reach the athlete interface.
+    await expect(card).not.toContainText(/RES-|KQ-\d/)
+    // It routes to upload, not the live camera — it has no live runtime.
+    await card.getByRole('button').click()
+    await expect(page).toHaveURL(/\/upload$/)
+    await expect(page.getByRole('heading', { level: 1 })).toContainText('forward lunge')
+    await expect(page.getByRole('heading', { name: /Side-camera setup/i })).toBeVisible()
+  })
+
+  test('movements without an implementation still cannot start an analysis', async ({ page }) => {
+    await page.goto('/')
+    for (const label of ['Sit to stand', 'Hip hinge', 'Vertical jump', 'Sprint']) {
+      const card = page.getByRole('listitem').filter({ hasText: label })
+      await expect(card).toContainText('In development — not yet available')
+      await expect(card.getByRole('button')).toHaveCount(0)
+      await expect(card.getByRole('link')).toHaveCount(0)
+    }
+  })
+
+  test('nothing on the landing page claims to be benchmarked', async ({ page }) => {
+    await page.goto('/')
+    const copy = await page.locator('.protocol-picker').innerText()
+    expect(copy).not.toContain('Benchmarked')
   })
 
   test('320px reflow keeps the primary landing flow in bounds', async ({ page }) => {

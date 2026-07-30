@@ -144,6 +144,17 @@ export interface ProtocolDefinition {
   metrics: MetricDefinition[]
   /** IDs of the finding rules that interpret this protocol's metrics (M7). */
   findingRuleIds: string[]
+  /**
+   * Coach questions this protocol's rules can actually answer.
+   *
+   * The report renders a question with no findings as "nothing to flag here —
+   * those reads stayed inside the expected range". That sentence is only true
+   * when the protocol measured the thing and found nothing notable. For a
+   * protocol that never measures trunk position, the same silence would be a
+   * false statement, so it declares which questions it covers. Absent = the
+   * legacy squat set (completion, posture, symmetry).
+   */
+  coachQuestionIds?: string[]
   /** Observation protocol this definition is validated for, if any (P5). */
   defaultObservationProtocolId?: string
 }

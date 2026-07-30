@@ -7,6 +7,7 @@ import {
   deriveReleaseState,
   isSelectable,
   releaseDetail,
+  releaseGuidance,
   releaseLabel,
   validateProtocolPackage,
 } from './package'
@@ -72,6 +73,22 @@ describe('user-facing labels', () => {
     // The resource id is developer vocabulary and must not reach the athlete.
     expect(releaseLabel(lunge)).not.toContain('RES-CORPUS')
     expect(releaseDetail(lunge)).toContain('RES-CORPUS')
+    // Capture surfaces render the guidance string, which must stay clean.
+    expect(releaseGuidance(lunge)).not.toMatch(/RES-|KQ-\d/)
+    expect(releaseGuidance(lunge)).toMatch(/never been compared/)
+  })
+
+  it('gives athlete-facing guidance for every release state without program ids', () => {
+    const lifecycles: ProtocolPackage['lifecycle'][] = [
+      { engineering: 'complete', validation: 'validated', blockedBy: [] },
+      { engineering: 'complete', validation: 'blocked', blockedBy: ['RES-CORPUS'] },
+      { engineering: 'partial', validation: 'blocked', blockedBy: ['RES-CORPUS'] },
+    ]
+    for (const lifecycle of lifecycles) {
+      const guidance = releaseGuidance(pkg({ lifecycle }))
+      expect(guidance.length).toBeGreaterThan(0)
+      expect(guidance).not.toMatch(/RES-|KQ-\d/)
+    }
   })
 
   it('labels an unvalidated package experimental without blockers', () => {

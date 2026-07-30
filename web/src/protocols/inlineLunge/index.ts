@@ -61,6 +61,10 @@ export const INLINE_LUNGE_PROTOCOL_DEFINITION: ProtocolDefinition = {
   },
   metrics: INLINE_LUNGE_METRIC_DEFINITIONS,
   findingRuleIds: ['rule.forwardLungeStrideReturn.completion', 'rule.forwardLungeStrideReturn.timing', 'rule.forwardLungeStrideReturn.consistency'],
+  // Nothing here measures trunk position or side-to-side load, so those
+  // questions are not claimed — reporting them as "inside the expected range"
+  // would state a read that was never taken.
+  coachQuestionIds: ['movement-completion', 'strategy-selection'],
   defaultObservationProtocolId: 'side-view-forward-lunge-stride-return-v1',
 }
 

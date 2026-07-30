@@ -9,6 +9,11 @@
  * ADR-017 scope).
  *
  * Run from `web/`:  npm run fixtures:forward-lunge
+ *
+ * Pass `--public` to ALSO stage them under `web/public/verification-fixtures/`,
+ * where the dev server can serve them to a browser-driven upload check. That
+ * directory is gitignored: the generator is the versioned artifact, never the
+ * landmark bytes.
  */
 import { mkdirSync, writeFileSync } from 'node:fs'
 import { resolve } from 'node:path'
@@ -55,6 +60,11 @@ const cases: FixtureCase[] = [
 const outputDirectory = resolve('../eval-tapes')
 mkdirSync(outputDirectory, { recursive: true })
 
+const publicDirectory = process.argv.includes('--public')
+  ? resolve('public/verification-fixtures')
+  : null
+if (publicDirectory) mkdirSync(publicDirectory, { recursive: true })
+
 for (const item of cases) {
   const tape = createTape(item.frames, {
     fps: FPS,
@@ -65,7 +75,8 @@ for (const item of cases) {
     filtering: 'raw',
     framesFiltered: false,
   })
-  const path = resolve(outputDirectory, item.file)
-  writeFileSync(path, `${serializeTape(tape)}\n`, 'utf8')
+  const json = `${serializeTape(tape)}\n`
+  writeFileSync(resolve(outputDirectory, item.file), json, 'utf8')
+  if (publicDirectory) writeFileSync(resolve(publicDirectory, item.file), json, 'utf8')
   process.stdout.write(`${item.file} — ${item.frames.length} frames\n`)
 }

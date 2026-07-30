@@ -6,6 +6,8 @@ type ButtonVariant = 'primary' | 'secondary' | 'ghost'
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: ButtonVariant
   to?: string
+  /** Router state carried with `to` — e.g. which protocol to select next. */
+  state?: unknown
   children: ReactNode
   className?: string
   block?: boolean
@@ -14,6 +16,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 export function Button({
   variant = 'primary',
   to,
+  state,
   children,
   className = '',
   block = false,
@@ -31,7 +34,7 @@ export function Button({
 
   if (to) {
     return (
-      <Link to={to} className={classes}>
+      <Link to={to} state={state} className={classes}>
         {children}
       </Link>
     )
