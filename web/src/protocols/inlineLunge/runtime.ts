@@ -31,10 +31,9 @@ export const FORWARD_LUNGE_RUNTIME: ProtocolRuntime = {
   outcomeKinds: ['transition'],
   analyzeSession: (input: ProtocolSessionInput): SessionResult =>
     buildForwardLungeSessionResult({
-      frames: input.frames,
+      packets: input.packets,
       capture: input.capture,
       leadSide: asLeadSide(input.parameters?.leadSide),
-      captureId: input.captureId,
       observationProtocolId: input.observationProtocolId,
     }),
   buildReportMetadata: (result): ReportMetadata => ({

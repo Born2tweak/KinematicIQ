@@ -1,15 +1,16 @@
 import { describe, expect, it } from 'vitest'
-import { analyzeFramesForProtocol } from './analyzeProtocol'
+import { analyzeCaptureForProtocol, packetsFromFrames } from './analyzeProtocol'
 import { runPipelineOnFrames } from './videoAnalyzer'
 import { buildSessionResult } from '../session/buildSessionResult'
 import { NotImplementedError, type ProtocolId } from '../core/protocol'
 import { buildCleanSquatPoseTape } from '../camera/fixtures/cleanSquatPoseTape'
 
 const frames = buildCleanSquatPoseTape().frames
+const packets = packetsFromFrames(frames, { source: 'fixture-video', captureId: 'test-capture' })
 
-describe('analyzeFramesForProtocol — squat path unchanged', () => {
+describe('analyzeCaptureForProtocol — squat path unchanged', () => {
   it('matches the existing pipeline + builder output exactly', () => {
-    const { segmentation, result } = analyzeFramesForProtocol('squat', frames)
+    const { segmentation, result } = analyzeCaptureForProtocol('squat', packets)
     const direct = runPipelineOnFrames(frames)
     expect(segmentation).toEqual(direct)
     expect(result).toEqual(
@@ -25,12 +26,12 @@ describe('analyzeFramesForProtocol — squat path unchanged', () => {
   })
 
   it('stamps the selected protocol id on the result', () => {
-    const { result } = analyzeFramesForProtocol('squat', frames)
+    const { result } = analyzeCaptureForProtocol('squat', packets)
     expect(result.protocolId).toBe('squat')
   })
 
   it('provenance follows the selected protocol, not the active default', () => {
-    const { result } = analyzeFramesForProtocol('squat', frames)
+    const { result } = analyzeCaptureForProtocol('squat', packets)
     // Squat's definition declares its observation protocol; the metric
     // results must carry it (explicit-id rule, M43).
     expect(result.metricResults.length).toBeGreaterThan(0)
@@ -40,11 +41,11 @@ describe('analyzeFramesForProtocol — squat path unchanged', () => {
   })
 })
 
-describe('analyzeFramesForProtocol — unavailable protocols block cleanly', () => {
+describe('analyzeCaptureForProtocol — unavailable protocols block cleanly', () => {
   it.each(['sitToStand', 'hipHinge', 'jump', 'sprint'] as const)(
     'throws NotImplementedError for planned protocol %s before touching frames',
     (id) => {
-      expect(() => analyzeFramesForProtocol(id, frames)).toThrow(
+      expect(() => analyzeCaptureForProtocol(id, packets)).toThrow(
         NotImplementedError,
       )
     },
@@ -52,7 +53,7 @@ describe('analyzeFramesForProtocol — unavailable protocols block cleanly', () 
 
   it('throws for unknown protocol ids', () => {
     expect(() =>
-      analyzeFramesForProtocol('yoga' as ProtocolId, frames),
+      analyzeCaptureForProtocol('yoga' as ProtocolId, packets),
     ).toThrow(/not registered/)
   })
 })

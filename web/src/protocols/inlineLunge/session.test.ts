@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
-import { analyzeFramesForProtocol } from '../../analysis/analyzeProtocol'
+import { analyzeCaptureForProtocol, packetsFromFrames } from '../../analysis/analyzeProtocol'
 import { buildCleanSquatPoseTape } from '../../camera/fixtures/cleanSquatPoseTape'
+import type { PoseFrame } from '../../cv/types'
 import { getProtocolRuntime } from '../runtime'
 import { buildSyntheticInlineLungeFrames } from './fixtures'
 import { buildForwardLungeSessionResult } from './session'
@@ -8,10 +9,14 @@ import { UNVALIDATED_CONFIDENCE_CEILING } from './profile'
 
 const upload = { captureSource: 'upload', filterVariant: 'raw' } as const
 
+/** Fixture frames carry no envelope, so they enter through ingestion here. */
+const packetize = (frames: readonly PoseFrame[]) =>
+  packetsFromFrames(frames, { source: 'fixture-video', captureId: 'test-capture' })
+
 const analyze = (
   frames: ReturnType<typeof buildSyntheticInlineLungeFrames>,
   leadSide: 'left' | 'right' = 'left',
-) => buildForwardLungeSessionResult({ frames, capture: upload, leadSide })
+) => buildForwardLungeSessionResult({ packets: packetize(frames), capture: upload, leadSide })
 
 describe('forward-lunge session assembly', () => {
   it('reports trials, metrics, findings and coaching from a complete set', () => {
@@ -72,7 +77,7 @@ describe('forward-lunge session assembly', () => {
 describe('forward-lunge abstention states', () => {
   it('refuses a recording captured under a different observation protocol', () => {
     const result = buildForwardLungeSessionResult({
-      frames: buildSyntheticInlineLungeFrames({ trials: 3 }),
+      packets: packetize(buildSyntheticInlineLungeFrames({ trials: 3 })),
       capture: { captureSource: 'replay', filterVariant: 'raw' },
       leadSide: 'left',
       observationProtocolId: 'front-view-squat-v1',
@@ -87,7 +92,7 @@ describe('forward-lunge abstention states', () => {
 
   it('accepts the legacy inline-lunge observation id', () => {
     const result = buildForwardLungeSessionResult({
-      frames: buildSyntheticInlineLungeFrames({ trials: 3 }),
+      packets: packetize(buildSyntheticInlineLungeFrames({ trials: 3 })),
       capture: { captureSource: 'replay', filterVariant: 'raw' },
       leadSide: 'left',
       observationProtocolId: 'side-view-inline-lunge-v1',
@@ -100,7 +105,7 @@ describe('forward-lunge abstention states', () => {
     // it is a readable recording of a different movement, and the honest
     // outcome is zero completed trials.
     const result = buildForwardLungeSessionResult({
-      frames: buildCleanSquatPoseTape().frames,
+      packets: packetize(buildCleanSquatPoseTape().frames),
       capture: upload,
       leadSide: 'left',
     })
@@ -165,10 +170,10 @@ describe('forward-lunge abstention states', () => {
 
 describe('forward lunge through the shared analysis entry point', () => {
   it('routes to the whole-session runtime and returns no rep segmentation', () => {
-    const { segmentation, result } = analyzeFramesForProtocol(
+    const { segmentation, result } = analyzeCaptureForProtocol(
       'forwardLungeStrideReturn',
-      buildSyntheticInlineLungeFrames({ trials: 3 }),
-      { capture: upload, parameters: { leadSide: 'left' }, captureId: 'fixture-tape' },
+      packetize(buildSyntheticInlineLungeFrames({ trials: 3 })),
+      { capture: upload, parameters: { leadSide: 'left' } },
     )
     expect(segmentation).toBeNull()
     expect(result.protocolId).toBe('forwardLungeStrideReturn')
@@ -178,7 +183,7 @@ describe('forward lunge through the shared analysis entry point', () => {
   it('ignores an unusable lead-side parameter instead of trusting it', () => {
     const runtime = getProtocolRuntime('forwardLungeStrideReturn')
     const result = runtime.analyzeSession!({
-      frames: buildSyntheticInlineLungeFrames({ trials: 3 }),
+      packets: packetize(buildSyntheticInlineLungeFrames({ trials: 3 })),
       capture: upload,
       parameters: { leadSide: 'sideways' },
     })

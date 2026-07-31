@@ -34,6 +34,7 @@ import type {
 import type { SetQualityAssessment } from '../session/setQualityGate'
 import type { MetricResult } from '../core/metric'
 import type { PoseFrame, RepMetrics } from '../cv/types'
+import type { FramePacket } from '../ingest/framePacket'
 import type { PostureFrameSample } from '../analysis/posture/postureFrame'
 import type { CaptureContext } from '../core/provenance'
 import { buildSessionResult } from '../session/buildSessionResult'
@@ -107,11 +108,17 @@ export interface ProtocolSessionParameters {
 
 /** Everything a whole-session runtime needs to analyze a captured sequence. */
 export interface ProtocolSessionInput {
-  frames: readonly PoseFrame[]
+  /**
+   * The capture, as the ingestion envelope produced it.
+   *
+   * This is `FramePacket[]` and not `PoseFrame[]` on purpose: the capture id,
+   * provenance and rotation are properties of the *capture*, and passing bare
+   * poses meant every consumer had to be told them separately or invent them.
+   * A runtime reads the sequence through `ingest/framePacket` and nowhere else.
+   */
+  packets: readonly FramePacket[]
   capture: CaptureContext
   parameters?: ProtocolSessionParameters
-  /** Stable id for the capture these frames belong to (FramePacket identity). */
-  captureId?: string
   /** Observation protocol the recording claims, when it carries one. */
   observationProtocolId?: string
 }

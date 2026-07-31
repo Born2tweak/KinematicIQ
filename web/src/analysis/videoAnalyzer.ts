@@ -23,6 +23,12 @@ import type {
   PoseFrame,
   RepMetrics,
 } from '../cv/types'
+import {
+  createFramePacket,
+  type FramePacket,
+  type FrameRotation,
+  type FrameSourceKind,
+} from '../ingest/framePacket'
 import type { PostureFrameSample } from './posture/postureFrame'
 import type { FrameTraceSample } from './frameTrace'
 import type { RepRejection } from './repCounter'
@@ -56,6 +62,24 @@ export interface VideoAnalysisDeps {
    * only to replay the raw pipeline (eval variants). See `cv/landmarkFilter`.
    */
   filterLandmarks?: boolean
+  /**
+   * Provenance stamped onto every packet this run emits. Required because the
+   * ingestion envelope's whole purpose is that a consumer can tell an uploaded
+   * frame from a fixture one; defaulting it would let a fixture masquerade as a
+   * real capture in an exported report.
+   */
+  source: FrameSourceKind
+  /** Stable id for this capture, shared by every packet it produces. */
+  captureId: string
+  /**
+   * Clockwise rotation already applied to reach upright.
+   *
+   * Browsers apply a video's rotation metadata before it reaches a `<video>`
+   * element, so frames sampled here are already upright and 0 is a measurement,
+   * not a guess — for that path. A caller decoding frames itself must pass what
+   * it actually applied.
+   */
+  rotation?: FrameRotation
 }
 
 export interface VideoAnalysisResult {
@@ -75,6 +99,17 @@ export interface VideoAnalysisResult {
    * pipeline variant reproduces the analysis deterministically (eval/poseTape).
    */
   rawFrames: PoseFrame[]
+  /**
+   * The ingestion envelope for this capture: one v1 packet per *sampled* frame,
+   * in order, including the frames the tracker could not read (`pose: null`).
+   *
+   * This is the boundary the objective calls for — packets are stamped here,
+   * where the timestamp, frame index, provenance and rotation are actually
+   * known, rather than reconstructed downstream from a bare `PoseFrame`.
+   * Undetected frames stay in the list so "how much of this recording was
+   * readable" remains answerable from the packets themselves.
+   */
+  packets: FramePacket[]
   /** Rejected rep candidates with gate diagnostics (see analysis/repCounter). */
   repRejections: RepRejection[]
   /** Per-frame landmark quality over the analyzed sequence (M26). */
@@ -144,6 +179,8 @@ export async function runVideoAnalysis(
   let framesAnalyzed = 0
   let lastTimestampMs = -1
   const detectedFrames: PoseFrame[] = []
+  const packets: FramePacket[] = []
+  const rotation = deps.rotation ?? 0
 
   // Compute the frame count up front so floating-point drift on the timeline
   // can't add or drop a sample. Always includes t = 0 and t = duration.
@@ -166,6 +203,21 @@ export async function runVideoAnalysis(
     lastTimestampMs = timestampMs
 
     const frame = deps.detect(timestampMs, framesAnalyzed)
+
+    // Stamped for every sampled frame, detected or not. `createFramePacket`
+    // throws on a non-finite timestamp or a negative index, which is the point:
+    // an unreadable frame stops the run here instead of becoming an
+    // unexplained gap in a report.
+    packets.push(
+      createFramePacket({
+        timestamp: timestampMs,
+        rotation,
+        source: deps.source,
+        identity: { frameIndex: framesAnalyzed, captureId: deps.captureId },
+        pose: frame,
+        quality: frame?.quality,
+      }),
+    )
     framesAnalyzed++
 
     if (frame) {
@@ -198,6 +250,7 @@ export async function runVideoAnalysis(
     framesAnalyzed,
     framesWithPose: detectedFrames.length,
     rawFrames: detectedFrames,
+    packets,
     repRejections,
     landmarkQuality,
   }

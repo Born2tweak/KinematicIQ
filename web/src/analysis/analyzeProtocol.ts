@@ -15,6 +15,13 @@ import type { ProtocolSessionParameters, SegmentationOutput } from '../protocols
 import type { SessionResult } from '../session/types'
 import type { ProtocolId } from '../core/protocol'
 import type { CaptureContext } from '../core/provenance'
+import {
+  assertPacketSequence,
+  fromPoseFrame,
+  posesFromPackets,
+  type FramePacket,
+  type FrameSourceKind,
+} from '../ingest/framePacket'
 import type { PoseFrame } from '../cv/types'
 import type { PipelineInitialState } from './videoAnalyzer'
 
@@ -25,8 +32,6 @@ export interface AnalyzeProtocolOptions {
   capture?: CaptureContext
   /** Capture parameters the athlete declared (e.g. forward-lunge lead side). */
   parameters?: ProtocolSessionParameters
-  /** Stable capture id carried into the ingestion envelope. */
-  captureId?: string
   /** Observation protocol the recording claims, when it carries one. */
   observationProtocolId?: string
 }
@@ -43,14 +48,34 @@ export interface ProtocolAnalysis {
 }
 
 /**
- * Analyze an ordered frame sequence under the selected protocol. Throws
+ * Wrap a bare frame list as a packet sequence.
+ *
+ * For sources that never went through `runVideoAnalysis` — a stored pose tape,
+ * a test fixture — the frames exist before any packet does. Rotation is 0
+ * because a legacy frame records none; that is a stated assumption, and it is
+ * stated here rather than silently inside each consumer.
+ */
+export function packetsFromFrames(
+  frames: readonly PoseFrame[],
+  options: { source: FrameSourceKind; captureId: string },
+): FramePacket[] {
+  return frames.map((frame) => fromPoseFrame(frame, options))
+}
+
+/**
+ * Analyze one capture under the selected protocol. Throws
  * `NotImplementedError` for planned protocols and a registry error for
  * unknown ids — callers surface honest "not yet validated" copy instead of
  * a fake report.
+ *
+ * Both runtime shapes enter through the same packet sequence. That is the
+ * point of the signature: the cyclic path used to receive raw `PoseFrame[]`
+ * while only the whole-session path saw an envelope, so "every source goes
+ * through ingestion" was true of one protocol and not the other.
  */
-export function analyzeFramesForProtocol(
+export function analyzeCaptureForProtocol(
   protocolId: ProtocolId,
-  frames: readonly PoseFrame[],
+  packets: readonly FramePacket[],
   options: AnalyzeProtocolOptions = {},
 ): ProtocolAnalysis {
   // Resolves the runtime (and refuses unimplemented protocols) before any
@@ -60,14 +85,18 @@ export function analyzeFramesForProtocol(
     return {
       segmentation: null,
       result: runtime.analyzeSession({
-        frames,
+        packets,
         capture: options.capture ?? { captureSource: 'live', filterVariant: 'raw' },
         parameters: options.parameters,
-        captureId: options.captureId,
         observationProtocolId: options.observationProtocolId,
       }),
     }
   }
+  // The cyclic engine reads poses, not packets — but it reads them from a
+  // sequence that has been checked as one ordered capture, exactly like the
+  // whole-session path does.
+  assertPacketSequence(packets)
+  const frames = posesFromPackets(packets)
   const cyclic = getCyclicProtocolRuntime(protocolId)
   const segmentation = cyclic.segmentFrames(frames, options.initial)
   const result = cyclic.buildSessionResult({

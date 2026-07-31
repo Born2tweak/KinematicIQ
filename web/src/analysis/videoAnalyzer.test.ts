@@ -74,6 +74,8 @@ describe('runVideoAnalysis', () => {
 
     const result = await runVideoAnalysis({
       durationSeconds: 1,
+      source: 'fixture-video',
+      captureId: 'test-capture',
       fps: 10,
       seek,
       detect,
@@ -92,6 +94,8 @@ describe('runVideoAnalysis', () => {
     const progress: number[] = []
     const result = await runVideoAnalysis({
       durationSeconds: 2,
+      source: 'fixture-video',
+      captureId: 'test-capture',
       seek: async () => {},
       detect: () => null,
       onProgress: (f) => progress.push(f),
@@ -105,6 +109,8 @@ describe('runVideoAnalysis', () => {
     const seen: number[] = []
     await runVideoAnalysis({
       durationSeconds: 0.2,
+      source: 'fixture-video',
+      captureId: 'test-capture',
       fps: 5,
       timestampBaseMs: 100_000,
       seek: async () => {},
@@ -119,6 +125,8 @@ describe('runVideoAnalysis', () => {
   it('skips frames with no detected pose without counting them', async () => {
     const result = await runVideoAnalysis({
       durationSeconds: 0.4,
+      source: 'fixture-video',
+      captureId: 'test-capture',
       fps: 5,
       seek: async () => {},
       detect: (_ts, frameIndex) =>
@@ -134,6 +142,8 @@ describe('runVideoAnalysis', () => {
     await expect(
       runVideoAnalysis({
         durationSeconds: 1,
+        source: 'fixture-video',
+        captureId: 'test-capture',
         seek: async () => {},
         detect: () => null,
         signal: controller.signal,
@@ -146,6 +156,8 @@ describe('runVideoAnalysis', () => {
     const fps = DEFAULT_ANALYSIS_FPS
     const result = await runVideoAnalysis({
       durationSeconds: (frames.length - 1) / fps,
+      source: 'fixture-video',
+      captureId: 'test-capture',
       fps,
       seek: async () => {},
       detect: (timestampMs, frameIndex) => {
@@ -165,6 +177,8 @@ describe('runVideoAnalysis', () => {
     const run = () =>
       runVideoAnalysis({
         durationSeconds: (frames.length - 1) / fps,
+        source: 'fixture-video',
+        captureId: 'test-capture',
         fps,
         seek: async () => {},
         detect: (timestampMs, frameIndex) => {
@@ -199,6 +213,8 @@ describe('runVideoAnalysis', () => {
     const fps = DEFAULT_ANALYSIS_FPS
     const result = await runVideoAnalysis({
       durationSeconds: (frames.length - 1) / fps,
+      source: 'fixture-video',
+      captureId: 'test-capture',
       fps,
       seek: async () => {},
       detect: (timestampMs, frameIndex) => {
@@ -236,6 +252,8 @@ describe('runVideoAnalysis', () => {
     const jitter = (i: number) => 0.004 * Math.sin(i * 2.7)
     const deps = {
       durationSeconds: (frames.length - 1) / fps,
+      source: 'fixture-video' as const,
+      captureId: 'test-capture',
       fps,
       seek: async () => {},
       detect: (timestampMs: number, frameIndex: number) => {

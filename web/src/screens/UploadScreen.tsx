@@ -5,7 +5,8 @@ import { Button } from '../components/Button'
 import { Card } from '../components/Card'
 import { DisclaimerBanner } from '../components/DisclaimerBanner'
 import { DEFAULT_ANALYSIS_FPS, runVideoAnalysis } from '../analysis/videoAnalyzer'
-import { analyzeFramesForProtocol } from '../analysis/analyzeProtocol'
+import { analyzeCaptureForProtocol, packetsFromFrames } from '../analysis/analyzeProtocol'
+import { newCaptureId } from '../ingest/captureId'
 import { poseEngine } from '../cv/poseEngine'
 import { createTape, deserializeTape, type PoseTape } from '../eval/poseTape'
 import { storeSessionTape } from '../eval/tapeStore'
@@ -262,17 +263,27 @@ export function UploadScreen() {
       try {
         setProgress(50)
         storeSessionTape(tape)
-        const { result } = analyzeFramesForProtocol(selectedProtocolId, tape.frames, {
-          capture: {
-            captureSource: 'replay',
-            filterVariant: tape.meta.filtering ?? 'raw',
+        // A stored tape carries frames but no envelope, so it enters ingestion
+        // here — the same boundary an uploaded video crosses inside
+        // `runVideoAnalysis`, just with the packets built from frames that
+        // already exist.
+        const { result } = analyzeCaptureForProtocol(
+          selectedProtocolId,
+          packetsFromFrames(tape.frames, {
+            source: 'pose-tape',
+            captureId: newCaptureId('replay'),
+          }),
+          {
+            capture: {
+              captureSource: 'replay',
+              filterVariant: tape.meta.filtering ?? 'raw',
+            },
+            parameters,
+            // A tape that declares its own observation protocol is checked
+            // against the selected one instead of being reinterpreted.
+            observationProtocolId: tape.meta.protocolId,
           },
-          parameters,
-          captureId: fileName ?? 'pose-tape',
-          // A tape that declares its own observation protocol is checked
-          // against the selected one instead of being reinterpreted.
-          observationProtocolId: tape.meta.protocolId,
-        })
+        )
         setProgress(100)
         navigate('/results', { state: { result } })
       } catch (err: unknown) {
@@ -295,8 +306,13 @@ export function UploadScreen() {
       const controller = new AbortController()
       abortRef.current = controller
 
+      const captureId = newCaptureId('upload')
+
       const result = await runVideoAnalysis({
         durationSeconds: loaded.durationSeconds,
+        // Provenance is stamped at the source, on every sampled frame.
+        source: 'uploaded-video',
+        captureId,
         // Zero-phase Butterworth filtering is the default for the offline path.
         seek: (seconds) => seekVideo(loaded.video, seconds),
         detect: (timestampMs, frameIndex) =>
@@ -339,10 +355,9 @@ export function UploadScreen() {
       // the cyclic rep pipeline only, and claiming it here would be false.
       const sessionResult = runtime.analyzeSession
         ? runtime.analyzeSession({
-            frames: result.rawFrames,
+            packets: result.packets,
             capture: { captureSource: 'upload', filterVariant: 'raw' },
             parameters,
-            captureId: fileName ?? 'uploaded-video',
           })
         : getProtocolRuntime(selectedProtocolId).buildSessionResult!({
             reps: result.reps,

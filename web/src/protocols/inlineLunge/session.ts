@@ -29,9 +29,13 @@ import { confidenceLevel } from '../../core/confidence'
 import type { MetricResult } from '../../core/metric'
 import type { Finding } from '../../core/finding'
 import { normalizeObservationProtocolId } from '../../core/protocol'
-import { makeProvenance, type CaptureContext, type CaptureSource } from '../../core/provenance'
+import { makeProvenance, type CaptureContext } from '../../core/provenance'
 import type { PoseFrame } from '../../cv/types'
-import { fromPoseFrame, type FrameSourceKind } from '../../ingest/framePacket'
+import {
+  assertPacketSequence,
+  posesFromPackets,
+  type FramePacket,
+} from '../../ingest/framePacket'
 import type { SessionResult, SetMetricsSummary } from '../../session/types'
 import type { SetQualityAssessment, SetQualityReason } from '../../session/setQualityGate'
 import { analyzeInlineLungeResearch } from '.'
@@ -40,12 +44,11 @@ import { FORWARD_LUNGE_PROFILE } from './profile'
 import type { InlineLungeAnalysisResult, InlineLungeSide } from './types'
 
 export interface ForwardLungeSessionInput {
-  frames: readonly PoseFrame[]
+  /** The capture as the ingestion envelope produced it (see ingest/framePacket). */
+  packets: readonly FramePacket[]
   capture: CaptureContext
   /** Declared before capture; the analysis is undefined without it. */
   leadSide?: InlineLungeSide
-  /** Stable id for the capture these frames belong to. */
-  captureId?: string
   /**
    * Observation protocol the recording itself claims, when it carries one (a
    * stored pose tape does). A recording captured under a different observation
@@ -53,14 +56,6 @@ export interface ForwardLungeSessionInput {
    * not a side-view lunge capture just because both contain legs.
    */
   observationProtocolId?: string
-}
-
-/** Frame provenance the ingestion envelope records, per capture surface. */
-const PACKET_SOURCE: Record<CaptureSource, FrameSourceKind> = {
-  live: 'live-camera',
-  upload: 'uploaded-video',
-  replay: 'pose-tape',
-  synthetic: 'fixture-video',
 }
 
 const CAPTURE_FIXES = [
@@ -71,20 +66,19 @@ const CAPTURE_FIXES = [
 ]
 
 /**
- * Wrap every frame as a v1 packet and hand back the poses that survived.
+ * Read the capture through the ingestion boundary and hand back its poses.
  *
- * The packet is the validation boundary, so this deliberately does not catch:
- * a frame the ingestion layer cannot vouch for must stop the analysis, and the
- * caller turns it into an explicit "this recording could not be read" report.
+ * Until now this *built* packets from bare frames and immediately discarded
+ * them, which validated one field and threw away every other thing a packet
+ * knows. Packets are now stamped by the producer, so this only has to check
+ * that what arrived is one coherent, ordered capture — and it deliberately
+ * does not catch: a sequence the ingestion layer cannot vouch for must stop
+ * the analysis, and the caller turns it into an explicit "this recording could
+ * not be read" report.
  */
-export function adaptFramesToPackets(
-  frames: readonly PoseFrame[],
-  source: CaptureSource,
-  captureId: string,
-): PoseFrame[] {
-  return frames
-    .map((frame) => fromPoseFrame(frame, { source: PACKET_SOURCE[source], captureId }))
-    .flatMap((packet) => (packet.pose ? [packet.pose] : []))
+export function readCaptureSequence(packets: readonly FramePacket[]): PoseFrame[] {
+  assertPacketSequence(packets)
+  return posesFromPackets(packets)
 }
 
 const emptyMetrics = (repCount: number, overallConfidence: number): SetMetricsSummary => ({
@@ -214,8 +208,6 @@ export function buildForwardLungeSessionResult(
   input: ForwardLungeSessionInput,
 ): SessionResult {
   const leadSide = input.leadSide ?? FORWARD_LUNGE_PROFILE.defaultLeadSide
-  const captureId =
-    input.captureId ?? `${input.capture.captureSource}-forward-lunge-${input.frames.length}`
 
   if (input.observationProtocolId !== undefined) {
     let declared: string | null = null
@@ -237,7 +229,7 @@ export function buildForwardLungeSessionResult(
 
   let frames: PoseFrame[]
   try {
-    frames = adaptFramesToPackets(input.frames, input.capture.captureSource, captureId)
+    frames = readCaptureSequence(input.packets)
   } catch (error) {
     return abstainingResult(
       [{

@@ -183,3 +183,76 @@ export function packetGapMs(previous: FramePacket, next: FramePacket): number | 
   const gap = next.timestamp - previous.timestamp
   return gap >= 0 ? gap : null
 }
+
+/**
+ * Check that an ordered run of packets is one coherent capture.
+ *
+ * A single well-formed packet says nothing about the sequence it belongs to:
+ * frames can still arrive out of order, carry a rewound clock, or splice two
+ * captures together, and every one of those silently corrupts a phase
+ * segmentation that reads time. `createFramePacket` cannot see any of it
+ * because it only ever holds one frame. This is the sequence-level half of the
+ * same boundary, and it is deliberately strict for the same reason: refuse here,
+ * while the producer is still on the stack.
+ *
+ * Timestamps must be strictly increasing rather than merely non-decreasing —
+ * two frames at the same instant make a duration undefined, and the capture
+ * loop already guarantees strict monotonicity.
+ */
+export function assertPacketSequence(
+  packets: readonly FramePacket[],
+): asserts packets is readonly FramePacket[] {
+  let previous: FramePacket | null = null
+  for (const packet of packets) {
+    if (!FRAME_PACKET_VERSIONS.includes(packet.packetVersion)) {
+      throw new FramePacketError(
+        `Unsupported FramePacket version ${String(packet.packetVersion)} in sequence.`,
+      )
+    }
+    if (previous) {
+      if (packet.identity.captureId !== previous.identity.captureId) {
+        throw new FramePacketError(
+          `FramePacket sequence mixes captures "${previous.identity.captureId}" and ` +
+            `"${packet.identity.captureId}"; one sequence is one capture.`,
+        )
+      }
+      if (packet.identity.frameIndex <= previous.identity.frameIndex) {
+        throw new FramePacketError(
+          `FramePacket frameIndex must increase: ${previous.identity.frameIndex} ` +
+            `was followed by ${packet.identity.frameIndex}.`,
+        )
+      }
+      if (packet.timestamp <= previous.timestamp) {
+        throw new FramePacketError(
+          `FramePacket timestamps must increase: ${previous.timestamp}ms ` +
+            `was followed by ${packet.timestamp}ms.`,
+        )
+      }
+    }
+    previous = packet
+  }
+}
+
+/**
+ * The poses a sequence actually carries, in order.
+ *
+ * Packets with `pose: null` are frames the ingestion layer sampled but the
+ * tracker could not read. They are dropped here rather than earlier so the
+ * sampled-vs-readable ratio stays measurable from the packet list itself —
+ * see {@link sequenceReadability}.
+ */
+export function posesFromPackets(packets: readonly FramePacket[]): PoseFrame[] {
+  return packets.flatMap((packet) => (packet.pose ? [packet.pose] : []))
+}
+
+/** How much of a sampled sequence the tracker could actually read. */
+export function sequenceReadability(packets: readonly FramePacket[]): {
+  sampled: number
+  withPose: number
+  /** Fraction in [0, 1]; 0 for an empty sequence, never NaN. */
+  ratio: number
+} {
+  const sampled = packets.length
+  const withPose = packets.reduce((count, packet) => count + (packet.pose ? 1 : 0), 0)
+  return { sampled, withPose, ratio: sampled === 0 ? 0 : withPose / sampled }
+}
