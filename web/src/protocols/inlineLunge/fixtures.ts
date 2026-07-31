@@ -1,3 +1,26 @@
+/**
+ * Synthetic frames that exercise forward-lunge *segmentation*. Not a lunge.
+ *
+ * Read this before quoting any number these frames produce. The generator moves
+ * a foot forward and drops a pelvis, which is exactly what the segmenter keys
+ * on, so it drives the six-phase state machine end to end and is genuinely
+ * useful for that. What it does not do is bend a knee: the hip, knee and ankle
+ * stay close to collinear throughout, and the lead-knee angle at the detected
+ * bottom is about 175° — a straight leg — against roughly 80–120° for a real
+ * forward lunge.
+ *
+ * That gap is the whole point of keeping this note here. A tape from this
+ * generator can show trials, phases, durations and consistency, and none of it
+ * is evidence that the analysis measures a lunge correctly on human video. The
+ * lead-knee metric now abstains on this geometry rather than reporting the 175°
+ * (see `LEAD_KNEE_FLEXION_IMPLAUSIBLE_ABOVE_DEG`), and a test pins that.
+ *
+ * Fixing the geometry means giving the leg consistent segment lengths across
+ * the motion and a pelvis drop deep enough to match the knee flexion, which
+ * changes the signals the segmenter thresholds were set against. That is a
+ * deliberate piece of work, not a tweak, and it should be done against real
+ * recordings rather than by tuning one fixture until it looks right.
+ */
 import type { NormalizedLandmark, PoseFrame } from '../../cv/types'
 import { LANDMARK_INDICES } from '../../cv/types'
 import type { InlineLungeSide } from './types'

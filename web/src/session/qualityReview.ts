@@ -12,6 +12,8 @@
  * Design sources: docs/research/11_Product_Experience_Bible.md (quality
  * review and recovery paths), docs/research/05 (verdict-or-abstain).
  */
+import type { ProtocolKind } from '../core/protocol'
+import { attemptNoun } from './attemptVocabulary'
 import type { SetQualityAssessment } from './setQualityGate'
 
 export type QualityReviewDecision =
@@ -35,8 +37,18 @@ export interface QualityReview {
   allowInspection: boolean
 }
 
-/** Map a finished set's quality assessment to the review-step decision. */
-export function reviewSetQuality(quality: SetQualityAssessment): QualityReview {
+/**
+ * Map a finished set's quality assessment to the review-step decision.
+ *
+ * `kind` selects the movement's own vocabulary. It is optional so existing
+ * squat callers keep working, and it defaults to the neutral "attempts" rather
+ * than to "reps" — a wrong-but-specific noun is worse than a vague one.
+ */
+export function reviewSetQuality(
+  quality: SetQualityAssessment,
+  kind?: ProtocolKind,
+): QualityReview {
+  const attempts = attemptNoun(kind).plural
   if (quality.verdict === 'valid') {
     return {
       decision: 'show-results',
@@ -51,7 +63,7 @@ export function reviewSetQuality(quality: SetQualityAssessment): QualityReview {
     return {
       decision: 'recommend-retake',
       headline:
-        'Parts of this recording could not be trusted — a retake would give a clearer report. Observations from the trusted reps are still shown.',
+        `Parts of this recording could not be trusted — a retake would give a clearer report. Observations from the trusted ${attempts} are still shown.`,
       retakeGuidance: [...quality.captureFixes],
       retakeRecommended: true,
       allowInspection: true,

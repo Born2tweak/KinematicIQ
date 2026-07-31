@@ -40,6 +40,7 @@ import type { SessionResult, SetMetricsSummary } from '../../session/types'
 import type { SetQualityAssessment, SetQualityReason } from '../../session/setQualityGate'
 import { analyzeInlineLungeResearch } from '.'
 import { deriveForwardLungeCues } from './coaching'
+import { leadKneeAngleAtBottom } from './metrics'
 import { FORWARD_LUNGE_PROFILE } from './profile'
 import type { InlineLungeAnalysisResult, InlineLungeSide } from './types'
 
@@ -150,6 +151,23 @@ function assessQuality(
     reasons.push({
       id: 'artifact-heavy-set',
       detail: `${rejected.length} trial attempt${rejected.length === 1 ? '' : 's'} could not be followed to a stable return (${[...new Set(rejected.map((trial) => trial.rejectionReason ?? 'rejected'))].join(', ')}).`,
+    })
+  }
+  // A completed trial whose lead knee never bent is a readable recording of
+  // something that is not a forward lunge. The trial count still stands — the
+  // step and return happened — but the depth read is withheld and said so.
+  const completedTrials = analysis.trials.filter((trial) => trial.status === 'completed')
+  const bottomAngles = completedTrials.flatMap((trial) =>
+    trial.leadKneeAngleAtBottom === null ? [] : [trial.leadKneeAngleAtBottom],
+  )
+  if (
+    bottomAngles.length > 0 &&
+    leadKneeAngleAtBottom(completedTrials) === null
+  ) {
+    const average = bottomAngles.reduce((sum, angle) => sum + angle, 0) / bottomAngles.length
+    reasons.push({
+      id: 'artifact-heavy-set',
+      detail: `The lead knee stayed near straight at the detected bottom (about ${Math.round(average)}°), so no depth read is reported for this recording. Check that the camera is square to your side and that the lead leg is fully visible.`,
     })
   }
   if (readableRatio < FORWARD_LUNGE_PROFILE.minimumReadableRatio) {

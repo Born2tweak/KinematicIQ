@@ -25,8 +25,14 @@ describe('forward-lunge session assembly', () => {
     expect(result.protocolId).toBe('forwardLungeStrideReturn')
     expect(result.metrics.repCount).toBe(3)
     expect(result.noRepsDetected).toBe(false)
-    expect(result.quality.verdict).toBe('valid')
     expect(result.insufficientData).toBe(false)
+    // Not 'valid': this fixture's lead leg stays straight, so the depth read is
+    // withheld and that is recorded as a reason. See fixtures.ts — the verdict
+    // is describing the fixture accurately, not a regression.
+    expect(result.quality.verdict).toBe('questionable')
+    expect(result.quality.reasons.map((reason) => reason.detail).join(' ')).toMatch(
+      /lead knee stayed near straight/i,
+    )
 
     const trialCount = result.metricResults.find(
       (metric) => metric.metricId === 'forwardLungeStrideReturn.trial.count',
@@ -38,7 +44,11 @@ describe('forward-lunge session assembly', () => {
       )?.value,
     ).toBeGreaterThan(0)
     expect(result.findings.length).toBeGreaterThan(0)
-    expect(result.feedback.length).toBeGreaterThan(0)
+    // No cue survives on this fixture, and each absence is deliberate: timing
+    // is perfectly even so there is nothing to say about it, three trials means
+    // the sparse-set cue does not apply, and the lead-knee cue reads a metric
+    // that abstained. Coaching stays silent rather than padding.
+    expect(result.feedback).toEqual([])
   })
 
   it('carries the required observation provenance on every metric', () => {

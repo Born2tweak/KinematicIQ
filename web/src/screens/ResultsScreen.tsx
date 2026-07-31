@@ -207,7 +207,9 @@ export function ResultsScreen() {
   const showExpert = activeTab === 'expert'
   // Quality review step (M51): explicit accept/retake recovery path derived
   // from the quality gate — never weakens the invalid full abstain below.
-  const qualityReview = reviewSetQuality(quality)
+  // The kind carries the movement's vocabulary: squat counts reps, forward
+  // lunge counts trials, and this banner used to say "reps" for both.
+  const qualityReview = reviewSetQuality(quality, protocolDefinition.kind)
   const topFindings = summaryFindings(result)
   const coachQuestions = coachQuestionSections(result)
   const metricResults = evidenceMetricResults(result)
