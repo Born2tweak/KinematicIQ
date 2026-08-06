@@ -9,7 +9,7 @@ import {
   KNEE_ASYMMETRY_THRESHOLDS,
   TRUNK_THRESHOLDS,
 } from '../../scoring/scoringConfig'
-import type { PostureSetSummary } from './postureCollector'
+import { deviationPhrase, type PostureSetSummary } from './postureCollector'
 
 /**
  * Posture concepts: coach-vocabulary reads derived from set metrics.
@@ -301,7 +301,9 @@ function appendPostureDepthConcepts(
         'deviation',
         `Rep ${posture.mostDeviantRep} stands out`,
         'info',
-        `Rep ${posture.mostDeviantRep} appears to differ most from your own pattern in this set — worth a second look.${
+        `Rep ${posture.mostDeviantRep} ${deviationPhrase(
+          posture.mostDeviantRepBasis,
+        )} than the rest of this set — worth a second look.${
           excluded ? " It is left out of this set's averages." : ''
         }`,
         sessionConfidence,

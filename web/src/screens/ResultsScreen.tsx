@@ -421,6 +421,7 @@ export function ResultsScreen() {
                   reps={metrics.reps}
                   showAngles={false}
                   deviantRep={result.posture?.mostDeviantRep ?? null}
+                  deviantBasis={result.posture?.mostDeviantRepBasis ?? null}
                   activeRep={replayRep}
                   onSelectRep={
                     sessionTape === null ? undefined : setRequestedReplayRep
@@ -717,6 +718,7 @@ export function ResultsScreen() {
                 reps={metrics.reps}
                 showAngles
                 deviantRep={result.posture?.mostDeviantRep ?? null}
+                deviantBasis={result.posture?.mostDeviantRepBasis ?? null}
                 activeRep={replayRep}
                 onSelectRep={sessionTape === null ? undefined : setRequestedReplayRep}
               />

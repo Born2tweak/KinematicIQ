@@ -1,6 +1,7 @@
 import { collectSetMetrics } from '../analysis/metricCollector'
 import {
   collectPostureMetrics,
+  deviationPhrase,
   findMostDeviantRep,
 } from '../analysis/posture/postureCollector'
 import type { PostureFrameSample } from '../analysis/posture/postureFrame'
@@ -63,7 +64,7 @@ export function buildSessionResult(
       : null
   const excludedRepNumbers = new Set<number>(quality.untrustedRepNumbers)
   if (deviantRep !== null) {
-    excludedRepNumbers.add(deviantRep)
+    excludedRepNumbers.add(deviantRep.repNumber)
   }
 
   const metrics = collectSetMetrics(
@@ -179,7 +180,11 @@ export function buildResultsSummary(result: SessionResult): string {
     exclusionPart += ` Rep${quality.untrustedRepNumbers.length === 1 ? '' : 's'} ${list} carried readings the camera cannot trust and ${quality.untrustedRepNumbers.length === 1 ? 'is' : 'are'} left out of the averages.`
   }
   if (deviantExcluded.length > 0) {
-    exclusionPart += ` Rep ${deviantExcluded.join(', ')} differed most from your set pattern and is left out of the averages.`
+    // Name the feature that actually differed. "Differed most from your set
+    // pattern" reads as a depth claim next to a depth chart, which is wrong
+    // whenever the flag came from rep timing.
+    const differed = deviationPhrase(result.posture?.mostDeviantRepBasis ?? null)
+    exclusionPart += ` Rep ${deviantExcluded.join(', ')} ${differed} than the rest of your set and is left out of the averages.`
   }
 
   let summary = `${repLine}${depthPart}.${exclusionPart}`

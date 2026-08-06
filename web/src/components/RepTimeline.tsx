@@ -1,3 +1,7 @@
+import {
+  deviationPhrase,
+  type DeviationBasis,
+} from '../analysis/posture/postureCollector'
 import type { RepMetrics } from '../cv/types'
 
 interface RepTimelineProps {
@@ -6,6 +10,12 @@ interface RepTimelineProps {
   showAngles?: boolean
   /** Rep number that deviates most from the set's own pattern, if any. */
   deviantRep?: number | null
+  /**
+   * Which feature flagged `deviantRep`. These bars plot depth only, so a
+   * timing outlier has to say so — otherwise the highlight looks like a
+   * depth claim the athlete can see is false.
+   */
+  deviantBasis?: DeviationBasis | null
   /** Rep the replay timeline is currently inside, if the replay is open. */
   activeRep?: number | null
   /** Evidence link: jump the replay to this rep's deepest tracked moment. */
@@ -33,10 +43,13 @@ export function RepTimeline({
   reps,
   showAngles = false,
   deviantRep = null,
+  deviantBasis = null,
   activeRep = null,
   onSelectRep,
 }: RepTimelineProps) {
   if (reps.length === 0) return null
+
+  const deviantNote = deviationPhrase(deviantBasis)
 
   return (
     <div className="rep-timeline" role="img" aria-label={`Depth per rep across ${reps.length} reps`}>
@@ -58,7 +71,7 @@ export function RepTimeline({
                 style={{ height: `${heightPercent}%` }}
                 onClick={() => onSelectRep?.(rep.repNumber)}
                 disabled={!onSelectRep}
-                aria-label={`Open rep ${rep.repNumber} at its deepest tracked moment${isDeviant ? '; differs most from this set pattern' : ''}`}
+                aria-label={`Open rep ${rep.repNumber} at its deepest tracked moment${isDeviant ? `; ${deviantNote} than the rest of this set` : ''}`}
                 title={
                   showAngles
                     ? `Rep ${rep.repNumber}: ${Math.round(depth)}° bottom knee angle`
@@ -73,7 +86,7 @@ export function RepTimeline({
       <p className="rep-timeline__caption">
         Taller bar = deeper rep{showAngles ? ' (bottom-of-rep knee angle)' : ''} — relative to your own set.
         {deviantRep !== null &&
-          ` Rep ${deviantRep} appears to differ most from your own pattern.`}
+          ` Rep ${deviantRep} ${deviantNote} than the rest of your set.`}
       </p>
       <details className="rep-timeline__text-alternative">
         <summary>Rep values as text</summary>
@@ -81,7 +94,9 @@ export function RepTimeline({
           {reps.map((rep) => (
             <li key={rep.repNumber}>
               Rep {rep.repNumber}: {Math.round(repDepth(rep))}° bottom knee-angle estimate
-              {rep.repNumber === deviantRep ? '; differs most from this set pattern' : ''}
+              {rep.repNumber === deviantRep
+                ? `; ${deviantNote} than the rest of this set`
+                : ''}
             </li>
           ))}
         </ul>

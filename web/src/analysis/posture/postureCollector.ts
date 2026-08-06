@@ -19,6 +19,48 @@ export const MIN_REP_SAMPLE_CONFIDENCE = 0.5
 /** |z| this large marks a rep as deviating from the set's own pattern. */
 export const DEVIATION_Z_THRESHOLD = 1.5
 
+/**
+ * Spread below which a feature is treated as uniform and scores nothing.
+ *
+ * A z-score is scale-free, so a set whose spread is pure numerical noise
+ * still produces large z-scores — nine reps agreeing on bottom knee angle
+ * to five decimal places were being ranked against each other and one was
+ * reported to the athlete as differing most. These floors are expressed in
+ * each feature's own units, because "is this spread meaningful?" is a
+ * measurement question, not a statistical one.
+ */
+/** Bottom knee-angle spread inside camera estimation noise (degrees). */
+export const MIN_MEANINGFUL_DEPTH_SD_DEG = 1
+
+/** Rep-duration spread below ~1.5 frames at 30 fps is unresolvable (ms). */
+export const MIN_MEANINGFUL_DURATION_SD_MS = 50
+
+/** Which per-rep feature drove a deviation flag. */
+export type DeviationBasis = 'depth' | 'duration'
+
+/**
+ * How a deviation flag is described to the athlete. Single source of truth:
+ * the flag is rendered on the Results summary, the rep-by-rep chart and the
+ * posture concepts, and those three must not drift into making different
+ * claims about the same rep.
+ */
+export function deviationPhrase(basis: DeviationBasis | null): string {
+  return basis === 'duration'
+    ? 'took a noticeably different amount of time'
+    : 'reached a noticeably different depth'
+}
+
+export interface RepDeviation {
+  repNumber: number
+  /**
+   * The feature the flag came from. Carried to the UI because the
+   * rep-by-rep chart plots depth only: highlighting a bar for a *timing*
+   * outlier, with no way to tell which, is not a claim the athlete can
+   * check against what is on screen.
+   */
+  basis: DeviationBasis
+}
+
 export interface RepPostureMetrics {
   repNumber: number
   /** hipFlexion : kneeFlexion at the deepest sample. >1 = hip-led, <1 = knee-led. */
@@ -50,6 +92,8 @@ export interface PostureSetSummary {
    * Within-set only — longitudinal baselines are future scope.
    */
   mostDeviantRep: number | null
+  /** Which feature drove `mostDeviantRep`; null when nothing is flagged. */
+  mostDeviantRepBasis: DeviationBasis | null
   /** Fraction of reps with a usable 3D read, in [0, 1]. */
   sampleCoverage: number
 }
@@ -62,27 +106,44 @@ function repDepth(rep: RepMetrics): number | null {
 }
 
 /** Max |z| across available per-rep features (depth, duration). */
-function deviationScores(reps: readonly RepMetrics[]): Map<number, number> {
-  const scores = new Map<number, number>()
+function deviationScores(
+  reps: readonly RepMetrics[],
+): Map<number, { z: number; basis: DeviationBasis }> {
+  const scores = new Map<number, { z: number; basis: DeviationBasis }>()
   if (reps.length < 3) return scores
 
-  const features: Array<(rep: RepMetrics) => number | null> = [
-    (rep) => repDepth(rep),
-    (rep) => rep.durationMs,
+  const features: Array<{
+    basis: DeviationBasis
+    read: (rep: RepMetrics) => number | null
+    minMeaningfulSd: number
+  }> = [
+    {
+      basis: 'depth',
+      read: (rep) => repDepth(rep),
+      minMeaningfulSd: MIN_MEANINGFUL_DEPTH_SD_DEG,
+    },
+    {
+      basis: 'duration',
+      read: (rep) => rep.durationMs,
+      minMeaningfulSd: MIN_MEANINGFUL_DURATION_SD_MS,
+    },
   ]
 
   for (const feature of features) {
-    const values = reps.map(feature)
+    const values = reps.map(feature.read)
     const present = values.filter((v): v is number => v !== null)
     if (present.length < 3) continue
     const m = average(present)
     const sd = standardDeviation(present)
-    if (m === null || sd === null || sd < 1e-9) continue
+    if (m === null || sd === null || sd < feature.minMeaningfulSd) continue
     reps.forEach((rep, i) => {
       const v = values[i]
       if (v === null) return
       const z = Math.abs((v - m) / sd)
-      scores.set(rep.repNumber, Math.max(scores.get(rep.repNumber) ?? 0, z))
+      const previous = scores.get(rep.repNumber)
+      if (previous === undefined || z > previous.z) {
+        scores.set(rep.repNumber, { z, basis: feature.basis })
+      }
     })
   }
   return scores
@@ -97,17 +158,17 @@ function deviationScores(reps: readonly RepMetrics[]): Map<number, number> {
  */
 export function findMostDeviantRep(
   reps: readonly RepMetrics[],
-): number | null {
+): RepDeviation | null {
   const scores = deviationScores(reps)
-  let mostDeviantRep: number | null = null
+  let deviation: RepDeviation | null = null
   let maxZ = 0
-  for (const [repNumber, z] of scores) {
+  for (const [repNumber, { z, basis }] of scores) {
     if (z >= DEVIATION_Z_THRESHOLD && z > maxZ) {
       maxZ = z
-      mostDeviantRep = repNumber
+      deviation = { repNumber, basis }
     }
   }
-  return mostDeviantRep
+  return deviation
 }
 
 function analyzeRep(
@@ -183,7 +244,7 @@ export function collectPostureMetrics(
     (r) => r.sampleConfidence >= MIN_REP_SAMPLE_CONFIDENCE,
   )
 
-  const mostDeviantRep = findMostDeviantRep(reps)
+  const deviation = findMostDeviantRep(reps)
 
   return {
     repPosture,
@@ -194,7 +255,8 @@ export function collectPostureMetrics(
     avgShoulderElevationRatio: averageOf(
       usable.map((r) => r.shoulderElevationRatio),
     ),
-    mostDeviantRep,
+    mostDeviantRep: deviation?.repNumber ?? null,
+    mostDeviantRepBasis: deviation?.basis ?? null,
     sampleCoverage: reps.length === 0 ? 0 : usable.length / reps.length,
   }
 }

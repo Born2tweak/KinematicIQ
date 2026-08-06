@@ -11,6 +11,7 @@ const summary: PostureSetSummary = {
   avgForwardHeadAngle: 14,
   avgShoulderElevationRatio: 0.31,
   mostDeviantRep: null,
+  mostDeviantRepBasis: null,
   sampleCoverage: 0.8,
 }
 

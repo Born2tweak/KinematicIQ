@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import type { RepMetrics } from '../../cv/types'
-import { collectPostureMetrics } from './postureCollector'
+import { collectPostureMetrics, deviationPhrase } from './postureCollector'
 import type { PostureFrameSample } from './postureFrame'
 
 function makeRep(
@@ -96,6 +96,49 @@ describe('collectPostureMetrics', () => {
     ]
     const summary = collectPostureMetrics(reps, [])
     expect(summary.mostDeviantRep).toBe(3)
+    expect(summary.mostDeviantRepBasis).toBe('depth')
+  })
+
+  // Regression: a fixture set agreed on bottom knee angle to five decimal
+  // places and rep 1 was still reported to the athlete as differing most.
+  // z-scores are scale-free, so float noise divided by float noise is a
+  // large z. Spread this small is not a depth difference.
+  it('does not flag depth deviation on float-noise-level spread', () => {
+    const noise = [
+      98.13011605329243, 98.1301183681281, 98.13011478622906,
+      98.13012095638092, 98.13012032691718, 98.13011496329503,
+    ]
+    const reps = noise.map((angle, i) =>
+      makeRep(i + 1, i * 2500, i * 2500 + 1270, {
+        minLeftKneeAngle: angle,
+        minRightKneeAngle: angle,
+      }),
+    )
+    const summary = collectPostureMetrics(reps, [])
+    expect(summary.mostDeviantRep).toBeNull()
+    expect(summary.mostDeviantRepBasis).toBeNull()
+  })
+
+  // The rep-by-rep chart plots depth only. A timing outlier may still be
+  // worth surfacing, but it has to be reported as a timing outlier.
+  it('reports a timing outlier as a duration deviation, not a depth one', () => {
+    const reps = [
+      makeRep(1, 0, 1406),
+      makeRep(2, 2500, 3762),
+      makeRep(3, 5000, 6261),
+      makeRep(4, 7500, 8770),
+      makeRep(5, 10000, 11274),
+      makeRep(6, 12500, 13771),
+    ]
+    const summary = collectPostureMetrics(reps, [])
+    expect(summary.mostDeviantRep).toBe(1)
+    expect(summary.mostDeviantRepBasis).toBe('duration')
+  })
+
+  it('never describes a timing outlier as a depth one', () => {
+    expect(deviationPhrase('duration')).toContain('time')
+    expect(deviationPhrase('duration')).not.toContain('depth')
+    expect(deviationPhrase('depth')).toContain('depth')
   })
 
   it('does not flag deviation for small or uniform sets', () => {
