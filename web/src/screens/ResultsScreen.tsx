@@ -42,6 +42,7 @@ import { reviewSetQuality } from '../session/qualityReview'
 import type { SessionBaseline } from '../session/types'
 import { buildResultsNarrative } from '../components/report/resultsNarrative'
 import { useResultsSession } from './useResultsSession'
+import type { PlayerMode } from '../components/replay/playerModel'
 
 const MovementPlayer = lazy(() =>
   import('../components/replay/MovementPlayer').then((m) => ({
@@ -66,6 +67,8 @@ export function ResultsScreen() {
   // rep chart can highlight it. Presentation state only.
   const [replayRep, setReplayRep] = useState<number | null>(null)
   const [requestedReplayRep, setRequestedReplayRep] = useState<number | null>(null)
+  /** Drives the media row's layout; the player owns the mode itself. */
+  const [playerMode, setPlayerMode] = useState<PlayerMode>('mini')
   const handleActiveRepChange = useCallback((repNumber: number | null) => {
     setReplayRep((current) => (current === repNumber ? current : repNumber))
   }, [])
@@ -398,37 +401,49 @@ export function ResultsScreen() {
             {/* The movement visualization sits above the fold, not behind the
                 analyst tab. P3 replaces this with the mini/expandable
                 source-video + 3D split player. */}
-            {sessionTape !== null && (
-              <section className="results-player" aria-label="Movement player">
-                <Suspense fallback={<div className="results-player__placeholder" />}>
-                  <MovementPlayer
-                    tape={sessionTape}
-                    videoBlob={sessionMedia}
-                    onActiveRepChange={handleActiveRepChange}
-                    requestedRepNumber={requestedReplayRep}
-                  />
-                </Suspense>
-              </section>
-            )}
+            {/* Mini player and rep chart share one row: the mini player is
+                deliberately small, and letting it sit alone in a full-width
+                card left most of the row empty and pushed the chart below
+                the fold for no gain. Once the player expands it takes the
+                row back, because the expanded transport needs the width. */}
+            <div
+              className={`results-media-row${
+                playerMode === 'mini' ? '' : ' results-media-row--stacked'
+              }`}
+            >
+              {sessionTape !== null && (
+                <section className="results-player" aria-label="Movement player">
+                  <Suspense fallback={<div className="results-player__placeholder" />}>
+                    <MovementPlayer
+                      tape={sessionTape}
+                      videoBlob={sessionMedia}
+                      onActiveRepChange={handleActiveRepChange}
+                      requestedRepNumber={requestedReplayRep}
+                      onModeChange={setPlayerMode}
+                    />
+                  </Suspense>
+                </section>
+              )}
 
-            {metrics.reps.length > 0 && (
-              <Card
-                className="results-reps-card"
-                title="Rep-by-rep"
-                subtitle="How your depth compared across the set"
-              >
-                <RepTimeline
-                  reps={metrics.reps}
-                  showAngles={false}
-                  deviantRep={result.posture?.mostDeviantRep ?? null}
-                  deviantBasis={result.posture?.mostDeviantRepBasis ?? null}
-                  activeRep={replayRep}
-                  onSelectRep={
-                    sessionTape === null ? undefined : setRequestedReplayRep
-                  }
-                />
-              </Card>
-            )}
+              {metrics.reps.length > 0 && (
+                <Card
+                  className="results-reps-card"
+                  title="Rep-by-rep"
+                  subtitle="How your depth compared across the set"
+                >
+                  <RepTimeline
+                    reps={metrics.reps}
+                    showAngles={false}
+                    deviantRep={result.posture?.mostDeviantRep ?? null}
+                    deviantBasis={result.posture?.mostDeviantRepBasis ?? null}
+                    activeRep={replayRep}
+                    onSelectRep={
+                      sessionTape === null ? undefined : setRequestedReplayRep
+                    }
+                  />
+                </Card>
+              )}
+            </div>
           </div>
 
           <aside className="results-grid__rail" aria-label="Primary metrics">

@@ -963,8 +963,14 @@ img {
   width: 100%;
   min-height: 4px;
   border-radius: var(--radius-sm) var(--radius-sm) 2px 2px;
-  background: linear-gradient(180deg, #38bdf8 0%, #6366f1 100%);
-  box-shadow: 0 0 16px rgba(56, 189, 248, 0.18);
+  /* Track the accent palette. These were hardcoded sky-to-indigo, which
+     read as purple next to the cyan the rest of the product uses. */
+  background: linear-gradient(
+    180deg,
+    var(--color-accent) 0%,
+    rgba(34, 211, 238, 0.45) 100%
+  );
+  box-shadow: 0 0 16px var(--color-accent-muted);
 }
 
 .rep-timeline__bar--deviant {
@@ -4040,6 +4046,39 @@ textarea:focus-visible,
 }
 
 /* ── Movement visualization ────────────────────────────────────── */
+
+/* Mini player + rep chart on one row. The mini player is capped at 22rem by
+   design, so alone in a full-width card it left roughly two thirds of the
+   row empty and pushed the chart below the fold. Pairing them recovers that
+   space without shrinking either. */
+.results-media-row {
+  display: grid;
+  grid-template-columns: minmax(0, 22rem) minmax(0, 1fr);
+  gap: var(--space-md);
+  align-items: start;
+}
+
+/* Expanded and split need the whole row back. */
+.results-media-row--stacked {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+@media (max-width: 900px) {
+  .results-media-row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.results-media-row > .results-player {
+  min-width: 0;
+}
+
+.results-media-row > .results-reps-card {
+  min-width: 0;
+  /* Match the player's height so the row reads as one band, not two
+     cards that happen to be adjacent. */
+  align-self: stretch;
+}
 
 .results-player {
   border: 1px solid var(--color-border);

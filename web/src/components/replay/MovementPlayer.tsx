@@ -70,6 +70,12 @@ interface MovementPlayerProps {
   onActiveRepChange?: (repNumber: number | null) => void
   /** External evidence link: a rep to open at its bottom frame. */
   requestedRepNumber?: number | null
+  /**
+   * Notifies the parent of the disclosure step. Results pairs the mini
+   * player with the rep chart in one row and gives the player the full
+   * width once it expands, so the layout has to follow the mode.
+   */
+  onModeChange?: (mode: PlayerMode) => void
 }
 
 const EVENT_GLYPH: Record<ReplayEvent['kind'], string> = {
@@ -92,6 +98,7 @@ export function MovementPlayer({
   videoBlob,
   onActiveRepChange,
   requestedRepNumber = null,
+  onModeChange,
 }: MovementPlayerProps) {
   const replay = useMemo(() => replayTape(tape), [tape])
   const events = useMemo(
@@ -100,6 +107,9 @@ export function MovementPlayer({
   )
 
   const [mode, setMode] = useState<PlayerMode>('mini')
+  useEffect(() => {
+    onModeChange?.(mode)
+  }, [mode, onModeChange])
   const [sampleIndex, setSampleIndex] = useState(0)
   const [playing, setPlaying] = useState(false)
   const [speed, setSpeed] = useState<PlaybackSpeed>(1)
