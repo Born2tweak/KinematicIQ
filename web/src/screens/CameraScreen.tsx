@@ -7,6 +7,11 @@ import {
 } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import type { ProtocolId } from '../core/protocol'
+import {
+  FALLBACK_PROTOCOL_ID,
+  resolutionDisclosure,
+  resolveProtocolFromRouteState,
+} from '../protocols/resolution'
 import { Button } from '../components/Button'
 import { RepCounter } from '../components/RepCounter'
 import {
@@ -97,12 +102,21 @@ function syncCanvasToVideo(
 export function CameraScreen() {
   const navigate = useNavigate()
   const location = useLocation()
-  // Selected protocol from the picker's route state (M43). Squat stays the
-  // default; only available protocols can navigate here with an id.
+  // Which movement are we analyzing, and on whose authority? Resolved through
+  // the protocol-resolution seam so a bare /camera visit (the nav bar links
+  // here with no state) is recorded as a disclosed fallback rather than
+  // silently becoming a squat the athlete never chose.
+  const protocolResolution = useMemo(
+    () => resolveProtocolFromRouteState(location.state),
+    [location.state],
+  )
   const selectedProtocolId: ProtocolId =
-    (location.state as { protocolId?: ProtocolId } | null)?.protocolId ??
-    'squat'
+    protocolResolution.protocolId ?? FALLBACK_PROTOCOL_ID
   const selectedProtocol = getProtocol(selectedProtocolId).definition
+  const protocolDisclosure = resolutionDisclosure(
+    protocolResolution,
+    selectedProtocol.label,
+  )
   // The live surface drives the cyclic rep engine, so it requires a runtime
   // that has one. A protocol reachable only through upload never routes here.
   const selectedRuntime = getCyclicProtocolRuntime(selectedProtocolId)
@@ -898,6 +912,12 @@ export function CameraScreen() {
               Fixture camera: {cameraSource.label}
             </div>
           )}
+          {/* Setup phases only — the locked direction keeps the screen
+              restrained once the athlete is actually moving. */}
+          {protocolDisclosure !== null && autoStartPhase !== 'ACTIVE' && (
+            <p className="protocol-fallback-note">{protocolDisclosure}</p>
+          )}
+
           <CameraReadinessPanel
             phase={displayPhase}
             status={statusCopy}

@@ -1266,6 +1266,23 @@ img {
   color: var(--color-text-muted);
 }
 
+/* Shown only when nothing selected a movement and the engine fell back to a
+   default. Informational, not an error: it is a correctable assumption, so it
+   reads as a note rather than a warning. Uses --color-text (not muted) — the
+   whole point is that the athlete actually reads it. */
+.protocol-fallback-note {
+  margin: 0.75rem 0 0;
+  padding: 0.6rem 0.85rem;
+  border: 1px solid var(--color-border-strong);
+  border-left: 3px solid var(--color-accent);
+  border-radius: 6px;
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-size: 0.875rem;
+  line-height: 1.45;
+  max-width: 60ch;
+}
+
 /* Local session history (M9). */
 .history-list {
   margin: 0;

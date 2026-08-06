@@ -12,6 +12,21 @@ test.describe('release readiness', () => {
     await expect(page).toHaveURL(/\/upload$/)
     await expect(page.getByRole('heading', { level: 1 })).toContainText('forward lunge')
     await expect(page.getByRole('heading', { name: /Side-camera setup/i })).toBeVisible()
+    // Arriving by an actual selection needs no explanation.
+    await expect(page.locator('.protocol-fallback-note')).toHaveCount(0)
+  })
+
+  // The nav bar links to /upload and /camera with no route state. The engine
+  // still has to pick something, but it must never present that assumption as
+  // the athlete's choice — and must never call it detection.
+  test('an unselected arrival discloses the assumed movement', async ({ page }) => {
+    await page.goto('/upload')
+    const note = page.locator('.protocol-fallback-note')
+    await expect(note).toBeVisible()
+    await expect(note).toContainText(/didn't pick a movement/i)
+    await expect(note).toContainText('Bodyweight squat')
+    // No classifier exists, so nothing may claim the movement was detected.
+    await expect(page.locator('main')).not.toContainText(/detected/i)
   })
 
   test('movements without an implementation still cannot start an analysis', async ({ page }) => {

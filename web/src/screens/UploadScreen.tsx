@@ -1,6 +1,11 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import type { ProtocolId } from '../core/protocol'
+import {
+  FALLBACK_PROTOCOL_ID,
+  resolutionDisclosure,
+  resolveProtocolFromRouteState,
+} from '../protocols/resolution'
 import { Button } from '../components/Button'
 import { Card } from '../components/Card'
 import { DisclaimerBanner } from '../components/DisclaimerBanner'
@@ -68,15 +73,24 @@ function buildWarnings(loaded: LoadedVideo): string[] {
 export function UploadScreen() {
   const navigate = useNavigate()
   const location = useLocation()
-  // Selected protocol from route state (M43); squat stays the default.
+  // Resolved through the protocol-resolution seam, so an unselected arrival
+  // is a disclosed fallback rather than a silent squat. See protocols/
+  // resolution.ts — this is where a classifier will eventually plug in.
+  const protocolResolution = useMemo(
+    () => resolveProtocolFromRouteState(location.state),
+    [location.state],
+  )
   const selectedProtocolId: ProtocolId =
-    (location.state as { protocolId?: ProtocolId } | null)?.protocolId ??
-    'squat'
+    protocolResolution.protocolId ?? FALLBACK_PROTOCOL_ID
   // Setup guidance belongs to the SELECTED protocol. Reading squat's capture
   // contract here would tell someone recording a side-view lunge to face the
   // camera square-on.
   const definition = getProtocol(selectedProtocolId).definition
   const capture = definition.capture
+  const protocolDisclosure = resolutionDisclosure(
+    protocolResolution,
+    definition.label,
+  )
   const runtime = getProtocolRuntime(selectedProtocolId)
   const pkg = buildProtocolPackage(definition, {
     hasRuntime: true,
@@ -441,6 +455,9 @@ export function UploadScreen() {
         <p className="protocol-card__status protocol-card__status--available">
           {releaseLabel(pkg)}
         </p>
+        {protocolDisclosure !== null && (
+          <p className="protocol-fallback-note">{protocolDisclosure}</p>
+        )}
         <DisclaimerBanner />
       </header>
 
