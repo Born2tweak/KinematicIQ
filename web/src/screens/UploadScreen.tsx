@@ -17,6 +17,10 @@ import {
   seekVideo,
   type LoadedVideo,
 } from '../cv/videoFrameSource'
+import {
+  setPendingCaptureMedia,
+  setPendingCaptureTape,
+} from '../media/pendingCapture'
 import { getProtocol } from '../protocols/registry'
 import { getProtocolRuntime } from '../protocols/runtime'
 import { buildProtocolPackage } from '../protocols/packageRegistry'
@@ -82,6 +86,13 @@ export function UploadScreen() {
   const acceptsTape = capture.inputModes.includes('replay')
   const fileInputRef = useRef<HTMLInputElement | null>(null)
   const loadedRef = useRef<LoadedVideo | null>(null)
+  /**
+   * The chosen file, kept so the analyzed video can be stored with the session
+   * (P3). `loadedRef`'s object URL is revoked on unmount, which is why the
+   * results screen previously had no footage to replay — the bytes have to
+   * outlive this screen, and the File is the thing that carries them.
+   */
+  const sourceFileRef = useRef<File | null>(null)
   const tapeRef = useRef<PoseTape | null>(null)
   const abortRef = useRef<AbortController | null>(null)
 
@@ -139,6 +150,7 @@ export function UploadScreen() {
     abortRef.current = null
     disposeVideo(loadedRef.current)
     loadedRef.current = null
+    sourceFileRef.current = null
     tapeRef.current = null
     setPreviewUrl(null)
     setProgress(0)
@@ -203,6 +215,7 @@ export function UploadScreen() {
       try {
         const loaded = await loadVideoFile(file)
         loadedRef.current = loaded
+        sourceFileRef.current = file
         setDurationSeconds(loaded.durationSeconds)
         setDimensions({ w: loaded.width, h: loaded.height })
         setPreviewUrl(loaded.objectUrl)
@@ -263,6 +276,9 @@ export function UploadScreen() {
       try {
         setProgress(50)
         storeSessionTape(tape)
+        // A replayed tape has no source video; park the landmarks alone.
+        setPendingCaptureTape(tape)
+        setPendingCaptureMedia(null)
         // A stored tape carries frames but no envelope, so it enters ingestion
         // here — the same boundary an uploaded video crosses inside
         // `runVideoAnalysis`, just with the packets built from frames that
@@ -333,21 +349,36 @@ export function UploadScreen() {
 
       // Keep the raw (pre-filter) frames as a replayable pose tape so the
       // results screen can offer it for download (validation dataset capture).
-      storeSessionTape(
-        createTape(
-          result.rawFrames,
-          {
-            fps: DEFAULT_ANALYSIS_FPS,
-            label: fileName ?? undefined,
-            source: 'upload',
-            recordedAt: new Date().toISOString(),
-            filtering: 'butterworth-offline',
-          },
-          {
-            countedReps: result.reps.length,
-            rejections: result.repRejections,
-          },
-        ),
+      const uploadTape = createTape(
+        result.rawFrames,
+        {
+          fps: DEFAULT_ANALYSIS_FPS,
+          label: fileName ?? undefined,
+          source: 'upload',
+          recordedAt: new Date().toISOString(),
+          filtering: 'butterworth-offline',
+        },
+        {
+          countedReps: result.reps.length,
+          rejections: result.repRejections,
+        },
+      )
+      storeSessionTape(uploadTape)
+      setPendingCaptureTape(uploadTape)
+
+      // Hand the source video across so Results can play the actual footage
+      // beside the skeleton (P3). The File outlives this screen's object URL,
+      // which `disposeVideo` revokes on unmount.
+      const sourceFile = sourceFileRef.current
+      setPendingCaptureMedia(
+        sourceFile
+          ? {
+              blob: sourceFile,
+              mimeType: sourceFile.type || 'video/mp4',
+              source: 'upload',
+              durationMs: loaded.durationSeconds * 1000,
+            }
+          : null,
       )
 
       // A protocol with its own segmentation engine consumes the raw detected

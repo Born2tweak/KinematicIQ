@@ -14,7 +14,11 @@ export default function App() {
           <Route path="/" element={<LandingScreen />} />
           <Route path="/camera" element={<CameraScreen />} />
           <Route path="/upload" element={<UploadScreen />} />
+          {/* `/results` is the hand-off a just-finished analysis lands on; it
+              immediately persists and replaces itself with `/results/:id`,
+              which is the canonical, refreshable, linkable address (P2). */}
           <Route path="/results" element={<ResultsScreen />} />
+          <Route path="/results/:sessionId" element={<ResultsScreen />} />
           <Route path="/history" element={<HistoryScreen />} />
         </Route>
       </Routes>

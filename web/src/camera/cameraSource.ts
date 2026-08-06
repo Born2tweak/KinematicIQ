@@ -39,6 +39,13 @@ export interface CameraSource {
    * standing holds, auto-finish) behave identically across sources.
    */
   getFrame(timestampMs: number, frameIndex: number): PoseFrame | null
+  /**
+   * The live stream this source is showing, when it has real footage to
+   * record (P3). Optional and null-returning by design: a pose-tape fixture
+   * has no camera behind it, so a deterministic run stores no source video
+   * rather than fabricating one. Callers must treat null as ordinary.
+   */
+  getRecordableStream?(): MediaStream | null
   /** Release the stream/placeholder and reset so attach() can run again. */
   stop(): void
 }

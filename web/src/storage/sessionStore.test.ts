@@ -192,6 +192,49 @@ describe('storage/historyView', () => {
     expect(text).not.toMatch(/injury|risk|diagnos/i)
   })
 
+  // ── Addressable sessions (P2) ────────────────────────────────────
+  // `/results/:id` is only trustworthy if the store can answer for one id.
+
+  it('get returns the saved record for its id', async () => {
+    const store = createMemorySessionStore()
+    await store.save(stored({ id: 'abc', timestamp: 100 }))
+    const found = await store.get('abc')
+    expect(found?.id).toBe('abc')
+  })
+
+  it('get returns null for an unknown id rather than throwing', async () => {
+    const store = createMemorySessionStore()
+    await expect(store.get('missing')).resolves.toBeNull()
+  })
+
+  it('get refuses a record written by an unreadable schema version', async () => {
+    const store = createMemorySessionStore()
+    await store.save({
+      ...stored({ id: 'future', timestamp: 100 }),
+      schemaVersion: 999,
+    })
+    // list() already filters these; get() must agree, or a stale link would
+    // render a record this reader cannot interpret.
+    await expect(store.get('future')).resolves.toBeNull()
+    await expect(store.list()).resolves.toEqual([])
+  })
+
+  it('delete removes one record and leaves the rest', async () => {
+    const store = createMemorySessionStore()
+    await store.save(stored({ id: 'keep', timestamp: 200 }))
+    await store.save(stored({ id: 'drop', timestamp: 100 }))
+    await store.delete('drop')
+    const remaining = await store.list()
+    expect(remaining.map((r) => r.id)).toEqual(['keep'])
+  })
+
+  it('delete of an absent id is a no-op', async () => {
+    const store = createMemorySessionStore()
+    await store.save(stored({ id: 'keep', timestamp: 100 }))
+    await expect(store.delete('nope')).resolves.toBeUndefined()
+    await expect(store.list()).resolves.toHaveLength(1)
+  })
+
   it('historyObservation reads sub-threshold depth deltas as within noise (M32)', () => {
     const older = stored(
       { id: 'older', timestamp: 100 },

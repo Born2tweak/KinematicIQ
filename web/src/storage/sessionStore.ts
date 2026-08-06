@@ -3,9 +3,16 @@
  *
  * Browser-only persistence for completed sets: IndexedDB when available, an
  * in-memory adapter otherwise (tests, unsupported browsers). No accounts, no
- * network, no cloud — saving is an explicit user action on the results screen
- * and everything stays on this device (docs/research/08 §9 local-first flavor
- * only; docs/doctrine/deferred-scope.md defers all backend persistence).
+ * network, no cloud — everything stays on this device
+ * (docs/research/08 §9 local-first flavor only;
+ * docs/doctrine/deferred-scope.md defers all backend persistence).
+ *
+ * Persistence is AUTOMATIC as of ADR-018. M9 originally required an explicit
+ * "Save to history" tap so that nothing was written without consent; that
+ * reasoning was about network upload, which never applied here — the record
+ * never leaves the browser. The manual gate cost every unsaved session and
+ * made `/results/:id` unaddressable. Consent is now expressed through
+ * deletion (per-record and delete-all) rather than through withheld writes.
  *
  * The stored record is versioned so future schema changes can migrate or
  * refuse old records instead of misreading them.
@@ -56,8 +63,19 @@ export interface StoredSession {
 
 export interface SessionStore {
   save(record: StoredSession): Promise<void>
+  /**
+   * One saved session by id, or null when it is absent or written by a schema
+   * version this reader does not understand (P2).
+   *
+   * This is what makes `/results/:id` a real address: before it existed the
+   * results screen could only read a session out of router state, so a
+   * refresh, a History row, or a pasted link all landed on an empty screen.
+   */
+  get(id: string): Promise<StoredSession | null>
   /** All saved sessions, newest first. */
   list(): Promise<StoredSession[]>
+  /** Privacy control: removes one saved session (P2, per-row delete). */
+  delete(id: string): Promise<void>
   /** Privacy control: irreversibly removes every saved session. */
   deleteAll(): Promise<void>
 }
@@ -115,10 +133,17 @@ export function createMemorySessionStore(): SessionStore {
     async save(record) {
       records.set(record.id, record)
     },
+    async get(id) {
+      const record = records.get(id)
+      return record && isReadableRecord(record) ? record : null
+    },
     async list() {
       return [...records.values()]
         .filter(isReadableRecord)
         .sort((a, b) => b.timestamp - a.timestamp)
+    },
+    async delete(id) {
+      records.delete(id)
     },
     async deleteAll() {
       records.clear()
@@ -170,6 +195,15 @@ export function createIndexedDbSessionStore(): SessionStore {
     async save(record) {
       await withStore('readwrite', (store) => store.put(record))
     },
+    async get(id) {
+      const record = await withStore<StoredSession | undefined>(
+        'readonly',
+        (store) => store.get(id),
+      )
+      // An unreadable schema version reads as absent rather than being
+      // handed upward and guessed at.
+      return record && isReadableRecord(record) ? record : null
+    },
     async list() {
       const records = await withStore<StoredSession[]>('readonly', (store) =>
         store.getAll(),
@@ -177,6 +211,9 @@ export function createIndexedDbSessionStore(): SessionStore {
       return records
         .filter(isReadableRecord)
         .sort((a, b) => b.timestamp - a.timestamp)
+    },
+    async delete(id) {
+      await withStore('readwrite', (store) => store.delete(id))
     },
     async deleteAll() {
       await withStore('readwrite', (store) => store.clear())

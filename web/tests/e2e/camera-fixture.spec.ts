@@ -62,8 +62,22 @@ test.describe('camera fixtures', () => {
       .toBeGreaterThanOrEqual(1)
 
     await page.getByRole('button', { name: 'Finish Now' }).click()
-    await expect(page).toHaveURL(/\/results$/)
-    await expect(page.getByRole('heading', { name: 'Your set' })).toBeVisible()
+
+    // The report names the movement it analyzed. The old assertion looked for
+    // a generic "Your set" heading, which told the athlete nothing about what
+    // was measured; the identity band now leads with the protocol label.
+    await expect(
+      page.getByRole('heading', { name: 'Bodyweight squat' }),
+    ).toBeVisible()
+
+    // Results are persisted automatically and the hand-off URL is replaced
+    // with the record's own address (ADR-018), so the report survives a
+    // reload instead of living only in router state.
+    await expect(page).toHaveURL(/\/results\/[0-9a-z-]+$/i)
+    await page.reload()
+    await expect(
+      page.getByRole('heading', { name: 'Bodyweight squat' }),
+    ).toBeVisible()
   })
 
   test('missing-feet keeps setup guidance and never auto-starts reps', async ({

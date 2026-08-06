@@ -26,6 +26,14 @@ import {
   type PoseTapeEntryState,
 } from '../eval/poseTape'
 import { storeSessionTape } from '../eval/tapeStore'
+import {
+  startCaptureRecording,
+  type CaptureRecorder,
+} from '../media/captureRecorder'
+import {
+  setPendingCaptureMedia,
+  setPendingCaptureTape,
+} from '../media/pendingCapture'
 import { createEmptyPose3DRef, hipCenter } from '../cv/pose3d'
 import {
   LANDMARK_INDICES,
@@ -123,6 +131,12 @@ export function CameraScreen() {
   const liveFilterRef = useRef(createLiveStreamFilter())
   const pose3DRef = useRef(createEmptyPose3DRef())
   const tapeRecorderRef = useRef(createTapeRecorder())
+  /**
+   * Source-video recorder (P3). Started on the same transition the pose tape
+   * starts on, so the footage and the landmarks cover the same window. Null
+   * until then, and inert for any source with no real stream behind it.
+   */
+  const captureRecorderRef = useRef<CaptureRecorder | null>(null)
   /** Pipeline entry state at set activation — tape replay parity (finding #7). */
   const tapeEntryStateRef = useRef<PoseTapeEntryState | null>(null)
   /** Index into the tape where the analysis FSM began (preroll before it). */
@@ -260,7 +274,22 @@ export function CameraScreen() {
     }
   }, [isLoading, isModelLoading, error])
 
-  const handleCancel = () => navigate('/')
+  // Abandoning the screen must release the recorder and drop its buffered
+  // chunks — an unfinished capture is not a session and must never be handed
+  // to the next one.
+  useEffect(() => {
+    return () => {
+      const videoRecorder = captureRecorderRef.current
+      captureRecorderRef.current = null
+      void videoRecorder?.stop()
+    }
+  }, [])
+
+  const handleCancel = () => {
+    setPendingCaptureMedia(null)
+    setPendingCaptureTape(null)
+    navigate('/')
+  }
 
   const finishSet = useCallback(() => {
     if (isFinishingRef.current) return
@@ -281,24 +310,26 @@ export function CameraScreen() {
     const recorder = tapeRecorderRef.current
     if (recorder.count > 0) {
       const frames = recorder.build({ fps: 0 }).frames
-      storeSessionTape(
-        createTape(
-          frames,
-          {
-            fps: estimateFps(frames),
-            label: 'live-session',
-            source: 'live',
-            recordedAt: new Date().toISOString(),
-            filtering: 'one-euro-live',
-            entryState: tapeEntryStateRef.current ?? undefined,
-            analysisStartFrameIndex: tapeAnalysisStartRef.current ?? 0,
-          },
-          {
-            countedReps: reps.length,
-            rejections: repCounterRef.current.rejections,
-          },
-        ),
+      const tape = createTape(
+        frames,
+        {
+          fps: estimateFps(frames),
+          label: 'live-session',
+          source: 'live',
+          recordedAt: new Date().toISOString(),
+          filtering: 'one-euro-live',
+          entryState: tapeEntryStateRef.current ?? undefined,
+          analysisStartFrameIndex: tapeAnalysisStartRef.current ?? 0,
+        },
+        {
+          countedReps: reps.length,
+          rejections: repCounterRef.current.rejections,
+        },
       )
+      storeSessionTape(tape)
+      // Park it for the results screen to persist under the session id, so
+      // the replay survives a reload instead of dying with the page (P3).
+      setPendingCaptureTape(tape)
     }
     recorder.reset()
     tapeEntryStateRef.current = null
@@ -321,7 +352,36 @@ export function CameraScreen() {
     setAutoFinishPending(false)
     setFinishCountdown(null)
 
-    navigate('/results', { state: { result } })
+    // Close the video recording BEFORE navigating: the results screen drains
+    // the pending capture on mount, so parking the blob afterwards would
+    // always miss. `stop()` resolves null for an inert recorder, so the
+    // fixture path costs one already-resolved promise and stores nothing.
+    const videoRecorder = captureRecorderRef.current
+    captureRecorderRef.current = null
+    const go = () => navigate('/results', { state: { result } })
+
+    if (!videoRecorder) {
+      go()
+      return
+    }
+    videoRecorder
+      .stop()
+      .then((recording) => {
+        setPendingCaptureMedia(
+          recording
+            ? {
+                blob: recording.blob,
+                mimeType: recording.mimeType,
+                source: 'camera',
+                durationMs: recording.durationMs,
+              }
+            : null,
+        )
+      })
+      // A recording that failed to finalize must not strand the athlete on
+      // the camera screen with a finished analysis in hand.
+      .catch(() => setPendingCaptureMedia(null))
+      .finally(go)
   }, [liveCyclic, navigate, selectedRuntime])
 
   const finishSetRef = useRef(finishSet)
@@ -562,6 +622,16 @@ export function CameraScreen() {
               autoResult.phase === 'ACTIVE'
             if (tapeThisFrame && rawFrame) {
               tapeRecorderRef.current.record(rawFrame)
+            }
+
+            // Start keeping the footage on the same transition the tape starts
+            // on, so video and landmarks describe the same window. A source
+            // with no real stream (pose-tape fixture) yields an inert recorder
+            // and simply stores no video.
+            if (tapeThisFrame && captureRecorderRef.current === null) {
+              captureRecorderRef.current = startCaptureRecording(
+                cameraSource.getRecordableStream?.() ?? null,
+              )
             }
 
             // Update UI phase

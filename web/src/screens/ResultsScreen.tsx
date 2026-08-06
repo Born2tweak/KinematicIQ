@@ -1,5 +1,4 @@
 import { Suspense, lazy, useCallback, useEffect, useMemo, useState } from 'react'
-import { useLocation } from 'react-router-dom'
 import { buildPostureConcepts } from '../analysis/posture/postureConcepts'
 import { Button } from '../components/Button'
 import { Card } from '../components/Card'
@@ -25,10 +24,11 @@ import {
   summaryFindings,
   type ResultsTabId,
 } from '../components/report/resultsTabsModel'
+import { primaryMetrics } from '../components/report/primaryMetrics'
 import { CaptureQualityPanel } from '../components/report/CaptureQualityPanel'
 import { realRejections } from './repRejectionUi'
 import { getProtocol } from '../protocols/registry'
-import { buildStoredSession, getSessionStore } from '../storage/sessionStore'
+import { getSessionStore } from '../storage/sessionStore'
 import {
   buildSessionReport,
   downloadReportFile,
@@ -39,22 +39,28 @@ import { renderReportHtml } from '../export/sessionReportHtml'
 import { buildMetricCsv, metricCsvFilename } from '../export/metricCsv'
 import { computeBaseline } from '../session/baseline'
 import { reviewSetQuality } from '../session/qualityReview'
-import type { SessionBaseline, SessionResult } from '../session/types'
+import type { SessionBaseline } from '../session/types'
 import { buildResultsNarrative } from '../components/report/resultsNarrative'
+import { useResultsSession } from './useResultsSession'
 
-const SessionReplay = lazy(() =>
-  import('../components/replay/SessionReplay').then((m) => ({
-    default: m.SessionReplay,
+const MovementPlayer = lazy(() =>
+  import('../components/replay/MovementPlayer').then((m) => ({
+    default: m.MovementPlayer,
   })),
 )
 
 export function ResultsScreen() {
-  const location = useLocation()
-  const result = (location.state as { result?: SessionResult } | null)?.result
+  const session = useResultsSession()
+  const result = session.status === 'ready' ? session.result : undefined
+  // Capture artifacts belonging to THIS session, restored on reload (P3).
+  const sessionMedia = session.status === 'ready' ? session.media : null
   const [activeTab, setActiveTab] = useState<ResultsTabId>(DEFAULT_RESULTS_TAB)
   // Expert tab reveals the analyst layer (folds in the former analyst toggle).
   const isAnalyst = activeTab === 'expert'
-  const sessionTape = getSessionTape()
+  // Prefer the session's own persisted tape; fall back to the in-memory
+  // hand-off for the tick before persistence settles.
+  const sessionTape =
+    (session.status === 'ready' ? session.tape : null) ?? getSessionTape()
 
   // Linked views: the replay timeline reports which rep it is inside so the
   // rep chart can highlight it. Presentation state only.
@@ -80,18 +86,6 @@ export function ResultsScreen() {
       })
     return () => {
       cancelled = true
-    }
-  }, [result])
-
-  // Saving is an explicit user action (M9) — never silent persistence.
-  const [saveState, setSaveState] = useState<'idle' | 'saved' | 'error'>('idle')
-  const handleSaveSession = useCallback(async () => {
-    if (!result) return
-    try {
-      await getSessionStore().save(buildStoredSession(result))
-      setSaveState('saved')
-    } catch {
-      setSaveState('error')
     }
   }, [result])
 
@@ -164,6 +158,22 @@ export function ResultsScreen() {
     )
   }, [result])
 
+  // The rail: three to five readable metrics, above the fold, one per concept.
+  const railMetrics = useMemo(
+    () => (result ? primaryMetrics(result) : []),
+    [result],
+  )
+
+  if (session.status === 'loading') {
+    return (
+      <div className="results-page">
+        <p className="results-panel__intro" role="status">
+          Opening this session…
+        </p>
+      </div>
+    )
+  }
+
   if (!result) {
     return (
       <div className="results-page stack-lg">
@@ -176,8 +186,8 @@ export function ResultsScreen() {
           <Button to="/camera" variant="primary">
             Open camera
           </Button>
-          <Button to="/" variant="secondary">
-            Home
+          <Button to="/history" variant="secondary">
+            Session history
           </Button>
         </div>
       </div>
@@ -211,286 +221,430 @@ export function ResultsScreen() {
   // lunge counts trials, and this banner used to say "reps" for both.
   const qualityReview = reviewSetQuality(quality, protocolDefinition.kind)
   const topFindings = summaryFindings(result)
+  const primaryFinding = topFindings[0] ?? null
   const coachQuestions = coachQuestionSections(result)
   const metricResults = evidenceMetricResults(result)
+  const attemptNoun = isTransitionProtocol ? 'trial' : 'rep'
+  const storedLocally = session.status === 'ready' && session.stored
 
   return (
-    <div className="results-page stack-lg">
-      <header className="results-page__header report-header">
-        <div className="report-header__titles">
-          <p className="landing-eyebrow">Movement report</p>
-          <h1 className="page-title">Your set</h1>
+    <div className="results-page">
+      {/* Compact session header: what was analyzed, when, and how much of it
+          the tracker could vouch for — one band, never a hero block. */}
+      <header className="results-bar">
+        <div className="results-bar__identity">
+          <h1 className="results-bar__title">{protocolDefinition.label}</h1>
+          <p className="results-bar__meta">
+            {metrics.repCount} observed {attemptNoun}
+            {metrics.repCount === 1 ? '' : 's'}
+            {' · '}
+            {quality.trustedRepCount} trusted
+            {' · '}
+            <span className="results-bar__release">
+              {protocolDefinition.kind === 'transition' ? 'Transition' : 'Cyclic'}{' '}
+              movement
+            </span>
+          </p>
+        </div>
+        <div className="results-bar__status">
+          <div className="results-bar__confidence">
+            <span className="results-bar__confidence-label">Tracking confidence</span>
+            <span className="results-bar__confidence-value">
+              {sessionConfidence} ({sessionConfidenceScore}%)
+            </span>
+            <div className="confidence__bar">
+              <div
+                className={`confidence__fill confidence__fill--${sessionConfidence.toLowerCase()}`}
+                style={{ width: `${sessionConfidenceScore}%` }}
+                role="progressbar"
+                aria-valuenow={sessionConfidenceScore}
+                aria-valuemin={0}
+                aria-valuemax={100}
+                aria-label="Tracking confidence"
+              />
+            </div>
+          </div>
+          <ResultsTabs active={activeTab} onChange={setActiveTab} />
         </div>
       </header>
-      <DisclaimerBanner />
 
-      <ResultsTabs active={activeTab} onChange={setActiveTab} />
+      {/* Landmark visibility is not movement validity. This distinction is
+          load-bearing and stays adjacent to the number itself. */}
+      <p className="results-bar__caveat">
+        {narrative.cameraConfidence}
+      </p>
 
-      <section className="results-lead-card" aria-label="Set summary">
-        <h2 className="results-lead-card__headline">{narrative.headline}</h2>
-        <p className="results-lead">{narrative.observed}</p>
-        <dl className="results-narrative">
-          <div><dt>Why</dt><dd>{narrative.why}</dd></div>
-          <div><dt>Next</dt><dd>{narrative.next}</dd></div>
-          <div><dt>Camera confidence</dt><dd>{narrative.cameraConfidence.replace(/^Camera confidence: /, '')}</dd></div>
-          <div><dt>Validation</dt><dd>{narrative.validation.replace(/^Scientific validation: /, '')}</dd></div>
-        </dl>
-      </section>
+      {showSummary && (
+        <div className="results-grid">
+          <div className="results-grid__main">
+            <section className="results-verdict" aria-label="Set summary">
+              <h2 className="results-verdict__headline">{narrative.headline}</h2>
+              <p className="results-verdict__observed">{narrative.observed}</p>
+            </section>
 
-      {showSummary && qualityReview.retakeRecommended && (
-        <section
-          className="results-panel quality-review"
-          aria-label="Capture quality review"
-        >
-          <p className="results-alert results-alert--warning" role="status">
-            {qualityReview.headline}
-          </p>
-          {/* Fixes for a full-invalid set are already itemized in the
-              "Why there is no movement report" block below — don't duplicate
-              them here; the panel's job in that case is the retake CTA. */}
-          {qualityReview.retakeGuidance.length > 0 && !isInvalidSet && (
-            <ul className="quality-review__guidance">
-              {qualityReview.retakeGuidance.map((fix) => (
-                <li key={fix} className="quality-review__fix">
-                  {fix}
-                </li>
-              ))}
-            </ul>
-          )}
-          <div className="results-actions">
-            <Button to={recordAgain.to} state={recordAgain.state} variant="primary">
-              {recordAgain.label}
-            </Button>
+            {qualityReview.retakeRecommended && (
+              <section
+                className="results-panel quality-review"
+                aria-label="Capture quality review"
+              >
+                <p className="results-alert results-alert--warning" role="status">
+                  {qualityReview.headline}
+                </p>
+                {/* Fixes for a full-invalid set are already itemized in the
+                    "Why there is no movement report" block below — don't
+                    duplicate them here; the panel's job is the retake CTA. */}
+                {qualityReview.retakeGuidance.length > 0 && !isInvalidSet && (
+                  <ul className="quality-review__guidance">
+                    {qualityReview.retakeGuidance.map((fix) => (
+                      <li key={fix} className="quality-review__fix">
+                        {fix}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+                <div className="results-actions">
+                  <Button
+                    to={recordAgain.to}
+                    state={recordAgain.state}
+                    variant="primary"
+                  >
+                    {recordAgain.label}
+                  </Button>
+                </div>
+              </section>
+            )}
+
+            {isInvalidSet && (
+              <section
+                className="results-panel results-abstain"
+                aria-label="Why there is no movement report"
+              >
+                <h2 className="results-panel__heading">
+                  Why there is no movement report
+                </h2>
+                <p className="results-panel__intro">
+                  This app reports only what the camera can vouch for. This
+                  recording could not support a trustworthy read, so posture
+                  reads, metric summaries, and coaching are withheld — the
+                  rep-by-rep chart and diagnostics stay available for audit.
+                </p>
+                <ul className="results-abstain__reasons">
+                  {quality.reasons.map((reason) => (
+                    <li key={reason.id} className="results-abstain__reason">
+                      {reason.detail}
+                    </li>
+                  ))}
+                </ul>
+                {quality.captureFixes.length > 0 && (
+                  <>
+                    <h3 className="results-panel__heading">
+                      How to get a trustworthy report next set
+                    </h3>
+                    <ul className="results-abstain__reasons">
+                      {quality.captureFixes.map((fix) => (
+                        <li key={fix} className="results-abstain__reason">
+                          {fix}
+                        </li>
+                      ))}
+                    </ul>
+                  </>
+                )}
+              </section>
+            )}
+
+            {isQuestionableSet && (
+              <section
+                className="results-panel results-abstain"
+                aria-label="Capture-quality warning"
+              >
+                <p className="results-alert results-alert--warning" role="status">
+                  Use this as a capture-quality check, not a movement report.
+                  Parts of this recording could not be trusted, so only
+                  observations are shown — no recommendations.
+                </p>
+                <ul className="results-abstain__reasons">
+                  {quality.reasons.map((reason) => (
+                    <li key={reason.id} className="results-abstain__reason">
+                      {reason.detail}
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            )}
+
+            {/* NO_REPS_MESSAGE and INSUFFICIENT_DATA_MESSAGE are squat copy —
+                they talk about reps, calibration, and pausing at the bottom. A
+                protocol with a different unit of observation gets its own
+                recovery guidance from the quality gate instead. */}
+            {result.noRepsDetected && (
+              <p className="results-alert" role="alert">
+                {isTransitionProtocol
+                  ? (quality.captureFixes[0] ??
+                    protocolDefinition.capture.viewInstruction)
+                  : NO_REPS_MESSAGE}
+              </p>
+            )}
+
+            {result.insufficientData &&
+              !result.noRepsDetected &&
+              !isInvalidSet && (
+                <p className="results-alert results-alert--warning" role="alert">
+                  {isTransitionProtocol
+                    ? 'Too little of this recording was readable to interpret. The measured evidence stays below; no observation is drawn from it.'
+                    : INSUFFICIENT_DATA_MESSAGE}
+                </p>
+              )}
+
+            {/* The movement visualization sits above the fold, not behind the
+                analyst tab. P3 replaces this with the mini/expandable
+                source-video + 3D split player. */}
+            {sessionTape !== null && (
+              <section className="results-player" aria-label="Movement player">
+                <Suspense fallback={<div className="results-player__placeholder" />}>
+                  <MovementPlayer
+                    tape={sessionTape}
+                    videoBlob={sessionMedia}
+                    onActiveRepChange={handleActiveRepChange}
+                    requestedRepNumber={requestedReplayRep}
+                  />
+                </Suspense>
+              </section>
+            )}
+
+            {metrics.reps.length > 0 && (
+              <Card
+                className="results-reps-card"
+                title="Rep-by-rep"
+                subtitle="How your depth compared across the set"
+              >
+                <RepTimeline
+                  reps={metrics.reps}
+                  showAngles={false}
+                  deviantRep={result.posture?.mostDeviantRep ?? null}
+                  activeRep={replayRep}
+                  onSelectRep={
+                    sessionTape === null ? undefined : setRequestedReplayRep
+                  }
+                />
+              </Card>
+            )}
           </div>
-        </section>
-      )}
 
-      {showSummary && topFindings.length > 0 && (
-        <section className="results-coaching" aria-label="Key findings">
-          <h2 className="results-section-title">What stood out</h2>
-          <p className="results-coaching__intro">
-            The clearest observations from this set — evidence and a cue, not a grade.
-          </p>
-          <div className="results-coaching__list stack">
-            {topFindings.map((finding) => (
-              <FindingCard key={finding.id} finding={finding} />
-            ))}
-          </div>
-        </section>
-      )}
+          <aside className="results-grid__rail" aria-label="Primary metrics">
+            {railMetrics.length > 0 && (
+              <section className="metric-rail">
+                <h2 className="metric-rail__heading">Primary metrics</h2>
+                <ul className="metric-rail__list">
+                  {railMetrics.map((metric) => (
+                    <li key={metric.metricId} className="metric-tile">
+                      <span className="metric-tile__label">
+                        {metric.label}
+                        {metric.sided && (
+                          <span className="metric-tile__qualifier"> (one side)</span>
+                        )}
+                      </span>
+                      <span className="metric-tile__value">{metric.display}</span>
+                      <span className="metric-tile__foot">
+                        <ConfidenceBadge level={metric.confidence} />
+                        <span className="metric-tile__tier">
+                          {metric.validationTier}
+                        </span>
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            )}
 
-      {showEvidence &&
-        quality.verdict === 'valid' &&
-        !result.insufficientData && (
-        <section
-          className="results-panel"
-          aria-label="Coach questions"
-        >
-          <h2 className="results-panel__heading">The coach questions</h2>
-          <p className="results-panel__intro">
-            The report organized by what a coach would ask. A quiet section
-            means those reads stayed inside the expected range — silence is
-            deliberate, not missing data.
-          </p>
-          {coachQuestions.map((section) => (
-            <div key={section.questionId} className="coach-question">
-              <h3 className="coach-question__title">{section.title}</h3>
-              <p className="coach-question__asks">{section.asks}</p>
-              {section.findings.length > 0 ? (
-                <div className="coach-question__findings stack">
-                  {section.findings.map((finding) => (
-                    <FindingCard
-                      key={finding.id}
-                      finding={finding}
-                      showProvenance
-                      showConstraint
-                    />
+            {/* One prioritized observation and one cue. When no finding rule
+                fired — including every abstained set — the narrative still
+                carries a reason and a recovery action, so this slot reports
+                that rather than disappearing and leaving the athlete with no
+                next step. */}
+            <section className="results-focus" aria-label="Primary observation">
+              <h2 className="results-focus__heading">
+                {primaryFinding ? 'What stood out' : 'What this set shows'}
+              </h2>
+              <p className="results-focus__statement">
+                {primaryFinding ? primaryFinding.statement : narrative.why}
+              </p>
+              <div className="results-focus__cue">
+                <span className="results-focus__cue-label">
+                  {primaryFinding?.tryNext ? 'Try next set' : 'Next'}
+                </span>
+                <p className="results-focus__cue-text">
+                  {primaryFinding?.tryNext ?? narrative.next}
+                </p>
+              </div>
+            </section>
+
+            {/* An abstained set publishes no coaching. Say so where the cue
+                would otherwise sit, instead of letting silence imply "fine". */}
+            {isInvalidSet && (
+              <p className="results-focus__withheld">
+                Coaching is withheld for this recording.
+              </p>
+            )}
+
+            {topFindings.length > 1 && (
+              <section className="results-secondary" aria-label="Other observations">
+                <h2 className="results-focus__heading">Also observed</h2>
+                <div className="stack">
+                  {topFindings.slice(1).map((finding) => (
+                    <FindingCard key={finding.id} finding={finding} />
                   ))}
                 </div>
-              ) : (
-                <p className="coach-question__abstain">{section.abstainLine}</p>
-              )}
+              </section>
+            )}
+
+            {/* Experimental limitation: visible, never dominant. */}
+            <details className="results-disclosure">
+              <summary className="results-disclosure__summary">
+                Validation status and limits
+              </summary>
+              <div className="results-disclosure__body">
+                <p>{narrative.validation}</p>
+                <p>
+                  Movement observations only — not medical advice. Use as a
+                  practice-quality check.
+                </p>
+              </div>
+            </details>
+
+            <div className="results-actions results-actions--rail">
+              <Button to={recordAgain.to} state={recordAgain.state} variant="primary">
+                {recordAgain.label}
+              </Button>
             </div>
-          ))}
-        </section>
+          </aside>
+        </div>
       )}
 
-      {showEvidence && quality.verdict === 'valid' && baseline !== null && (
-        <section className="results-panel" aria-label="Compared to your baseline">
-          <h2 className="results-panel__heading">Compared to your baseline</h2>
-          <p className="results-panel__intro">
-            Your own saved sessions ({baseline.sessionCount} of this movement),
-            not anyone else&apos;s numbers. Each difference is compared against
-            a provisional noise threshold — heuristic, not validated
-            reliability data — so &ldquo;possible change&rdquo; is the
-            strongest language offered.
-          </p>
-          <ul className="baseline__list">
-            {baseline.deltas.map((d) => (
-              <li key={d.metricId} className="baseline-row">
-                <span className="baseline-row__label">{d.label}</span>
-                <span className="baseline-row__values">
-                  {Math.round(d.baselineValue * 100) / 100}
-                  {' → '}
-                  {Math.round(d.currentValue * 100) / 100}
-                  {d.unit === 'deg' ? '°' : d.unit === 'percent' ? '%' : ''}
-                  <span className="baseline-row__delta">
-                    {' '}({d.delta >= 0 ? '+' : ''}
-                    {Math.round(d.delta * 100) / 100})
-                  </span>
-                  {d.change && (
-                    <span
-                      className={`baseline-row__change baseline-row__change--${d.change.classification}`}
-                      title={d.change.copy}
-                    >
-                      {d.change.classification === 'within-noise'
-                        ? 'within noise'
-                        : d.change.classification === 'possible-change'
-                          ? 'possible change'
-                          : 'not judged'}
-                    </span>
+      {showEvidence && (
+        <div className="results-stack">
+          {quality.verdict === 'valid' && !result.insufficientData && (
+            <section className="results-panel" aria-label="Coach questions">
+              <h2 className="results-panel__heading">The coach questions</h2>
+              <p className="results-panel__intro">
+                The report organized by what a coach would ask. A quiet section
+                means those reads stayed inside the expected range — silence is
+                deliberate, not missing data.
+              </p>
+              {coachQuestions.map((section) => (
+                <div key={section.questionId} className="coach-question">
+                  <h3 className="coach-question__title">{section.title}</h3>
+                  <p className="coach-question__asks">{section.asks}</p>
+                  {section.findings.length > 0 ? (
+                    <div className="coach-question__findings stack">
+                      {section.findings.map((finding) => (
+                        <FindingCard
+                          key={finding.id}
+                          finding={finding}
+                          showProvenance
+                          showConstraint
+                        />
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="coach-question__abstain">{section.abstainLine}</p>
                   )}
-                </span>
-              </li>
-            ))}
-          </ul>
-        </section>
-      )}
+                </div>
+              ))}
+            </section>
+          )}
 
-      {showSummary && isInvalidSet && (
-        <section
-          className="results-panel results-abstain"
-          aria-label="Why there is no movement report"
-        >
-          <h2 className="results-panel__heading">
-            Why there is no movement report
-          </h2>
-          <p className="results-panel__intro">
-            This app reports only what the camera can vouch for. This recording
-            could not support a trustworthy read, so posture reads, metric
-            summaries, and coaching are withheld — the rep-by-rep chart and
-            diagnostics below stay available for audit.
-          </p>
-          <ul className="results-abstain__reasons">
-            {quality.reasons.map((reason) => (
-              <li key={reason.id} className="results-abstain__reason">
-                {reason.detail}
-              </li>
-            ))}
-          </ul>
-          {quality.captureFixes.length > 0 && (
-            <>
-              <h3 className="results-panel__heading">
-                How to get a trustworthy report next set
-              </h3>
-              <ul className="results-abstain__reasons">
-                {quality.captureFixes.map((fix) => (
-                  <li key={fix} className="results-abstain__reason">
-                    {fix}
+          {quality.verdict === 'valid' && baseline !== null && (
+            <section className="results-panel" aria-label="Compared to your baseline">
+              <h2 className="results-panel__heading">Compared to your baseline</h2>
+              <p className="results-panel__intro">
+                Your own saved sessions ({baseline.sessionCount} of this
+                movement), not anyone else&apos;s numbers. Each difference is
+                compared against a provisional noise threshold — heuristic, not
+                validated reliability data — so &ldquo;possible change&rdquo; is
+                the strongest language offered.
+              </p>
+              <ul className="baseline__list">
+                {baseline.deltas.map((d) => (
+                  <li key={d.metricId} className="baseline-row">
+                    <span className="baseline-row__label">{d.label}</span>
+                    <span className="baseline-row__values">
+                      {Math.round(d.baselineValue * 100) / 100}
+                      {' → '}
+                      {Math.round(d.currentValue * 100) / 100}
+                      {d.unit === 'deg' ? '°' : d.unit === 'percent' ? '%' : ''}
+                      <span className="baseline-row__delta">
+                        {' '}({d.delta >= 0 ? '+' : ''}
+                        {Math.round(d.delta * 100) / 100})
+                      </span>
+                      {d.change && (
+                        <span
+                          className={`baseline-row__change baseline-row__change--${d.change.classification}`}
+                          title={d.change.copy}
+                        >
+                          {d.change.classification === 'within-noise'
+                            ? 'within noise'
+                            : d.change.classification === 'possible-change'
+                              ? 'possible change'
+                              : 'not judged'}
+                        </span>
+                      )}
+                    </span>
                   </li>
                 ))}
               </ul>
-            </>
+            </section>
           )}
-        </section>
-      )}
 
-      {showSummary && isQuestionableSet && (
-        <section
-          className="results-panel results-abstain"
-          aria-label="Capture-quality warning"
-        >
-          <p className="results-alert results-alert--warning" role="status">
-            Use this as a capture-quality check, not a movement report. Parts of
-            this recording could not be trusted, so only observations are shown —
-            no recommendations.
-          </p>
-          <ul className="results-abstain__reasons">
-            {quality.reasons.map((reason) => (
-              <li key={reason.id} className="results-abstain__reason">
-                {reason.detail}
-              </li>
-            ))}
-          </ul>
-        </section>
-      )}
+          {postureConcepts.length > 0 && (
+            <section className="report-section" aria-label="Posture profile">
+              <h2 className="report-section__title">Posture profile</h2>
+              <PostureProfile concepts={postureConcepts} result={result} />
+            </section>
+          )}
 
-      {showEvidence && postureConcepts.length > 0 && (
-        <section className="report-hero" aria-label="Posture profile">
-          <div className="report-hero__concepts report-section">
-            <h2 className="report-section__title">Posture profile</h2>
-            <PostureProfile concepts={postureConcepts} result={result} />
-          </div>
-          <aside className="report-hero__score report-section">
-            <h2 className="report-section__title">Camera confidence</h2>
-            <div className="report-hero__confidence confidence">
-              <div className="confidence__header">
-                <span className="confidence__label">Camera confidence</span>
-                <span className="confidence__value">{sessionConfidenceScore}%</span>
+          {metricResults.length > 0 && (
+            <section className="results-panel" aria-label="Measured metrics">
+              <h2 className="results-panel__heading">Measured metrics</h2>
+              <p className="results-panel__intro">
+                Keyed reads from this set, each with its camera confidence and
+                validation tier — observations, not a grade.
+              </p>
+              <ul className="metric-results__list">
+                {metricResults.map((metric) => (
+                  <li key={metric.metricId} className="metric-result-row">
+                    <div className="metric-result-row__head">
+                      <span className="metric-result-row__label">{metric.label}</span>
+                      <ConfidenceBadge level={metric.confidence.level} />
+                    </div>
+                    <span className="metric-result-row__value">
+                      {metric.value === null
+                        ? 'not readable'
+                        : `${Math.round(metric.value * 100) / 100}${metric.unit === 'deg' ? '°' : metric.unit === 'percent' ? '%' : ` ${metric.unit}`}`}
+                      <span className="metric-result-row__tier">
+                        {' '}
+                        · {metric.validationTier}
+                      </span>
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
+
+          {feedback.length > 0 && (
+            <section className="results-coaching" aria-label="Coaching">
+              <h2 className="results-section-title">What to try next</h2>
+              <p className="results-coaching__intro">
+                Based on the weakest areas in this set — not medical advice.
+              </p>
+              <div className="results-coaching__list stack">
+                {feedback.map((cue) => (
+                  <FeedbackCard key={cue.issue} cue={cue} />
+                ))}
               </div>
-              <div className="confidence__bar">
-                <div
-                  className={`confidence__fill confidence__fill--${sessionConfidence.toLowerCase()}`}
-                  style={{ width: `${sessionConfidenceScore}%` }}
-                  role="progressbar"
-                  aria-valuenow={sessionConfidenceScore}
-                  aria-valuemin={0}
-                  aria-valuemax={100}
-                />
-              </div>
-              <ConfidenceBadge level={sessionConfidence} />
-            </div>
-          </aside>
-        </section>
-      )}
-
-      {/* NO_REPS_MESSAGE and INSUFFICIENT_DATA_MESSAGE are squat copy — they
-          talk about reps, calibration, and pausing at the bottom. A protocol
-          with a different unit of observation gets its own recovery guidance
-          from the quality gate instead. */}
-      {showSummary && result.noRepsDetected && (
-        <p className="results-alert" role="alert">
-          {isTransitionProtocol
-            ? (quality.captureFixes[0] ?? protocolDefinition.capture.viewInstruction)
-            : NO_REPS_MESSAGE}
-        </p>
-      )}
-
-      {showSummary &&
-        result.insufficientData &&
-        !result.noRepsDetected &&
-        !isInvalidSet && (
-        <p className="results-alert results-alert--warning" role="alert">
-          {isTransitionProtocol
-            ? 'Too little of this recording was readable to interpret. The measured evidence stays below; no observation is drawn from it.'
-            : INSUFFICIENT_DATA_MESSAGE}
-        </p>
-      )}
-
-      {showEvidence && metricResults.length > 0 && (
-        <section className="results-panel" aria-label="Measured metrics">
-          <h2 className="results-panel__heading">Measured metrics</h2>
-          <p className="results-panel__intro">
-            Keyed reads from this set, each with its camera confidence and
-            validation tier — observations, not a grade.
-          </p>
-          <ul className="metric-results__list">
-            {metricResults.map((metric) => (
-              <li key={metric.metricId} className="metric-result-row">
-                <div className="metric-result-row__head">
-                  <span className="metric-result-row__label">{metric.label}</span>
-                  <ConfidenceBadge level={metric.confidence.level} />
-                </div>
-                <span className="metric-result-row__value">
-                  {metric.value === null
-                    ? 'not readable'
-                    : `${Math.round(metric.value * 100) / 100}${metric.unit === 'deg' ? '°' : metric.unit === 'percent' ? '%' : ` ${metric.unit}`}`}
-                  <span className="metric-result-row__tier"> · {metric.validationTier}</span>
-                </span>
-              </li>
-            ))}
-          </ul>
-        </section>
+            </section>
+          )}
+        </div>
       )}
 
       {(showEvidence || showExpert) && scoring && componentExplanations.length > 0 && (
@@ -522,190 +676,155 @@ export function ResultsScreen() {
         </section>
       )}
 
-      {showEvidence && feedback.length > 0 && (
-        <section className="results-coaching" aria-label="Coaching">
-          <h2 className="results-section-title">What to try next</h2>
-          <p className="results-coaching__intro">
-            Based on the weakest areas in this set — not medical advice.
-          </p>
-          <div className="results-coaching__list stack">
-            {feedback.map((cue) => (
-              <FeedbackCard key={cue.issue} cue={cue} />
-            ))}
-          </div>
-        </section>
-      )}
-
-      {showExpert && (result.rootCauses?.length ?? 0) > 0 && (
-        <section className="results-panel" aria-label="Possible contributors">
-          <h2 className="results-panel__heading">Possible contributors</h2>
-          <p className="results-panel__intro">
-            Candidate explanations for this set&apos;s findings — plausibility,
-            not diagnosis. Each includes a way to check it yourself.
-          </p>
-          <ul className="root-cause__list stack">
-            {result.rootCauses!.map((card) => (
-              <li key={card.id} className="root-cause-card">
-                <h3 className="root-cause-card__title">{card.title}</h3>
-                <p className="root-cause-card__because">{card.plausibleBecause}</p>
-                <p className="root-cause-card__check">
-                  <strong>Check it yourself:</strong> {card.selfCheck}
-                </p>
-                <p className="root-cause-card__framing">{card.framing}</p>
-                {card.provenance && (
-                  <p className="finding-card__provenance">
-                    {REVIEW_STATUS_LABEL[card.provenance.reviewStatus]} ·{' '}
-                    {card.provenance.ruleId}
-                  </p>
-                )}
-              </li>
-            ))}
-          </ul>
-        </section>
-      )}
-
-      {showExpert && sessionTape !== null && (
-        <Suspense fallback={null}>
-          <SessionReplay
-            tape={sessionTape}
-            onActiveRepChange={handleActiveRepChange}
-            requestedRepNumber={requestedReplayRep}
-          />
-        </Suspense>
-      )}
-
-      {(showEvidence || showExpert) && metrics.reps.length > 0 && (
-        <Card
-          className="results-reps-card"
-          title="Rep-by-rep"
-          subtitle={
-            isAnalyst
-              ? 'Bottom-of-rep knee angle and average trunk lean per rep'
-              : 'How your depth compared across the set'
-          }
-        >
-          <RepTimeline
-            reps={metrics.reps}
-            showAngles={isAnalyst}
-            deviantRep={result.posture?.mostDeviantRep ?? null}
-            activeRep={replayRep}
-            onSelectRep={sessionTape === null ? undefined : setRequestedReplayRep}
-          />
-          {isAnalyst && (
-            <div className="detail-rows">
-              {metrics.reps.map((rep) => {
-                const depth = Math.min(
-                  rep.minLeftKneeAngle ?? 180,
-                  rep.minRightKneeAngle ?? 180,
-                )
-                return (
-                  <div key={rep.repNumber} className="detail-row">
-                    <span className="detail-row__label">Rep {rep.repNumber}</span>
-                    <span className="detail-row__value">
-                      {Math.round(depth)}° depth
-                      {rep.averageTrunkLean === null
-                        ? ''
-                        : ` · ${Math.round(rep.averageTrunkLean)}° trunk`}
-                    </span>
-                  </div>
-                )
-              })}
-            </div>
+      {showExpert && (
+        <div className="results-stack">
+          {(result.rootCauses?.length ?? 0) > 0 && (
+            <section className="results-panel" aria-label="Possible contributors">
+              <h2 className="results-panel__heading">Possible contributors</h2>
+              <p className="results-panel__intro">
+                Candidate explanations for this set&apos;s findings —
+                plausibility, not diagnosis. Each includes a way to check it
+                yourself.
+              </p>
+              <ul className="root-cause__list stack">
+                {result.rootCauses!.map((card) => (
+                  <li key={card.id} className="root-cause-card">
+                    <h3 className="root-cause-card__title">{card.title}</h3>
+                    <p className="root-cause-card__because">{card.plausibleBecause}</p>
+                    <p className="root-cause-card__check">
+                      <strong>Check it yourself:</strong> {card.selfCheck}
+                    </p>
+                    <p className="root-cause-card__framing">{card.framing}</p>
+                    {card.provenance && (
+                      <p className="finding-card__provenance">
+                        {REVIEW_STATUS_LABEL[card.provenance.reviewStatus]} ·{' '}
+                        {card.provenance.ruleId}
+                      </p>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </section>
           )}
-        </Card>
-      )}
 
-      {isAnalyst && sessionTape !== null && (
-        <section className="results-panel" aria-label="Pose tape">
-          <h2 className="results-panel__heading">Pose tape</h2>
-          <p className="results-panel__intro">
-            Raw landmark recording of this session — replayable through the eval
-            harness, and the capture format for the validation dataset. Stays on
-            this device.
-          </p>
-          <Button variant="secondary" onClick={() => downloadTape(sessionTape)}>
-            Save pose tape (JSON)
-          </Button>
-
-          <CaptureQualityPanel frames={sessionTape.frames} />
-
-          {(sessionTape.diagnostics?.rejections.length ?? 0) > 0 &&
-            (() => {
-              const allRejections = sessionTape.diagnostics!.rejections
-              const real = realRejections(allRejections)
-              const phantomCount = allRejections.length - real.length
-              return (
-                <div className="detail-rows">
-                  <h3 className="results-panel__heading">
-                    Rejected rep candidates ({real.length})
-                  </h3>
-                  {real.map((rejection, index) => (
-                    <div
-                      key={`${rejection.startFrameIndex}-${index}`}
-                      className="detail-row"
-                    >
-                      <span className="detail-row__label">
-                        {rejection.gate} · frames {rejection.startFrameIndex}–
-                        {rejection.endFrameIndex}
-                      </span>
+          {metrics.reps.length > 0 && (
+            <Card
+              className="results-reps-card"
+              title="Rep-by-rep"
+              subtitle="Bottom-of-rep knee angle and average trunk lean per rep"
+            >
+              <RepTimeline
+                reps={metrics.reps}
+                showAngles
+                deviantRep={result.posture?.mostDeviantRep ?? null}
+                activeRep={replayRep}
+                onSelectRep={sessionTape === null ? undefined : setRequestedReplayRep}
+              />
+              <div className="detail-rows">
+                {metrics.reps.map((rep) => {
+                  const depth = Math.min(
+                    rep.minLeftKneeAngle ?? 180,
+                    rep.minRightKneeAngle ?? 180,
+                  )
+                  return (
+                    <div key={rep.repNumber} className="detail-row">
+                      <span className="detail-row__label">Rep {rep.repNumber}</span>
                       <span className="detail-row__value">
-                        {rejection.reason} · {Math.round(rejection.durationMs)}
-                        ms · hip drop {rejection.values.maxHipDrop.toFixed(3)} ·
-                        conf {Math.round(rejection.values.avgConfidence * 100)}%
+                        {Math.round(depth)}° depth
+                        {rep.averageTrunkLean === null
+                          ? ''
+                          : ` · ${Math.round(rep.averageTrunkLean)}° trunk`}
                       </span>
                     </div>
-                  ))}
-                  {phantomCount > 0 && (
-                    <p className="results-panel__intro">
-                      {phantomCount} zero-descent candidate
-                      {phantomCount === 1 ? '' : 's'} (phase jitter while
-                      standing, no hip drop) not shown — retained in the pose
-                      tape for audit.
-                    </p>
-                  )}
-                </div>
-              )
-            })()}
-        </section>
+                  )
+                })}
+              </div>
+            </Card>
+          )}
+
+          {sessionTape !== null && (
+            <section className="results-panel" aria-label="Pose tape">
+              <h2 className="results-panel__heading">Pose tape</h2>
+              <p className="results-panel__intro">
+                Raw landmark recording of this session — replayable through the
+                eval harness, and the capture format for the validation dataset.
+                Stays on this device.
+              </p>
+              <Button variant="secondary" onClick={() => downloadTape(sessionTape)}>
+                Save pose tape (JSON)
+              </Button>
+
+              <CaptureQualityPanel frames={sessionTape.frames} />
+
+              {(sessionTape.diagnostics?.rejections.length ?? 0) > 0 &&
+                (() => {
+                  const allRejections = sessionTape.diagnostics!.rejections
+                  const real = realRejections(allRejections)
+                  const phantomCount = allRejections.length - real.length
+                  return (
+                    <div className="detail-rows">
+                      <h3 className="results-panel__heading">
+                        Rejected rep candidates ({real.length})
+                      </h3>
+                      {real.map((rejection, index) => (
+                        <div
+                          key={`${rejection.startFrameIndex}-${index}`}
+                          className="detail-row"
+                        >
+                          <span className="detail-row__label">
+                            {rejection.gate} · frames {rejection.startFrameIndex}–
+                            {rejection.endFrameIndex}
+                          </span>
+                          <span className="detail-row__value">
+                            {rejection.reason} ·{' '}
+                            {Math.round(rejection.durationMs)}
+                            ms · hip drop {rejection.values.maxHipDrop.toFixed(3)} ·
+                            conf {Math.round(rejection.values.avgConfidence * 100)}%
+                          </span>
+                        </div>
+                      ))}
+                      {phantomCount > 0 && (
+                        <p className="results-panel__intro">
+                          {phantomCount} zero-descent candidate
+                          {phantomCount === 1 ? '' : 's'} (phase jitter while
+                          standing, no hip drop) not shown — retained in the pose
+                          tape for audit.
+                        </p>
+                      )}
+                    </div>
+                  )
+                })()}
+            </section>
+          )}
+        </div>
       )}
 
-      <div className="results-actions">
-        <Button to={recordAgain.to} state={recordAgain.state} variant="primary">
-          {recordAgain.label}
-        </Button>
-        <Button
-          variant="secondary"
-          onClick={() => void handleSaveSession()}
-          disabled={saveState === 'saved'}
-        >
-          {saveState === 'saved' ? 'Saved to history' : 'Save to history'}
-        </Button>
-        <Button variant="secondary" onClick={() => handleExportReport('html')}>
-          Export report HTML
-        </Button>
-        <Button variant="secondary" onClick={() => handleExportReport('json')}>
-          Export report JSON
-        </Button>
-        {showExpert && result.metricResults.length > 0 && (
-          <Button variant="secondary" onClick={handleExportCsv}>
-            Export metrics CSV
+      <footer className="results-footer">
+        <DisclaimerBanner />
+        <div className="results-actions">
+          <Button variant="secondary" onClick={() => handleExportReport('html')}>
+            Export report HTML
           </Button>
-        )}
-        <Button to="/" variant="secondary">
-          Home
-        </Button>
-      </div>
-      {saveState === 'error' && (
-        <p className="results-alert results-alert--warning" role="alert">
-          Could not save this session on this device.
+          <Button variant="secondary" onClick={() => handleExportReport('json')}>
+            Export report JSON
+          </Button>
+          {showExpert && result.metricResults.length > 0 && (
+            <Button variant="secondary" onClick={handleExportCsv}>
+              Export metrics CSV
+            </Button>
+          )}
+          <Button to="/history" variant="secondary">
+            Session history
+          </Button>
+        </div>
+        {/* Automatic local persistence (ADR-018). Stated quietly, and only
+            ever as what actually happened on this device. */}
+        <p className="results-storage" role="status">
+          {storedLocally
+            ? 'Stored on this device. Nothing is uploaded — delete it any time from History.'
+            : 'Not stored on this device — this browser refused the local write, so this report will be gone when you leave the page.'}
         </p>
-      )}
-      {saveState === 'saved' && (
-        <p className="results-alert results-alert--info" role="status">
-          Saved locally in this browser only — see the History page. Nothing is
-          uploaded.
-        </p>
-      )}
+      </footer>
     </div>
   )
 }

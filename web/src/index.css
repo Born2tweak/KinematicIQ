@@ -1,15 +1,34 @@
+/* ── Design system: dense graphite/carbon + restrained cyan (P1) ──────
+   Replaces the pre-launch glass/aurora treatment. Three rules hold this
+   system together and every later block inherits them:
+
+   1. Surfaces are opaque graphite, not translucent glass. Depth comes from
+      a one-step lightness change plus a hairline border — never from blur.
+   2. Cyan is an accent, not a background. It marks the single dominant
+      action, the live/active state, and data marks. Nothing decorative.
+   3. Layout width is a token. The old 720px reading column is what made
+      every screen scroll forever; app screens now run to a desktop width
+      and lay out in columns instead.
+
+   The glass/gradient token NAMES are retained and neutralized rather than
+   deleted: ~40 rules across this file reference them, and dropping the
+   custom properties would silently invalidate whole `box-shadow`
+   declarations. Neutralizing at the source flattens every consumer at
+   once and keeps this reversible. */
 :root {
-  --color-bg: #05080f;
-  --color-bg-elevated: #0b101d;
-  --color-surface: rgba(148, 184, 255, 0.055);
-  --color-surface-elevated: rgba(148, 184, 255, 0.1);
-  --color-border: rgba(168, 200, 255, 0.1);
-  --color-border-strong: rgba(182, 210, 255, 0.18);
-  --color-accent: #3b82f6;
-  --color-accent-hover: #7dd3fc;
-  --color-accent-muted: rgba(56, 189, 248, 0.12);
-  --color-text: #f2f6fc;
-  --color-text-muted: #9aa8c0;
+  --color-bg: #0a0c0f;
+  --color-bg-elevated: #101319;
+  --color-surface: #14181e;
+  --color-surface-elevated: #1b2129;
+  --color-border: rgba(255, 255, 255, 0.07);
+  --color-border-strong: rgba(255, 255, 255, 0.14);
+  --color-accent: #22d3ee;
+  --color-accent-hover: #67e8f9;
+  --color-accent-muted: rgba(34, 211, 238, 0.12);
+  /* Text/icons on an accent fill. Never white — see .btn--primary. */
+  --color-on-accent: #04141b;
+  --color-text: #e9eef4;
+  --color-text-muted: #8b97a6;
   --color-success: #34d399;
 
   /* Confidence-state tokens (M56): the canonical chip colors, shared by every
@@ -21,12 +40,13 @@
   --confidence-low: #ef4444;
   --confidence-low-bg: rgba(239, 68, 68, 0.15);
 
-  --gradient-accent: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%);
-  --gradient-button: linear-gradient(135deg, #2563eb 0%, #6d28d9 100%);
-  --glass-blur: blur(22px) saturate(160%);
-  --glass-highlight:
-    inset 0 1px 0 rgba(255, 255, 255, 0.09),
-    inset 0 -1px 0 rgba(255, 255, 255, 0.02);
+  /* Flat fills. Kept as tokens so the ~6 call sites need no edit. */
+  --gradient-accent: #22d3ee;
+  --gradient-button: #22d3ee;
+  /* Neutralized glass. `none` is a valid backdrop-filter; the highlight must
+     stay a well-formed shadow so comma-joined box-shadow lists survive. */
+  --glass-blur: none;
+  --glass-highlight: 0 0 0 0 rgba(0, 0, 0, 0);
 
   --space-xs: 0.25rem;
   --space-sm: 0.5rem;
@@ -40,10 +60,14 @@
   --radius-lg: 1.25rem;
   --radius-full: 9999px;
 
-  --shadow-card: 0 8px 32px rgba(2, 6, 16, 0.45);
-  --shadow-glow: 0 0 48px rgba(56, 189, 248, 0.1);
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.5);
+  --shadow-glow: 0 0 0 0 rgba(0, 0, 0, 0);
 
-  --max-width: 720px;
+  /* Layout widths. `--max-width` stays the marketing reading column; app
+     screens read `--width-app` and lay out in columns at desktop sizes. */
+  --max-width: 760px;
+  --width-wide: 1200px;
+  --width-app: 1600px;
   --navbar-height: 3.5rem;
   --transition-fast: 150ms ease;
   --transition-base: 250ms ease;
@@ -67,43 +91,9 @@ body {
   font-size: 1rem;
   line-height: 1.6;
   color: var(--color-text);
+  /* Flat carbon. The aurora backdrop and the SVG grain that de-banded the
+     glass panels are both gone — neither survives a flat, opaque system. */
   background: var(--color-bg);
-  background-image: linear-gradient(180deg, var(--color-bg) 0%, #070c18 100%);
-}
-
-/* Aurora backdrop the glass surfaces refract. */
-body::before {
-  content: '';
-  position: fixed;
-  inset: -22% -12%;
-  z-index: -1;
-  pointer-events: none;
-  background:
-    radial-gradient(36% 30% at 16% 16%, rgba(59, 130, 246, 0.2), transparent 70%),
-    radial-gradient(32% 26% at 84% 10%, rgba(139, 92, 246, 0.17), transparent 70%),
-    radial-gradient(40% 34% at 68% 88%, rgba(45, 212, 191, 0.1), transparent 70%),
-    radial-gradient(26% 22% at 35% 70%, rgba(56, 189, 248, 0.08), transparent 70%);
-  animation: aurora-drift 38s ease-in-out infinite alternate;
-}
-
-@keyframes aurora-drift {
-  0% {
-    transform: translate3d(-2%, -1.5%, 0) scale(1);
-  }
-  100% {
-    transform: translate3d(2%, 2%, 0) scale(1.06);
-  }
-}
-
-/* Fine grain so large glass panels don't band. */
-body::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  z-index: 1;
-  pointer-events: none;
-  opacity: 0.026;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
 #root {
@@ -177,10 +167,7 @@ img {
   font-size: clamp(2rem, 5vw, 2.75rem);
   font-weight: 600;
   letter-spacing: -0.03em;
-  background: linear-gradient(135deg, var(--color-text) 0%, var(--color-accent-hover) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--color-text);
 }
 
 .hero__description {
@@ -252,8 +239,7 @@ img {
   display: flex;
   align-items: center;
   border-bottom: 1px solid var(--color-border);
-  background: rgba(10, 10, 15, 0.85);
-  backdrop-filter: blur(12px);
+  background: var(--color-bg);
 }
 
 .navbar__inner {
@@ -262,7 +248,7 @@ img {
   justify-content: space-between;
   gap: var(--space-md);
   width: 100%;
-  max-width: calc(var(--max-width) + var(--space-lg) * 2);
+  max-width: calc(var(--width-app) + var(--space-lg) * 2);
   margin-inline: auto;
   padding-inline: var(--space-md);
 }
@@ -342,15 +328,20 @@ img {
   transform: scale(0.98);
 }
 
+/* Cyan is a LIGHT accent, so the primary action carries dark text. White on
+   #22d3ee measures 1.8:1 — the old indigo accent got away with white text and
+   this one cannot. `--color-on-accent` is the single source for anything
+   sitting on an accent fill. */
 .btn--primary {
   background: var(--color-accent);
-  color: white;
-  box-shadow: 0 2px 12px rgba(99, 102, 241, 0.35);
+  color: var(--color-on-accent);
+  font-weight: 600;
+  box-shadow: none;
 }
 
 .btn--primary:hover {
   background: var(--color-accent-hover);
-  box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
+  box-shadow: none;
 }
 
 .btn--secondary {
@@ -594,7 +585,7 @@ img {
 
 /* Wider container for app screens (upload/results report layouts). */
 .container--app {
-  max-width: 960px;
+  max-width: var(--width-app);
 }
 
 /* Full-bleed stage route (camera): no container, no padding. */
@@ -1237,27 +1228,42 @@ img {
   text-align: left;
   cursor: pointer;
 }
+/* An unavailable movement is marked by its border and its status label, not
+   by fading the whole card. `opacity: 0.65` composited this card's muted text
+   down to ~3.5:1 — a real WCAG AA failure that went undetected only because
+   the old aurora backdrop left axe unable to resolve the background color.
+   Removing the backdrop exposed it. Meaning belongs in the status line, which
+   already exists, and never in an opacity that also dims the text. */
 .protocol-card--planned {
   cursor: default;
-  opacity: 0.65;
+  border-style: dashed;
+  background: var(--color-surface);
 }
+
 .protocol-card__label {
   font-weight: 700;
 }
+
+/* These four rules referenced `--text-muted` and `--accent`, which are not
+   tokens in this system — every one of them silently used its literal
+   fallback and never tracked the palette. Wired to the real tokens. */
 .protocol-card__kind {
-  color: var(--text-muted, #94a3b8);
+  color: var(--color-text-muted);
   font-size: 0.85rem;
   text-transform: capitalize;
 }
+
 .protocol-card__status {
   font-size: 0.8rem;
   font-weight: 600;
 }
+
 .protocol-card__status--available {
-  color: var(--accent, #22c55e);
+  color: var(--color-accent);
 }
+
 .protocol-card__status--planned {
-  color: var(--text-muted, #94a3b8);
+  color: var(--color-text-muted);
 }
 
 /* Local session history (M9). */
@@ -2567,7 +2573,7 @@ button.rep-timeline__bar:disabled {
 /* ===== Landing page ===== */
 
 .container--wide {
-  max-width: 1060px;
+  max-width: var(--width-wide);
 }
 
 .landing {
@@ -3252,7 +3258,7 @@ button.rep-timeline__bar:disabled {
 
 .pipeline__step--active .pipeline__step-num {
   background: var(--color-accent);
-  color: white;
+  color: var(--color-on-accent);
 }
 
 .pipeline__step-title {
@@ -3462,23 +3468,23 @@ button.rep-timeline__bar:disabled {
 }
 
 .pipeline__step--active .pipeline__step-num {
-  background: var(--gradient-button);
+  background: var(--color-accent);
+  color: var(--color-on-accent);
 }
 
-/* Glass buttons */
+/* Flat action buttons. This block used to re-skin .btn--primary as glass with
+   an indigo glow, overriding the base rule above and its contrast fix — the
+   accent color and the on-accent text now come from one place. */
 .btn--primary {
-  background: var(--gradient-button);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  box-shadow:
-    0 4px 20px rgba(67, 112, 240, 0.4),
-    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+  border: 1px solid transparent;
+  box-shadow: none;
 }
 
 .btn--primary:hover {
-  background: linear-gradient(135deg, #1d4ed8 0%, #5b21b6 100%);
-  box-shadow:
-    0 6px 28px rgba(80, 120, 245, 0.5),
-    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  background: var(--color-accent-hover);
+  box-shadow: none;
 }
 
 .btn--secondary {
@@ -3561,15 +3567,14 @@ button.rep-timeline__bar:disabled {
 }
 
 .demo-player__play {
-  background: var(--gradient-button);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow:
-    0 4px 24px rgba(67, 112, 240, 0.5),
-    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+  border: 1px solid transparent;
+  box-shadow: none;
 }
 
 .demo-player__play:hover {
-  background: linear-gradient(135deg, #4a90f5 0%, #8d70f5 100%);
+  background: var(--color-accent-hover);
 }
 
 .rep-counter,
@@ -3877,4 +3882,527 @@ textarea:focus-visible,
   outline: 2px solid var(--color-accent, #22c55e);
   outline-offset: 2px;
   border-radius: 4px;
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   Results — dense desktop report (P2)
+
+   Replaces the single-column stack that made this screen scroll
+   forever. Above the fold, at >=1100px: session identity + tracking
+   confidence in one band, the movement visualization and rep chart in
+   the main column, and the metric rail plus the one prioritized
+   observation and cue held to the side. Evidence and analyst material
+   stay one tab away; validation limits stay visible but collapsed.
+   ══════════════════════════════════════════════════════════════════ */
+
+.results-page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+/* ── Session identity band ─────────────────────────────────────── */
+
+.results-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-md);
+  padding-bottom: var(--space-md);
+  border-bottom: 1px solid var(--color-border-strong);
+}
+
+.results-bar__title {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 650;
+  letter-spacing: -0.02em;
+}
+
+.results-bar__meta {
+  margin: var(--space-xs) 0 0;
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+}
+
+.results-bar__release {
+  color: var(--color-text-muted);
+}
+
+.results-bar__status {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-lg);
+  flex-wrap: wrap;
+}
+
+.results-bar__confidence {
+  min-width: 15rem;
+}
+
+.results-bar__confidence-label {
+  display: block;
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--color-text-muted);
+}
+
+.results-bar__confidence-value {
+  display: block;
+  margin-block: 2px var(--space-xs);
+  font-size: 1.0625rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.results-bar__caveat {
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--color-text-muted);
+}
+
+/* ── Two-column report body ────────────────────────────────────── */
+
+.results-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-lg);
+  align-items: start;
+}
+
+@media (min-width: 1100px) {
+  .results-grid {
+    /* The rail is fixed-width so metric tiles stay comparable across
+       sessions; the main column absorbs the remaining space. */
+    grid-template-columns: minmax(0, 1fr) 22rem;
+  }
+}
+
+.results-grid__main,
+.results-grid__rail,
+.results-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  min-width: 0;
+}
+
+@media (min-width: 1100px) {
+  .results-grid__rail {
+    position: sticky;
+    top: calc(var(--navbar-height) + var(--space-md));
+  }
+}
+
+/* ── Dominant result ───────────────────────────────────────────── */
+
+.results-verdict {
+  padding: var(--space-md) var(--space-lg);
+  border: 1px solid var(--color-border-strong);
+  border-left: 3px solid var(--color-accent);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+}
+
+.results-verdict__headline {
+  margin: 0;
+  font-size: 1.625rem;
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+}
+
+.results-verdict__observed {
+  margin: var(--space-sm) 0 0;
+  color: var(--color-text-muted);
+  font-size: 0.9375rem;
+  line-height: 1.55;
+}
+
+/* ── Movement visualization ────────────────────────────────────── */
+
+.results-player {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-bg-elevated);
+  overflow: hidden;
+}
+
+.results-player__placeholder {
+  aspect-ratio: 16 / 9;
+  background: var(--color-surface);
+}
+
+/* ── Metric rail ───────────────────────────────────────────────── */
+
+.metric-rail__heading,
+.results-focus__heading {
+  margin: 0 0 var(--space-sm);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--color-text-muted);
+}
+
+.metric-rail__list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-sm);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* The lead metric spans the rail: equal weight for every number is the
+   thing the redesign is correcting. */
+.metric-rail__list > .metric-tile:first-child {
+  grid-column: 1 / -1;
+}
+
+.metric-tile {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--space-sm) var(--space-md);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+}
+
+.metric-tile__label {
+  font-size: 0.75rem;
+  line-height: 1.35;
+  color: var(--color-text-muted);
+}
+
+.metric-tile__qualifier {
+  font-size: 0.6875rem;
+}
+
+.metric-tile__value {
+  font-size: 1.5rem;
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+.metric-rail__list > .metric-tile:first-child .metric-tile__value {
+  font-size: 2rem;
+}
+
+.metric-tile__foot {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  flex-wrap: wrap;
+  margin-top: 2px;
+}
+
+.metric-tile__tier {
+  font-size: 0.6875rem;
+  color: var(--color-text-muted);
+}
+
+/* ── Prioritized observation + cue ─────────────────────────────── */
+
+.results-focus,
+.results-secondary {
+  padding: var(--space-md);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+}
+
+.results-focus__statement {
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+}
+
+.results-focus__cue {
+  margin-top: var(--space-md);
+  padding-top: var(--space-sm);
+  border-top: 1px solid var(--color-border);
+}
+
+.results-focus__cue-label {
+  display: block;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--color-accent);
+}
+
+.results-focus__cue-text {
+  margin: var(--space-xs) 0 0;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+}
+
+.results-focus__withheld {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: var(--color-text-muted);
+}
+
+/* ── Progressive disclosure ────────────────────────────────────── */
+
+.results-disclosure {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+}
+
+.results-disclosure__summary {
+  padding: var(--space-sm) var(--space-md);
+  cursor: pointer;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+}
+
+.results-disclosure__summary:hover {
+  color: var(--color-text);
+}
+
+.results-disclosure__body {
+  padding: 0 var(--space-md) var(--space-md);
+  font-size: 0.8125rem;
+  line-height: 1.55;
+  color: var(--color-text-muted);
+}
+
+.results-disclosure__body p {
+  margin: 0 0 var(--space-sm);
+}
+
+.results-disclosure__body p:last-child {
+  margin-bottom: 0;
+}
+
+/* ── Footer ────────────────────────────────────────────────────── */
+
+.results-footer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--color-border);
+}
+
+.results-actions--rail {
+  flex-direction: column;
+}
+
+.results-storage {
+  margin: 0;
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}
+
+/* History rows open their stored report (P2). Full table lands in P6. */
+.history-row__link {
+  display: block;
+  padding: var(--space-sm);
+  margin: calc(var(--space-sm) * -1);
+  border-radius: var(--radius-sm);
+  transition: background var(--transition-fast);
+}
+
+.history-row__link:hover {
+  background: var(--color-surface-elevated);
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   Movement player (P3)
+
+   One synchronized surface with three sizes. `mini` is the default and
+   is deliberately small — the report must not open with a video
+   dominating it. Clicking steps up to `expanded`, then `split`, which
+   places the synchronized 3D reconstruction beside the source view.
+   ══════════════════════════════════════════════════════════════════ */
+
+.movement-player {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md) var(--space-md);
+}
+
+.movement-player__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-md);
+}
+
+.movement-player__label {
+  display: block;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--color-text-muted);
+}
+
+/* Absence of source video is a state, not an error — stated plainly. */
+.movement-player__note {
+  display: block;
+  margin-top: 2px;
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}
+
+.movement-player__modes {
+  display: flex;
+  gap: var(--space-xs);
+  flex-shrink: 0;
+}
+
+.movement-player__stage {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-sm);
+}
+
+.movement-player--split .movement-player__stage {
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 900px) {
+  .movement-player--split .movement-player__stage {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* The source view stacks the video and the skeleton overlay in one box. */
+.movement-player__source {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: var(--radius-sm);
+  background: #05070a;
+}
+
+.movement-player__video,
+.movement-player__canvas,
+.movement-player__no-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.movement-player__video {
+  object-fit: contain;
+}
+
+/* The skeleton is drawn from the landmark frame and always sits on top. */
+.movement-player__canvas {
+  pointer-events: none;
+}
+
+.movement-player__scene3d {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: #05070a;
+}
+
+.movement-player__readout {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  padding: var(--space-xs) var(--space-sm);
+  font-size: 0.6875rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text);
+  background: rgba(5, 7, 10, 0.72);
+}
+
+/* Mini: small enough to sit in the report without taking it over. */
+.movement-player--mini {
+  max-width: 22rem;
+}
+
+.movement-player__mini-hit {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: zoom-in;
+  border-radius: var(--radius-sm);
+}
+
+.movement-player__mini-hit:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.movement-player__timeline {
+  position: relative;
+}
+
+.movement-player__scrub {
+  width: 100%;
+  accent-color: var(--color-accent);
+}
+
+.movement-player__markers {
+  position: relative;
+  height: 1rem;
+}
+
+.movement-player__marker {
+  position: absolute;
+  transform: translateX(-50%);
+  padding: 0;
+  border: 0;
+  background: none;
+  font-size: 0.625rem;
+  line-height: 1;
+  cursor: pointer;
+  color: var(--color-text-muted);
+}
+
+.movement-player__marker--bottom {
+  color: var(--color-accent);
+}
+
+.movement-player__marker--rep-counted {
+  color: var(--color-success);
+}
+
+.movement-player__marker--rejection {
+  color: var(--confidence-medium);
+}
+
+.movement-player__controls {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+}
+
+.movement-player__speeds {
+  display: flex;
+  gap: 2px;
+}
+
+.movement-player__frame-count {
+  margin-left: auto;
+  font-size: 0.6875rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text-muted);
 }

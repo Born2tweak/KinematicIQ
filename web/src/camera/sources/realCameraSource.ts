@@ -102,6 +102,11 @@ export function createRealCameraSource(): CameraSource {
       return poseEngine.detect(videoElement, timestampMs, frameIndex)
     },
 
+    /** The real webcam stream, so a session can keep its own footage (P3). */
+    getRecordableStream(): MediaStream | null {
+      return stream
+    },
+
     stop(): void {
       stopped = true
       if (stream) {
